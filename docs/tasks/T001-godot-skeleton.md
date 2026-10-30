@@ -43,3 +43,6 @@ Grave Rats starts here. This sets up the Godot 4.7 project every later task buil
 - **Handoff:** `docs/handoffs/auto-T001.md` with test counts, frame times, the import approach, anything that looked wrong (materials, normals, animation glitches), and screenshots listed.
 
 Out of scope: gameplay, input, the real camera (T002), new art.
+
+## Addendum (lead, 2026-10-29)
+- Set `scenes/dev/asset_viewer.tscn` as the project's main scene (`application/run/main_scene`), so pressing Play in the editor runs it. Later stages move the main scene to the game.

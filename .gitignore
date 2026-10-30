@@ -1,0 +1,5 @@
+.godot/
+builds/
+*.tmp
+.DS_Store
+/version.txt

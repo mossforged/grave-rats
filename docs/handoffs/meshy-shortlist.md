@@ -11,6 +11,13 @@ Scripts build anything boxy that has to snap to the 0.5 m grid: walls, floors, d
 | 5 | **Rifle** | A005-02 (helmet and body only; the grip inset is wrong), A001-01 | A chunky industrial carbine for both crews. |
 | 6 | **Optional dressing:** surgical lamp, IV stand, med cabinet, parked loader exosuit | A002-05, A002-06 | Only if 1–5 go smoothly. |
 
+## Input images
+Meshy needs one clean object per image. Use `assets/source/meshy/input/`:
+- **hauler:** `hauler-front.png`, `hauler-side.png`, `hauler-back.png` (ready; use Meshy's multi-view upload);
+- **stalker, bed, console, rifle:** made by A007 (queued).
+
+Text prompts are optional. A short texture hint is enough, e.g. hauler: "worn industrial space salvage suit, beige patched fabric, orange painted armour plates, black rubber, grime". Don't use the A001/A005 scene or sheet images directly.
+
 ## Specs
 - Export **.glb**, in **metres**, Y-up, feet or base at the origin.
 - Scale to the A006 numbers: the hauler 1.8 m tall before the game's ×1.15; the bed 0.9 × 0.75 × 2.0 m.

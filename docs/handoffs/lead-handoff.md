@@ -30,4 +30,5 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T006 | code | merged 2026-10-30; waits for John's play |
 | T007 | code | queued 2026-10-30 (step 0: scale 0.85/1.15, fade) |
 | A005 | art | merged and approved 2026-10-30 |
-| A006 | art | merged 2026-10-30; waits for John's approval and modelling split |
+| A006 | art | merged and approved 2026-10-30 |
+| A007 | art | queued: clean Meshy input images (stalker, bed, console, rifle) |

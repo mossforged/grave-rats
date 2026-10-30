@@ -13,7 +13,7 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## What builders need now
 - Code: T007 merged (lead reviewed, 210/210 reproduced). T008 queued.
-- Art: A006 merged and approved. A007 queued (clean Meshy input images: stalker, bed, console, rifle).
+- Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. John's hauler (30.8k tris, 1.80 m, unrigged) waits for a Meshy rig.
 
 ## Open questions (for John)
 - T007 play (`scenes/pirates/pirate_deck.tscn`, now the main scene): does cover matter? Is lock-to-cover (Space, RMB) better than plain crouch (F1 toggle)? Too lethal (3.4 s in the open)? Do the crew read as rivals? Do the barks give too much away? Bots: cover doubles survival; lock is no better than crouch when fighting from one spot.

@@ -32,7 +32,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T008 | code | queued: flicker, door-noise rule, suit-OS HUD with the noise ring |
 | A005 | art | merged and approved 2026-10-30 |
 | A006 | art | merged and approved 2026-10-30 |
-| A007 | art | queued: clean Meshy input images (stalker, bed, console, rifle) |
+| A007 | art | merged 2026-10-30 (rifle refused by the image tool) |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

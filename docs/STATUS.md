@@ -17,12 +17,12 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## Open questions (for John)
 - T006 open: is 8 s of door banging right?
-- A005 HUD ring: what should it show? (A005 has it as magazine ammo, turning red for suit danger.)
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?
 
 ## Parked
+- Next code candidate (after T007): the suit-OS HUD with the noise ring (decided 2026-10-30).
 - Lock-to-cover, Gears style (John): brace against cover and shoot over it. Waits for a shooting enemy.
 - Visible aim cone may go in the final game (John); keep for testing.
 - Competitive modes; procedural ship generation; contracts and meta-progression; the in-game "shift" framing (runs as shifts, timecard end screen).

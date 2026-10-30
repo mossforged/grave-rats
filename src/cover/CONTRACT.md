@@ -1,6 +1,6 @@
 # cover
 
-Cover with height (T005): what stops a shot in 3D, the bed you tip over, the HUD's shield marks. Lock-to-cover, a prototype you can switch off (T007).
+Cover with height (T005): what stops a shot in 3D, the bed you tip over, the state behind the HUD's shield marks. Lock-to-cover, a prototype you can switch off (T007).
 
 ## Owns
 - `cover_field.gd`: scene-free pieces (footprint + class) and the straight 3D trace against them. The torso height of a stance.
@@ -8,8 +8,8 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the HUD
 - `tip_bed.gd`: one bed: mesh hinged on its far long edge, collision, its piece in the field.
 - `shot_tracer.gd`: `Rifle.shot_tracer`. Walls and doors through physics; bodies on the plan line, aimed at at their torso height; cover in between stops the round.
 - `cover_lock.gd`: scene-free lock-to-cover: the slot, the snap, raise and lower, sliding, letting go.
-- `lock_driver.gd`: lock-to-cover in a scene: takes the operator's controls while locked, the prompt, the `LOCKED` readout. It hands them back when free, and touches nothing while free.
-- `protection_mark.gd`: the HUD's cover readout: `IN COVER` beside the stance word, and above it one shield per shooter.
+- `lock_driver.gd`: lock-to-cover in a scene: takes the operator's controls while locked, the prompt, and `state_word()` for the suit OS's `LOCKED` readout. It hands them back when free, and touches nothing while free.
+- `protection_mark.gd`: the cover readout's state: in cover or not, and one line per shooter. The suit OS (`src/hud`) draws them, and holds the words and sizes.
 
 ## Does not own
 - Who is shooting (the marks are told, by `src/enemies`), the E key (the scene), sight (`src/sight`; tall cover is already an occluder there).
@@ -31,7 +31,7 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the HUD
 
 ## Public API
 - `CoverLock.new(cfg)`: `enabled()`, `locked()`, `exposed()`, `can_fire()`, `spot_for(field, p, radius, is_free)`, `try_lock(field, p, radius, is_free) -> bool`, `release()`, `step(delta, wish, wants_aim) -> move`, `hold_position(p)`, `facing_point(reach)`; fields `state`, `raise`, `slot`, `normal`, `tangent`, `piece_id`.
-- `LockDriver`: `setup(operator, field, cfg, is_free)`, `press() -> bool`, `tap_fire()`, `release()`, `step(delta)` (before the operator's), `show_state(alive)`, `spot_here()`; fields `lock`, `scripted` {`keys`, `aim`, `fire`}, `hide_prompt`.
+- `LockDriver`: `setup(operator, field, cfg, is_free)`, `press() -> bool`, `tap_fire()`, `release()`, `step(delta)` (before the operator's), `show_state(alive)`, `state_word()`, `spot_here()`; fields `lock`, `scripted` {`keys`, `aim`, `fire`}, `hide_prompt`.
 - `CoverField.new(cfg)`: `set_piece(id, rect, kind)` ("none" removes), `kind_of(id)`, `height_of(kind)`, `segment_hit(a, b) -> {} or {t, point, id, kind}`, `line_blocked(a, b)`, `near(p, reach)`, `low_near(p, reach) -> {} or {id, rect}`, `torso_height(crouch_amount, braced)`. Constants `NONE`, `LOW`, `TALL`.
 - `TipState.new(cfg, overturned := false, fall_side := 1.0)`: `start(from_side) -> bool`, `step(delta) -> bool` (true on landing), `cover_class()`, `footprint(rect, thickness)`; fields `state`, `progress`, `side`.
 - `TipBed`: `setup(spec, rect, cover_field, cfg)`, `reset()`, `tick(delta)`, `try_tip(p) -> bool`, `can_tip()`, `distance_to_point(p)`, `footprint()`; fields `tip`, `upright_rect`.
@@ -42,6 +42,6 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the HUD
 `TipBed.landed(bed)`, `TipBed.footprint_changed(bed)`, `ShotTracer.cover_stopped(body)`.
 
 ## Data keys (`data/cover.json`)
-`low_height_m`, `standing_torso_m`, `crouched_torso_m`, `braced_torso_m`, `brace_hold_s`, `brace_crouch_shown`, `brace_rate_per_s`; `lock` {`enabled`, `reach_m`, `gap_m`, `edge_inset_m`, `search_step_m`, `snap_s`, `raise_s`, `lower_s`, `release_dot`, `break_m`, `exposed_at`, `fire_at`, `face_hold_s`, `aim_hold_s`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`, `layer`, `word_locked`, `word_exposed`, `word_font_size`, `word_from_right_px`, `word_from_bottom_px`, `word_color`, `word_exposed_color`}; `bed` {`tip_s`, `reach_m`, `lying_height_m`, `mattress_m`, `color`, `mattress_color`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `mark` {`layer`, `size_px`, `word_gap_px`, `gap_px`, `from_right_px`, `from_bottom_px`, `line_px`, `protected_color`, `exposed_color`, `word_protected`, `word_exposed`, `font_size`, `in_cover_word`, `in_cover_font_size`, `in_cover_from_right_px`, `in_cover_from_bottom_px`, `in_cover_pad_px`, `in_cover_height_px`, `in_cover_color`, `in_cover_text_color`, `in_cover_reach_m`, `in_cover_min_crouch`}. Props' classes are in `data/deck.json`.
+`low_height_m`, `standing_torso_m`, `crouched_torso_m`, `braced_torso_m`, `brace_hold_s`, `brace_crouch_shown`, `brace_rate_per_s`; `lock` {`enabled`, `reach_m`, `gap_m`, `edge_inset_m`, `search_step_m`, `snap_s`, `raise_s`, `lower_s`, `release_dot`, `break_m`, `exposed_at`, `fire_at`, `face_hold_s`, `aim_hold_s`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `bed` {`tip_s`, `reach_m`, `lying_height_m`, `mattress_m`, `color`, `mattress_color`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `mark` {`in_cover_reach_m`, `in_cover_min_crouch`}. Props' classes are in `data/deck.json`.
 
 Tests: `tests/test_cover.gd`, `tests/test_pirates.gd`.

@@ -79,9 +79,8 @@ func shot_at(from: Vector2, to: Vector2) -> void:
 	var near := float(cfg.dodge.shot_line_m)
 	for s: Node in stalkers:
 		var at: Vector2 = s.floor_position()
-		var closest := Geometry2D.get_closest_point_to_segment(at, from, to)
-		# A round that stopped on the far side of a door or wall went past nobody.
-		if at.distance_to(closest) <= near and not plan_blocked.call(at, closest):
+		# With no open way to whoever fired, the round stopped on the far side of a shut door.
+		if at.distance_to(Geometry2D.get_closest_point_to_segment(at, from, to)) <= near and not nav.path(at, from).is_empty():
 			s.brain.notice_shot(from)
 
 

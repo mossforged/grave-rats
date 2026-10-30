@@ -14,7 +14,7 @@ Sliding bulkhead doors (T004), which stalkers break (T006).
 - Fully open is the only state that doesn't block; anything short of it still has a panel in the doorway.
 - A door won't start closing on someone in the doorway ("blocked"), and a closing door backs off if someone steps in.
 - A locked door answers "locked" and never moves. `unlock()` exists; nothing in the game calls it yet.
-- Bashing only adds up on a shut, unlocked door, and stays if the basher leaves. At `bash.break_s` it's `BROKEN`: for good, stops nothing, hides nothing, panel flat on the floor on the far side; E answers "broken". Only `reset` brings it back. Who bashes and when is `src/enemies`.
+- Bashing only adds up on a shut, unlocked door, and stays if the basher leaves. At `bash.break_s` it's `BROKEN`: for good, stops nothing, hides nothing, panel flat on the floor on the far side; E answers "broken". Only `reset` brings it back. Who bashes and when is `src/enemies`: only a stalker already hunting you, never one that just heard a noise (T008).
 - A fully open panel is hidden: it lies inside the wall, where it fought the door post's surfaces.
 - Only doors facing the camera (`along_x`) join the cut-away. Side doors stay tall, so a shut one reads as shut beside a dropped wall.
 

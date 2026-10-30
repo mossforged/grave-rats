@@ -1,0 +1,10 @@
+# A008 — hauler-apose-back
+
+Tool: built-in image_gen; opaque background.
+Reference images (in order, in this directory): `hauler-apose-front.png`, `hauler-back.png`, `hauler-side.png`.
+
+## Exact generation prompt
+
+Use case: identity-preserve. Asset packet A008. Make one studio rigging input image of the EXACT SAME original Grave Rats hauler. Reference image 1 is the approved new FRONT A-POSE and locks the body pose, proportions, hand position and equipment placement. Other reference images show the existing suit from side/back. Preserve dirty ivory fabric, chipped orange helmet and shoulder plates, opaque black visor, dark harness, ivory chest box, ivory/orange compact rectangular life support backpack, snug corrugated neck hose, black utility belt, tightly fitted tools/pouches, asymmetric knee/shin/thigh gear, dark orange-plated gloves and chunky orange/black boots.
+Keep both arms 45 degrees out and down from the vertical torso, elbows almost straight, hands open flat with fingers together and palms facing the floor, holding nothing. Keep legs straight and feet shoulder width apart. Maintain clean visible background wedges between arms and torso and between gloves and hips/thighs/pouches. Background channel between legs continuing to boots. All belt equipment hugs body and never bridges these gaps; hose tight to shoulder. Exactly one whole centered figure, head to toe, generous margin around hands/boots/helmet. Neutral upright pose, no movement. Flat light grey studio background and soft even light, matching detailed worn PBR studio rendering. No labels, text, logos, watermarks, guide lines, props, scenery, or other figures.
+View requirement: BACK VIEW, camera directly behind the figure, orthographic-style at torso height. Rotate camera only; maintain the exact same A-pose. Show the rectangular backpack with ivory central panel, orange stripe on the wearer's RIGHT edge, dark perimeter framework and compact hose fittings. No chest box visible on the back. Preserve the wearer's asymmetric gear placement; no mirroring of anatomy.

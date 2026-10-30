@@ -17,7 +17,7 @@ Keys: WASD, Shift sprint, C/Ctrl crouch, mouse aim, LMB fire, R reload, 1-5 came
 - Cone closes wide to tight over `settle_s`, half closed at half time; moving never goes under the minimum, from the first step.
 - Reload: fire is refused and doesn't cancel it, it takes its full time; sprint cancels it and loses the magazine.
 - Speed before the move: pushing a wall still reads walk speed with the body stopped.
-- Numbers from data: edited config changes behaviour; a scan rejects tunable literals in 9 gameplay scripts (HUD, panel, `weight_deck.gd` and `operator_anim.gd` are not scanned; `weight_deck.gd` has literals only in its capture and demo code).
+- Numbers from data: edited config changes behaviour; a scan rejects tunable literals in 9 gameplay scripts (HUD, panel, `weight_deck.gd` and `operator_anim.gd` are not scanned; `weight_deck.gd` has literals in its capture and demo code plus a 5 m spawn aim distance, as in T002).
 - I broke the code on purpose to prove two tests bite: measuring speed after the move fails the walk test, and un-swapping the strafe clips fails the strafe test. Both restored.
 
 **Frame time** (`docs/screens/T003/frametime.json`): **2.08 ms avg, 2.50 ms p95, 3.13 ms p99, 19.2 ms max**, 4812 frames, 1920×954 (this display's limit), M2 Pro, Metal, MSAA 4x, vsync off. The measuring window walks, turns and fires, so it counts the gun.

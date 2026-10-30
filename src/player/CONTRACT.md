@@ -22,7 +22,7 @@ The weighty operator (T003). The rule: the intent responds the same step, the co
 ## Behaviour worth knowing
 - Turn rate: standing to crouched by crouch amount, and the slower of that and firing while a shot is recent.
 - Hips stay planted until the torso runs out of lead, then get dragged; while moving they also catch up at `hip_settle_deg_s`.
-- Sprinting needs Shift, a move held, no crouch key and fully upright. It wins over nothing else: crouch beats it.
+- Sprinting needs Shift, a move held, no crouch key and fully upright, so crouch beats sprint.
 - The legacy `L_Strafe_L/R` clips are named backwards (planted feet sweep the wrong way); the blend tree swaps them. `tests/test_player.gd` guards it.
 
 ## Signals

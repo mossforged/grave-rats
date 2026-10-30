@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 2 (core loop, grey box): John played it 2026-10-30. Gate not passed: the stalker is too slow and weak to scare. T006 (make it dangerous, plus his fixes) and A005 (hauler turnaround, HUD, title) queued.
+**Stage:** 2 (core loop, grey box): T006 merged (dangerous stalker; John's fixes). A005 merged (hauler sheet, crew variety, suit-OS HUD, title, logo). T007 (rival pirates, lock-to-cover, plus the scale/fade defaults T006 missed) queued. Stage 2 gate waits for John's second play.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,12 +12,13 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T006 queued (faster, dodging stalker; ambush that bites; doors broken slowly; crouch corkscrew, flashlight flicker, cover readout, camera between presets 1 and 2, awareness 2.2 m, tall crates block sight, stalker_deck as main scene).
-- Next code: T007 (rival pirates as recoloured operators, lock-to-cover prototype) is written; queue it once T006 merges.
-- Art: A005 queued (orange hauler model sheet, crew variety, suit-OS HUD with the ring, title art recomposed, logo set).
+- Code: T006 merged (lead reviewed, 181/181 reproduced). T007 queued; its step 0 applies John's stage 1 scale and fade picks.
+- Art: A005 merged. Lane idle until John approves the hauler for modelling, the crew-variety direction, the HUD and the title art.
 
 ## Open questions (for John)
-- Stage 2 gate, again after T006: tense and fun with a dangerous stalker?
+- T006 play: tense and fun now? Too much (a bot standing still dies in 5 s)? Does the light still flicker (if so, F1 Dust motes and Beam strength to 0 one at a time)? Is the corkscrew gone? 8 s of door banging right? Should a gunshot start a stalker on a door? (auto-T006)
+- A005: approve 01b/02/03b for a blockout model (the rifle-grip inset is wrong; we need a separate rifle reference), the crew-variety direction (04), the suit-OS HUD with the ammo ring (05/06b), the title art (07), the logo set (08b).
+- T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?
 
@@ -36,5 +37,5 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Stalker: a hit interrupting a wind-up; a player death animation.
 
 ## Last session
-2026-10-30 (lead): John played the stalker deck. Feedback in `docs/playtests/log.md`; picks in `docs/decisions.md`. Wrote and queued T006 and A005.
-2026-10-30 (lead, earlier): merged T005 (153/153 reproduced); morning report published.
+2026-10-30 (lead): merged T006 (181/181 reproduced; it predates the scale/fade addendum, so that moved into T007 step 0) and A005; queued T007.
+2026-10-30 (code, unattended): T006: dash, dodge, faster spit, an ambush that hits 12/12 bots, doors broken in 8 s, crouch corkscrew fixed, IN COVER, LIGHT OFF, camera 60°/20.5 m. Flicker not reproduced; one door-panel flash fixed.

@@ -6,6 +6,10 @@
 John: cover needs "a monster that shoots something", and "maybe having a sort of Gears style, like, lock into cover thing would be a good idea, where you, like, brace against it and then can shoot over it." He picked **rival pirates** for the shooting enemy, and suggested **a recolour of the player body** to save time.
 
 ## Do
+0. **First, John's stage 1 picks (the T006 addendum, which T006 missed because it branched before it):**
+   - room scale 0.85 and character scale 1.15 become the defaults in `data/deck.json`;
+   - the cut-away default becomes `fade`, with `fade_transparency` 0.82 → 0.65, plus a slider for it in F1.
+   The lead tried exactly this data change on top of T006: 180/181 passed. `test_enemies.gd::test_tipping_a_bed_in_the_scene_holds_you_and_gives_low_cover` fails with "can't walk off while tipping": probably a test position that assumes room ×1.0. Fix the cause, not just the number. Check that every prop, door, bed and the ambush panel still fit at ×0.85. Report the operator's share of view height at the new default camera, and capture the medbay and junction with the new defaults.
 1. **The pirate body:** the legacy operator model and clips, recoloured as a rival crew. Per the A001-13 brief they're "better funded, worse people": clean corporate white and navy or a loud sponsor colour, with no orange (that's ours). Do it with a material tint or swap in data, not by editing the source glTF. Same rifle model.
 2. **Pirates obey weight, exactly like you** (`src/pirates/`, numbers in `data/pirates.json`, on F1 sliders): the same turn-rate cap, aim settle, recoil and reload commitment as the player. They're dangerous because they're coordinated and use cover, not because they cheat.
 3. **Pirate behaviour (a squad of 3):**

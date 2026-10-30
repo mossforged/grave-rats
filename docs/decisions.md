@@ -11,3 +11,5 @@
 - 2026-10-29: Pillars approved, with two from John: **weight, not speed** (deliberate, visceral combat; turning, aiming, firing and reloading take time; cover matters; ambushes scare because you can't spin instantly) and **satirical tone** (200 years on, worse capitalism drives desperate crews into derelicts for credits; humour from desperation, violence still lands).
 - 2026-10-29: Threats (John): rogue AI, robots, aliens, horrors, and rival pirate crews. Roster and mix still open; A001 explores.
 - 2026-10-29: Pillar added (lead's proposal, John: "that sounds good to me"): **Greed is the clock**. Staying longer means better loot and worse odds; runs build to "one more room?".
+- 2026-10-30: `assets/source/.gdignore` added (lead): Godot no longer scans art sources, so it never writes `.import` files into the art lane's folder. The code lane imports by copying into `assets/game/` (T001 approach).
+- 2026-10-30: MSAA 4× kept (T001: thin rails and rifles crawl at 2×; cost within noise on the M2 Pro). Revisit if a scene gets tight.

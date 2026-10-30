@@ -1,0 +1,67 @@
+{
+  "default_preset": 0,
+  "near_m": 0.1,
+  "far_m": 150.0,
+  "follow": {
+    "smoothing_hz": 5.0,
+    "look_ahead_m": 1.6,
+    "focus_height_m": 0.9
+  },
+  "presets": [
+    {
+      "name": "concept match",
+      "projection": "perspective",
+      "pitch_deg": 60.0,
+      "yaw_deg": 0.0,
+      "fov_deg": 35.0,
+      "distance_m": 19.0,
+      "ortho_size_m": 0.0
+    },
+    {
+      "name": "steeper / closer",
+      "projection": "perspective",
+      "pitch_deg": 70.0,
+      "yaw_deg": 0.0,
+      "fov_deg": 35.0,
+      "distance_m": 13.0,
+      "ortho_size_m": 0.0
+    },
+    {
+      "name": "flatter / wider",
+      "projection": "perspective",
+      "pitch_deg": 48.0,
+      "yaw_deg": 0.0,
+      "fov_deg": 42.0,
+      "distance_m": 22.0,
+      "ortho_size_m": 0.0
+    },
+    {
+      "name": "prototype ortho",
+      "projection": "orthographic",
+      "pitch_deg": 52.0,
+      "yaw_deg": 0.0,
+      "fov_deg": 0.0,
+      "distance_m": 40.0,
+      "ortho_size_m": 21.0
+    },
+    {
+      "name": "wildcard: long lens",
+      "projection": "perspective",
+      "pitch_deg": 62.0,
+      "yaw_deg": 0.0,
+      "fov_deg": 18.0,
+      "distance_m": 37.0,
+      "ortho_size_m": 0.0
+    }
+  ],
+  "cutaway": {
+    "mode": "drop",
+    "modes": ["drop", "fade", "off"],
+    "low_height_m": 0.45,
+    "fade_transparency": 0.82,
+    "half_width_m": 4.0,
+    "depth_m": 7.0,
+    "behind_m": 0.4,
+    "speed_per_s": 5.0
+  }
+}

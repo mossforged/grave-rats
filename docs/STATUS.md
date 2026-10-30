@@ -17,7 +17,7 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## Open questions (for John)
 - Stage 2 gate, again after T006: tense and fun with a dangerous stalker?
-- Room and character scale: untested (the keys only work in `scenes/study/scale_deck.tscn`, not the stalker deck).
+- Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
 - A shooting enemy next (security robot or rival pirate), then lock-to-cover (his Gears idea)? Lead's plan: yes, T007 after T006.
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?
 

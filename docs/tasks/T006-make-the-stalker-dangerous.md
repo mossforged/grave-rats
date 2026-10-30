@@ -39,3 +39,9 @@ John played `stalker_deck`. The structure works: sight, weight and sounds are go
 - **Human (John):** the stage 2 gate question again, with F1 open.
 
 Out of scope: new enemy types (a shooting enemy is next), lock-to-cover, art, new sounds beyond placeholder bangs.
+
+## Addendum (lead, 2026-10-30, John's stage 1 answers)
+John played `scale_deck`: "I like tight and bigger for the scale", and the operator "is generally, I think, too small ... We want to be able to see details in the model." For the cut-away he "definitely" prefers fade over drop, and it "could even be a little bit more obscure".
+- **Room scale 0.85 and character scale 1.15 become the defaults** in every deck (data only). Check that props and doors still fit and that the T005 cover heights still hold at the new scale; report the operator's share of view height at the new default camera.
+- **Cut-away default becomes `fade`**, with the faded walls a little more solid than now (`fade_transparency` 0.82 → about 0.65; a slider in F1). Drop stays on the C key.
+- Add to the windowed captures: the new defaults (camera, scale, fade) in the medbay and the junction.

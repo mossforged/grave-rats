@@ -19,4 +19,5 @@
 - 2026-10-30: Weight levers (turn, aim settle, reload) **approved as they are** (John: "pretty good right now").
 - 2026-10-30: Art picks (John): crew **A001-01 orange hauler** first, with varied looks and sizes later; all A002 environment sheets; HUD **A003-02 suit OS** (keep 01's ring around the operator as an idea); company screens' tone approved; logo **A004-01**, with the cracked visor and crew patch also liked; title art **A004-08**, recomposed as one crew member working the door while another walks up behind.
 - 2026-10-30: A shooting enemy comes before cover gets more work; a Gears-style lock-to-cover is a candidate for then (John's idea), not now.
+- 2026-10-30: Stage 1 scale (John): **rooms ×0.85, character ×1.15** ("tight and bigger"; the operator was too small to show detail). Cut-away **fade, not drop**, a little more opaque. Together with the new camera this closes the stage 1 gate's open choices; John confirms the framing after T006.
 

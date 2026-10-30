@@ -40,7 +40,7 @@ The stalker, its spit, the bulkhead ambush, and the scene that closes the grey-b
 - `StalkerPack`: `setup(layout, cover, blocked, dps)`, `tick(delta)`, `reset()`, `noise(kind, at)`, `shot_at(from, to)`, `door_towards(s)`, `next_dodge_point(s)`, `shooter_lines()`, `play_sound(key, at)`; fields `stalkers`, `nav`, `spits`, `light_on` (Callable, set by the scene), `target` {`pos`, `height`, `alive`}.
 - `Stalker`: `setup`, `reset`, `simulate(delta, pack)`, `place_hunting(from, at)`, `take_hit`, `shot_disc`, `mouth`, `floor_position`; fields `brain`, `label`, `door`.
 - `Bulkhead`: `setup(breach, cfg, height)`, `blow()`, `reset()`, `tick(delta)`, `blocks_sight()`, `sight_rect()`, `panel_center()`, `debris_count()`, `sealed`.
-- `stalker_deck.gd`: `simulate_world(delta)`, `interact()`, `fire_ambush()`, `body_height()`, `in_cover_now()`, `bed_in_reach(p)`, plus `weight_deck`'s and `sight_deck`'s. It's the project's main scene. Keys: E tips a bed in reach, otherwise works a door; 6 goes back to the default camera; Backspace resets everything, starts a new life and writes the old one's log.
+- `stalker_deck.gd`: `simulate_world(delta)`, `interact()`, `fire_ambush()`, `body_height()`, `in_cover_now()`, `bed_in_reach(p)`, plus `weight_deck`'s and `sight_deck`'s. Keys: E tips a bed in reach, otherwise works a door; 6 goes back to the default camera; Backspace resets everything, starts a new life and writes the old one's log.
 
 ## Signals
 `StalkerPack.player_hit(source, amount, stalker, in_cover)`, `player_protected(stalker)`; `SpitSystem.glob_ended(result, shooter, aimed_at)`; `Stalker.was_shot(stalker, damage, from)`; `Bulkhead.burst`.

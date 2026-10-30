@@ -443,6 +443,319 @@
       "step": 0.05
     },
     {
+      "section": "Lock-to-cover (pirate_deck)"
+    },
+    {
+      "label": "Lock-to-cover (1 on, 0 off)",
+      "file": "cover",
+      "path": "lock.enabled",
+      "min": 0,
+      "max": 1,
+      "step": 1
+    },
+    {
+      "label": "Lock reach m",
+      "file": "cover",
+      "path": "lock.reach_m",
+      "min": 0.3,
+      "max": 3,
+      "step": 0.05
+    },
+    {
+      "label": "Snap s",
+      "file": "cover",
+      "path": "lock.snap_s",
+      "min": 0.02,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Raise to braced s",
+      "file": "cover",
+      "path": "lock.raise_s",
+      "min": 0.02,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Lower to protected s",
+      "file": "cover",
+      "path": "lock.lower_s",
+      "min": 0.02,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Moving away releases at",
+      "file": "cover",
+      "path": "lock.release_dot",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.05
+    },
+    {
+      "section": "Pirates: weight (start equal to yours)"
+    },
+    {
+      "label": "Turn standing °/s",
+      "file": "pirates",
+      "path": "weight.turn.standing_deg_s",
+      "min": 60,
+      "max": 720,
+      "step": 5
+    },
+    {
+      "label": "Turn firing °/s",
+      "file": "pirates",
+      "path": "weight.turn.firing_deg_s",
+      "min": 30,
+      "max": 720,
+      "step": 5
+    },
+    {
+      "label": "Turn crouched °/s",
+      "file": "pirates",
+      "path": "weight.turn.crouched_deg_s",
+      "min": 30,
+      "max": 720,
+      "step": 5
+    },
+    {
+      "label": "Walk m/s",
+      "file": "pirates",
+      "path": "weight.move.walk_speed_m_s",
+      "min": 1,
+      "max": 8,
+      "step": 0.05
+    },
+    {
+      "label": "Crouch m/s",
+      "file": "pirates",
+      "path": "weight.move.crouch_speed_m_s",
+      "min": 0.5,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "label": "Sprint m/s",
+      "file": "pirates",
+      "path": "weight.move.sprint_speed_m_s",
+      "min": 2,
+      "max": 10,
+      "step": 0.05
+    },
+    {
+      "label": "Cone wide °",
+      "file": "pirates",
+      "path": "rifle.cone.wide_deg",
+      "min": 1,
+      "max": 30,
+      "step": 0.1
+    },
+    {
+      "label": "Cone tight °",
+      "file": "pirates",
+      "path": "rifle.cone.tight_deg",
+      "min": 0,
+      "max": 10,
+      "step": 0.1
+    },
+    {
+      "label": "Cone settle s",
+      "file": "pirates",
+      "path": "rifle.cone.settle_s",
+      "min": 0.02,
+      "max": 2,
+      "step": 0.01
+    },
+    {
+      "label": "Reload s",
+      "file": "pirates",
+      "path": "rifle.reload_s",
+      "min": 0.3,
+      "max": 4,
+      "step": 0.05
+    },
+    {
+      "label": "Recoil °/shot",
+      "file": "pirates",
+      "path": "rifle.recoil.kick_deg",
+      "min": 0,
+      "max": 6,
+      "step": 0.05
+    },
+    {
+      "label": "Recoil recovery °/s",
+      "file": "pirates",
+      "path": "rifle.recoil.recover_deg_s",
+      "min": 0,
+      "max": 60,
+      "step": 0.5
+    },
+    {
+      "section": "Pirates: fight"
+    },
+    {
+      "label": "Round damage",
+      "file": "pirates",
+      "path": "rifle.damage",
+      "min": 1,
+      "max": 40,
+      "step": 0.5
+    },
+    {
+      "label": "Health",
+      "file": "pirates",
+      "path": "health",
+      "min": 10,
+      "max": 300,
+      "step": 1
+    },
+    {
+      "label": "Fall back below share",
+      "file": "pirates",
+      "path": "fight.fall_back_below",
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    },
+    {
+      "label": "Burst shortest",
+      "file": "pirates",
+      "path": "fight.burst_min",
+      "min": 1,
+      "max": 15,
+      "step": 1
+    },
+    {
+      "label": "Burst longest",
+      "file": "pirates",
+      "path": "fight.burst_max",
+      "min": 1,
+      "max": 30,
+      "step": 1
+    },
+    {
+      "label": "Suppress gap s",
+      "file": "pirates",
+      "path": "fight.suppress_gap_s",
+      "min": 0,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "label": "Support gap s",
+      "file": "pirates",
+      "path": "fight.support_gap_s",
+      "min": 0,
+      "max": 8,
+      "step": 0.05
+    },
+    {
+      "label": "Flanker gap s",
+      "file": "pirates",
+      "path": "fight.flank_gap_s",
+      "min": 0,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "label": "Rise to braced s",
+      "file": "pirates",
+      "path": "fight.rise_s",
+      "min": 0.02,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Lower s",
+      "file": "pirates",
+      "path": "fight.lower_s",
+      "min": 0.02,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Fires within °",
+      "file": "pirates",
+      "path": "fight.fire_within_deg",
+      "min": 0.5,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Suppresses for s after contact",
+      "file": "pirates",
+      "path": "fight.suppress_memory_s",
+      "min": 0,
+      "max": 20,
+      "step": 0.5
+    },
+    {
+      "label": "Reaction lag s",
+      "file": "pirates",
+      "path": "senses.reaction_s",
+      "min": 0,
+      "max": 1.5,
+      "step": 0.05
+    },
+    {
+      "label": "Sight range m",
+      "file": "pirates",
+      "path": "senses.sight_range_m",
+      "min": 1,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Sight half angle °",
+      "file": "pirates",
+      "path": "senses.sight_half_angle_deg",
+      "min": 5,
+      "max": 120,
+      "step": 1
+    },
+    {
+      "label": "Hears gunfire m",
+      "file": "pirates",
+      "path": "senses.gunfire_m",
+      "min": 0,
+      "max": 60,
+      "step": 0.5
+    },
+    {
+      "label": "Stands down after s",
+      "file": "pirates",
+      "path": "senses.stand_down_s",
+      "min": 1,
+      "max": 60,
+      "step": 1
+    },
+    {
+      "label": "Flank at least °",
+      "file": "pirates",
+      "path": "spots.flank_min_deg",
+      "min": 0,
+      "max": 150,
+      "step": 5
+    },
+    {
+      "label": "Light energy",
+      "file": "pirates",
+      "path": "flashlight.energy",
+      "min": 0,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Beam strength",
+      "file": "pirates",
+      "path": "flashlight.beam_strength",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
       "section": "Suit"
     },
     {

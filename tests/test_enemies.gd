@@ -423,9 +423,11 @@ func test_the_prowling_stalker_really_walks_and_doors_hold_it() -> void:
 
 func test_tipping_a_bed_in_the_scene_holds_you_and_gives_low_cover() -> void:
 	var scene: Node = await _scene()
-	var bed: Node = scene.beds[0]
+	# The second bed's open side: beds 0 and 1 stand close enough at x0.85 that the gap is nearer the other one.
+	var bed: Node = scene.beds[1]
 	var c: Vector2 = bed.upright_rect.get_center()
-	var p: Vector2 = c + Vector2(bed.upright_rect.size.x, 0)
+	# Clear of the bed by a hair at any character scale: a capsule that starts inside it gets pushed out.
+	var p: Vector2 = c + Vector2(bed.upright_rect.size.x * 0.5 + scene.operator.body_radius() + 0.05, 0)
 	_at(scene, p, p + Vector2(0, -3))
 	check(scene.bed_in_reach(p) == bed, "the bed is in reach")
 	scene.operator.scripted = {"keys": Vector2(1, 0)}

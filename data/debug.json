@@ -250,6 +250,14 @@
       "step": 0.01
     },
     {
+      "label": "Cut-away see-through (V: fade)",
+      "file": "camera",
+      "path": "cutaway.fade_transparency",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
       "label": "Camera follow /s (camera.json)",
       "file": "camera",
       "path": "follow.smoothing_hz",

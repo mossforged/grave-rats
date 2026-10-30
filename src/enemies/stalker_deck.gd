@@ -274,7 +274,7 @@ func _process(delta: float) -> void:
 	super(delta)
 	if not _ready_done:
 		return
-	doors.actors = [{"position": _eye(), "radius": float(Data.value("player", "radius_m"))}]
+	doors.actors = [{"position": _eye(), "radius": operator.body_radius()}]
 	for s: Node in pack.stalkers:
 		if s.brain.alive():
 			doors.actors.append({"position": s.floor_position(), "radius": float(pack.cfg.radius_m)})
@@ -375,6 +375,7 @@ func capture_shots() -> Array[Dictionary]:
 	return [
 		{"name": "camera_default", "do": "camera", "preset": int(Data.value("camera", "default_preset"))},
 		{"name": "camera_preset_1", "do": "camera", "preset": 0},
+		{"name": "junction_default", "do": "junction"},
 		{"name": "dash_mid_motion", "do": "dash"},
 		{"name": "dodge", "do": "dodge"},
 		{"name": "spit_windup_fast", "do": "windup"},
@@ -422,6 +423,8 @@ func apply_shot(shot: Dictionary) -> void:
 			rig.set_preset(int(shot.preset))
 			await _open_medbay_door()
 			await _stand_at(behind, behind + Vector2(-float(pack.cfg.lunge.range_m), 0))
+		"junction":
+			await _stand_at(layout.point_in("junction", [0.5, 0.4]), layout.point_in("junction", [0.5, 0.1]))
 		"dash":
 			await _open_medbay_door()
 			var far := behind + Vector2(-float(pack.cfg.lunge.range_m), 0)

@@ -4,7 +4,7 @@ extends RefCounted
 ## with room_scale (snapped to grid_m); walls, doors and props keep their real size.
 ##
 ## Walls: every space gets a band of wall_thickness_m around its interior. Wall = inside some band,
-## inside no interior, inside no doorway. So shared walls are built once and spaces that touch
+## inside no interior, inside no doorway or door frame. So shared walls are built once and spaces that touch
 ## (an open corridor mouth) open into each other. Walls are merged into boxes and split into
 ## pieces no longer than wall_segment_m, so the camera cut-away can drop them locally.
 
@@ -111,7 +111,11 @@ func _build_walls() -> void:
 		var r: Rect2 = spaces[n].rect
 		interiors.append(r)
 		outers.append(r.grow(t))
-	var openings: Array = doors.map(func(d: Dictionary) -> Rect2: return d.rect)
+	# Doorways and their frame posts are cut out of the walls (frames are their own pieces).
+	var openings: Array = []
+	for d in doors:
+		openings.append(d.rect)
+		openings.append_array(d.frames)
 	# Coordinate-compressed grid over every edge, so cells are exact.
 	var xs := {}
 	var zs := {}

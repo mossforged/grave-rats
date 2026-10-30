@@ -83,6 +83,8 @@ func test_doorways_fit_the_character() -> void:
 			check(is_equal_approx(clear, float(deck.door_width_m)), "door width from data")
 			for w in lay.walls:
 				check(not _overlaps(w, d.rect), "no wall in the doorway of %s" % d.space)
+				for fr in d.frames:
+					check(not _overlaps(w, fr), "door frame of %s is its own piece (no z-fight)" % d.space)
 			for p in lay.props:
 				check(not p.rect.intersects(d.rect.grow(0.5)), "no prop blocks the door of %s" % d.space)
 
@@ -158,5 +160,24 @@ func test_study_scene_builds_and_switches() -> void:
 	check_eq(tree.get_nodes_in_group(&"camera_cutaway").size(), scene.layout.walls.size() + scene.layout.doors.size() * 2,
 			"old deck's walls left the tree")
 	scene.release_shot()
+	scene.queue_free()
+	await tree.process_frame
+
+
+func test_stand_in_collides_with_walls() -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	var scene: Node3D = load("res://scenes/study/scale_deck.tscn").instantiate()
+	tree.root.add_child(scene)
+	await tree.physics_frame
+	await tree.physics_frame
+	var body: CharacterBody3D = scene.stand_in
+	body.input_enabled = false
+	# Stand in the junction level with solid medbay wall (not the door) and push west into it.
+	var j: Rect2 = scene.layout.space_rect("junction")
+	body.global_position = Vector3(j.position.x + 1.5, 0, j.position.y + 4.0)
+	await tree.physics_frame
+	var hit := body.move_and_collide(Vector3(-5, 0, 0))
+	check(hit != null, "stand-in hits the junction's west wall")
+	check(body.global_position.x > j.position.x - 0.01, "stand-in stops at the wall (x %.2f, wall face %.2f)" % [body.global_position.x, j.position.x])
 	scene.queue_free()
 	await tree.process_frame

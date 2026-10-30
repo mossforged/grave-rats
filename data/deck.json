@@ -60,7 +60,9 @@
     "sun_energy": 1.1,
     "sun_pitch_deg": -62.0,
     "sun_yaw_deg": 35.0,
-    "sun_shadows": true
+    "sun_shadows": true,
+    "sun_shadow_max_distance_m": 70.0,
+    "sun_shadow_blur": 1.5
   },
   "colors": {
     "floor": "8c9096",

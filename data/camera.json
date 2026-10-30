@@ -11,19 +11,19 @@
     {
       "name": "concept match",
       "projection": "perspective",
-      "pitch_deg": 60.0,
+      "pitch_deg": 56.0,
       "yaw_deg": 0.0,
       "fov_deg": 35.0,
-      "distance_m": 19.0,
+      "distance_m": 23.0,
       "ortho_size_m": 0.0
     },
     {
       "name": "steeper / closer",
       "projection": "perspective",
-      "pitch_deg": 70.0,
+      "pitch_deg": 68.0,
       "yaw_deg": 0.0,
       "fov_deg": 35.0,
-      "distance_m": 13.0,
+      "distance_m": 16.0,
       "ortho_size_m": 0.0
     },
     {
@@ -31,8 +31,8 @@
       "projection": "perspective",
       "pitch_deg": 48.0,
       "yaw_deg": 0.0,
-      "fov_deg": 42.0,
-      "distance_m": 22.0,
+      "fov_deg": 40.0,
+      "distance_m": 30.0,
       "ortho_size_m": 0.0
     },
     {
@@ -42,21 +42,25 @@
       "yaw_deg": 0.0,
       "fov_deg": 0.0,
       "distance_m": 40.0,
-      "ortho_size_m": 21.0
+      "ortho_size_m": 17.0
     },
     {
       "name": "wildcard: long lens",
       "projection": "perspective",
-      "pitch_deg": 62.0,
+      "pitch_deg": 58.0,
       "yaw_deg": 0.0,
       "fov_deg": 18.0,
-      "distance_m": 37.0,
+      "distance_m": 44.0,
       "ortho_size_m": 0.0
     }
   ],
   "cutaway": {
     "mode": "drop",
-    "modes": ["drop", "fade", "off"],
+    "modes": [
+      "drop",
+      "fade",
+      "off"
+    ],
     "low_height_m": 0.45,
     "fade_transparency": 0.82,
     "half_width_m": 4.0,

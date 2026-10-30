@@ -78,6 +78,16 @@ func moving() -> bool:
 	return speed > float(cfg.move.moving_threshold_m_s)
 
 
+## The noise your feet make right now: a key into the enemies' `senses` ("sprint_m" and so on), or
+## "" standing still. The AI hears this and the HUD's ring draws it.
+func noise_kind() -> String:
+	if not moving():
+		return ""
+	if sprinting:
+		return "sprint"
+	return "crouch" if crouch_amount >= 0.5 else "walk"
+
+
 func current_turn_rate_deg() -> float:
 	var t: Dictionary = cfg.turn
 	var rate := lerpf(float(t.standing_deg_s), float(t.crouched_deg_s), crouch_amount)

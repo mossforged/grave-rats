@@ -1057,18 +1057,126 @@ func test_a_locked_door_holds_and_a_door_with_a_way_around_is_not_bashed() -> vo
 	check(s.door == null, "and none in mind")
 
 
-func test_a_noise_behind_a_shut_door_brings_it_to_bash() -> void:
-	var scene: Node = await _scene()
+## A stalker on the far side of the cargo door from a gunshot, the door shut.
+func _shot_through_cargo_door(scene: Node) -> Dictionary:
 	var door: Node = scene._door("cargo", 0.6)
 	var s: Node = scene.pack.stalkers[0]
-	var outside: Vector2 = scene._door_side(door, -1.0, 2.0)
-	var noise_at: Vector2 = scene._door_side(door, -1.0, 4.0)
-	s.global_position = Vector3(scene._door_side(door, 1.0, 2.5).x, 0, scene._door_side(door, 1.0, 2.5).y)
+	var noise_at: Vector2 = scene._door_side(door, -1.0, 3.0)
+	var far: Vector2 = scene._door_side(door, 1.0, 2.5)
+	s.global_position = Vector3(far.x, 0, far.y)
 	_at(scene, noise_at, noise_at + Vector2(-5, 0))
-	check(outside != noise_at, "fixture")
-	scene.pack.noise("gunfire", noise_at)
-	await _run(scene, 2.0)
-	check_eq(s.brain.state, StalkerBrain.State.BASH, "a shot behind the door: it comes to break it")
+	return {"door": door, "stalker": s, "noise_at": noise_at}
+
+
+func test_a_shot_through_a_shut_door_brings_it_to_the_door_and_it_gives_up() -> void:
+	var scene: Node = await _scene()
+	var w: Dictionary = _shot_through_cargo_door(scene)
+	var door: Node = w.door
+	var s: Node = w.stalker
+	scene.pack.noise("gunfire", w.noise_at)
+	check_eq(s.brain.state, StalkerBrain.State.INVESTIGATE, "it heard and comes to look")
+	var t := 0.0
+	var reached := false
+	var ever_bashed := false
+	while t < 16.0 and s.brain.state == StalkerBrain.State.INVESTIGATE:
+		await _run(scene, DT)
+		t += DT
+		reached = reached or door.within_reach(s.floor_position(), float(s.cfg.radius_m))
+		ever_bashed = ever_bashed or s.brain.state == StalkerBrain.State.BASH or s.brain.bashing
+	check(reached, "it came right up to the door")
+	check(not ever_bashed, "it never bashed")
+	check_eq(door.door_state.bash_progress, 0.0, "not a scratch on it")
+	check_eq(s.brain.state, StalkerBrain.State.PROWL, "it gave up and went back to prowling")
+	check(door.door_state.blocks(), "the door is still shut")
+
+
+func test_a_shot_at_the_door_it_stands_behind_does_not_start_it_bashing() -> void:
+	var scene: Node = await _scene()
+	var w: Dictionary = _shot_through_cargo_door(scene)
+	var door: Node = w.door
+	var s: Node = w.stalker
+	var at_door: Vector2 = door.front_point(s.floor_position(), float(s.cfg.radius_m))
+	s.global_position = Vector3(at_door.x, 0, at_door.y)
+	# The way the deck reports a round fired into the door from the other side.
+	for i in 5:
+		scene.pack.noise("gunfire", w.noise_at)
+		scene.pack.shot_at(w.noise_at, door.opening.get_center())
+		await _run(scene, 0.2)
+	check_eq(s.brain.state, StalkerBrain.State.INVESTIGATE, "still only investigating: %s" % s.brain.state_name())
+	check_eq(door.door_state.bash_progress, 0.0, "the door's untouched")
+
+
+func test_a_hunting_stalker_still_breaks_the_door_you_went_behind() -> void:
+	var scene: Node = await _scene()
+	var door: Node = scene._door("medbay", 0.7)
+	var s: Node = scene.pack.stalkers[0]
+	var outside: Vector2 = scene._door_side(door, 1.0, 3.0)
+	var inside: Vector2 = scene._door_side(door, -1.0, 3.0)
+	scene._open_medbay_door()
+	_at(scene, outside + Vector2(0, -1), inside)
+	s.place_hunting(outside + Vector2(3, 0), outside)
+	await _run(scene, 0.3)
+	check(s.brain.hunting(), "fixture: hunting you with the door open")
+	# You step through and shut it.
+	_at(scene, inside, inside + Vector2(-5, 0))
+	s.brain.last_known = inside
+	check_eq(door.interact([]), "closing", "fixture: it shuts")
+	for i in roundi(float(door.cfg.close_s) / DT) + 2:
+		door.tick(DT, [])
+	check(door.door_state.blocks(), "fixture: shut")
+	var t := 0.0
+	while t < 4.0 and not s.brain.bashing:
+		await _run(scene, DT)
+		t += DT
+	check_eq(s.brain.state, StalkerBrain.State.BASH, "it comes to break it")
+	t = 0.0
+	while t < 5.0 and door.door_state.bash_progress == 0.0:
+		await _run(scene, DT)
+		t += DT
+	check(door.door_state.bash_progress > 0.0, "and it does")
+
+
+func test_the_through_door_radius_comes_from_data() -> void:
+	var cfg := _cfg()
+	var full := float(cfg.senses.gunfire_m)
+	check_eq(float(cfg.senses.through_door_factor), 0.5, "starts at half")
+	var b := _brain(false, cfg)
+	var at := Vector2(full * 0.75, 0)
+	check(b.hear("gunfire", at, Vector2.ZERO), "out in the open it hears at 75% of the radius")
+	b = _brain(false, cfg)
+	check(not b.hear("gunfire", at, Vector2.ZERO, true), "through a door it doesn't")
+	check(b.hear("gunfire", Vector2(full * 0.49, 0), Vector2.ZERO, true), "inside half the radius it does")
+	cfg.senses.through_door_factor = 0.8
+	b = _brain(false, cfg)
+	check(b.hear("gunfire", at, Vector2.ZERO, true), "the number really is read from data")
+	var scene: Node = await _scene()
+	var w: Dictionary = _shot_through_cargo_door(scene)
+	var s: Node = w.stalker
+	var d: Vector2 = s.floor_position() - (w.noise_at as Vector2)
+	var radius := StalkerBrain.hearing_radius(s.cfg, "gunfire", true)
+	var too_far: Vector2 = s.floor_position() - d.normalized() * (radius + 0.5)
+	check(scene.pack.nav.path(s.floor_position(), too_far).is_empty(), "fixture: that spot is behind the shut door")
+	scene.pack.noise("gunfire", too_far)
+	check_eq(s.brain.state, StalkerBrain.State.PROWL, "the pack uses the reduced radius behind a shut door")
+
+
+func test_a_fight_in_one_room_does_not_set_off_a_stalker_two_rooms_away() -> void:
+	var scene: Node = await _scene()
+	# The fight is deep in the medbay; the prowler is in cargo, with the junction and two shut doors between.
+	var s: Node = scene.pack.stalkers[0]
+	var fight_at: Vector2 = scene.layout.point_in("medbay", [0.5, 0.5])
+	check_eq(scene.layout.space_at(s.floor_position()), "cargo", "fixture: it's in cargo")
+	check(s.floor_position().distance_to(fight_at) <= float(s.cfg.senses.gunfire_m), "fixture: in earshot in the open")
+	_at(scene, fight_at, fight_at + Vector2(-3, 0))
+	var bashed := false
+	for i in 90:
+		scene.pack.noise("gunfire", fight_at)
+		scene.pack.shot_at(fight_at, fight_at + Vector2(-3, 0))
+		await _run(scene, 0.2)
+		bashed = bashed or s.brain.state == StalkerBrain.State.BASH or s.brain.bashing
+	check(not bashed, "18 s of gunfire never started it on a door (%s)" % s.brain.state_name())
+	for d: Node in scene.doors.doors:
+		check_eq(d.door_state.bash_progress, 0.0, "%s door untouched" % d.space)
 
 
 # --- T006: small changes from John's play ---

@@ -217,9 +217,10 @@ func _step_brace(delta: float) -> void:
 
 func _step_noise(delta: float, pos: Vector2) -> void:
 	_sprint_noise_left -= delta
-	if operator.model.sprinting and _sprint_noise_left <= 0.0:
+	var kind: String = operator.model.noise_kind()
+	if kind != "" and _sprint_noise_left <= 0.0:
 		_sprint_noise_left = float(pack.cfg.senses.sprint_emit_s)
-		pack.noise("sprint", pos)
+		pack.noise(kind, pos)
 
 
 func _step_acid(delta: float, pos: Vector2) -> void:

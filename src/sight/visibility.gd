@@ -117,8 +117,20 @@ func polygon(eye: Vector2, aim_yaw: float, light_on: bool) -> PackedVector2Array
 	return out
 
 
+## How far each of `count` rays reaches from `from`, evenly from `first_yaw` across `span`, capped
+## at `limit`. A beam's walls: it doesn't touch `hit_dynamic`, which is about what the player saw.
+func fan(from: Vector2, first_yaw: float, span: float, count: int, limit: float) -> PackedFloat64Array:
+	var edges := _facing_edges(from, limit)
+	var out := PackedFloat64Array()
+	out.resize(count)
+	for i in count:
+		var y := first_yaw + span * float(i) / float(maxi(count - 1, 1))
+		out[i] = _cast(from, yaw_dir2(y), limit, edges, false)
+	return out
+
+
 ## Distance along the unit `dir` to the first edge in `edges`, capped at `limit`.
-func _cast(eye: Vector2, dir: Vector2, limit: float, edges: PackedInt32Array) -> float:
+func _cast(eye: Vector2, dir: Vector2, limit: float, edges: PackedInt32Array, note_hits := true) -> float:
 	var best := limit
 	var best_owner := -1
 	for i: int in edges:
@@ -137,7 +149,7 @@ func _cast(eye: Vector2, dir: Vector2, limit: float, edges: PackedInt32Array) ->
 			continue
 		best = t
 		best_owner = _owner[i]
-	if best_owner >= 0:
+	if note_hits and best_owner >= 0:
 		hit_dynamic[best_owner] = true
 	return best
 

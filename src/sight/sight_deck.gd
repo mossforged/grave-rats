@@ -126,7 +126,7 @@ func _update_sight(delta: float, force_memory: bool) -> void:
 	sight.update_sight(_eye(), yaw, flashlight.on, delta, force_memory)
 	var muzzle := operator.muzzle_position()
 	flashlight.follow(muzzle, yaw)
-	flashlight.draw_beam(sight.polygon, _eye(), yaw, muzzle)
+	flashlight.draw_beam(sight.visibility, _eye(), yaw, muzzle, delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:

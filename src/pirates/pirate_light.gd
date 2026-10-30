@@ -1,11 +1,12 @@
 extends Node3D
-## A pirate's flashlight: a shadowed spot at the muzzle and a beam sheet cut by the same walls the
-## player's is. Colder than yours, so you can tell whose it is. Numbers from data/pirates.json "flashlight".
+## A pirate's flashlight: a shadowed spot at the muzzle and the same beam as the player's (BeamFan). Colder than yours, so you can tell whose it is. Numbers from data/pirates.json "flashlight".
 
-const BEAM_SHADER := preload("res://src/pirates/pirate_beam.gdshader")
+const BeamFan := preload("res://src/sight/beam_fan.gd")
+const BEAM_SHADER := preload("res://src/sight/beam.gdshader")
 
 var cfg: Dictionary
 var spot: SpotLight3D
+var fan: BeamFan
 
 var _mesh: ImmediateMesh
 var _mat: ShaderMaterial
@@ -31,6 +32,7 @@ func setup(config: Dictionary) -> void:
 	_beam.top_level = true
 	_beam.extra_cull_margin = float(cfg.range_m)
 	add_child(_beam)
+	fan = BeamFan.new(int(cfg.beam_rays))
 	apply_cfg()
 	set_on(bool(cfg.start_on))
 
@@ -45,6 +47,9 @@ func apply_cfg() -> void:
 	_mat.set_shader_parameter("beam_color", Color(String(cfg.color)))
 	_mat.set_shader_parameter("strength", float(cfg.beam_strength))
 	_mat.set_shader_parameter("fade_power", float(cfg.beam_fade_power))
+	_mat.set_shader_parameter("edge_power", float(cfg.beam_edge_power))
+	_mat.set_shader_parameter("tan_half", tan(deg_to_rad(float(cfg.half_angle_deg))))
+	fan.configure(deg_to_rad(float(cfg.half_angle_deg)), float(cfg.range_m), float(cfg.beam_reach_rate_m_s), float(cfg.beam_snap_m))
 
 
 func set_mask(texture: Texture2D, bounds: Rect2) -> void:
@@ -56,6 +61,7 @@ func set_mask(texture: Texture2D, bounds: Rect2) -> void:
 func set_on(value: bool) -> void:
 	spot.visible = value
 	_beam.visible = value
+	fan.restart()
 
 
 func follow(muzzle: Vector3, yaw: float) -> void:
@@ -63,33 +69,15 @@ func follow(muzzle: Vector3, yaw: float) -> void:
 	global_transform = Transform3D(Basis.from_euler(Vector3(pitch, yaw, 0.0)), muzzle)
 
 
-## A fan over the part of a sight polygon inside this light's wedge. `visibility` is the player's
-## Visibility, which knows the walls and doors; asked at beam_hz, since it isn't free.
+## The fixed fan from the muzzle. `visibility` is the player's Visibility, which knows the walls and
+## doors; asked at beam_hz, since it isn't free. The fan eases to its answer every step regardless.
 func draw_beam(delta: float, visibility: RefCounted, eye: Vector2, yaw: float, muzzle: Vector3) -> void:
+	if not _beam.visible:
+		return
+	var at := Vector2(muzzle.x, muzzle.z)
 	_since_beam += delta
-	if _since_beam < 1.0 / float(cfg.beam_hz) or not _beam.visible:
-		return
-	_since_beam = 0.0
-	var half := deg_to_rad(float(cfg.half_angle_deg))
-	var range_m := float(cfg.range_m)
-	var ring := PackedVector2Array()
-	for p: Vector2 in visibility.polygon(eye, yaw, true):
-		var to := p - eye
-		if absf(angle_difference(yaw, atan2(-to.x, -to.y))) <= half:
-			ring.append(eye + to.limit_length(range_m))
-	_mesh.clear_surfaces()
-	if ring.size() < 2:
-		return
-	var start_y := float(cfg.beam_start_height_m)
-	var end_y := float(cfg.beam_end_height_m)
-	var apex := Vector3(muzzle.x, start_y, muzzle.z)
-	_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in ring.size() - 1:
-		_mesh.surface_set_uv(Vector2.ZERO)
-		_mesh.surface_add_vertex(apex)
-		for k in 2:
-			var p := ring[i + k]
-			var t := minf(eye.distance_to(p) / range_m, 1.0)
-			_mesh.surface_set_uv(Vector2(t, 0.0))
-			_mesh.surface_add_vertex(Vector3(p.x, lerpf(start_y, end_y, t), p.y))
-	_mesh.surface_end()
+	if _since_beam >= 1.0 / float(cfg.beam_hz):
+		_since_beam = 0.0
+		fan.cast(visibility, eye, at, yaw)
+	fan.step(delta, at, yaw)
+	fan.fill(_mesh, muzzle, deg_to_rad(float(cfg.pitch_deg)), float(cfg.beam_floor_m))

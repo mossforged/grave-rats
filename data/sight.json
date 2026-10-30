@@ -33,9 +33,12 @@
   "beam": {
     "color": "e8e6d8",
     "strength": 0.1,
-    "start_height_m": 1.2,
-    "end_height_m": 0.1,
-    "fade_power": 1.5
+    "fade_power": 1.5,
+    "edge_power": 1.5,
+    "rays": 25,
+    "reach_rate_m_s": 30.0,
+    "snap_m": 1.0,
+    "floor_m": 0.03
   },
   "motes": {
     "count": 140,

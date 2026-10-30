@@ -69,6 +69,8 @@
     "close_sense_m": 2.6,
     "gunfire_m": 24.0,
     "sprint_m": 9.0,
+    "walk_m": 3.0,
+    "crouch_m": 1.5,
     "sprint_emit_s": 0.4,
     "shot_line_m": 2.0,
     "reaction_s": 0.3,
@@ -144,8 +146,11 @@
     "shadow_blur": 1.0,
     "beam_strength": 0.14,
     "beam_fade_power": 1.5,
-    "beam_start_height_m": 1.2,
-    "beam_end_height_m": 0.1,
+    "beam_edge_power": 1.5,
+    "beam_rays": 21,
+    "beam_reach_rate_m_s": 30.0,
+    "beam_snap_m": 1.0,
+    "beam_floor_m": 0.03,
     "beam_hz": 20.0
   },
   "body": {

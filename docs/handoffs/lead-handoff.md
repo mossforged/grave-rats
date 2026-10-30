@@ -30,6 +30,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T006 | code | merged 2026-10-30; waits for John's play |
 | T007 | code | merged 2026-10-30; waits for John's play |
 | T008 | code | queued: flicker, door-noise rule, suit-OS HUD with the noise ring |
+| T009 | code | written: John's Meshy hauler replaces the operator. **Queue it when T008 merges.** |
 | A005 | art | merged and approved 2026-10-30 |
 | A006 | art | merged and approved 2026-10-30 |
 | A007 | art | merged 2026-10-30 (rifle refused by the image tool) |

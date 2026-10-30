@@ -127,6 +127,7 @@ func test_it_turns_at_your_cap_however_much_it_wants_to() -> void:
 
 func test_its_aim_settles_and_recoil_kicks_as_yours_do() -> void:
 	var c := _cfg()
+	c.rifle.recoil.same_side_chance = 1.0
 	var b := _brain(c)
 	var pos := Vector2(0, 0)
 	var at := Vector2(0, -10)
@@ -402,6 +403,32 @@ func test_the_suppressor_fires_at_your_cover_while_the_flanker_gets_an_open_line
 		t += DT
 		s.alert(me)
 	check(scene.suit.integrity < was, "and the open line gets you, cover and all (%.1f s)" % t)
+
+
+func test_behind_tall_cover_it_hides_and_fires_from_beside_it() -> void:
+	var c := _cfg()
+	var field := CoverField.new(Data.load_data("cover"))
+	var rect := Rect2(5, -1, 1.2, 2)
+	field.set_piece(0, rect, CoverField.TALL)
+	var pieces := [{"rect": rect, "cover": "tall"}]
+	var plan := func(a: Vector2, z: Vector2) -> bool: return field.line_blocked(Vector3(a.x, 1, a.y), Vector3(z.x, 1, z.y))
+	var free := func(_p: Vector2) -> bool: return true
+	var walk := func(a: Vector2, z: Vector2) -> PackedVector2Array: return PackedVector2Array([a, z])
+	const CoverSpots := preload("res://src/pirates/cover_spots.gd")
+	var spots := CoverSpots.new(c.spots, field, pieces, 0.46, 1.2, free, plan, walk)
+	var threat := Vector2(0, 0)
+	var spot: Dictionary = spots.best_cover(threat, 0.8, Vector2(9, 0), [])
+	check(not spot.is_empty(), "it finds a slot")
+	check_eq(spot.kind, "tall", "the tall one")
+	check(plan.call(spot.hide, threat), "hidden where it crouches")
+	check(not plan.call(spot.fire, threat), "with a line from where it fires")
+	check(spot.fire != spot.hide, "which is somewhere else")
+	check(spots.hides(spot, threat, 0.8), "and hides says so")
+	var flank: Dictionary = spots.flank_spot(threat, 0.8, Vector2(9, 0), Vector2(9, 0), [])
+	check(not flank.is_empty(), "a flank exists")
+	check(spots.open_line(flank.hide, threat, 0.8), "with an open line")
+	var off := rad_to_deg(absf(angle_difference(Vector2(9, 0).angle(), (flank.hide as Vector2).angle())))
+	check(off >= float(c.spots.flank_min_deg), "well off the suppressor's angle (%.0f°)" % off)
 
 
 func test_a_hurt_pirate_falls_back_to_further_cover() -> void:

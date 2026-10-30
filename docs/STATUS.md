@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 2 (core loop, grey box): T006 merged (dangerous stalker; John's fixes). A005 merged (hauler sheet, crew variety, suit-OS HUD, title, logo). T007 (rival pirates, lock-to-cover, plus the scale/fade defaults T006 missed) queued. Stage 2 gate waits for John's second play.
+**Stage:** 2 (core loop, grey box): T006 merged (dangerous stalker; John's fixes). A005 merged (hauler sheet, crew variety, suit-OS HUD, title, logo). T007 (rival pirates, lock-to-cover, John's scale and fade defaults) built on `auto/t007-mac`, awaiting the lead's review. Stage 2 gate waits for John's second play.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,18 +12,20 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T006 merged (lead reviewed, 181/181 reproduced). T007 queued; its step 0 applies John's stage 1 scale and fade picks.
+- Code: T007 done (210/210), unplayed; handoff `auto-T007`. Main scene is now `pirate_deck`; the stalker deck is `godot --path . scenes/enemies/stalker_deck.tscn`. No next packet queued.
 - Art: A005 merged. Lane idle until John approves the hauler for modelling, the crew-variety direction, the HUD and the title art.
 
 ## Open questions (for John)
+- T007 play: does cover matter now, and is lock-to-cover better than plain crouching? Bots: cover yes (3.4 s in the open, 7.7 s behind cover); lock no (same when passive, fewer kills fighting). Too lethal? Do the barks give too much away? Is the crew right (white and navy)? (auto-T007)
 - T006 play: tense and fun now? Too much (a bot standing still dies in 5 s)? Does the light still flicker (if so, F1 Dust motes and Beam strength to 0 one at a time)? Is the corkscrew gone? 8 s of door banging right? Should a gunshot start a stalker on a door? (auto-T006)
 - A005: approve 01b/02/03b for a blockout model (the rifle-grip inset is wrong; we need a separate rifle reference), the crew-variety direction (04), the suit-OS HUD with the ammo ring (05/06b), the title art (07), the logo set (08b).
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
-- Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
+- Stage 1: rooms ×0.85, character ×1.15, fade cut-away at 0.65 are now the defaults (operator 7.4% of view height). Confirm the framing. Tighter rooms made the stalker easier to hit (lag bot 31-38% → 45%).
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?
 
 ## Parked
-- Lock-to-cover, Gears style (John): brace against cover and shoot over it. Waits for a shooting enemy.
+- Lock-to-cover in `stalker_deck`, turning corners and crossing to the next piece of cover (T007 has it in `pirate_deck`, one piece at a time).
+- Pirates: fighting stalkers, friendly fire, firing on the move, a lone survivor who advances.
 - Visible aim cone may go in the final game (John); keep for testing.
 - Competitive modes; procedural ship generation; contracts and meta-progression; the in-game "shift" framing (runs as shifts, timecard end screen).
 - T002 capture: auto-walk during the frame-time window so camera motion and cut-away are measured.
@@ -37,5 +39,5 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Stalker: a hit interrupting a wind-up; a player death animation.
 
 ## Last session
-2026-10-30 (lead): merged T006 (181/181 reproduced; it predates the scale/fade addendum, so that moved into T007 step 0) and A005; queued T007.
-2026-10-30 (code, unattended): T006: dash, dodge, faster spit, an ambush that hits 12/12 bots, doors broken in 8 s, crouch corkscrew fixed, IN COVER, LIGHT OFF, camera 60°/20.5 m. Flicker not reproduced; one door-panel flash fixed.
+2026-10-30 (code, unattended): T007: step 0 defaults (the failing test was the 0.46 m capsule, not room scale; two overlapping crates and door clearance fixed), a squad of 3 on the player's own weight code that suppresses and flanks, lock-to-cover on an F1 toggle, `pirate_deck`, run log fields. 210/210. Nobody has played it.
+2026-10-30 (lead): merged T006 (181/181 reproduced) and A005; queued T007.

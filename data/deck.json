@@ -1,0 +1,76 @@
+{
+  "grid_m": 0.5,
+  "floor_tile_m": 1.0,
+  "wall_height_m": 2.6,
+  "wall_thickness_m": 0.5,
+  "wall_segment_m": 2.0,
+  "door_width_m": 2.0,
+  "door_frame_m": 0.2,
+  "room_scale": 1.0,
+  "room_scale_options": [0.85, 1.0, 1.15],
+  "character_scale": 1.0,
+  "character_scale_options": [1.0, 1.15],
+  "spaces": [
+    {"name": "junction", "kind": "corridor", "size_m": [6.0, 26.0]},
+    {"name": "medbay", "kind": "room", "size_m": [14.0, 10.0],
+      "anchor": {"to": "junction", "side": "west", "offset_m": 3.0}},
+    {"name": "cargo", "kind": "room", "size_m": [14.0, 12.0],
+      "anchor": {"to": "junction", "side": "east", "offset_m": 0.0}},
+    {"name": "side_corridor", "kind": "corridor", "size_m": [14.0, 3.5],
+      "anchor": {"to": "cargo", "side": "south", "offset_m": 0.0, "offset_walls": -1, "open": false}}
+  ],
+  "doors": [
+    {"space": "medbay", "side": "east", "at": 0.7},
+    {"space": "cargo", "side": "west", "at": 0.6},
+    {"space": "side_corridor", "side": "north", "at": 0.8}
+  ],
+  "props": [
+    {"type": "bed", "space": "medbay", "at": [0.2, 0.4], "size_m": [0.9, 0.75, 2.0]},
+    {"type": "bed", "space": "medbay", "at": [0.36, 0.4], "size_m": [0.9, 0.75, 2.0]},
+    {"type": "console", "space": "medbay", "at": [0.7, 0.07], "size_m": [1.4, 1.1, 0.6]},
+    {"type": "cabinet", "space": "medbay", "at": [0.05, 0.08], "size_m": [0.6, 1.9, 0.5]},
+    {"type": "cabinet", "space": "medbay", "at": [0.12, 0.08], "size_m": [0.6, 1.9, 0.5]},
+    {"type": "console", "space": "medbay", "at": [0.9, 0.35], "size_m": [0.6, 1.1, 1.2]},
+    {"type": "crate_low", "space": "junction", "at": [0.8, 0.06], "size_m": [0.8, 0.8, 0.8]},
+    {"type": "console", "space": "junction", "at": [0.08, 0.04], "size_m": [0.6, 1.1, 1.0]},
+    {"type": "crate_high", "space": "cargo", "at": [0.4, 0.45], "size_m": [1.2, 1.2, 1.2]},
+    {"type": "crate_high", "space": "cargo", "at": [0.4, 0.58], "size_m": [1.2, 1.2, 1.2]},
+    {"type": "crate_low", "space": "cargo", "at": [0.5, 0.45], "size_m": [1.2, 0.8, 1.2]},
+    {"type": "crate_high", "space": "cargo", "at": [0.82, 0.2], "size_m": [1.2, 1.2, 1.2]},
+    {"type": "crate_high", "space": "cargo", "at": [0.9, 0.2], "size_m": [1.2, 1.2, 1.2]},
+    {"type": "crate_low", "space": "cargo", "at": [0.86, 0.32], "size_m": [1.2, 0.8, 1.2]},
+    {"type": "ammo_crate", "space": "cargo", "at": [0.68, 0.38], "size_m": [1.0, 0.6, 0.6]},
+    {"type": "crate_low", "space": "cargo", "at": [0.2, 0.1], "size_m": [0.8, 0.8, 0.8]},
+    {"type": "crate_low", "space": "side_corridor", "at": [0.35, 0.25], "size_m": [0.8, 0.8, 0.8]}
+  ],
+  "spawn": {"space": "junction", "at": [0.45, 0.5], "aim_deg": 30.0},
+  "path_check": {"from": "medbay", "to": "cargo", "cell_m": 0.1, "margin_m": 0.05},
+  "stand_in": {
+    "speed_m_s": 4.2,
+    "turn_deg_s": 720.0,
+    "radius_m": 0.4,
+    "height_m": 1.8,
+    "aim_height_m": 1.2
+  },
+  "lighting": {
+    "background_color": "0b0e12",
+    "ambient_color": "8a96a6",
+    "ambient_energy": 0.55,
+    "sun_color": "f2f2ee",
+    "sun_energy": 1.1,
+    "sun_pitch_deg": -62.0,
+    "sun_yaw_deg": 35.0,
+    "sun_shadows": true,
+    "sun_shadow_max_distance_m": 70.0,
+    "sun_shadow_blur": 1.5
+  },
+  "colors": {
+    "floor": "8c9096",
+    "floor_line": "6f7378",
+    "wall": "4a4f56",
+    "wall_top": "2c3036",
+    "door_frame": "e0a21a",
+    "prop": "6c737c",
+    "prop_accent": "c9a227"
+  }
+}

@@ -62,7 +62,7 @@ func _make_help() -> void:
 	layer.name = "SightHelp"
 	add_child(layer)
 	var label := Label.new()
-	label.text = String(h.text)
+	label.text = _help_text()
 	label.add_theme_font_size_override("font_size", int(h.font_size))
 	layer.add_child(label)
 	label.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
@@ -70,6 +70,10 @@ func _make_help() -> void:
 	label.offset_top = -float(h.from_bottom_px)
 	label.offset_bottom = -float(h.from_bottom_px)
 	label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+
+
+func _help_text() -> String:
+	return String(sight.cfg.help.text)
 
 
 ## Sight's own darker numbers on top of the deck's, in a copy so nothing else sees them.

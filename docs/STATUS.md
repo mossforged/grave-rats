@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 2 (core loop, grey box): T003 and T004 merged; T005 (stalker, cover, damage, ambush) running. Gates for stage 1 (camera/scale) and the T003/T004 feel wait for John.
+**Stage:** 2 (core loop, grey box): T003 and T004 merged; T005 (stalker, cover, damage, ambush) built on `auto/t005-mac`, awaiting lead review. Gates for stage 1 (camera/scale) and stage 2 wait for John.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,10 +12,11 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T004 merged (lead reviewed, 96/96 reproduced). T005 queued.
+- Code: T005 awaits lead review (153/153 headless). Next: John plays `scenes/enemies/stalker_deck.tscn` for the stage 2 gate.
 - Art: A001–A004 merged. Lane idle on purpose: crew/threat, environment, HUD and logo development all wait on John's picks.
 
 ## Open questions (for John)
+- Stage 2 gate: *"Is moving through these rooms with a flashlight tense and fun?"* Play `scenes/enemies/stalker_deck.tscn` with F1 open. Should stalkers open doors (they can't now)? Is tipping a bed worth 0.8 s? (auto-T005)
 - Stage 1 gate: which camera preset and room/character scale? At 55–65° pitch a real-size operator can't be both ~8% of view height and framed like the panel; preset 1 favours operator size, preset 3 the composition (see auto-T002).
 - `tools/capture.sh` only reaches 1920×954 on this display (title bar); accept, or make the capture window borderless (src/debug task)?
 - A001 picks: which crew looks and threat directions to develop (art lane's recommendation: 01 orange hauler; 11 acid stalker, with 09 rogue AI as the systemic complement).
@@ -36,8 +37,9 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - `tests/test_deck.gd` `test_props_at_real_size` logs a string-format error (`%` with an array) while passing.
 - Sight leaks: the floor aim cone stops at unseen walls, tracers and prompts draw over the mask, hidden targets pop in with no fade.
 - Quiet-machine frame-time baseline for the asset viewer (T001 runs had other load on the Mac).
+- `src/study` deck dressing and the deck copy in `stalker_deck` want a real level module.
+- Stalker: a hit interrupting a wind-up; a player death animation.
 
 ## Last session
-2026-10-30 (lead): merged T004 (96/96 reproduced; flashlight ~0.35 ms) and A004; queued T005.
-2026-10-30 (code, unattended): T004 built: `src/sight`, `src/doors`, `scenes/sight/sight_deck.tscn`, `data/sight.json`, `data/doors.json`; `data/deck.json` gains a fourth (locked) door and two tall props. 96/96 tests, import clean.
-Flashlight costs about 0.35 ms (3.51 vs 3.16 ms avg) at 1920×954, not a true 1080p, on a loaded Mac. Captures in `docs/screens/T004/`. Nobody has played it; the dread is untested.
+2026-10-30 (code, unattended): T005 built: `src/cover`, `src/health`, `src/enemies`, `src/run_log`, `scenes/enemies/stalker_deck.tscn`. Small hooks in rifle, operator, deck layout and `sight_deck`. 153/153 tests, import clean.
+Two stalkers hunting: 3.50 ms avg, 5.20 ms p95 at 1920×954 (+0.26 / +1.5 ms against `sight_deck`). Captures in `docs/screens/T005/`. Nobody has played it or heard it.

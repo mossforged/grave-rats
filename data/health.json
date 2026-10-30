@@ -1,0 +1,34 @@
+{
+  "suit": {
+    "max": 100.0
+  },
+  "stagger": {
+    "threshold_fraction": 0.25,
+    "control_loss_s": 0.35,
+    "cone_deg": 22.0,
+    "camera_kick_m": 0.22,
+    "kick_recover_s": 0.3
+  },
+  "acid": {
+    "puddle_dps": 9.0
+  },
+  "hud": {
+    "layer": 51,
+    "bar_width_px": 280.0,
+    "bar_height_px": 18.0,
+    "margin_px": 20.0,
+    "label_font_size": 18,
+    "death_font_size": 44,
+    "detail_font_size": 22,
+    "outline_px": 6,
+    "flash_s": 0.25,
+    "acid_color": "9dff4a",
+    "bar_color": "d8d2c0",
+    "low_color": "e0604a",
+    "low_fraction": 0.3,
+    "flash_color": "ff503c60",
+    "death_color": "000000c0",
+    "death_word": "SUIT BREACHED",
+    "restart_word": "Backspace: next shift"
+  }
+}

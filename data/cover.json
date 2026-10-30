@@ -1,0 +1,35 @@
+{
+  "low_height_m": 0.9,
+  "standing_torso_m": 1.3,
+  "crouched_torso_m": 0.8,
+  "braced_torso_m": 1.2,
+  "brace_hold_s": 0.45,
+  "brace_crouch_shown": 0.55,
+  "brace_rate_per_s": 9.0,
+  "bed": {
+    "tip_s": 0.8,
+    "reach_m": 1.5,
+    "lying_height_m": 0.9,
+    "mattress_m": 0.1,
+    "color": "6c737c",
+    "mattress_color": "8a4b3c",
+    "prompt": "E  tip the bed",
+    "prompt_height_m": 1.5,
+    "prompt_pixel_size": 0.006,
+    "prompt_font_size": 40,
+    "prompt_color": "ffe9b0"
+  },
+  "mark": {
+    "layer": 50,
+    "size_px": 44.0,
+    "word_gap_px": 18.0,
+    "gap_px": 26.0,
+    "from_bottom_px": 150.0,
+    "line_px": 3.0,
+    "protected_color": "62e08a",
+    "exposed_color": "e0604a",
+    "word_protected": "COVER",
+    "word_exposed": "OPEN",
+    "font_size": 16
+  }
+}

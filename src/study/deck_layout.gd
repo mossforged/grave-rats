@@ -14,7 +14,8 @@ var spaces := {}             # name -> {name, kind, rect: Rect2}
 var space_order: Array = []  # names in data order
 var doors: Array = []        # {space, side, rect: Rect2 (the opening, wall-thick), frames: [Rect2, Rect2], along_x: bool}
 var walls: Array = []        # Rect2 footprints
-var props: Array = []        # {type, space, center: Vector2, size: Vector3, rect: Rect2}
+var props: Array = []        # {type, space, center: Vector2, size: Vector3, rect: Rect2, cover}
+var breaches: Array = []     # optional data "breaches": wall openings something else fills {space, side, rect, along_x}
 var bounds := Rect2()
 
 
@@ -23,6 +24,7 @@ func _init(deck: Dictionary, scale: float = -1.0) -> void:
 	room_scale = float(deck.room_scale) if scale <= 0.0 else scale
 	_place_spaces()
 	_place_doors()
+	_place_breaches()
 	_build_walls()
 	_place_props()
 
@@ -103,6 +105,24 @@ func _place_doors() -> void:
 				"frames": frames, "along_x": along_x})
 
 
+## Like a doorway with no frames or door: cut from the walls, walkable floor. Its owner fills it.
+func _place_breaches() -> void:
+	var t := thickness()
+	var w := float(data.door_width_m)
+	for spec in data.get("breaches", []):
+		var r: Rect2 = spaces[String(spec.space)].rect
+		var at := float(spec.at)
+		var rect: Rect2
+		var along_x := String(spec.side) in ["north", "south"]
+		if along_x:
+			var z0 := r.position.y - t if spec.side == "north" else r.end.y
+			rect = Rect2(r.position.x + r.size.x * at - w * 0.5, z0, w, t)
+		else:
+			var x0 := r.position.x - t if spec.side == "west" else r.end.x
+			rect = Rect2(x0, r.position.y + r.size.y * at - w * 0.5, t, w)
+		breaches.append({"space": String(spec.space), "side": String(spec.side), "rect": rect, "along_x": along_x})
+
+
 func _build_walls() -> void:
 	var t := thickness()
 	var outers: Array = []
@@ -116,6 +136,8 @@ func _build_walls() -> void:
 	for d in doors:
 		openings.append(d.rect)
 		openings.append_array(d.frames)
+	for b in breaches:
+		openings.append(b.rect)
 	# Coordinate-compressed grid over every edge, so cells are exact.
 	var xs := {}
 	var zs := {}
@@ -195,7 +217,7 @@ func _place_props() -> void:
 		var c := point_in(String(spec.space), spec.at)
 		var s := Vector3(float(spec.size_m[0]), float(spec.size_m[1]), float(spec.size_m[2]))
 		props.append({"type": String(spec.type), "space": String(spec.space), "center": c, "size": s,
-				"rect": Rect2(c.x - s.x * 0.5, c.y - s.z * 0.5, s.x, s.z)})
+				"rect": Rect2(c.x - s.x * 0.5, c.y - s.z * 0.5, s.x, s.z), "cover": String(spec.get("cover", "none"))})
 
 
 ## Every footprint a character can't stand in: walls, door frames and props.
@@ -255,6 +277,7 @@ func free_grid(radius: float, cell: float) -> Dictionary:
 	free.fill(0)
 	var floors: Array = space_order.map(func(n: String) -> Rect2: return spaces[n].rect)
 	floors.append_array(doors.map(func(d: Dictionary) -> Rect2: return d.rect))
+	floors.append_array(breaches.map(func(b: Dictionary) -> Rect2: return b.rect))
 	for r in floors:
 		_mark(free, nx, nz, cell, r, 0.0, 1)
 	for r in blockers():

@@ -2,6 +2,9 @@
 
 ## 2026-10-30 — stalker deck after T006, John's second play
 - "Obviously the way that it moves, the lack of animations and all that, the sound effects are rough, but yeah, this is definitely scarier. It is more of an actual issue that has to be dealt with. So yeah, I would say that those are improvements."
+- Gate: "yes i think we can call it passed i think its not too much right now."
+- Flicker, still there: "there is the steady cone of white for the light, and then there's a more abstract lower shape that's sort of flickering. It's visible kind of lower on the screen from it a little bit, like almost overlaid, but not quite."
+- Gunshots starting door-breaking: "I'm not sure about the gunshots. I don't want one fight to cause everything to trigger necessarily."
 
 ## 2026-10-30 — stage 2 grey box (`stalker_deck`, after T005), John's first play
 - Tense and fun? "The tension is going to come down to how dangerous these things are, how fast they move, how much damage they do. I wouldn't say that I'm particularly scared at this point." "It attacks pretty slowly. It doesn't really move."

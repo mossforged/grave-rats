@@ -21,4 +21,6 @@
 - 2026-10-30: A shooting enemy comes before cover gets more work; a Gears-style lock-to-cover is a candidate for then (John's idea), not now.
 - 2026-10-30: Stage 1 scale (John): **rooms ×0.85, character ×1.15** ("tight and bigger"; the operator was too small to show detail). Cut-away **fade, not drop**, a little more opaque. Together with the new camera this closes the stage 1 gate's open choices; John confirms the framing after T006.
 - 2026-10-30: Second enemy = **rival pirates** (John), using **a recolour of the player body** to save time (John). T007 is written; the lead queues it once T006 merges.
+- 2026-10-30: **Stage 2 gate passed** (John, after T006: "definitely scarier", "I think we can call it passed", difficulty "not too much right now"). Placeholder motion, animation and sound are known and belong to stage 3.
+- 2026-10-30: Noise doesn't start door-breaking (John: "I don't want one fight to cause everything to trigger"). Only a stalker already hunting you breaks a door; gunfire through a door brings it to investigate. Added to T007.
 

@@ -36,3 +36,17 @@ John: cover needs "a monster that shoots something", and "maybe having a sort of
 - **Human (John):** does cover matter now, and is lock-to-cover better than plain crouching?
 
 Out of scope: new art beyond the recolour, pirates fighting stalkers (parked), loot, co-op.
+
+## Addendum (lead, 2026-10-30, after John's second play)
+Do these two first, after step 0.
+1. **The flashlight flicker, located by John:** "there is the steady cone of white for the light, and then there's a more abstract lower shape that's sort of flickering. It's visible kind of lower on the screen from it a little bit, like almost overlaid, but not quite."
+   - **The lead's suspect:** the beam mesh `flashlight.draw_beam()` (`src/sight/flashlight.gd`). It's rebuilt every frame as a fan from the sight polygon, sloping from `beam.start_height_m` to `end_height_m`, so it sits lower than and offset from the real SpotLight cone, and its edge follows every polygon change.
+   - **Confirm before fixing:** with the beam mesh hidden, does the second shape go away?
+   - **Then fix it so there is one light shape:** the beam shouldn't jitter frame to frame (smooth or stabilise the ring, or build it from a fixed cone clipped only at walls), and it should line up with the spotlight's footprint.
+   - Add a test on frame-to-frame beam vertex change while standing still and slowly turning. Capture a before and after pair.
+   - Also check the sight mask's stair-stepped edge, which T006 flagged, for the same crawl.
+2. **Gunshots don't start door-breaking** (John: "I don't want one fight to cause everything to trigger necessarily"):
+   - A stalker breaks a shut door only if it was **hunting you** (it saw you, or was stalking you) when you went behind that door.
+   - A gunshot it hears through a shut door makes it **investigate up to the door and linger**, then give up; no bashing on noise alone.
+   - Hearing through shut doors uses a reduced radius (a data value, start at 50%).
+   - Update the T006 door tests to match, and add one: a fight in one room doesn't send a stalker two rooms away into bashing.

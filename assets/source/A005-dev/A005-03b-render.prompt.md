@@ -1,0 +1,5 @@
+# A005-03b
+
+Built-in image_gen; design reference A005-03-render.png. Review layout uses a 96 px-tall projected figure plus an exact nearest-neighbour 4x enlargement (384 px). This is a review proxy; game scale is not yet approved.
+
+Use case: precise-object-edit. A005-03b overhead camera correction. Supplied image is the orange hauler identity reference. Re-render the exact same hauler and rifle from a substantially STEEPER overhead three-quarter GAME CAMERA. Camera is 60 degrees below horizontal, only 30 degrees away from vertical top-down: see mostly helmet CROWN, tops of orange shoulders and backpack TOP, strongly foreshortened torso and legs. See almost none of visor front, no chest hero portrait. Full body and entire long rifle fit inside frame on neutral flat charcoal floor. Figure aims diagonally toward upper right. Orange dome remains visibly separate from ivory rectangular backpack; orange shoulder shells, dirty ivory suit and black harness maintained. Lighting flat and even. No text or duplicate views. This single master will be mechanically resized into exact game-size and 4x review panels.

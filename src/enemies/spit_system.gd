@@ -5,7 +5,7 @@ extends Node3D
 const SpitArc := preload("res://src/enemies/spit_arc.gd")
 const PuddleField := preload("res://src/health/puddle_field.gd")
 
-signal glob_ended(result: String, shooter: Node3D, at: Vector3)
+signal glob_ended(result: String, shooter: Node3D, aimed_at: Vector3)
 
 var cfg: Dictionary  # data/enemies.json "stalker"
 var puddles: PuddleField
@@ -13,7 +13,7 @@ var cover: RefCounted
 var plan_blocked: Callable
 
 var _globs: Array = []    # {arc, shooter, mesh}
-var _discs: Dictionary = {}  # puddle Dictionary -> MeshInstance3D
+var _discs: Dictionary = {}  # puddle id -> MeshInstance3D
 var _glob_mesh: SphereMesh
 var _disc_mesh: CylinderMesh
 
@@ -79,7 +79,7 @@ func _end_glob(g: Dictionary, result: String) -> void:
 		var back := Vector2(arc.from.x, arc.from.z) - at
 		at += back.normalized() * float(p.blocked_back_m)
 	add_puddle(at, String(g.shooter.label))
-	glob_ended.emit(result, g.shooter, arc.position)
+	glob_ended.emit(result, g.shooter, arc.to)
 
 
 func add_puddle(at: Vector2, owner_name: String) -> void:
@@ -92,22 +92,23 @@ func _sync_discs() -> void:
 	var live := {}
 	var from := float(cfg.puddle.shrink_from)
 	for q: Dictionary in puddles.puddles:
-		live[q] = true
-		if not _discs.has(q):
+		var id: int = q.id
+		live[id] = true
+		if not _discs.has(id):
 			var mi := MeshInstance3D.new()
 			mi.name = "Puddle"
 			mi.mesh = _disc_mesh
 			add_child(mi)
 			var at: Vector2 = q.at
 			mi.global_position = Vector3(at.x, float(cfg.puddle.height_m) * 0.5, at.y)
-			_discs[q] = mi
+			_discs[id] = mi
 		var left := float(q.left) / float(q.life)
 		var f := clampf(left / from, 0.0, 1.0)
-		(_discs[q] as Node3D).scale = Vector3(f, 1.0, f)
-	for q: Dictionary in _discs.keys():
-		if not live.has(q):
-			(_discs[q] as Node).queue_free()
-			_discs.erase(q)
+		(_discs[id] as Node3D).scale = Vector3(f, 1.0, f)
+	for id: int in _discs.keys():
+		if not live.has(id):
+			(_discs[id] as Node).queue_free()
+			_discs.erase(id)
 
 
 func clear() -> void:

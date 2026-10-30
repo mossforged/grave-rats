@@ -50,7 +50,9 @@
       "side_score": 1.0,
       "from_cost_per_m": 0.5,
       "close_score_per_m": 0.6,
-      "path_tries": 6
+      "path_tries": 10,
+      "orbit_slack_m": 0.5,
+      "orbit_within_m": 6.0
     },
     "nav": {
       "cell_m": 0.5,
@@ -68,13 +70,14 @@
       "face_deg": 40.0,
       "damage": 16.0,
       "hit_radius_m": 0.75,
+      "protect_radius_m": 2.5,
       "body_margin_m": 0.5,
       "speed_m_s": 9.0,
       "min_flight_s": 0.5,
       "apex_short_m": 1.5,
       "apex_long_m": 0.12,
-      "short_range_m": 4.0,
-      "long_range_m": 7.0,
+      "short_range_m": 3.0,
+      "long_range_m": 5.0,
       "arc_samples": 24,
       "glob_radius_m": 0.14,
       "glob_color": "b8ff3a",
@@ -82,8 +85,8 @@
     },
     "puddle": {
       "life_s": 6.0,
-      "radius_m": 1.0,
-      "blocked_back_m": 0.55,
+      "radius_m": 0.85,
+      "blocked_back_m": 0.45,
       "shrink_from": 0.25,
       "height_m": 0.03,
       "color": "7fe02a",
@@ -179,5 +182,5 @@
     "spit": {"length_s": 0.22, "decay_per_s": 18.0, "low_hz": 340.0, "low_share": 0.3, "volume_db": -4.0},
     "lunge": {"length_s": 0.3, "decay_per_s": 10.0, "low_hz": 130.0, "low_share": 0.5, "volume_db": -2.0}
   },
-  "help": {"text": "F flashlight   E door / tip bed   F2 sight debug   Backspace respawn", "from_bottom_px": 62}
+  "help": {"text": "F flashlight   E door / tip bed   F2 sight debug", "from_bottom_px": 62}
 }

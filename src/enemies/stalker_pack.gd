@@ -134,10 +134,10 @@ func _handle(ev: String, s: Node, body: Vector3) -> void:
 			player_hit.emit("lunge", float(cfg.lunge.damage), s, in_cover_from(s))
 
 
-func _on_glob_ended(result: String, shooter: Node3D, at: Vector3) -> void:
+func _on_glob_ended(result: String, shooter: Node3D, aimed_at: Vector3) -> void:
 	if result == SpitArc.HIT:
 		player_hit.emit("spit", float(cfg.spit.damage), shooter, in_cover_from(shooter))
-	elif result == SpitArc.COVER and Vector2(at.x, at.z).distance_to(target.pos) <= float(cfg.lunge.range_m):
+	elif result == SpitArc.COVER and Vector2(aimed_at.x, aimed_at.z).distance_to(target.pos) <= float(cfg.spit.protect_radius_m):
 		player_protected.emit(shooter)
 
 

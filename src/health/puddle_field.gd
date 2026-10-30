@@ -3,7 +3,9 @@ extends RefCounted
 ## one. Overlaps don't stack. `dps` comes from data/health.json, size and life from whoever adds.
 
 var dps := 0.0
-var puddles: Array = []  # {at: Vector2, radius: float, life: float, left: float, owner: String}
+var puddles: Array = []  # {id: int, at: Vector2, radius: float, life: float, left: float, owner: String}
+
+var _next_id := 0
 
 
 func _init(damage_per_s: float) -> void:
@@ -11,7 +13,8 @@ func _init(damage_per_s: float) -> void:
 
 
 func add(at: Vector2, radius: float, life: float, owner_name: String, max_count: int) -> Dictionary:
-	var p := {"at": at, "radius": radius, "life": life, "left": life, "owner": owner_name}
+	_next_id += 1
+	var p := {"id": _next_id, "at": at, "radius": radius, "life": life, "left": life, "owner": owner_name}
 	puddles.append(p)
 	while puddles.size() > max_count:
 		puddles.pop_front()

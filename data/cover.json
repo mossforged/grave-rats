@@ -23,7 +23,7 @@
     "layer": 50,
     "size_px": 44.0,
     "word_gap_px": 18.0,
-    "gap_px": 10.0,
+    "gap_px": 26.0,
     "from_bottom_px": 150.0,
     "line_px": 3.0,
     "protected_color": "62e08a",

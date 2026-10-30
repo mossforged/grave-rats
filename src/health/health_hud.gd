@@ -22,7 +22,7 @@ func _ready() -> void:
 	var w := float(cfg.bar_width_px)
 	var h := float(cfg.bar_height_px)
 	_flash = _rect("Flash", Color(String(cfg.flash_color)))
-	_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_flash.visible = false
 	_back = _rect("Back", Color.BLACK)
 	_back.position = Vector2(m, m)
@@ -33,18 +33,25 @@ func _ready() -> void:
 	_word = _label(int(cfg.label_font_size))
 	_word.position = Vector2(m, m + h)
 	_death = _rect("Death", Color(String(cfg.death_color)))
-	_death.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_death.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_death.visible = false
 	_death_word = _label(int(cfg.death_font_size))
 	_death_word.text = String(cfg.death_word)
-	_death_word.set_anchors_preset(Control.PRESET_CENTER)
+	_death_word.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_death_word.anchor_top = 0.5
+	_death_word.anchor_bottom = 0.5
+	_death_word.offset_top = -float(cfg.death_font_size)
+	_death_word.offset_bottom = 0.0
 	_death_word.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_death_word.visible = false
 	_detail = _label(int(cfg.detail_font_size))
-	_detail.set_anchors_preset(Control.PRESET_CENTER)
+	_detail.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_detail.anchor_top = 0.5
+	_detail.anchor_bottom = 0.5
+	_detail.offset_top = float(cfg.death_font_size)
+	_detail.offset_bottom = float(cfg.death_font_size)
 	_detail.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_detail.grow_vertical = Control.GROW_DIRECTION_END
-	_detail.offset_top = float(cfg.death_font_size)
 	_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_detail.visible = false
 

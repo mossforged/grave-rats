@@ -183,7 +183,7 @@ func test_it_turns_slowly_prowling_and_fast_lunging() -> void:
 	check(float(cfg.turn.lunge_deg_s) > float(cfg.turn.prowl_deg_s) * 2.0, "the rule it breaks is in the numbers")
 	var b := _brain()
 	b.yaw = 0.0
-	var s := _senses(Vector2.ZERO, {"next_point": Vector2(5, 5)})
+	var s := _senses(Vector2(3, 0), {"next_point": Vector2(8, 5)})
 	b.step(DT, s)
 	var prowl := absf(b.yaw)
 	check(absf(rad_to_deg(prowl) - float(cfg.turn.prowl_deg_s) * DT) < 0.01, "prowl turn is capped (%.3f deg)" % rad_to_deg(prowl))
@@ -349,7 +349,7 @@ func test_the_stalk_prefers_points_you_cannot_see() -> void:
 	check(hidden.call(goal), "it goes where you can't see it: %s" % str(goal))
 
 
-func test_gameplay_scene_is_in_the_deck_layout_contract_and_the_breach_is_cut() -> void:
+func test_the_breach_is_cut_only_in_a_deck_that_asks_for_one() -> void:
 	var deck: Dictionary = (Data.load_data("deck") as Dictionary).duplicate(true)
 	var a: Dictionary = (Data.load_data("enemies") as Dictionary).ambush
 	(deck.spaces as Array).append(a.closet)
@@ -379,12 +379,13 @@ func _scene() -> Node:
 	return scene
 
 
-## World and operator together, as the tree would.
+## World and operator together, one per physics frame, since move_and_slide reads the frame's delta.
 func _run(scene: Node, seconds: float) -> void:
+	var tree := Engine.get_main_loop() as SceneTree
 	for i in roundi(seconds / DT):
+		await tree.physics_frame
 		scene.simulate_world(DT)
 		scene.operator.simulate(DT)
-		scene.doors.tick(DT)
 
 
 func _at(scene: Node, p: Vector2, look: Vector2) -> void:
@@ -409,13 +410,13 @@ func test_the_prowling_stalker_really_walks_and_doors_hold_it() -> void:
 	var s: Node = scene.pack.stalkers[0]
 	var start: Vector2 = s.floor_position()
 	_at(scene, scene.layout.point_in("junction", [0.5, 0.9]), scene.layout.point_in("junction", [0.5, 0.1]))
-	_run(scene, 4.0)
+	await _run(scene, 4.0)
 	check(s.floor_position().distance_to(start) > 0.5, "it moved along its patrol")
 	check(s.floor_position().distance_to(start) < float(s.cfg.speed.prowl_m_s) * 4.0 + 0.1, "slowly")
 	# All doors shut: a shot next to it brings it to the door, no further.
 	scene.pack.noise("gunfire", scene.layout.point_in("cargo", [0.05, 0.6]))
 	check_eq(s.brain.state, StalkerBrain.State.INVESTIGATE, "it heard")
-	_run(scene, 8.0)
+	await _run(scene, 8.0)
 	check(scene.layout.space_at(s.floor_position()) == "cargo", "still in cargo with the doors shut")
 
 
@@ -429,14 +430,14 @@ func test_tipping_a_bed_in_the_scene_holds_you_and_gives_low_cover() -> void:
 	scene.operator.scripted = {"keys": Vector2(1, 0)}
 	scene.interact()
 	check(scene.operator.control_held(), "committed the same step")
-	_run(scene, 0.4)
+	await _run(scene, 0.4)
 	check(scene.operator.global_position.distance_to(Vector3(p.x, 0, p.y)) < 0.01, "can't walk off while tipping")
 	check_eq(scene.cover.kind_of(bed), "none", "no cover yet")
-	_run(scene, 0.45)
+	await _run(scene, 0.45)
 	check(not scene.operator.control_held(), "free after the tip")
 	check_eq(scene.cover.kind_of(bed), "low", "low cover now")
 	check(bed.footprint().end.x <= bed.upright_rect.position.x + 0.001, "fell away from the player")
-	var low_from_west := scene.cover.line_blocked(Vector3(bed.footprint().position.x - 6.0, 1.0, c.y), Vector3(p.x - 0.8, 0.8, c.y))
+	var low_from_west: bool = scene.cover.line_blocked(Vector3(bed.footprint().position.x - 6.0, 1.0, c.y), Vector3(p.x - 0.8, 0.8, c.y))
 	check(low_from_west, "a crouched body on the player's side is covered from the far side")
 	scene.respawn()
 	check_eq(scene.cover.kind_of(bed), "none", "a respawn stands it up again")
@@ -453,10 +454,10 @@ func test_a_big_hit_staggers_in_the_scene() -> void:
 	check(scene.operator.control_held(), "control's gone")
 	check(scene.operator.rifle.cone.spread_deg >= float(scene._health_cfg.stagger.cone_deg), "the cone blows wide")
 	var mag: int = scene.operator.rifle.state.mag
-	_run(scene, float(scene._health_cfg.stagger.control_loss_s) * 0.8)
+	await _run(scene, float(scene._health_cfg.stagger.control_loss_s) * 0.8)
 	check_eq(scene.operator.model.torso_yaw, yaw_before, "the body doesn't turn")
 	check_eq(int(scene.operator.rifle.state.mag), mag, "the gun doesn't fire")
-	_run(scene, float(scene._health_cfg.stagger.control_loss_s) * 0.4)
+	await _run(scene, float(scene._health_cfg.stagger.control_loss_s) * 0.4)
 	check(not scene.operator.control_held(), "and control comes back")
 	check_eq(scene.run_log.damage_by_source.lunge, float(s.cfg.lunge.damage), "the log has the damage")
 
@@ -465,7 +466,7 @@ func test_standing_in_a_puddle_costs_suit_in_the_scene() -> void:
 	var scene: Node = await _scene()
 	var p: Vector2 = scene._eye()
 	scene.pack.spits.add_puddle(p, "cargo stalker")
-	_run(scene, 1.0)
+	await _run(scene, 1.0)
 	var lost := float(scene._health_cfg.suit.max) - float(scene.suit.integrity)
 	check(absf(lost - float(scene._health_cfg.acid.puddle_dps)) < 0.5, "about puddle_dps a second (%.2f)" % lost)
 	check(scene.run_log.damage_by_source.puddle > 0.0, "logged as puddle")
@@ -482,7 +483,7 @@ func test_the_mark_is_per_shooter_not_per_box() -> void:
 	var far := Vector2(r.end.x + float(scene.pack.cfg.spit.long_range_m), r.get_center().y)
 	_at(scene, behind, far)
 	scene.operator.scripted = {"crouch": true}
-	_run(scene, 0.5)
+	await _run(scene, 0.5)
 	var s: Node = scene.pack.stalkers[0]
 	check(door != null, "door there")
 	check(scene.pack.shooter_lines().is_empty(), "behind a box with nobody hunting: no mark")
@@ -508,22 +509,22 @@ func test_the_burst_fires_once_behind_the_player_and_lets_it_out() -> void:
 	var c: Vector2 = scene.bulkhead.panel_center()
 	var past := c + Vector2(2.0, -float(scene._ambush_cfg.past_m) - 0.5)
 	_at(scene, past, past + Vector2(0, 5))  # looking back at it
-	_run(scene, 0.2)
+	await _run(scene, 0.2)
 	check(scene.bulkhead.sealed, "not while they look at it")
 	var bursts := [0]
 	scene.bulkhead.burst.connect(func() -> void: bursts[0] += 1)
 	_at(scene, past, past + Vector2(0, -5))
-	_run(scene, DT)
+	await _run(scene, DT)
 	check(not scene.bulkhead.sealed, "it bursts behind them")
 	check_eq(bursts[0], 1, "one burst")
 	check(scene.bulkhead.debris_count() > 0, "debris")
 	check(scene._kick > 0.0, "the camera kicks")
 	check(not scene.bulkhead.blocks_sight(), "the hole doesn't block sight")
 	check_eq(waiting.brain.state, StalkerBrain.State.DORMANT, "the bang comes first")
-	_run(scene, float(scene._ambush_cfg.emerge_delay_s) + 0.05)
+	await _run(scene, float(scene._ambush_cfg.emerge_delay_s) + 0.05)
 	check_eq(waiting.brain.state, StalkerBrain.State.STALK, "then it comes out knowing")
 	var inside: Vector2 = waiting.floor_position()
-	_run(scene, 2.0)
+	await _run(scene, 2.0)
 	check(waiting.floor_position().distance_to(inside) > 1.0, "and it really leaves the closet")
 	check_eq(bursts[0], 1, "still one burst")
 
@@ -535,7 +536,7 @@ func test_death_writes_the_log_and_a_respawn_resets_everything() -> void:
 	scene.pack.spits.add_puddle(scene._eye() + Vector2(9, 9), s.label)
 	scene.fire_ambush()
 	scene.ambush.fired = true
-	_run(scene, 0.1)
+	await _run(scene, 0.1)
 	scene._hurt("lunge", float(scene._health_cfg.suit.max), s.label, false)
 	check(scene.suit.dead, "dead")
 	check(scene.operator.control_held(), "no control")
@@ -546,7 +547,7 @@ func test_death_writes_the_log_and_a_respawn_resets_everything() -> void:
 	check_eq(d.killed_by.how, "lunge", "and how")
 	check(float(d.time_alive_s) > 0.0, "and how long")
 	s.brain.force_hunt(s.floor_position(), scene._eye())
-	_run(scene, DT)
+	await _run(scene, DT)
 	check_eq(s.brain.state, StalkerBrain.State.PROWL, "they go back to prowling once you're dead")
 	scene.respawn()
 	check(not scene.suit.dead and scene.suit.fraction() == 1.0, "the suit's whole")
@@ -582,3 +583,52 @@ func test_shooting_a_stalker_in_the_scene_logs_and_kills_it() -> void:
 	check_eq(scene.run_log.shots_fired, hits, "shots logged")
 	check_eq(scene.run_log.shots_hit, hits, "hits logged")
 	check(s.shot_disc().is_empty(), "the dead aren't a target")
+
+
+func test_the_rifle_and_sprinting_make_noise_in_the_scene() -> void:
+	var scene: Node = await _scene()
+	var s: Node = scene.pack.stalkers[0]
+	var p: Vector2 = scene._eye()
+	s.global_position = Vector3(p.x + float(s.cfg.senses.sprint_m) * 0.5, 0.0, p.y)
+	var aim := Vector3(p.x, 1.2, p.y - 5.0)
+	scene.operator.face_now(aim)
+	scene.operator.scripted = {"fire": true}
+	await _run(scene, DT * 2.0)
+	check_eq(s.brain.state, StalkerBrain.State.INVESTIGATE, "a shot brings it")
+	check(s.brain.goal.distance_to(p) < 1.5, "to where the shot was (the muzzle): %s" % str(s.brain.goal))
+	scene.respawn()
+	check_eq(s.brain.state, StalkerBrain.State.PROWL, "reset")
+	p = scene._eye()
+	s.global_position = Vector3(p.x + float(s.cfg.senses.sprint_m) * 0.5, 0.0, p.y)
+	scene.operator.scripted = {"keys": Vector2(0, -1), "sprint": true}
+	await _run(scene, 0.5)
+	check_eq(s.brain.state, StalkerBrain.State.INVESTIGATE, "sprinting brings it too")
+	scene.respawn()
+	p = scene._eye()
+	s.global_position = Vector3(p.x + float(s.cfg.senses.sprint_m) * 0.5, 0.0, p.y)
+	scene.operator.scripted = {"keys": Vector2(0, -1)}
+	await _run(scene, 0.5)
+	check_eq(s.brain.state, StalkerBrain.State.PROWL, "walking doesn't")
+
+
+func test_a_glob_stopped_by_cover_counts_as_protected_and_splashes_on_the_far_side() -> void:
+	var scene: Node = await _scene()
+	scene._open_medbay_door()
+	var bed: Node = scene.beds[2]
+	var r: Rect2 = bed.footprint()
+	var behind := Vector2(r.position.x - 0.6, r.get_center().y)
+	var far := Vector2(r.end.x + float(scene.pack.cfg.spit.long_range_m) + 1.0, r.get_center().y)
+	_at(scene, behind, far)
+	scene.operator.scripted = {"crouch": true}
+	await _run(scene, 0.4)
+	var s: Node = scene.pack.stalkers[0]
+	s.place_hunting(far, behind)
+	var before: float = scene.suit.integrity
+	scene.pack.spits.spit(s, Vector3(behind.x, scene.body_height(), behind.y))
+	await _run(scene, float(scene.pack.cfg.spit.long_range_m) / float(scene.pack.cfg.spit.speed_m_s) + 0.5)
+	check_eq(scene.run_log.times_protected, 1, "logged as protected")
+	check_eq(scene.suit.integrity, before, "no damage")
+	var puddles: Array = scene.pack.spits.puddles.puddles
+	check_eq(puddles.size(), 1, "a puddle")
+	check((puddles[0].at as Vector2).x > r.end.x, "on the thrower's side of the bed")
+	check_eq(scene.pack.spits.puddles.damage_at(behind, 1.0), 0.0, "and none reaches behind it")

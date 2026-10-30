@@ -374,6 +374,339 @@
       "min": 0,
       "max": 1.5,
       "step": 0.01
+    },
+    {
+      "section": "Cover (stalker_deck)"
+    },
+    {
+      "label": "Low cover height m",
+      "file": "cover",
+      "path": "low_height_m",
+      "min": 0.3,
+      "max": 1.3,
+      "step": 0.01
+    },
+    {
+      "label": "Crouched torso m",
+      "file": "cover",
+      "path": "crouched_torso_m",
+      "min": 0.3,
+      "max": 1.2,
+      "step": 0.01
+    },
+    {
+      "label": "Standing torso m",
+      "file": "cover",
+      "path": "standing_torso_m",
+      "min": 0.8,
+      "max": 1.7,
+      "step": 0.01
+    },
+    {
+      "label": "Braced torso m",
+      "file": "cover",
+      "path": "braced_torso_m",
+      "min": 0.6,
+      "max": 1.6,
+      "step": 0.01
+    },
+    {
+      "label": "Brace holds s",
+      "file": "cover",
+      "path": "brace_hold_s",
+      "min": 0,
+      "max": 2,
+      "step": 0.05
+    },
+    {
+      "label": "Tip bed s",
+      "file": "cover",
+      "path": "bed.tip_s",
+      "min": 0.1,
+      "max": 2,
+      "step": 0.05
+    },
+    {
+      "section": "Suit"
+    },
+    {
+      "label": "Stagger at share of suit",
+      "file": "health",
+      "path": "stagger.threshold_fraction",
+      "min": 0.05,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Stagger control loss s",
+      "file": "health",
+      "path": "stagger.control_loss_s",
+      "min": 0,
+      "max": 1.5,
+      "step": 0.01
+    },
+    {
+      "label": "Stagger cone °",
+      "file": "health",
+      "path": "stagger.cone_deg",
+      "min": 1,
+      "max": 45,
+      "step": 0.5
+    },
+    {
+      "label": "Puddle damage /s",
+      "file": "health",
+      "path": "acid.puddle_dps",
+      "min": 0,
+      "max": 40,
+      "step": 0.5
+    },
+    {
+      "section": "Stalker senses"
+    },
+    {
+      "label": "Hears gunfire m",
+      "file": "enemies",
+      "path": "stalker.senses.gunfire_m",
+      "min": 0,
+      "max": 50,
+      "step": 0.5
+    },
+    {
+      "label": "Hears sprint m",
+      "file": "enemies",
+      "path": "stalker.senses.sprint_m",
+      "min": 0,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Sight range m",
+      "file": "enemies",
+      "path": "stalker.senses.sight_range_m",
+      "min": 1,
+      "max": 25,
+      "step": 0.5
+    },
+    {
+      "label": "Sight half angle °",
+      "file": "enemies",
+      "path": "stalker.senses.sight_half_angle_deg",
+      "min": 5,
+      "max": 120,
+      "step": 1
+    },
+    {
+      "label": "Feels you within m",
+      "file": "enemies",
+      "path": "stalker.senses.close_sense_m",
+      "min": 0,
+      "max": 6,
+      "step": 0.1
+    },
+    {
+      "label": "Remembers s",
+      "file": "enemies",
+      "path": "stalker.senses.memory_s",
+      "min": 0,
+      "max": 15,
+      "step": 0.25
+    },
+    {
+      "section": "Stalker body"
+    },
+    {
+      "label": "Health",
+      "file": "enemies",
+      "path": "stalker.health",
+      "min": 10,
+      "max": 400,
+      "step": 1
+    },
+    {
+      "label": "Prowl m/s",
+      "file": "enemies",
+      "path": "stalker.speed.prowl_m_s",
+      "min": 0.2,
+      "max": 4,
+      "step": 0.05
+    },
+    {
+      "label": "Investigate m/s",
+      "file": "enemies",
+      "path": "stalker.speed.investigate_m_s",
+      "min": 0.2,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "label": "Stalk m/s",
+      "file": "enemies",
+      "path": "stalker.speed.stalk_m_s",
+      "min": 0.2,
+      "max": 6,
+      "step": 0.05
+    },
+    {
+      "label": "Prowl turn °/s",
+      "file": "enemies",
+      "path": "stalker.turn.prowl_deg_s",
+      "min": 10,
+      "max": 360,
+      "step": 5
+    },
+    {
+      "label": "Stalk turn °/s",
+      "file": "enemies",
+      "path": "stalker.turn.stalk_deg_s",
+      "min": 10,
+      "max": 720,
+      "step": 5
+    },
+    {
+      "label": "Lunge turn °/s",
+      "file": "enemies",
+      "path": "stalker.turn.lunge_deg_s",
+      "min": 60,
+      "max": 1800,
+      "step": 10
+    },
+    {
+      "section": "Stalker spit"
+    },
+    {
+      "label": "Wind-up s",
+      "file": "enemies",
+      "path": "stalker.spit.windup_s",
+      "min": 0.1,
+      "max": 2,
+      "step": 0.05
+    },
+    {
+      "label": "Cooldown s",
+      "file": "enemies",
+      "path": "stalker.spit.cooldown_s",
+      "min": 0.2,
+      "max": 10,
+      "step": 0.1
+    },
+    {
+      "label": "Damage",
+      "file": "enemies",
+      "path": "stalker.spit.damage",
+      "min": 0,
+      "max": 60,
+      "step": 1
+    },
+    {
+      "label": "Glob m/s",
+      "file": "enemies",
+      "path": "stalker.spit.speed_m_s",
+      "min": 2,
+      "max": 25,
+      "step": 0.5
+    },
+    {
+      "label": "Arcs over within m",
+      "file": "enemies",
+      "path": "stalker.spit.short_range_m",
+      "min": 0.5,
+      "max": 8,
+      "step": 0.1
+    },
+    {
+      "label": "Flat beyond m",
+      "file": "enemies",
+      "path": "stalker.spit.long_range_m",
+      "min": 1,
+      "max": 12,
+      "step": 0.1
+    },
+    {
+      "label": "Lob height m",
+      "file": "enemies",
+      "path": "stalker.spit.apex_short_m",
+      "min": 0,
+      "max": 3,
+      "step": 0.05
+    },
+    {
+      "label": "Puddle life s",
+      "file": "enemies",
+      "path": "stalker.puddle.life_s",
+      "min": 0.5,
+      "max": 20,
+      "step": 0.5
+    },
+    {
+      "section": "Stalker lunge"
+    },
+    {
+      "label": "Wind-up s",
+      "file": "enemies",
+      "path": "stalker.lunge.windup_s",
+      "min": 0.05,
+      "max": 1.5,
+      "step": 0.05
+    },
+    {
+      "label": "Recovery s",
+      "file": "enemies",
+      "path": "stalker.lunge.recover_s",
+      "min": 0.1,
+      "max": 3,
+      "step": 0.05
+    },
+    {
+      "label": "Cooldown s",
+      "file": "enemies",
+      "path": "stalker.lunge.cooldown_s",
+      "min": 0.2,
+      "max": 10,
+      "step": 0.1
+    },
+    {
+      "label": "Range m",
+      "file": "enemies",
+      "path": "stalker.lunge.range_m",
+      "min": 1,
+      "max": 8,
+      "step": 0.1
+    },
+    {
+      "label": "Charge m/s",
+      "file": "enemies",
+      "path": "stalker.lunge.speed_m_s",
+      "min": 2,
+      "max": 16,
+      "step": 0.25
+    },
+    {
+      "label": "Damage",
+      "file": "enemies",
+      "path": "stalker.lunge.damage",
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "section": "Ambush"
+    },
+    {
+      "label": "Comes out after s",
+      "file": "enemies",
+      "path": "ambush.emerge_delay_s",
+      "min": 0,
+      "max": 3,
+      "step": 0.05
+    },
+    {
+      "label": "Camera kick m",
+      "file": "enemies",
+      "path": "ambush.camera_kick_m",
+      "min": 0,
+      "max": 1.5,
+      "step": 0.01
     }
   ]
 }

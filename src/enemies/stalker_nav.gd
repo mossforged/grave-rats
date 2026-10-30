@@ -134,7 +134,18 @@ func stalk_point(from: Vector2, player: Vector2, side: float, hidden: Callable) 
 			score += float(st.hidden_score)
 		ranked.append([score, p])
 	ranked.sort_custom(func(a: Array, b: Array) -> bool: return a[0] > b[0])
+	# Must get closer by walking, not just by the crow: a dead-end closet is near and hidden and useless.
+	# Far off it must close by walking; once near, it may circle.
+	var now := path(from, player).size()
+	var near := now * cell <= float(st.orbit_within_m)
+	var allow := now + int(float(st.orbit_slack_m) / cell) if near else now - 1
+	# Right on top of you with its lunge cooling, it backs off to the ring and circles.
+	if now * cell < float(st.ring_radii_m[0]):
+		allow = maxi(allow, ceili(float(st.ring_radii_m[0]) * 2.0 / cell))
 	for k in mini(ranked.size(), int(st.path_tries)):
-		if not path(from, ranked[k][1]).is_empty():
-			return ranked[k][1]
+		var p: Vector2 = ranked[k][1]
+		if p.distance_to(from) <= float(st.arrive_m) or path(from, p).is_empty():
+			continue
+		if now == 0 or path(p, player).size() <= allow:
+			return p
 	return from

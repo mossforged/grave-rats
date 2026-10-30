@@ -37,7 +37,6 @@ var _emerge_left := -1.0
 var _kick := 0.0
 var _kick_full := 0.0
 var _kick_recover := 1.0
-var _tipping: TipBed = null
 var _ready_done := false
 
 
@@ -148,7 +147,6 @@ func respawn() -> void:
 	_brace_left = 0.0
 	_emerge_left = -1.0
 	_kick = 0.0
-	_tipping = null
 	for bed: TipBed in beds:
 		bed.reset()
 	var specs: Array = deck_data.doors
@@ -182,8 +180,6 @@ func simulate_world(delta: float) -> void:
 	suit.step(delta)
 	for bed: TipBed in beds:
 		bed.tick(delta)
-	if _tipping and _tipping.tip.state != _tipping.tip.State.TIPPING:
-		_tipping = null
 	var pos := _eye()
 	if not suit.dead:
 		run_log.note_time(delta)
@@ -276,7 +272,7 @@ func _process(delta: float) -> void:
 		if s.brain.alive():
 			doors.actors.append({"position": s.floor_position(), "radius": float(pack.cfg.radius_m)})
 	var bed := bed_in_reach(_eye())
-	_bed_prompt.visible = bed != null and not suit.dead
+	_bed_prompt.visible = bed != null and not suit.dead and not operator.control_held()
 	if bed:
 		var c: Vector2 = bed.upright_rect.get_center()
 		_bed_prompt.global_position = Vector3(c.x, float(_cover_cfg.bed.prompt_height_m), c.y)
@@ -299,7 +295,6 @@ func interact() -> void:
 		return
 	var bed := bed_in_reach(_eye())
 	if bed and bed.try_tip(_eye()):
-		_tipping = bed
 		operator.hold_control(float(_cover_cfg.bed.tip_s))
 		return
 	doors.interact(_eye())
@@ -374,8 +369,8 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "lunge_charge", "do": "lunge"},
 		{"name": "lunge_recover", "do": "recover"},
 		{"name": "ambush_1_burst", "do": "ambush", "wait": 0.05},
-		{"name": "ambush_2_debris", "do": "ambush", "wait": 0.4},
-		{"name": "ambush_3_coming_out", "do": "ambush", "wait": 1.25},
+		{"name": "ambush_2_turning", "do": "ambush", "wait": 0.5},
+		{"name": "ambush_3_coming_out", "do": "ambush", "wait": 1.5},
 		{"name": "death_screen", "do": "death"},
 	]
 
@@ -428,7 +423,9 @@ func apply_shot(shot: Dictionary) -> void:
 		"lunge", "recover":
 			await _open_medbay_door()
 			await _stand_at(behind, infront)
-			var spot := behind + Vector2(float(pack.cfg.lunge.range_m), -float(pack.cfg.radius_m) * 2.0)
+			# Across open floor to the west, so nothing stops the charge.
+			var spot := behind + Vector2(-float(pack.cfg.lunge.range_m), 0)
+			await _stand_at(behind, spot)
 			_hunt_from(hunter, spot, behind)
 			hunter.brain.force_lunge()
 			await _sim(float(pack.cfg.lunge.windup_s) + 0.1)
@@ -469,17 +466,23 @@ func _hunt_from(s: Node, from: Vector2, at: Vector2) -> void:
 	s.place_hunting(from, at)
 
 
-## The same walk each time, up the junction past the panel, with the burst behind.
+## The same moment each time: past the panel, facing away, it bursts; the player turns at once.
+## The turn takes what the turn takes, so the frames show how late they are.
 func _ambush_shot(wait: float) -> void:
 	var c := bulkhead.panel_center()
 	var past := float(_ambush_cfg.past_m)
 	var p := c + Vector2(float(deck_data.grid_m) * 2.0, -past)
-	await _stand_at(p + Vector2(0, -float(deck_data.grid_m)), p + Vector2(0, -past))
-	operator.scripted = {"keys": Vector2(0, -1)}
-	if not ambush.fired:
-		fire_ambush()
-		ambush.fired = true
+	await _stand_at(p, p + Vector2(0, -past))
+	await _sim(0.05)
+	check_ambush_fired()
+	operator.aim_point = Vector3(c.x, _aim_height, c.y)
 	await _sim(wait)
+
+
+## The trigger's own rule fires it; if not, the shot would be a lie, so say so.
+func check_ambush_fired() -> void:
+	if not ambush.fired:
+		push_error("stalker_deck: the ambush capture didn't trigger")
 
 
 ## Measuring window: both stalkers awake and hunting the player in the medbay doorway. The suit

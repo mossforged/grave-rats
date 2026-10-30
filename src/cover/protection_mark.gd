@@ -13,7 +13,7 @@ func _ready() -> void:
 	layer = int(cfg.layer)
 	_canvas = Control.new()
 	_canvas.name = "Marks"
-	_canvas.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_canvas.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_canvas.draw.connect(_draw_marks)
 	add_child(_canvas)
@@ -47,7 +47,9 @@ func _draw_marks() -> void:
 		loop.append(pts[0])
 		_canvas.draw_polyline(loop, col, float(cfg.line_px), true)
 		var word := String(cfg.word_protected if blocked else cfg.word_exposed)
-		_canvas.draw_string(font, Vector2(x, y + size + float(cfg.word_gap_px)), word, HORIZONTAL_ALIGNMENT_CENTER, size, int(cfg.font_size), col)
+		var w := font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, int(cfg.font_size)).x
+		_canvas.draw_string(font, Vector2(x + (size - w) * 0.5, y + size + float(cfg.word_gap_px)), word,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, int(cfg.font_size), col)
 		x += size + gap
 
 

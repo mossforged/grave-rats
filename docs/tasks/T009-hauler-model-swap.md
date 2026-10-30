@@ -24,7 +24,15 @@ John made the player model in Meshy, rigged and animated: `assets/source/meshy/h
    - hit or stagger;
    - death.
    **Strip horizontal root motion from the hips** so the code keeps moving the body. Keep the existing torso-lead / aim layering: the upper body aims while the legs walk.
-3. **Missing clips** (no idle holding a rifle, no strafe, crouch, reload or hit in this file):
+3. **Mixamo clips John added** (FBX, "without skin", Mixamo bone names, so they fit the hauler's skeleton by name), in `assets/source/meshy/`:
+   - `hauler-rifle-idle.fbx`;
+   - `hauler-crouch-idle.fbx` and `hauler-crouch-aim.fbx`;
+   - `hauler-crouch-walk.fbx`;
+   - `hauler-strafe-a.fbx` and `-b.fbx` (one is left, one is right: work out which from the hips' motion);
+   - `hauler-reload.fbx`;
+   - `hauler-hit.fbx`.
+   Some may carry root motion; strip it as above. They were made on Mixamo's default body, so check the proportions on the hauler (feet in the floor, hands through the body) and correct them with a hip height offset in data if needed.
+   **Still missing** after these:
    - retarget the legacy clips onto the Mixamo skeleton where you can (Godot's humanoid `SkeletonProfile` / `BoneMap`);
    - otherwise use the closest Meshy clip;
    - otherwise keep the pose.

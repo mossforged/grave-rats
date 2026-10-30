@@ -25,8 +25,5 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 ## In flight
 | ID | Lane | State |
 | --- | --- | --- |
-| T001 | code | queued |
-| T002 | code | written, waits for T001 |
-| T003 | code | written, waits for T002 |
-| T004 | code | written, waits for T003 |
-| A001 | art | queued |
+| T001–T005 | code | merged 2026-10-30; lane idle until John answers the stage 1 and 2 gates |
+| A001–A004 | art | merged 2026-10-30; lane idle until John picks crew, threat, environment, HUD and logo directions |

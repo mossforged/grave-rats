@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 2 (core loop, grey box): T003 and T004 merged; T005 (stalker, cover, damage, ambush) built on `auto/t005-mac`, awaiting lead review. Gates for stage 1 (camera/scale) and stage 2 wait for John.
+**Stage:** 2 (core loop, grey box): built. T001–T005 merged; the stage 2 gate (`scenes/enemies/stalker_deck.tscn`) and the stage 1 camera/scale gate wait for John. Next: nothing queued until John plays.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,11 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T005 awaits lead review (153/153 headless). Next: John plays `scenes/enemies/stalker_deck.tscn` for the stage 2 gate.
+- Code: T005 merged (lead reviewed, 153/153 reproduced). Lane idle until John answers the stage 1 and 2 gates.
 - Art: A001–A004 merged. Lane idle on purpose: crew/threat, environment, HUD and logo development all wait on John's picks.
 
 ## Open questions (for John)
-- Stage 2 gate: *"Is moving through these rooms with a flashlight tense and fun?"* Play `scenes/enemies/stalker_deck.tscn` with F1 open. Should stalkers open doors (they can't now)? Is tipping a bed worth 0.8 s? (auto-T005)
+- **Stage 2 gate:** *"Is moving through these rooms with a flashlight tense and fun?"* Play `scenes/enemies/stalker_deck.tscn` with F1 open (E tips a bed, Backspace respawns). Also: does the bulkhead burst make you feel late? Should stalkers open doors (now they can't)? Is tipping a bed worth 0.8 s? Are the placeholder sounds loud enough? (auto-T005)
 - Stage 1 gate: which camera preset and room/character scale? At 55–65° pitch a real-size operator can't be both ~8% of view height and framed like the panel; preset 1 favours operator size, preset 3 the composition (see auto-T002).
 - `tools/capture.sh` only reaches 1920×954 on this display (title bar); accept, or make the capture window borderless (src/debug task)?
 - A001 picks: which crew looks and threat directions to develop (art lane's recommendation: 01 orange hauler; 11 acid stalker, with 09 rogue AI as the systemic complement).
@@ -25,7 +25,6 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - T003 feel: play `scenes/player/weight_deck.tscn`, tune with F1 and Save. Open: cursor sits ~0.8 m screen-up of the floor cone (aim at gun height); is the 1.5° settled cone readable?
 - T004 dread: *"Do I feel the corners?"* Play `scenes/sight/sight_deck.tscn` (F light, E door, F2 debug, F1 "Sight" sliders). Is 2.6 m awareness too generous? How dark? Should 1.2 m crates block sight? (auto-T004)
 - A004 picks: wordmark (art lane recommends 01 hull stencil, fallback 03 hazard label), keep the rat emblem (07)?, title art direction (08/09).
-- T004 feel: `scenes/sight/sight_deck.tscn`: do the corners feel uncertain? Awareness circle 2.6 m too generous? How dark should remembered/unknown be? Should 1.2 m crates block sight?
 - How weighty? F1 in `weight_deck` tunes every lever; Save writes `data/`.
 - Aim marker: the cone is on the floor but the cursor aims at gun height, so the cursor sits about 0.8 m screen-up of the cone's line at the concept camera. A ring marks the floor point under the aim. Keep that, or aim on the floor and accept that shots at a dummy's chest pass behind it? (auto-T003)
 
@@ -36,10 +35,11 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Legacy clips: a real walk (the run clips stand in), a crouch walk with real steps, turn-in-place feet. Foot slide numbers in auto-T003.
 - `tests/test_deck.gd` `test_props_at_real_size` logs a string-format error (`%` with an array) while passing.
 - Sight leaks: the floor aim cone stops at unseen walls, tracers and prompts draw over the mask, hidden targets pop in with no fade.
+- T005 limits: the cover shield can show a stalker you can't see; 1.2 m crate physics boxes may stop 1.2 m rounds; a tipped bed can land on a stalker; 13 `invalid UID` import warnings for `operator.glb`.
 - Quiet-machine frame-time baseline for the asset viewer (T001 runs had other load on the Mac).
 - `src/study` deck dressing and the deck copy in `stalker_deck` want a real level module.
 - Stalker: a hit interrupting a wind-up; a player death animation.
 
 ## Last session
-2026-10-30 (code, unattended): T005 built: `src/cover`, `src/health`, `src/enemies`, `src/run_log`, `scenes/enemies/stalker_deck.tscn`. Small hooks in rifle, operator, deck layout and `sight_deck`. 153/153 tests, import clean.
-Two stalkers hunting: 3.50 ms avg, 5.20 ms p95 at 1920×954 (+0.26 / +1.5 ms against `sight_deck`). Captures in `docs/screens/T005/`. Nobody has played it or heard it.
+2026-10-30 (lead): merged T005 (153/153 reproduced, import clean, captures checked). Overnight: T001–T005 and A001–A004 all merged; morning report published for John.
+2026-10-30 (code, unattended): T005 built `src/cover`, `src/health`, `src/enemies`, `src/run_log` and `scenes/enemies/stalker_deck.tscn`; two stalkers cost 3.50 ms avg / 5.20 ms p95 at 1920×954. Nobody has played it.

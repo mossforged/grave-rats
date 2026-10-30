@@ -13,3 +13,10 @@
 - 2026-10-29: Pillar added (lead's proposal, John: "that sounds good to me"): **Greed is the clock**. Staying longer means better loot and worse odds; runs build to "one more room?".
 - 2026-10-30: `assets/source/.gdignore` added (lead): Godot no longer scans art sources, so it never writes `.import` files into the art lane's folder. The code lane imports by copying into `assets/game/` (T001 approach).
 - 2026-10-30: MSAA 4× kept (T001: thin rails and rifles crawl at 2×; cost within noise on the M2 Pro). Revisit if a scene gets tight.
+- 2026-10-30: Stage 2 gate **not passed yet** (John: "I wouldn't say that I'm particularly scared"). The loop's structure works (sight, weight, sounds); the threat is too slow and weak. T006 makes it dangerous.
+- 2026-10-30: Stalkers **never open doors; they break through a shut one, slowly** (John).
+- 2026-10-30: Camera: new default **between preset 1 and 2, closer to 1** (John). Room/character scale still unjudged.
+- 2026-10-30: Weight levers (turn, aim settle, reload) **approved as they are** (John: "pretty good right now").
+- 2026-10-30: Art picks (John): crew **A001-01 orange hauler** first, with varied looks and sizes later; all A002 environment sheets; HUD **A003-02 suit OS** (keep 01's ring around the operator as an idea); company screens' tone approved; logo **A004-01**, with the cracked visor and crew patch also liked; title art **A004-08**, recomposed as one crew member working the door while another walks up behind.
+- 2026-10-30: A shooting enemy comes before cover gets more work; a Gears-style lock-to-cover is a candidate for then (John's idea), not now.
+

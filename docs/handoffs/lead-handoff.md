@@ -25,5 +25,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 ## In flight
 | ID | Lane | State |
 | --- | --- | --- |
-| T001–T005 | code | merged 2026-10-30; lane idle until John answers the stage 1 and 2 gates |
-| A001–A004 | art | merged 2026-10-30; lane idle until John picks crew, threat, environment, HUD and logo directions |
+| T001–T005 | code | merged 2026-10-30; John played T005 2026-10-30, gate not passed |
+| A001–A004 | art | merged 2026-10-30; John picked 2026-10-30 |
+| T006 | code | queued: make the stalker dangerous, playtest fixes |
+| A005 | art | queued: hauler turnaround, crew variety, HUD, title, logo |

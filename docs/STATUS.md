@@ -12,6 +12,7 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
+- Queue order (lead): T008 (running) → T009 (hauler swap, held until T008 merges) → T010 (slice kit, held until T009 merges).
 - Code: T007 merged (lead reviewed, 210/210 reproduced). T008 queued.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. John's hauler (30.8k tris, 1.80 m, unrigged) waits for a Meshy rig.
 

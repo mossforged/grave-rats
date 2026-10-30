@@ -1,0 +1,1 @@
+Deterministic review layout, built by build-sheet.py. Four rows of original T006 frame / preferred A006 paint-over / diagnostic cyan grey-box edges. Two rows of selected kit and material boards. Labels and caveats are authored, not generated. No crop or registration warp.

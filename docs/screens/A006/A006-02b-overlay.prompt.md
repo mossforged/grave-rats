@@ -1,0 +1,1 @@
+Deterministic diagnostic for A006-02b: original T006/in_cover_readout.png FIND_EDGES luminance >10, HUD bands masked (y80:900), MaxFilter(3), normalized full-frame resize to paint-over dimensions, cyan edges alpha 215/255. No registration or warp. Built by build-sheet.py. User explicitly requested grey-box edge overlays when layout drifts.

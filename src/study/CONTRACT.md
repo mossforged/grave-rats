@@ -25,6 +25,6 @@ Rects are world XZ metres (x east, z south). Space sizes scale with `room_scale`
 None.
 
 ## Data keys (`data/deck.json`)
-`grid_m`, `floor_tile_m`, `wall_height_m`, `wall_thickness_m`, `wall_segment_m`, `door_width_m`, `door_frame_m`, `room_scale`, `room_scale_options`, `character_scale`, `character_scale_options`; `spaces` [{`name`, `kind` (room|corridor), `size_m` [x, z], `anchor` {`to`, `side`, `offset_m`, `offset_walls`, `open`}}]; `doors` [{`space`, `side`, `at` (0–1 along that side)}]; `props` [{`type`, `space`, `at` [fx, fz] centre, `size_m` [x, y, z]}]; `spawn` {`space`, `at`, `aim_deg` (0 = north/screen-up)}; `path_check` {`from`, `to`, `cell_m`, `margin_m`}; `stand_in` {`speed_m_s`, `turn_deg_s`, `radius_m`, `height_m`, `aim_height_m`}; `lighting` {...}; `colors` {...}.
+`grid_m`, `floor_tile_m`, `wall_height_m`, `wall_thickness_m`, `wall_segment_m`, `door_width_m`, `door_frame_m`, `room_scale`, `room_scale_options`, `character_scale`, `character_scale_options`; `spaces` [{`name`, `kind` (room|corridor), `size_m` [x, z], `anchor` {`to`, `side`, `offset_m`, `offset_walls`, `open`}}]; `doors` [{`space`, `side`, `at` (0–1 along that side), `state`, `slide` (both read by `src/doors`; this module only cuts the opening)}]; `props` [{`type`, `space`, `at` [fx, fz] centre, `size_m` [x, y, z]}]; `spawn` {`space`, `at`, `aim_deg` (0 = north/screen-up)}; `path_check` {`from`, `to`, `cell_m`, `margin_m`}; `stand_in` {`speed_m_s`, `turn_deg_s`, `radius_m`, `height_m`, `aim_height_m`}; `lighting` {...}; `colors` {...}.
 
 Tests: `tests/test_deck.gd`.

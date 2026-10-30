@@ -1,0 +1,64 @@
+{
+  "tall_prop_min_m": 1.5,
+  "awareness_radius_m": 2.6,
+  "cone_on": {"range_m": 15.0, "half_angle_deg": 24.0},
+  "cone_off": {"range_m": 7.0, "half_angle_deg": 36.0},
+  "arc_step_deg": 8.0,
+  "edge_step_deg": 0.05,
+  "target_radius_m": 0.3,
+  "memory": {"cell_m": 0.25, "update_hz": 20.0},
+  "mask": {
+    "px_per_m": 16.0,
+    "dilate_m": 0.22,
+    "edge_low": 0.25,
+    "edge_high": 0.75,
+    "remembered_brightness": 0.3,
+    "remembered_saturation": 0.25,
+    "remembered_tint": "b8c6d8",
+    "unknown_brightness": 0.035,
+    "unknown_saturation": 0.0,
+    "bounds_margin_m": 1.0
+  },
+  "flashlight": {
+    "start_on": true,
+    "color": "f4f1e4",
+    "energy": 7.0,
+    "attenuation": 0.8,
+    "angle_attenuation": 0.6,
+    "pitch_deg": -5.0,
+    "muzzle_ahead_m": 0.7,
+    "shadows": true,
+    "shadow_blur": 1.0
+  },
+  "beam": {
+    "color": "e8e6d8",
+    "strength": 0.1,
+    "start_height_m": 1.2,
+    "end_height_m": 0.1,
+    "fade_power": 1.5
+  },
+  "motes": {
+    "count": 140,
+    "lifetime_s": 4.0,
+    "box_half_m": 8.0,
+    "height_m": 1.5,
+    "size_m": 0.03,
+    "drift_m_s": 0.08,
+    "spread_deg": 180.0,
+    "color": "fff6df",
+    "strength": 1.6
+  },
+  "lighting": {
+    "ambient_energy": 0.32,
+    "sun_energy": 0.32
+  },
+  "debug": {
+    "polygon_color": "ffe14a",
+    "visible_color": "58f07a",
+    "remembered_color": "6aa8ff",
+    "unknown_color": "ff5a5a",
+    "floor_y_m": 0.06,
+    "outline_hz": 5.0
+  },
+  "help": {"text": "F flashlight   E door   F2 sight debug", "font_size": 18, "margin_px": 16, "from_bottom_px": 62}
+}

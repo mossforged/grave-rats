@@ -28,7 +28,11 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T001–T005 | code | merged 2026-10-30; John played T005 2026-10-30, gate not passed |
 | A001–A004 | art | merged 2026-10-30; John picked 2026-10-30 |
 | T006 | code | merged 2026-10-30; waits for John's play |
-| T007 | code | queued 2026-10-30 (step 0: scale 0.85/1.15, fade) |
+| T007 | code | merged 2026-10-30; waits for John's play |
+| T008 | code | queued: flicker, door-noise rule, suit-OS HUD with the noise ring |
 | A005 | art | merged and approved 2026-10-30 |
 | A006 | art | merged and approved 2026-10-30 |
 | A007 | art | queued: clean Meshy input images (stalker, bed, console, rifle) |
+
+## Lesson
+- Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

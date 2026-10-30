@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 2 gate **passed** 2026-10-30 (tag `stage-2`). T007 (rival pirates, lock-to-cover, plus the scale/fade defaults, the flicker fix and the door-noise rule) queued. Stage 1 framing confirmation waits for T007's new defaults; stage 3 (vertical slice art) next.
+**Stage:** 3 starting. Stage 2 passed (tag `stage-2`, pushed by John). T007 merged: pirates, lock-to-cover, the 0.85/1.15/fade defaults. T008 queued: flicker fix, door-noise rule, suit-OS HUD with the noise ring. A007 (Meshy input images) queued. John is modelling from the Meshy shortlist.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,10 +12,11 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T006 merged (lead reviewed, 181/181 reproduced). T007 queued; its step 0 applies John's stage 1 scale and fade picks.
-- Art: A006 merged (paint-overs of real frames, kit sheets at game dimensions, material board). Approved as the stage 3 target. Next: the scripted kit (code lane, after T007); John makes the Meshy shortlist.
+- Code: T007 merged (lead reviewed, 210/210 reproduced). T008 queued.
+- Art: A006 merged and approved. A007 queued (clean Meshy input images: stalker, bed, console, rifle).
 
 ## Open questions (for John)
+- T007 play (`scenes/pirates/pirate_deck.tscn`, now the main scene): does cover matter? Is lock-to-cover (Space, RMB) better than plain crouch (F1 toggle)? Too lethal (3.4 s in the open)? Do the crew read as rivals? Do the barks give too much away? Bots: cover doubles survival; lock is no better than crouch when fighting from one spot.
 - Meshy models from John (`docs/handoffs/meshy-shortlist.md`): hauler, stalker, bed, console, rifle.
 - T006 open: is 8 s of door banging right?
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
@@ -23,7 +24,6 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?
 
 ## Parked
-- Next code candidate (after T007): the suit-OS HUD with the noise ring (decided 2026-10-30).
 - Lock-to-cover, Gears style (John): brace against cover and shoot over it. Waits for a shooting enemy.
 - Visible aim cone may go in the final game (John); keep for testing.
 - Competitive modes; procedural ship generation; contracts and meta-progression; the in-game "shift" framing (runs as shifts, timecard end screen).
@@ -38,5 +38,5 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Stalker: a hit interrupting a wind-up; a player death animation.
 
 ## Last session
-2026-10-30 (lead): merged T006 (181/181 reproduced; it predates the scale/fade addendum, so that moved into T007 step 0) and A005; queued T007.
-2026-10-30 (code, unattended): T006: dash, dodge, faster spit, an ambush that hits 12/12 bots, doors broken in 8 s, crouch corkscrew fixed, IN COVER, LIGHT OFF, camera 60°/20.5 m. Flicker not reproduced; one door-panel flash fixed.
+2026-10-30 (lead): merged T007 (210/210 reproduced). It branched before the flicker/door-noise addendum, so those went into T008 with the suit-OS HUD. Queued T008.
+2026-10-30 (code, unattended): T007: pirates as recoloured operators on the player's own weight rules; suppress and flank; lock-to-cover toggle; scale 0.85/1.15 and fade 0.65; the tipping test failure was the character scale (capsule radius).

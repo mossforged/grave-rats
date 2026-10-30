@@ -13,7 +13,7 @@ T002 camera and scale study. Grey-box only; meant to be thrown away or folded in
 - Camera behaviour (`src/camera`), data loading (`src/core`), capture driver (`src/debug`), legacy assets.
 
 ## Public API
-- `DeckLayout.new(deck: Dictionary, room_scale := -1)`: `spaces`, `space_order`, `doors`, `walls` (Rect2), `props`, `bounds`; `space_rect(name)`, `point_in(name, [fx, fz])`, `space_at(p)`, `blockers()`, `is_free(p, radius)`, `path_cells(from, to, radius, cell) -> int` (-1 = no path), `free_grid(radius, cell)`.
+- `DeckLayout.new(deck: Dictionary, room_scale := -1)`: `spaces`, `space_order`, `doors`, `breaches`, `walls` (Rect2), `props`, `bounds`; `space_rect(name)`, `point_in(name, [fx, fz])`, `space_at(p)`, `blockers()`, `is_free(p, radius)`, `path_cells(from, to, radius, cell) -> int` (-1 = no path), `free_grid(radius, cell)`.
 - `DeckBuilder.build(layout) -> Node3D` named "Deck".
 - Scene: `set_room_scale(s)`, `set_character_scale(s)`, `respawn()`, `capture_shots()`, `apply_shot(shot)`, `release_shot()`.
 - Keys: 1–5 camera preset, 6/7/8 room scale 0.85/1.0/1.15, 9/0 character scale 1.0/1.15, C cut-away mode, R respawn, WASD, mouse aim, F3 frame time.
@@ -25,6 +25,6 @@ Rects are world XZ metres (x east, z south). Space sizes scale with `room_scale`
 None.
 
 ## Data keys (`data/deck.json`)
-`grid_m`, `floor_tile_m`, `wall_height_m`, `wall_thickness_m`, `wall_segment_m`, `door_width_m`, `door_frame_m`, `room_scale`, `room_scale_options`, `character_scale`, `character_scale_options`; `spaces` [{`name`, `kind` (room|corridor), `size_m` [x, z], `anchor` {`to`, `side`, `offset_m`, `offset_walls`, `open`}}]; `doors` [{`space`, `side`, `at` (0–1 along that side), `state`, `slide` (both read by `src/doors`; this module only cuts the opening)}]; `props` [{`type`, `space`, `at` [fx, fz] centre, `size_m` [x, y, z]}]; `spawn` {`space`, `at`, `aim_deg` (0 = north/screen-up)}; `path_check` {`from`, `to`, `cell_m`, `margin_m`}; `stand_in` {`speed_m_s`, `turn_deg_s`, `radius_m`, `height_m`, `aim_height_m`}; `lighting` {...}; `colors` {...}.
+`grid_m`, `floor_tile_m`, `wall_height_m`, `wall_thickness_m`, `wall_segment_m`, `door_width_m`, `door_frame_m`, `room_scale`, `room_scale_options`, `character_scale`, `character_scale_options`; `spaces` [{`name`, `kind` (room|corridor), `size_m` [x, z], `anchor` {`to`, `side`, `offset_m`, `offset_walls`, `open`}}]; `doors` [{`space`, `side`, `at` (0–1 along that side), `state`, `slide` (both read by `src/doors`; this module only cuts the opening)}]; `props` [{`type`, `space`, `at` [fx, fz] centre, `size_m` [x, y, z], `cover` (none|low|tall, read by `src/cover`), optional `tippable`, `overturned`, `tip_side` (read by `stalker_deck`; other scenes draw these beds as plain upright boxes)}]; `spawn` {`space`, `at`, `aim_deg` (0 = north/screen-up)}; optional `breaches` [{`space`, `side`, `at`}]: wall openings with floor but no door or frame, for their owner to fill (`src/enemies/bulkhead.gd`); only `stalker_deck`'s copy of the deck has any; `path_check` {`from`, `to`, `cell_m`, `margin_m`}; `stand_in` {`speed_m_s`, `turn_deg_s`, `radius_m`, `height_m`, `aim_height_m`}; `lighting` {...}; `colors` {...}.
 
 Tests: `tests/test_deck.gd`.

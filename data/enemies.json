@@ -155,7 +155,6 @@
     "emerge_delay_s": 0.55,
     "camera_kick_m": 0.42,
     "camera_kick_recover_s": 0.6,
-    "bang_volume_db": 6.0,
     "panel_color": "4a4f56",
     "panel_roughness": 0.85,
     "debris": {
@@ -182,5 +181,5 @@
     "spit": {"length_s": 0.22, "decay_per_s": 18.0, "low_hz": 340.0, "low_share": 0.3, "volume_db": -4.0},
     "lunge": {"length_s": 0.3, "decay_per_s": 10.0, "low_hz": 130.0, "low_share": 0.5, "volume_db": -2.0}
   },
-  "help": {"text": "F flashlight   E door / tip bed   F2 sight debug", "from_bottom_px": 62}
+  "help": {"text": "F flashlight   E door / tip bed   F2 sight debug"}
 }

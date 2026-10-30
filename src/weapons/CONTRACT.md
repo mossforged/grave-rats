@@ -15,8 +15,8 @@ The rifle and the things it shoots (T003).
 ## Public API
 - `AimCone.new(cfg)`: `step(delta, speed_fraction, moving, sprinting, turned_deg)`, `target_deg(...)`, `spread_deg`.
 - `RifleState.new(cfg)`: `step(delta, sprinting) -> "finished"|"cancelled"|""`, `try_fire(sprinting) -> FIRED|BLOCKED_*`, `start_reload(sprinting) -> bool`, `cancel_reload()`, `refill()`, `reloading()`, `reload_progress()`, `shot_yaw(center, spread_deg)`; fields `mag`, `reserve`, `reload_left`, `reload_total`, `recoil_deg`, `camera_kick_m`, `rng`.
-- `rifle.gd`: `state`, `cone`, `fx`, `trigger_held`, `exclude`; `tick(delta, sprinting, origin, center_yaw, muzzle) -> bool` (once per physics step), `request_reload(sprinting) -> bool`.
-- Anything a shot hits may have `take_hit({point, direction, damage})`.
+- `rifle.gd`: `state`, `cone`, `fx`, `trigger_held`, `exclude`, `shot_tracer` (optional Callable `(origin, dir, length) -> {} or {position, collider}` replacing the flat physics ray; `src/cover/shot_tracer.gd` is the 3D one, and scenes without it are unchanged); `tick(delta, sprinting, origin, center_yaw, muzzle) -> bool` (once per physics step), `request_reload(sprinting) -> bool`.
+- Anything a shot hits may have `take_hit({point, direction, damage, origin})`.
 
 ## Reload rules
 Starting drops the magazine: its rounds go back to the reserve and the new magazine leaves the reserve, so the gun holds 0. It takes the full `reload_s`. Fire is refused and changes nothing. Sprinting cancels and the new magazine is lost. It can't start while sprinting, on a full magazine or with nothing left.

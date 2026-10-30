@@ -632,3 +632,42 @@ func test_a_glob_stopped_by_cover_counts_as_protected_and_splashes_on_the_far_si
 	check_eq(puddles.size(), 1, "a puddle")
 	check((puddles[0].at as Vector2).x > r.end.x, "on the thrower's side of the bed")
 	check_eq(scene.pack.spits.puddles.damage_at(behind, 1.0), 0.0, "and none reaches behind it")
+
+
+func test_the_e_and_backspace_keys_reach_the_scene() -> void:
+	var scene: Node = await _scene()
+	var bed: Node = scene.beds[0]
+	var c: Vector2 = bed.upright_rect.get_center()
+	var p: Vector2 = c + Vector2(bed.upright_rect.size.x, 0)
+	_at(scene, p, p + Vector2(0, -3))
+	var e := InputEventKey.new()
+	e.physical_keycode = KEY_E
+	e.pressed = true
+	scene._unhandled_input(e)
+	check(not bed.can_tip(), "E tips the bed in reach")
+	check(scene.operator.control_held(), "and commits you")
+	var door: Node = scene._door("medbay", 0.7)
+	var at: Vector2 = door.opening.get_center() + Vector2(1.5, 0)
+	scene.operator.release_control()
+	_at(scene, at, at + Vector2(-3, 0))
+	var was_blocking: bool = door.door_state.blocks()
+	scene._unhandled_input(e)
+	await _run(scene, float(scene.doors.cfg.open_s) + 0.1)
+	check(door.door_state.blocks() != was_blocking, "with no bed in reach E still works the door")
+	var back := InputEventKey.new()
+	back.physical_keycode = KEY_BACKSPACE
+	back.pressed = true
+	scene._unhandled_input(back)
+	check(bed.can_tip(), "Backspace resets everything: the bed stands again")
+	check(door.door_state.blocks(), "and the door's shut")
+
+
+func test_closing_the_window_writes_the_life_so_far() -> void:
+	var scene: Node = await _scene()
+	await _run(scene, 0.1)
+	scene.notification(Node.NOTIFICATION_WM_CLOSE_REQUEST)
+	var path: String = scene.run_log.last_path
+	check(path.begins_with(TEST_DIR), "a file: %s" % path)
+	var d: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
+	check_eq(d.ended, "quit", "marked as a quit")
+	check_eq(d.killed_by, null, "nobody killed you")

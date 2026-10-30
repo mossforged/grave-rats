@@ -10,14 +10,14 @@ Pillar 2, "Know the room, fear the corner" (T004): line of sight, the three stat
 - `sight_mask.gd`, `sight_mask.gdshader`: two deck-wide SubViewports (visible, cleared each frame, 4x MSAA; memory, never cleared, no MSAA) and a fullscreen quad that looks up each pixel's world XZ from depth. Lighting stays real. Drawn first among the transparents (`RENDER_PRIORITY_MIN`), so beam, FX, aim drawings and prompts draw after it, unmasked.
 - `flashlight.gd`, `beam.gdshader`, `mote.gdshader`: shadowed `SpotLight3D` at the muzzle, a beam sheet cut to the sight polygon, dust motes that show only inside the wedge and the visible mask.
 - `sight_debug.gd`: F2 view.
-- `sight_deck.gd`: root of `scenes/sight/sight_deck.tscn`. Extends `src/player/weight_deck.gd`, adding all of the above plus `src/doors`, with darker lighting.
+- `sight_deck.gd`: root of `scenes/sight/sight_deck.tscn`. Extends `src/player/weight_deck.gd`, adding all of the above plus `src/doors`, with darker lighting. `_help_text()` is a hook for scenes built on it.
 
 ## Does not own
 - Doors (`src/doors`), deck geometry (`src/study`), the operator (`src/player`), enemies' own sight (next packet).
 
 ## Rules worth knowing
 - Walls block sight at their face; the mask spreads sight by `mask.dilate_m` so wall tops and faces show. It must stay under half a wall's thickness minus half a panel's, or sight spills past a door (0.22 m against 0.5 m walls and a 0.2 m panel).
-- Props at least `tall_prop_min_m` high block sight and are shown whole once a ray stops on them. Lower ones don't block. Stance doesn't change this yet (cover is a later packet).
+- Props at least `tall_prop_min_m` high block sight and are shown whole once a ray stops on them. Lower ones don't block. These are exactly the props with `cover: tall` (`tests/test_cover.gd` holds that). Crouching doesn't hide anything from the player's own sight; low cover against a stalker's eyes is in `src/enemies`.
 - The grid is the rules' truth and updates at `memory.update_hz`; the mask's memory texture is painted from the same polygons every frame, so its edge is smoother than the cells.
 - The sight wedge starts at the eye, the light at the muzzle. `Flashlight.spot_angle_deg()` makes them equally wide at full range; nearer in, the wedge is up to `muzzle_ahead_m × tan(half angle)` wider each side.
 

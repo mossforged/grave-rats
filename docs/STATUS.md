@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 1 (camera and scale) merged; gate waits for John. T003 (weighty operator and gun) built on `auto/t003-mac`, waiting for lead review. **Next:** John plays `scenes/study/scale_deck.tscn` (keys 1–5 camera, 6/7/8 room scale, 9/0 character scale, C cut-away) and picks a preset and scale (a data edit), then plays `scenes/player/weight_deck.tscn` and tunes with F1: *"Does it feel heavy without feeling laggy?"*
+**Stage:** 2 (core loop, grey box) in progress: T003 merged; gates for stage 1 (camera/scale) and T003's feel wait for John. **Next:** T004 (sight, flashlight, doors) running; then an enemy and cover packet.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,14 +12,16 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T002 merged; John's gate still open. T003 built, needs lead review and merge (`docs/handoffs/auto-T003.md`). T004 (sight, flashlight, doors) queues after T003 merges.
-- Art: A001 and A002 merged. A003 (HUD and company screens) queued. Crew/threat and environment development wait on John's A001/A002 picks.
+- Code: T003 merged (lead reviewed, 71/71 reproduced). T004 queued.
+- Art: A001–A003 merged. A004 (logo and title art) queued. Crew/threat, environment and HUD development wait on John's picks.
 
 ## Open questions (for John)
 - Stage 1 gate: which camera preset and room/character scale? At 55–65° pitch a real-size operator can't be both ~8% of view height and framed like the panel; preset 1 favours operator size, preset 3 the composition (see auto-T002).
 - `tools/capture.sh` only reaches 1920×954 on this display (title bar); accept, or make the capture window borderless (src/debug task)?
 - A001 picks: which crew looks and threat directions to develop (art lane's recommendation: 01 orange hauler; 11 acid stalker, with 09 rogue AI as the systemic complement).
 - A002 picks: walls, doors, floors, props, signage (08b) and lighting (09b) for stage 3 (art lane recommends all, with caveats in auto-A002).
+- A003 picks: HUD direction (01 minimal / 02 suit OS / 03 watch strip, art lane recommends 03) and the tone of the briefing, payslip and death bill.
+- T003 feel: play `scenes/player/weight_deck.tscn`, tune with F1 and Save. Open: cursor sits ~0.8 m screen-up of the floor cone (aim at gun height); is the 1.5° settled cone readable?
 - How weighty? F1 in `weight_deck` tunes every lever; Save writes `data/`.
 - Aim marker: the cone is on the floor but the cursor aims at gun height, so the cursor sits about 0.8 m screen-up of the cone's line at the concept camera. A ring marks the floor point under the aim. Keep that, or aim on the floor and accept that shots at a dummy's chest pass behind it? (auto-T003)
 
@@ -32,4 +34,5 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Quiet-machine frame-time baseline for the asset viewer (T001 runs had other load on the Mac).
 
 ## Last session
+2026-10-30 (lead): merged T003 (71/71 reproduced) and A003; queued T004 and A004.
 2026-10-30 (code, unattended): T003 built: `src/player`, `src/weapons`, F1 tuning panel, `scenes/player/weight_deck.tscn`, `data/player.json`, `data/weapons.json`. 71/71 tests pass, import clean. 2.08 ms avg, 2.50 ms p95 at 1920×954 while walking, turning and firing. Captures in `docs/screens/T003/`. Feel is untested by a human.

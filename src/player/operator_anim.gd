@@ -7,6 +7,7 @@ extends Node
 const SpineTwist := preload("res://src/player/spine_twist.gd")
 const UPPER_BONES := ["spine1", "spine2", "clavicle_L", "upperarm_L", "forearm_L", "hand_L",
 	"clavicle_R", "upperarm_R", "forearm_R", "hand_R", "neck", "head", "weapon", "mag"]
+const TWISTED_CLIPS := ["L_Idle", "L_Crouch_Idle"]
 const SKELETON_PATH := "Rig/Skeleton3D:"
 
 var tree: AnimationTree
@@ -22,6 +23,9 @@ func setup(model_root: Node3D, cfg: Dictionary, weapon_bone_name: String) -> voi
 	_reload_clip_s = float(cfg.reload_clip_s)
 	skeleton = model_root.find_children("*", "Skeleton3D", true, false)[0]
 	var player: AnimationPlayer = model_root.find_children("*", "AnimationPlayer", true, false)[0]
+	for clip: String in TWISTED_CLIPS:
+		for side: String in ["_L", "_R"]:
+			_untwist_leg(player.get_animation(clip), side)
 	tree = AnimationTree.new()
 	tree.name = "AnimationTree"
 	tree.tree_root = _build_tree(float(cfg.upper_xfade_s))
@@ -34,6 +38,28 @@ func setup(model_root: Node3D, cfg: Dictionary, weapon_bone_name: String) -> voi
 	twist.spine1_share = float(cfg.spine1_twist_share)
 	skeleton.add_child(twist)
 	twist.setup(skeleton, skeleton.find_bone(weapon_bone_name))
+
+
+## The idle clips hold each thigh half a turn about its own length from where the walk clips and
+## the rest pose hold it, and take that half turn back at the foot. The pose looks fine, but the
+## mixer blends rotations away from rest, so a blend into a crouch swung each foot in a loop around
+## the body: the corkscrew John saw. This writes the same pose the short way. The clip resources are
+## shared between operators, so a clip already untwisted is left alone.
+func _untwist_leg(clip: Animation, side: String) -> void:
+	var half := Quaternion(Vector3.UP, PI)
+	var thigh := clip.find_track(NodePath(SKELETON_PATH + "thigh" + side), Animation.TYPE_ROTATION_3D)
+	var shin := clip.find_track(NodePath(SKELETON_PATH + "shin" + side), Animation.TYPE_ROTATION_3D)
+	var foot := clip.find_track(NodePath(SKELETON_PATH + "foot" + side), Animation.TYPE_ROTATION_3D)
+	var rest := skeleton.get_bone_rest(skeleton.find_bone("thigh" + side)).basis.get_rotation_quaternion()
+	var first: Quaternion = clip.track_get_key_value(thigh, 0)
+	if absf(rest.dot(first)) >= absf(rest.dot(first * half)):
+		return
+	for k in clip.track_get_key_count(thigh):
+		clip.track_set_key_value(thigh, k, (clip.track_get_key_value(thigh, k) as Quaternion) * half)
+	for k in clip.track_get_key_count(shin):
+		clip.track_set_key_value(shin, k, half.inverse() * (clip.track_get_key_value(shin, k) as Quaternion) * half)
+	for k in clip.track_get_key_count(foot):
+		clip.track_set_key_value(foot, k, half.inverse() * (clip.track_get_key_value(foot, k) as Quaternion))
 
 
 ## Call once per step with state from before the move. `reload_s` is the reload's full time.

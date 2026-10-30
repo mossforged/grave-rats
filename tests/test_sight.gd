@@ -296,14 +296,23 @@ func test_sight_deck_scene_runs_with_doors_and_targets() -> void:
 	check(t.seen, "open door shows what's behind it")
 	check_eq(scene.sight.grid.state_at(inside), SightGrid.VISIBLE, "the room's visible")
 	var before: bool = scene.flashlight.on
-	scene.flashlight.toggle()
-	check(scene.flashlight.on != before, "F's toggle works")
-	scene.sight_debug.toggle()
+	scene._unhandled_input(_key(KEY_F))
+	check(scene.flashlight.on != before, "F toggles the light")
+	scene._unhandled_input(_key(KEY_E))
+	check(d.door_state.blocks() or d.door_state.state == d.door_state.State.CLOSING, "E starts closing the door")
+	scene._unhandled_input(_key(KEY_F2))
 	await tree.process_frame
-	check(scene.sight_debug.visible, "F2's toggle works")
+	check(scene.sight_debug.visible, "F2 shows the debug view")
 	check(scene.sight_debug.mesh.get_surface_count() > 0, "debug view drew something")
 	scene.respawn()
 	check_eq(scene.sight.grid.state_at(inside), SightGrid.UNKNOWN, "respawn forgets")
+
+
+func _key(code: Key) -> InputEventKey:
+	var e := InputEventKey.new()
+	e.physical_keycode = code
+	e.pressed = true
+	return e
 
 
 func test_gameplay_scripts_have_no_tunable_literals() -> void:

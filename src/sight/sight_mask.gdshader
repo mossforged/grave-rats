@@ -37,6 +37,11 @@ float ring_max(sampler2D mask, vec2 uv, vec2 r) {
 	m = max(m, texture(mask, uv - r * DIAG).r);
 	m = max(m, texture(mask, uv + vec2(r.x, -r.y) * DIAG).r);
 	m = max(m, texture(mask, uv + vec2(-r.x, r.y) * DIAG).r);
+	// Halfway in too, so a shape narrower than the ring doesn't leave stripes.
+	m = max(m, texture(mask, uv + vec2(r.x, 0.0) * 0.5).r);
+	m = max(m, texture(mask, uv - vec2(r.x, 0.0) * 0.5).r);
+	m = max(m, texture(mask, uv + vec2(0.0, r.y) * 0.5).r);
+	m = max(m, texture(mask, uv - vec2(0.0, r.y) * 0.5).r);
 	return m;
 }
 

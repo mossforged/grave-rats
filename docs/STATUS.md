@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 2 (core loop, grey box) in progress: T003 merged; gates for stage 1 (camera/scale) and T003's feel wait for John. **Next:** T004 (sight, flashlight, doors) running; then an enemy and cover packet.
+**Stage:** 2 (core loop, grey box) in progress: T003 merged; gates for stage 1 (camera/scale) and T003's feel wait for John. T004 (sight, flashlight, doors) built, awaiting lead review. **Next:** John plays `scenes/sight/sight_deck.tscn`; then an enemy and cover packet.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,7 +12,7 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Code: T003 merged (lead reviewed, 71/71 reproduced). T004 queued.
+- Code: T004 on `auto/t004-mac`, 96/96 tests, not merged. See `docs/handoffs/auto-T004.md`.
 - Art: A001–A003 merged. A004 (logo and title art) queued. Crew/threat, environment and HUD development wait on John's picks.
 
 ## Open questions (for John)
@@ -22,6 +22,7 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - A002 picks: walls, doors, floors, props, signage (08b) and lighting (09b) for stage 3 (art lane recommends all, with caveats in auto-A002).
 - A003 picks: HUD direction (01 minimal / 02 suit OS / 03 watch strip, art lane recommends 03) and the tone of the briefing, payslip and death bill.
 - T003 feel: play `scenes/player/weight_deck.tscn`, tune with F1 and Save. Open: cursor sits ~0.8 m screen-up of the floor cone (aim at gun height); is the 1.5° settled cone readable?
+- T004 dread: *"Do I feel the corners?"* Play `scenes/sight/sight_deck.tscn` (F light, E door, F2 debug, F1 "Sight" sliders). Is 2.6 m awareness too generous? How dark? Should 1.2 m crates block sight? (auto-T004)
 - How weighty? F1 in `weight_deck` tunes every lever; Save writes `data/`.
 - Aim marker: the cone is on the floor but the cursor aims at gun height, so the cursor sits about 0.8 m screen-up of the cone's line at the concept camera. A ring marks the floor point under the aim. Keep that, or aim on the floor and accept that shots at a dummy's chest pass behind it? (auto-T003)
 
@@ -31,8 +32,9 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Physics interpolation: the operator steps at 60 Hz, so a faster display may show slight camera jitter.
 - Legacy clips: a real walk (the run clips stand in), a crouch walk with real steps, turn-in-place feet. Foot slide numbers in auto-T003.
 - `tests/test_deck.gd` `test_props_at_real_size` logs a string-format error (`%` with an array) while passing.
+- Sight leaks: the floor aim cone stops at unseen walls, tracers and prompts draw over the mask, hidden targets pop in with no fade.
 - Quiet-machine frame-time baseline for the asset viewer (T001 runs had other load on the Mac).
 
 ## Last session
-2026-10-30 (lead): merged T003 (71/71 reproduced) and A003; queued T004 and A004.
-2026-10-30 (code, unattended): T003 built: `src/player`, `src/weapons`, F1 tuning panel, `scenes/player/weight_deck.tscn`, `data/player.json`, `data/weapons.json`. 71/71 tests pass, import clean. 2.08 ms avg, 2.50 ms p95 at 1920×954 while walking, turning and firing. Captures in `docs/screens/T003/`. Feel is untested by a human.
+2026-10-30 (code, unattended): T004 built: `src/sight`, `src/doors`, `scenes/sight/sight_deck.tscn`, `data/sight.json`, `data/doors.json`; `data/deck.json` gains a fourth (locked) door and two tall props. 96/96 tests, import clean.
+Flashlight costs about 0.35 ms (3.51 vs 3.16 ms avg) at 1920×954, not a true 1080p, on a loaded Mac. Captures in `docs/screens/T004/`. Nobody has played it; the dread is untested.

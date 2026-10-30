@@ -118,7 +118,7 @@ func _on_sight(polygon: PackedVector2Array, reveal: Array) -> void:
 	# The shader spreads every shape by dilate_m, so what's revealed whole is drawn that much
 	# smaller, down to a sliver: a door panel must not spill into the room behind it.
 	var dilate := float(sight.cfg.mask.dilate_m)
-	var sliver := 1.0 / float(sight.cfg.mask.px_per_m)
+	var sliver := dilate * 0.5
 	var rects: Array = []
 	for r: Rect2 in reveal:
 		var w := maxf(r.size.x - dilate * 2.0, sliver)

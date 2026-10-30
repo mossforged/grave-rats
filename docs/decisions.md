@@ -10,3 +10,4 @@
 - 2026-10-29: Carried over from the prototype as legacy assets only: the operator and robot glTF (one shared skeleton, 13 clips), the 32-piece environment kit, 15 PBR texture sets, the Blender/texture build scripts. Reference only; free to replace.
 - 2026-10-29: Pillars approved, with two from John: **weight, not speed** (deliberate, visceral combat; turning, aiming, firing and reloading take time; cover matters; ambushes scare because you can't spin instantly) and **satirical tone** (200 years on, worse capitalism drives desperate crews into derelicts for credits; humour from desperation, violence still lands).
 - 2026-10-29: Threats (John): rogue AI, robots, aliens, horrors, and rival pirate crews. Roster and mix still open; A001 explores.
+- 2026-10-29: Pillar added (lead's proposal, John: "that sounds good to me"): **Greed is the clock**. Staying longer means better loot and worse odds; runs build to "one more room?".

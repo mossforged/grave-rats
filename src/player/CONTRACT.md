@@ -7,14 +7,13 @@ The weighty operator (T003). The rule: the intent responds the same step, the co
 - `operator.gd`: CharacterBody3D. Reads intent, steps the model, fires, moves, drives animation and floor drawings. Speed and direction are fixed **before** `move_and_slide` (the prototype measured after, so its walk never animated).
 - `operator_anim.gd`, `spine_twist.gd`: AnimationTree over the legacy clips, and the torso lead as a spine twist (a SkeletonModifier3D, which also records the gun's pose for the muzzle).
 - `aim_visuals.gd`: floor cone, turn arc, ring under the aim point.
-- `player_hud.gd`: magazine / reserve, reload bar, stance word, key help.
-- `weight_deck.gd`: root of `scenes/player/weight_deck.tscn`: deck, targets, camera, HUD, panel, camera kick, capture shots.
+- `weight_deck.gd`: root of `scenes/player/weight_deck.tscn`: deck, targets, camera, the suit OS and noise ring (`src/hud`), panel, camera kick, capture shots. `_noise_senses()` says whose ears the ring shows. H toggles the key help.
 
 ## Does not own
 - The gun's rules, FX, targets (`src/weapons`); camera behaviour (`src/camera`); deck (`src/study`); the panel (`src/debug`).
 
 ## Public API
-- `OperatorModel.new(cfg)`: `step(delta, wish, to_yaw, wants_crouch, wants_sprint)`, `note_shot()`, `face_now(yaw)`, `reset_motion()`, `aim_yaw_for(from, point)`, `aim_error()`, `torso_lead()`, `leg_blend()` (x right, y forward, relative to the torso), `leg_time_scale()`, `crouch_time_scale()`, `current_turn_rate_deg()`, `top_speed()`, `moving()`, `firing()`; fields `velocity`, `speed`, `torso_yaw`, `hips_yaw`, `aim_yaw`, `crouch_amount`, `sprinting`, `turned_deg`. Statics `wish_from_keys`, `yaw_to`, `yaw_dir`. Yaw 0 faces -Z.
+- `OperatorModel.new(cfg)`: `step(delta, wish, to_yaw, wants_crouch, wants_sprint)`, `note_shot()`, `face_now(yaw)`, `reset_motion()`, `aim_yaw_for(from, point)`, `aim_error()`, `noise_kind()`, `torso_lead()`, `leg_blend()` (x right, y forward, relative to the torso), `leg_time_scale()`, `crouch_time_scale()`, `current_turn_rate_deg()`, `top_speed()`, `moving()`, `firing()`; fields `velocity`, `speed`, `torso_yaw`, `hips_yaw`, `aim_yaw`, `crouch_amount`, `sprinting`, `turned_deg`. Statics `wish_from_keys`, `yaw_to`, `yaw_dir`. Yaw 0 faces -Z.
 - `operator.gd`: `aim_point`, `move_yaw_deg`, `input_enabled`, `scripted` {`keys`, `crouch`, `sprint`, `fire`} (used when input is off), `anim_speed`, `crouch_shown` (share of the crouch the body shows; a braced shot rises out of it), `model`, `rifle`, `anim`; `simulate(delta)`, `hold_control(seconds)` / `release_control()` / `control_held()` (no moving, turning or firing: a stagger, tipping a bed, death), `request_reload()`, `face_now(point)`, `gun_yaw()`, `aim_dir()`, `muzzle_position()`, `shot_reach(yaw)`, `set_character_scale(s)`, `body_radius()`.
 - Scene keys: WASD, Shift sprint, C/Ctrl crouch, mouse aim, LMB fire, R reload, 1-5 camera, V cut-away, Backspace respawn and refill, F1 tuning, F3 frame time.
 - Scene capture hooks: `capture_shots()`, `apply_shot(shot)` (a coroutine: runs real frames, then freezes `Engine.time_scale`), `release_shot()`.

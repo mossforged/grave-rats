@@ -79,14 +79,18 @@ func shot_at(from: Vector2, to: Vector2) -> void:
 	var near := float(cfg.dodge.shot_line_m)
 	for s: Node in stalkers:
 		var at: Vector2 = s.floor_position()
-		if at.distance_to(Geometry2D.get_closest_point_to_segment(at, from, to)) <= near:
+		# With no open way to whoever fired, the round stopped on the far side of a shut door.
+		if at.distance_to(Geometry2D.get_closest_point_to_segment(at, from, to)) <= near and not nav.path(at, from).is_empty():
 			s.brain.notice_shot(from)
 
 
-## A noise anyone may hear ("gunfire", "sprint").
+## A noise anyone may hear ("gunfire", "sprint", "walk", "crouch"). With no open way to it, it's
+## coming through a shut door, and carries less.
 func noise(kind: String, at: Vector2) -> void:
 	for s: Node in stalkers:
-		s.brain.hear(kind, at, s.floor_position())
+		var pos: Vector2 = s.floor_position()
+		if pos.distance_to(at) <= StalkerBrain.hearing_radius(cfg, kind):
+			s.brain.hear(kind, at, pos, nav.path(pos, at).is_empty())
 
 
 func target_body() -> Vector3:

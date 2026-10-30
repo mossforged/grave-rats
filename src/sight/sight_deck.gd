@@ -17,7 +17,6 @@ var doors: DoorSystem
 var sight_debug: SightDebug
 
 var _env_light := ""
-var _light_off_label: Label
 
 
 func _ready() -> void:
@@ -48,43 +47,12 @@ func _ready() -> void:
 		var st := SightTarget.new()
 		st.name = "SightTarget"
 		t.add_child(st)
-	_make_help()
+	hud.scene_help = _help_text()
 	_env_light = OS.get_environment("SIGHT_FLASHLIGHT")
 	if _env_light != "":
 		flashlight.set_on(_env_light == "on")
 	sight.forget()
 	_update_sight(0.0, true)
-
-
-## This scene's extra keys, just above the HUD's own key line.
-func _make_help() -> void:
-	var h: Dictionary = sight.cfg.help
-	var layer := CanvasLayer.new()
-	layer.name = "SightHelp"
-	add_child(layer)
-	var label := Label.new()
-	label.text = _help_text()
-	label.add_theme_font_size_override("font_size", int(h.font_size))
-	layer.add_child(label)
-	label.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	label.offset_left = float(h.margin_px)
-	label.offset_top = -float(h.from_bottom_px)
-	label.offset_bottom = -float(h.from_bottom_px)
-	label.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var off: Dictionary = sight.cfg.light_off
-	_light_off_label = Label.new()
-	_light_off_label.name = "LightOff"
-	_light_off_label.text = String(off.word)
-	_light_off_label.add_theme_font_size_override("font_size", int(off.font_size))
-	_light_off_label.add_theme_color_override("font_color", Color(String(off.color)))
-	layer.add_child(_light_off_label)
-	_light_off_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_light_off_label.offset_right = -float(off.from_right_px)
-	_light_off_label.offset_left = -float(off.from_right_px)
-	_light_off_label.offset_top = -float(off.from_bottom_px)
-	_light_off_label.offset_bottom = -float(off.from_bottom_px)
-	_light_off_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_light_off_label.visible = not flashlight.on
 
 
 func _help_text() -> String:
@@ -113,7 +81,7 @@ func _process(delta: float) -> void:
 	if panel and panel.visible:
 		mask.apply_cfg()
 		flashlight.apply_cfg()
-	_light_off_label.visible = not flashlight.on
+	hud.light_off = not flashlight.on
 	_update_sight(delta, false)
 
 
@@ -126,7 +94,7 @@ func _update_sight(delta: float, force_memory: bool) -> void:
 	sight.update_sight(_eye(), yaw, flashlight.on, delta, force_memory)
 	var muzzle := operator.muzzle_position()
 	flashlight.follow(muzzle, yaw)
-	flashlight.draw_beam(sight.polygon, _eye(), yaw, muzzle)
+	flashlight.draw_beam(sight.visibility, _eye(), yaw, muzzle, delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:

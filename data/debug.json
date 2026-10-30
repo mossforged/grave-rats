@@ -368,6 +368,22 @@
       "step": 0.01
     },
     {
+      "label": "Beam soft sides",
+      "file": "sight",
+      "path": "beam.edge_power",
+      "min": 0,
+      "max": 6,
+      "step": 0.1
+    },
+    {
+      "label": "Beam reach eases m/s",
+      "file": "sight",
+      "path": "beam.reach_rate_m_s",
+      "min": 2,
+      "max": 120,
+      "step": 1
+    },
+    {
       "label": "Dust motes strength",
       "file": "sight",
       "path": "motes.strength",
@@ -754,6 +770,164 @@
       "min": 0,
       "max": 1,
       "step": 0.01
+    },
+    {
+      "section": "Suit OS HUD"
+    },
+    {
+      "label": "Bloom out s",
+      "file": "hud",
+      "path": "ring.bloom_s",
+      "min": 0.05,
+      "max": 1.5,
+      "step": 0.01
+    },
+    {
+      "label": "Hold at full s",
+      "file": "hud",
+      "path": "ring.hold_s",
+      "min": 0,
+      "max": 1.5,
+      "step": 0.01
+    },
+    {
+      "label": "Shrink back s",
+      "file": "hud",
+      "path": "ring.shrink_s",
+      "min": 0.2,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "label": "Swell m/s",
+      "file": "hud",
+      "path": "ring.swell_m_s",
+      "min": 2,
+      "max": 60,
+      "step": 1
+    },
+    {
+      "label": "Ring line m",
+      "file": "hud",
+      "path": "ring.line_m",
+      "min": 0.02,
+      "max": 0.4,
+      "step": 0.01
+    },
+    {
+      "label": "Ring segments",
+      "file": "hud",
+      "path": "ring.segments",
+      "min": 8,
+      "max": 120,
+      "step": 1
+    },
+    {
+      "label": "Ring gap share",
+      "file": "hud",
+      "path": "ring.gap",
+      "min": 0,
+      "max": 0.9,
+      "step": 0.01
+    },
+    {
+      "label": "Ring alpha walking",
+      "file": "hud",
+      "path": "ring.alpha.walk",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Ring alpha sprinting",
+      "file": "hud",
+      "path": "ring.alpha.sprint",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Ring alpha gunfire",
+      "file": "hud",
+      "path": "ring.alpha.gunfire",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Pulse alpha",
+      "file": "hud",
+      "path": "ring.alpha.ripple",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Low ammo at rounds",
+      "file": "hud",
+      "path": "ammo.low_rounds",
+      "min": 0,
+      "max": 30,
+      "step": 1
+    },
+    {
+      "label": "Low suit at share",
+      "file": "hud",
+      "path": "suit.low_fraction",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Status above operator m",
+      "file": "hud",
+      "path": "status.above_m",
+      "min": 1,
+      "max": 5,
+      "step": 0.05
+    },
+    {
+      "section": "Noise (what the ring shows)"
+    },
+    {
+      "label": "Stalkers hear walking m",
+      "file": "enemies",
+      "path": "stalker.senses.walk_m",
+      "min": 0,
+      "max": 12,
+      "step": 0.1
+    },
+    {
+      "label": "Stalkers hear crouch-walking m",
+      "file": "enemies",
+      "path": "stalker.senses.crouch_m",
+      "min": 0,
+      "max": 12,
+      "step": 0.1
+    },
+    {
+      "label": "Through a shut door, share",
+      "file": "enemies",
+      "path": "stalker.senses.through_door_factor",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Pirates hear walking m",
+      "file": "pirates",
+      "path": "senses.walk_m",
+      "min": 0,
+      "max": 12,
+      "step": 0.1
+    },
+    {
+      "label": "Pirates hear crouch-walking m",
+      "file": "pirates",
+      "path": "senses.crouch_m",
+      "min": 0,
+      "max": 12,
+      "step": 0.1
     },
     {
       "section": "Suit"

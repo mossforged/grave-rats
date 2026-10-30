@@ -141,7 +141,8 @@ func simulate(delta: float, pack: Node) -> Array:
 	return events
 
 
-## Every so often: is a shut door all that's between it and where it thinks you are?
+## Every so often: is a shut door all that's between it and where it thinks you are? Hunting, it
+## breaks it; investigating, it only comes up to it (StalkerBrain).
 func _look_for_door(delta: float, pack: Node) -> void:
 	var hunting_for_you: bool = brain.state == StalkerBrain.State.STALK or brain.state == StalkerBrain.State.INVESTIGATE \
 			or brain.state == StalkerBrain.State.BASH

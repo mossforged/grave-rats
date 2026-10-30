@@ -52,10 +52,11 @@ func _ready() -> void:
 	suit_hud = HealthHud.new()
 	suit_hud.name = "SuitHud"
 	add_child(suit_hud)
-	suit_hud.suit = suit
+	hud.suit = suit
 	mark = ProtectionMark.new()
 	mark.name = "ProtectionMark"
 	add_child(mark)
+	hud.mark = mark
 	squad = PirateSquad.new()
 	squad.name = "Squad"
 	add_child(squad)
@@ -103,6 +104,10 @@ func _make_targets() -> void:
 
 func _help_text() -> String:
 	return String(Data.value("pirates", "help", {}).text)
+
+
+func _noise_senses() -> Dictionary:
+	return (Data.value("pirates", "senses") as Dictionary)
 
 
 func respawn() -> void:
@@ -189,9 +194,10 @@ func _step_brace(delta: float) -> void:
 
 func _step_noise(delta: float, pos: Vector2) -> void:
 	_sprint_noise_left -= delta
-	if operator.model.sprinting and _sprint_noise_left <= 0.0:
+	var kind: String = operator.model.noise_kind()
+	if kind != "" and _sprint_noise_left <= 0.0:
 		_sprint_noise_left = float(_pirate_cfg.senses.sprint_emit_s)
-		squad.noise("sprint", pos)
+		squad.noise(kind, pos)
 
 
 func _apply_camera_kick() -> void:
@@ -219,6 +225,7 @@ func _process(delta: float) -> void:
 	for p: Node in squad.living():
 		doors.actors.append({"position": p.floor_position(), "radius": float(_pirate_cfg.radius_m) * float(deck_data.character_scale)})
 	driver.show_state(not suit.dead)
+	hud.lock_state = driver.state_word() if not suit.dead else ""
 	if panel and panel.visible:
 		for p: Node in squad.pirates:
 			p.light.apply_cfg()
@@ -303,6 +310,9 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "lock_2_aiming_over", "do": "lock", "aim": true},
 		{"name": "lock_prompt", "do": "prompt"},
 		{"name": "death_screen", "do": "death"},
+		{"name": "hud_locked", "do": "lock", "aim": false},
+		{"name": "hud_locked_exposed", "do": "lock", "aim": true},
+		{"name": "hud_shields_under_fire", "do": "flank", "wait": 1.8},
 	]
 
 
@@ -384,7 +394,8 @@ func _beside_shot() -> void:
 	await _stand_at(at, at + Vector2(0, 6))
 	_hold_squad = true
 	driver.hide_prompt = true
-	mark.visible = false
+	hud.visible = false
+	noise_ring.visible = false
 	squad.hide_barks()
 	for o: Node in squad.pirates:
 		if o != q:
@@ -413,7 +424,7 @@ func release_shot() -> void:
 	super()
 	_hold_squad = false
 	driver.hide_prompt = false
-	mark.visible = true
+	hud.visible = true
 	mask.visible = true
 	rig.set_process(true)
 	if _shot_light:

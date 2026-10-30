@@ -1,15 +1,17 @@
 extends Node3D
-## The weapon light: a shadowed SpotLight3D at the muzzle, a beam sheet cut to the sight polygon
+## The weapon light: a shadowed SpotLight3D at the muzzle, a beam sheet in the same cone (BeamFan)
 ## and dust motes that only show inside it. The cone comes from data/sight.json "cone_on", the
 ## same numbers sight uses, so light and knowledge match.
 
 const Visibility := preload("res://src/sight/visibility.gd")
+const BeamFan := preload("res://src/sight/beam_fan.gd")
 const BEAM_SHADER := preload("res://src/sight/beam.gdshader")
 const MOTE_SHADER := preload("res://src/sight/mote.gdshader")
 
 var on := true
 var cfg: Dictionary
 var spot: SpotLight3D
+var fan: BeamFan
 
 var _beam: MeshInstance3D
 var _beam_mesh: ImmediateMesh
@@ -37,6 +39,7 @@ func setup(config: Dictionary) -> void:
 	_beam.top_level = true
 	_beam.extra_cull_margin = float(cfg.cone_on.range_m)
 	add_child(_beam)
+	fan = BeamFan.new(int(cfg.beam.rays))
 	_make_motes()
 	apply_cfg()
 	set_on(bool(f.start_on))
@@ -74,6 +77,9 @@ func set_mask(texture: Texture2D, bounds: Rect2) -> void:
 	_mote_mat.set_shader_parameter("visible_mask", texture)
 	_mote_mat.set_shader_parameter("mask_origin", bounds.position)
 	_mote_mat.set_shader_parameter("mask_size", bounds.size)
+	_beam_mat.set_shader_parameter("visible_mask", texture)
+	_beam_mat.set_shader_parameter("mask_origin", bounds.position)
+	_beam_mat.set_shader_parameter("mask_size", bounds.size)
 
 
 ## Data to nodes. Called at setup, and while the tuning panel is open.
@@ -91,6 +97,9 @@ func apply_cfg() -> void:
 	_beam_mat.set_shader_parameter("beam_color", Color(b.color))
 	_beam_mat.set_shader_parameter("strength", float(b.strength))
 	_beam_mat.set_shader_parameter("fade_power", float(b.fade_power))
+	_beam_mat.set_shader_parameter("edge_power", float(b.edge_power))
+	_beam_mat.set_shader_parameter("tan_half", tan(deg_to_rad(spot.spot_angle)))
+	fan.configure(deg_to_rad(spot.spot_angle), float(c.range_m), float(b.reach_rate_m_s), float(b.snap_m))
 	_mote_mat.set_shader_parameter("mote_color", Color(m.color))
 	_mote_mat.set_shader_parameter("strength", float(m.strength))
 	_mote_mat.set_shader_parameter("half_angle", deg_to_rad(float(c.half_angle_deg)))
@@ -111,6 +120,7 @@ func set_on(value: bool) -> void:
 	_beam.visible = on
 	_motes.visible = on
 	_motes.emitting = on
+	fan.restart()
 
 
 func toggle() -> void:
@@ -127,35 +137,12 @@ func follow(muzzle: Vector3, yaw: float) -> void:
 	_mote_mat.set_shader_parameter("beam_dir", d)
 
 
-## Rebuilds the beam sheet: a fan from the muzzle over the part of the polygon inside the wedge.
-func draw_beam(polygon: PackedVector2Array, eye: Vector2, yaw: float, muzzle: Vector3) -> void:
-	_beam_mesh.clear_surfaces()
+## Rebuilds the beam sheet: the fixed fan from the muzzle, stopped by the walls, at the spot's pitch.
+func draw_beam(visibility: RefCounted, eye: Vector2, yaw: float, muzzle: Vector3, delta: float) -> void:
 	if not on:
+		_beam_mesh.clear_surfaces()
 		return
-	var c: Dictionary = cfg.cone_on
-	var half := deg_to_rad(float(c.half_angle_deg))
-	var ahead := float(cfg.flashlight.muzzle_ahead_m)
-	var range_m := float(c.range_m)
-	var start_y := float(cfg.beam.start_height_m)
-	var end_y := float(cfg.beam.end_height_m)
-	var ring := PackedVector2Array()
-	for p in polygon:
-		var to := p - eye
-		if absf(angle_difference(yaw, atan2(-to.x, -to.y))) <= half:
-			# Closer than the muzzle: pushed out to it. Dropping the point would join its neighbours
-			# in one big triangle that snapped in and out as a wall came within reach.
-			ring.append(eye + to.normalized() * ahead if to.length() < ahead else p)
-	if ring.size() < 2:
-		return
-	var apex := Vector3(muzzle.x, start_y, muzzle.z)
-	var apex2 := Vector2(muzzle.x, muzzle.z)
-	_beam_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in ring.size() - 1:
-		_beam_mesh.surface_set_uv(Vector2.ZERO)
-		_beam_mesh.surface_add_vertex(apex)
-		for k in 2:
-			var p := ring[i + k]
-			var t := minf(apex2.distance_to(p) / range_m, 1.0)
-			_beam_mesh.surface_set_uv(Vector2(t, 0.0))
-			_beam_mesh.surface_add_vertex(Vector3(p.x, lerpf(start_y, end_y, t), p.y))
-	_beam_mesh.surface_end()
+	var at := Vector2(muzzle.x, muzzle.z)
+	fan.cast(visibility, eye, at, yaw)
+	fan.step(delta, at, yaw)
+	fan.fill(_beam_mesh, muzzle, deg_to_rad(float(cfg.flashlight.pitch_deg)), float(cfg.beam.floor_m))

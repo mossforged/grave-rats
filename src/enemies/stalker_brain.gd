@@ -152,11 +152,19 @@ func force_lunge() -> void:
 	_hit_landed = false
 
 
-## A noise of `kind` ("gunfire", "sprint") at `at`. True if it heard.
-func hear(kind: String, at: Vector2, from: Vector2) -> bool:
+## How far a noise of `kind` carries to a stalker's ears: the same numbers the HUD's ring shows.
+## Through a shut door (no open way between them) it carries a share of that.
+static func hearing_radius(config: Dictionary, kind: String, through_door := false) -> float:
+	var s: Dictionary = config.senses
+	return float(s[kind + "_m"]) * (float(s.through_door_factor) if through_door else 1.0)
+
+
+## A noise of `kind` ("gunfire", "sprint", "walk", "crouch") at `at`. True if it heard. A noise
+## never starts it on a door: a stalker that wasn't hunting comes to the door, lingers, gives up.
+func hear(kind: String, at: Vector2, from: Vector2, through_door := false) -> bool:
 	if state == State.DORMANT or state == State.DEAD:
 		return false
-	if from.distance_to(at) > float(cfg.senses[kind + "_m"]):
+	if from.distance_to(at) > hearing_radius(cfg, kind, through_door):
 		return false
 	if state == State.PROWL or state == State.INVESTIGATE:
 		_investigate(at)
@@ -386,12 +394,13 @@ func _step_prowl(delta: float, s: Dictionary) -> void:
 	wants_move = true
 
 
+## To the noise, or as far as the shut door in the way, and it never breaks one from here: only a
+## stalker that was hunting you does (_step_stalk).
 func _step_investigate(delta: float, s: Dictionary) -> void:
-	if bool(s.door_ahead):
-		_start_bash()
-		return
 	_noise_left -= delta
-	var there := (s.pos as Vector2).distance_to(goal) <= float(cfg.investigate.arrive_m)
+	var door_in_way := bool(s.door_ahead)
+	goal = s.door_at if door_in_way else last_known
+	var there := bool(s.at_door) if door_in_way else (s.pos as Vector2).distance_to(goal) <= float(cfg.investigate.arrive_m)
 	wants_move = not there and _noise_left > 0.0
 	if not wants_move:
 		_linger_left -= delta
@@ -490,6 +499,8 @@ func _step_body(delta: float, s: Dictionary) -> void:
 		State.INVESTIGATE:
 			if wants_move:
 				_turn(delta, yaw_to(pos, s.next_point), float(cfg.turn.investigate_deg_s))
+			elif bool(s.door_ahead):
+				_turn(delta, yaw_to(pos, s.door_face), float(cfg.turn.investigate_deg_s))
 			_walk(float(cfg.speed.investigate_m_s), s)
 		State.PROWL:
 			if wants_move:

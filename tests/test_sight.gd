@@ -7,6 +7,7 @@ const SightGrid := preload("res://src/sight/sight_grid.gd")
 const SightSystem := preload("res://src/sight/sight_system.gd")
 const SightTarget := preload("res://src/sight/sight_target.gd")
 const Flashlight := preload("res://src/sight/flashlight.gd")
+const BeamFan := preload("res://src/sight/beam_fan.gd")
 const DeckLayout := preload("res://src/study/deck_layout.gd")
 const NUMBER_FREE := ["res://src/sight/visibility.gd", "res://src/sight/sight_system.gd",
 	"res://src/sight/flashlight.gd", "res://src/sight/sight_target.gd", "res://src/sight/sight_debug.gd",
@@ -328,3 +329,135 @@ func test_gameplay_scripts_have_no_tunable_literals() -> void:
 			for m in rx.search_all(line):
 				if not allowed.has(m.get_string(1)):
 					check(false, "%s:%d has the literal %s" % [path, n, m.get_string(1)])
+
+
+# --- T008: one light shape, no frame-to-frame jitter ---
+
+## A room with a pillar in the beam's way, the walls of the real thing's kind.
+func _beam_world(cfg: Dictionary) -> Visibility:
+	var v := Visibility.new(cfg)
+	v.set_static([Rect2(-20, -21, 40, 1), Rect2(-20, 20, 40, 1), Rect2(-21, -20, 1, 40), Rect2(20, -20, 1, 40), Rect2(-1, -7, 2, 2)])
+	return v
+
+
+func _fan(cfg: Dictionary) -> BeamFan:
+	var f := BeamFan.new(int(cfg.beam.rays))
+	f.configure(deg_to_rad(float(cfg.cone_on.half_angle_deg)), float(cfg.cone_on.range_m), float(cfg.beam.reach_rate_m_s), float(cfg.beam.snap_m))
+	return f
+
+
+## The worst any vertex moves between two steps, turning `deg_s` for `seconds`. Also checks the count holds.
+func _worst_move(f: BeamFan, v: Visibility, deg_s: float, seconds: float) -> float:
+	var worst := 0.0
+	var yaw := -0.6
+	var last := PackedVector2Array()
+	var at := Vector2.ZERO
+	for i in roundi(seconds * 60.0):
+		yaw += deg_to_rad(deg_s) / 60.0
+		f.cast(v, at, at, yaw)
+		f.step(1.0 / 60.0, at, yaw)
+		var pts := PackedVector2Array()
+		for k in f.reach.size():
+			pts.append(f.point(k))
+		if not last.is_empty():
+			check_eq(pts.size(), last.size(), "the vertex count never changes")
+			for k in pts.size():
+				worst = maxf(worst, pts[k].distance_to(last[k]))
+		last = pts
+	return worst
+
+
+func test_the_beam_holds_still_when_you_do() -> void:
+	var cfg := _cfg()
+	var f := _fan(cfg)
+	var worst := _worst_move(f, _beam_world(cfg), 0.0, 1.0)
+	check(worst < 0.0005, "standing still no vertex moves (%.5f m)" % worst)
+
+
+func test_the_beam_moves_only_as_fast_as_you_turn_it() -> void:
+	var cfg := _cfg()
+	var deg_s := 10.0
+	var f := _fan(cfg)
+	var v := _beam_world(cfg)
+	# 40 degrees of sweep carries the pillar's corners through every ray.
+	var worst := _worst_move(f, v, deg_s, 4.0)
+	var sweep := float(cfg.cone_on.range_m) * deg_to_rad(deg_s) / 60.0
+	var cap := sweep + float(cfg.beam.reach_rate_m_s) / 60.0
+	check(worst <= cap + 0.001, "worst vertex move %.3f m, under the cap of %.3f m" % [worst, cap])
+	check(worst > sweep, "fixture: the sweep did cross the pillar's corners (%.3f m)" % worst)
+
+
+func test_the_beam_is_lined_up_with_the_spot_and_clipped_only_at_walls() -> void:
+	var cfg := _cfg()
+	var light := Flashlight.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(light)
+	_nodes.append(light)
+	light.setup(cfg)
+	check_eq(light.fan.half, deg_to_rad(light.spot.spot_angle), "as wide as the spot")
+	check_eq(light.fan.range_m, light.spot.spot_range, "and as long")
+	var v := Visibility.new(cfg)
+	v.set_static([])
+	var muzzle := Vector3(1, 1.2, 2)
+	var yaw := deg_to_rad(40.0)
+	light.follow(muzzle, yaw)
+	light.draw_beam(v, Vector2(1, 2), yaw, muzzle, 1.0 / 60.0)
+	check_eq(light.fan.apex, Vector2(1, 2), "from the spot's own position")
+	var mid: int = light.fan.reach.size() / 2
+	var along: Vector2 = (light.fan.point(mid) - light.fan.apex).normalized()
+	check(along.distance_to(Visibility.yaw_dir2(yaw)) < 0.001, "its middle ray is the spot's axis")
+	check_eq(light.fan.reach[mid], float(cfg.cone_on.range_m), "nothing in the way: full reach")
+	var wall := Visibility.new(cfg)
+	wall.set_static([Rect2(-20, 2.0 - 5.0 - 1.0, 40, 1)])
+	light.fan.restart()
+	light.draw_beam(wall, Vector2(1, 2), 0.0, muzzle, 1.0 / 60.0)
+	check(absf(light.fan.reach[mid] - 5.0) < 0.001, "a wall 5 m off stops it there (%.2f)" % light.fan.reach[mid])
+	var mesh := ImmediateMesh.new()
+	light.fan.fill(mesh, muzzle, deg_to_rad(float(cfg.flashlight.pitch_deg)), float(cfg.beam.floor_m))
+	check_eq(mesh.get_surface_count(), 1, "it builds a sheet")
+
+
+func test_a_muzzle_through_a_wall_has_no_beam_and_a_switched_on_light_snaps_to_the_walls() -> void:
+	var cfg := _cfg()
+	var f := _fan(cfg)
+	var v := Visibility.new(cfg)
+	v.set_static([Rect2(-5, -0.4, 10, 0.2)])
+	var eye := Vector2.ZERO
+	var muzzle := Vector2(0, -0.7)
+	f.cast(v, eye, muzzle, 0.0)
+	f.step(1.0 / 60.0, muzzle, 0.0)
+	check_eq(f.reach[0], 0.0, "no beam out of the far side of a wall you're against")
+	var open := Visibility.new(cfg)
+	open.set_static([])
+	f.restart()
+	f.cast(open, eye, muzzle, 0.0)
+	f.step(1.0 / 60.0, muzzle, 0.0)
+	check_eq(f.reach[0], float(cfg.cone_on.range_m), "a fresh start doesn't ease in")
+
+
+func test_the_pirates_light_is_the_same_beam() -> void:
+	var cfg: Dictionary = (Data.load_data("pirates") as Dictionary).flashlight
+	var light: Node3D = (load("res://src/pirates/pirate_light.gd") as GDScript).new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(light)
+	_nodes.append(light)
+	light.setup(cfg)
+	check_eq(light.fan.reach.size(), int(cfg.beam_rays), "a fixed fan from data")
+	check_eq(light.fan.half, deg_to_rad(float(cfg.half_angle_deg)), "as wide as its spot")
+	var v := _beam_world(_cfg())
+	var dt := 1.0 / 60.0
+	var yaw := -0.6
+	var at := Vector2.ZERO
+	var muzzle := Vector3(0, 1.2, 0)
+	var worst := 0.0
+	var last := PackedVector2Array()
+	for i in 240:
+		yaw += deg_to_rad(10.0) * dt
+		light.draw_beam(dt, v, at, yaw, muzzle)
+		var pts := PackedVector2Array()
+		for k in light.fan.reach.size():
+			pts.append(light.fan.point(k))
+		if not last.is_empty():
+			for k in pts.size():
+				worst = maxf(worst, pts[k].distance_to(last[k]))
+		last = pts
+	var cap: float = float(cfg.range_m) * deg_to_rad(10.0) * dt + float(cfg.beam_reach_rate_m_s) * dt
+	check(worst <= cap + 0.001, "turning slowly, worst vertex move %.3f m under %.3f m, though it asks the walls at only %d Hz" % [worst, cap, int(cfg.beam_hz)])

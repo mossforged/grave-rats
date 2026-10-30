@@ -1,5 +1,8 @@
 # Playtest log (John's words, dated, newest first)
 
+## 2026-10-30 — stalker deck after T006, John's second play
+- "Obviously the way that it moves, the lack of animations and all that, the sound effects are rough, but yeah, this is definitely scarier. It is more of an actual issue that has to be dealt with. So yeah, I would say that those are improvements."
+
 ## 2026-10-30 — stage 2 grey box (`stalker_deck`, after T005), John's first play
 - Tense and fun? "The tension is going to come down to how dangerous these things are, how fast they move, how much damage they do. I wouldn't say that I'm particularly scared at this point." "It attacks pretty slowly. It doesn't really move."
 - Sight: "having your vision only be in the circle around you and the flashlight, I think that that helps."

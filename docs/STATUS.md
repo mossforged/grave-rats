@@ -16,7 +16,7 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Art: A005 merged. Lane idle until John approves the hauler for modelling, the crew-variety direction, the HUD and the title art.
 
 ## Open questions (for John)
-- T006 play: tense and fun now? Too much (a bot standing still dies in 5 s)? Does the light still flicker (if so, F1 Dust motes and Beam strength to 0 one at a time)? Is the corkscrew gone? 8 s of door banging right? Should a gunshot start a stalker on a door? (auto-T006)
+- T006 play: John: "definitely scarier ... an actual issue that has to be dealt with"; motion, animation and sound are rough (stage 3). Gate pass not yet stated. Still open: Too much (a bot standing still dies in 5 s)? Does the light still flicker (if so, F1 Dust motes and Beam strength to 0 one at a time)? Is the corkscrew gone? 8 s of door banging right? Should a gunshot start a stalker on a door? (auto-T006)
 - A005: approve 01b/02/03b for a blockout model (the rifle-grip inset is wrong; we need a separate rifle reference), the crew-variety direction (04), the suit-OS HUD with the ammo ring (05/06b), the title art (07), the logo set (08b).
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.

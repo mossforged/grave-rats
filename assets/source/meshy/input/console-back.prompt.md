@@ -1,0 +1,5 @@
+# A007-12 — console back
+
+Built-in image_gen tool. Edit target: console-34.png (same folder).
+
+Use case: precise-object-edit. Asset A007-12. Edit target attached med console master. Change ONLY camera to strict orthographic BACK elevation, directly behind cabinet. Preserve same 1.4m wide x 1.1m tall x 0.6m deep overall broad stepped silhouette, screen housing taller on viewer's right in back view, lower auxiliary section on viewer's left, black reinforced corner bumpers, chipped ivory panels, muted yellow bottom trim, continuous black low plinth. Rear surfaces inferred as flat ivory maintenance plates with flush screws and one recessed dark ventilation grille. No screen or keyboard visible from rear, no new attachments, handles, cables or wheels. Same worn industrial materials and proportions. ONE complete object and ONE view, centred with generous margin, uniform flat light-grey background, soft even studio lighting, minimal contact shadow. No people, props, text, numbers, labels, dimensions, glow, fog or dramatic shadows. Orthographic, no perspective.

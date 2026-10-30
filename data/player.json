@@ -1,0 +1,53 @@
+{
+  "radius_m": 0.4,
+  "height_m": 1.8,
+  "aim_height_m": 1.2,
+  "move": {
+    "walk_speed_m_s": 3.4,
+    "crouch_speed_m_s": 1.5,
+    "sprint_speed_m_s": 5.4,
+    "accel_s": 0.18,
+    "decel_s": 0.12,
+    "moving_threshold_m_s": 0.15
+  },
+  "turn": {
+    "standing_deg_s": 240.0,
+    "firing_deg_s": 150.0,
+    "crouched_deg_s": 120.0,
+    "firing_hold_s": 0.25,
+    "torso_lead_deg": 70.0,
+    "hip_settle_deg_s": 180.0,
+    "aim_deadzone_m": 0.25
+  },
+  "crouch": {
+    "down_s": 0.18,
+    "stand_up_s": 0.35
+  },
+  "anim": {
+    "clip_speed_forward_m_s": 3.5,
+    "clip_speed_back_m_s": 3.6,
+    "clip_speed_strafe_m_s": 2.35,
+    "clip_speed_crouch_m_s": 0.7,
+    "max_time_scale": 1.6,
+    "upper_xfade_s": 0.1,
+    "reload_clip_s": 1.4667,
+    "spine1_twist_share": 0.4
+  },
+  "aim_visuals": {
+    "floor_y_m": 0.025,
+    "cone_length_m": 9.0,
+    "cone_segments": 12.0,
+    "cone_edge_width_m": 0.035,
+    "cone_fill_color": "ffd27a30",
+    "cone_edge_color": "ffd27ac0",
+    "arc_radius_m": 1.5,
+    "arc_width_m": 0.07,
+    "arc_min_deg": 2.0,
+    "arc_step_deg": 4.0,
+    "arc_color": "8fe8ffd8",
+    "marker_radius_m": 0.16,
+    "marker_width_m": 0.03,
+    "marker_segments": 16.0,
+    "marker_color": "ffffffb0"
+  }
+}

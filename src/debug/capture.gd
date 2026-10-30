@@ -57,7 +57,7 @@ func _run() -> void:
 		overlay.visible = false
 	if scene and scene.has_method("capture_shots") and scene.has_method("apply_shot"):
 		for shot in scene.capture_shots():
-			scene.apply_shot(shot)
+			await scene.apply_shot(shot)
 			await _shoot(String(shot.name))
 		if scene.has_method("release_shot"):
 			scene.release_shot()

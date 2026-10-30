@@ -1,0 +1,112 @@
+{
+  "rifle": {
+    "damage": 18.0,
+    "magazine": 30.0,
+    "reserve": 120.0,
+    "fire_interval_s": 0.11,
+    "range_m": 40.0,
+    "reload_s": 2.0,
+    "muzzle_bone": "weapon",
+    "muzzle_bone_offset": [
+      0.0,
+      0.91,
+      0.0
+    ],
+    "cone": {
+      "wide_deg": 9.0,
+      "tight_deg": 1.5,
+      "settle_s": 0.45,
+      "moving_min_deg": 5.0,
+      "sprint_deg": 16.0,
+      "open_deg_s": 60.0,
+      "turn_open_per_deg": 0.15
+    },
+    "recoil": {
+      "kick_deg": 0.9,
+      "recover_deg_s": 12.0,
+      "recover_delay_s": 0.12,
+      "max_deg": 8.0,
+      "same_side_chance": 0.7
+    },
+    "camera_kick": {
+      "kick_m": 0.06,
+      "recover_s": 0.12
+    }
+  },
+  "fx": {
+    "flash_life_s": 0.05,
+    "flash_size_m": 0.7,
+    "flash_color": "ffd9a0",
+    "flash_energy": 3.0,
+    "flash_light_energy": 2.0,
+    "flash_light_range_m": 5.0,
+    "tracer_life_s": 0.07,
+    "tracer_width_m": 0.035,
+    "tracer_color": "ffe6b0",
+    "tracer_energy": 3.0,
+    "impact_life_s": 0.12,
+    "impact_size_m": 0.28,
+    "impact_color": "ffb46a",
+    "impact_energy": 2.0,
+    "pool_size": 6.0
+  },
+  "targets": {
+    "health": 100.0,
+    "flinch_deg": 16.0,
+    "flinch_s": 0.25,
+    "down_deg": 78.0,
+    "down_s": 0.2,
+    "reset_s": 2.5,
+    "hit_flash_s": 0.12,
+    "radius_m": 0.3,
+    "height_m": 1.8,
+    "head_radius_m": 0.14,
+    "color": "b56a3a",
+    "hit_color": "ffcf8a",
+    "down_color": "4a4f56",
+    "placements": [
+      {
+        "space": "junction",
+        "at": [
+          0.72,
+          0.28
+        ]
+      },
+      {
+        "space": "junction",
+        "at": [
+          0.28,
+          0.14
+        ]
+      },
+      {
+        "space": "medbay",
+        "at": [
+          0.62,
+          0.72
+        ]
+      },
+      {
+        "space": "medbay",
+        "at": [
+          0.2,
+          0.8
+        ]
+      },
+      {
+        "space": "cargo",
+        "at": [
+          0.68,
+          0.75
+        ]
+      },
+      {
+        "space": "side_corridor",
+        "at": [
+          0.62,
+          0.5
+        ]
+      }
+    ]
+  }
+}

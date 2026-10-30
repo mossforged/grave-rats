@@ -27,4 +27,6 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | --- | --- | --- |
 | T001 | code | queued |
 | T002 | code | written, waits for T001 |
-| A001 | art | written, waits for John's pillar sign-off |
+| T003 | code | written, waits for T002 |
+| T004 | code | written, waits for T003 |
+| A001 | art | queued |

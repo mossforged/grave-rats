@@ -12,7 +12,7 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the "weird things" roster.
 
 ## What builders need now
-- Code: T001 queued.
+- Code: T001 queued. T002, T003 (weighty operator and gun) and T004 (sight, flashlight, doors) written; each queues after the previous one is merged.
 - Art: A001 (crew and threat concept exploration) queued.
 
 ## Open questions (for John)
@@ -23,4 +23,4 @@ Later (parked): competitive modes, ship generation, contracts and meta, the "wei
 - Competitive modes; procedural ship generation; contracts and meta-progression; the in-game "shift" framing (runs as shifts, timecard end screen).
 
 ## Last session
-2026-10-29 (lead): repo seeded from the Dead Circuit pass-05 prototype. Docs, runners, T001, T002 and A001 written.
+2026-10-29 (lead): repo seeded; pillars approved (6). Study `docs/studies/2026-10-29-weight-without-lag.md`, `docs/design/tone-bible.md` (draft), T003 and T004 written. John asleep until about 06:00 PT; the lead keeps lanes fed overnight.

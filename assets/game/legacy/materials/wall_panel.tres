@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/wall_panel_albedo.jpg" id="1_udtvy"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/wall_panel_normal.jpg" id="2_sf4qv"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/wall_panel_orm.jpg" id="3_sfhsv"]
+
+[resource]
+resource_name = "wall_panel"
+albedo_texture = ExtResource("1_udtvy")
+orm_texture = ExtResource("3_sfhsv")
+normal_enabled = true
+normal_texture = ExtResource("2_sf4qv")
+texture_filter = 5

@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_hazard_albedo.jpg" id="1_v7ckt"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_hazard_normal.jpg" id="2_qpf55"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_hazard_orm.jpg" id="3_6rqee"]
+
+[resource]
+resource_name = "paint_hazard"
+albedo_texture = ExtResource("1_v7ckt")
+orm_texture = ExtResource("3_6rqee")
+normal_enabled = true
+normal_texture = ExtResource("2_qpf55")
+texture_filter = 5

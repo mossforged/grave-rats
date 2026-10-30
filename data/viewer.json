@@ -1,0 +1,142 @@
+{
+  "camera": {
+    "fov": 38.0,
+    "position": [
+      0.0,
+      12.5,
+      9.0
+    ],
+    "target": [
+      0.0,
+      0.5,
+      0.0
+    ],
+    "near": 0.1,
+    "far": 60.0
+  },
+  "flashlight": {
+    "local_position": [
+      0.0,
+      1.35,
+      -0.35
+    ],
+    "pitch_deg": -12.0,
+    "color": "fff0d8",
+    "energy": 12.0,
+    "range": 14.0,
+    "angle_deg": 26.0,
+    "attenuation": 1.0,
+    "angle_attenuation": 1.4,
+    "shadows": true
+  },
+  "practical_cool": {
+    "position": [
+      -3.4,
+      2.2,
+      -2.7
+    ],
+    "color": "62d2ff",
+    "energy": 4.0,
+    "range": 7.5,
+    "attenuation": 1.2,
+    "shadows": true
+  },
+  "practical_amber": {
+    "position": [
+      3.4,
+      1.8,
+      2.2
+    ],
+    "color": "ff9233",
+    "energy": 4.0,
+    "range": 6.5,
+    "attenuation": 1.2,
+    "shadows": true
+  },
+  "environment": {
+    "background_color": "040608",
+    "ambient_color": "223040",
+    "ambient_energy": 0.7,
+    "tonemap": "agx",
+    "exposure": 1.0,
+    "glow_intensity": 0.7,
+    "glow_bloom": 0.04,
+    "glow_hdr_threshold": 1.0,
+    "ssao_radius": 0.8,
+    "ssao_intensity": 2.2,
+    "fog_density": 0.012,
+    "fog_albedo": "9db1c2",
+    "fog_emission": "000000",
+    "fog_anisotropy": 0.4,
+    "fog_length": 40.0
+  },
+  "roll_pause_s": 0.8,
+  "shots": [
+    {
+      "name": "operator_run_a",
+      "focus": "Operator1",
+      "offset": [
+        0.6,
+        2.4,
+        3.6
+      ],
+      "fov": 32.0,
+      "time": 0.0
+    },
+    {
+      "name": "operator_run_b",
+      "focus": "Operator1",
+      "offset": [
+        0.6,
+        2.4,
+        3.6
+      ],
+      "fov": 32.0,
+      "time": 0.17
+    },
+    {
+      "name": "operator_run_c",
+      "focus": "Operator1",
+      "offset": [
+        0.6,
+        2.4,
+        3.6
+      ],
+      "fov": 32.0,
+      "time": 0.33
+    },
+    {
+      "name": "roll_tuck",
+      "focus": "Operator2",
+      "offset": [
+        0.4,
+        2.4,
+        3.6
+      ],
+      "fov": 32.0,
+      "time": 0.3
+    },
+    {
+      "name": "robot_walk_a",
+      "focus": "Robot",
+      "offset": [
+        -0.6,
+        2.4,
+        3.6
+      ],
+      "fov": 32.0,
+      "time": 0.27
+    },
+    {
+      "name": "robot_walk_b",
+      "focus": "Robot",
+      "offset": [
+        -0.6,
+        2.4,
+        3.6
+      ],
+      "fov": 32.0,
+      "time": 0.8
+    }
+  ]
+}

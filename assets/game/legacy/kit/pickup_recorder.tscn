@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/pickup_recorder.res" id="1_mo224"]
+
+[node name="pickup_recorder" type="Node3D" unique_id=1220388089]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=578893103]
+mesh = ExtResource("1_mo224")

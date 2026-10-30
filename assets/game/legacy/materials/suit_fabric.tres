@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/suit_fabric_albedo.jpg" id="1_jbbvm"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/suit_fabric_normal.jpg" id="2_es5eh"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/suit_fabric_orm.jpg" id="3_igsfa"]
+
+[resource]
+resource_name = "suit_fabric"
+albedo_texture = ExtResource("1_jbbvm")
+orm_texture = ExtResource("3_igsfa")
+normal_enabled = true
+normal_texture = ExtResource("2_es5eh")
+texture_filter = 5

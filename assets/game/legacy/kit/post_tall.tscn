@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/post_tall.res" id="1_flwr4"]
+
+[node name="post_tall" type="Node3D" unique_id=1614422740]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=610331068]
+mesh = ExtResource("1_flwr4")

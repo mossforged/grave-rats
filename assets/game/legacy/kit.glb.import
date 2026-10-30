@@ -1,0 +1,433 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://b716hmj5es0ox"
+path="res://.godot/imported/kit.glb-5490eaf0efb70669f689ecf9e7acdca0.scn"
+
+[deps]
+
+source_file="res://assets/game/legacy/kit.glb"
+dest_files=["res://.godot/imported/kit.glb-5490eaf0efb70669f689ecf9e7acdca0.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"dark_metal": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/dark_metal.tres",
+"use_external/path": "res://assets/game/legacy/materials/dark_metal.tres"
+},
+"floor_grate": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/floor_grate.tres",
+"use_external/path": "res://assets/game/legacy/materials/floor_grate.tres"
+},
+"floor_plate": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/floor_plate.tres",
+"use_external/path": "res://assets/game/legacy/materials/floor_plate.tres"
+},
+"glass": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/glass.tres",
+"use_external/path": "res://assets/game/legacy/materials/glass.tres"
+},
+"hull_top": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/hull_top.tres",
+"use_external/path": "res://assets/game/legacy/materials/hull_top.tres"
+},
+"light_amber": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/light_amber.tres",
+"use_external/path": "res://assets/game/legacy/materials/light_amber.tres"
+},
+"light_cyan": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/light_cyan.tres",
+"use_external/path": "res://assets/game/legacy/materials/light_cyan.tres"
+},
+"light_red": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/light_red.tres",
+"use_external/path": "res://assets/game/legacy/materials/light_red.tres"
+},
+"light_white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/light_white.tres",
+"use_external/path": "res://assets/game/legacy/materials/light_white.tres"
+},
+"medical_fabric": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/medical_fabric.tres",
+"use_external/path": "res://assets/game/legacy/materials/medical_fabric.tres"
+},
+"paint_hazard": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/paint_hazard.tres",
+"use_external/path": "res://assets/game/legacy/materials/paint_hazard.tres"
+},
+"paint_orange": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/paint_orange.tres",
+"use_external/path": "res://assets/game/legacy/materials/paint_orange.tres"
+},
+"paint_robot": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/paint_robot.tres",
+"use_external/path": "res://assets/game/legacy/materials/paint_robot.tres"
+},
+"paint_white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/paint_white.tres",
+"use_external/path": "res://assets/game/legacy/materials/paint_white.tres"
+},
+"paint_yellow": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/paint_yellow.tres",
+"use_external/path": "res://assets/game/legacy/materials/paint_yellow.tres"
+},
+"rubber": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/rubber.tres",
+"use_external/path": "res://assets/game/legacy/materials/rubber.tres"
+},
+"screen_cyan": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/screen_cyan.tres",
+"use_external/path": "res://assets/game/legacy/materials/screen_cyan.tres"
+},
+"wall_med": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/wall_med.tres",
+"use_external/path": "res://assets/game/legacy/materials/wall_med.tres"
+},
+"wall_panel": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/game/legacy/materials/wall_panel.tres",
+"use_external/path": "res://assets/game/legacy/materials/wall_panel.tres"
+}
+},
+"meshes": {
+"kit_cable_run": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/cable_run.res",
+"save_to_file/path": "uid://bojqlgaplc3bu"
+},
+"kit_canister": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/canister.res",
+"save_to_file/path": "uid://cjt4uch0hkwfy"
+},
+"kit_crate_large": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/crate_large.res",
+"save_to_file/path": "uid://c66cnludsgjie"
+},
+"kit_crate_small": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/crate_small.res",
+"save_to_file/path": "uid://8i30chiym2ym"
+},
+"kit_crate_tall": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/crate_tall.res",
+"save_to_file/path": "uid://dcmei3ixvpgct"
+},
+"kit_crate_yellow": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/crate_yellow.res",
+"save_to_file/path": "uid://jn6dvfl7wq8e"
+},
+"kit_door_frame": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/door_frame.res",
+"save_to_file/path": "uid://dk57lytxeq54q"
+},
+"kit_door_leaf": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/door_leaf.res",
+"save_to_file/path": "uid://dfxr4luvol0jw"
+},
+"kit_floor_grate_tile": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/floor_grate_tile.res",
+"save_to_file/path": "uid://dh0way7accdmx"
+},
+"kit_floor_hatch": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/floor_hatch.res",
+"save_to_file/path": "uid://b02alhd6yhmkt"
+},
+"kit_floor_tile": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/floor_tile.res",
+"save_to_file/path": "uid://dkm6urytc0yhc"
+},
+"kit_iv_stand": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/iv_stand.res",
+"save_to_file/path": "uid://ctxpmmf06c1dj"
+},
+"kit_med_bed": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/med_bed.res",
+"save_to_file/path": "uid://cyv2l3m4rj5ag"
+},
+"kit_med_cabinet": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/med_cabinet.res",
+"save_to_file/path": "uid://druk8nxua5vg0"
+},
+"kit_med_console": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/med_console.res",
+"save_to_file/path": "uid://ctg51xg53lb13"
+},
+"kit_pallet": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/pallet.res",
+"save_to_file/path": "uid://h7e8ws1qjvsu"
+},
+"kit_pickup_ammo": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/pickup_ammo.res",
+"save_to_file/path": "uid://dwy1ej5ywrddn"
+},
+"kit_pickup_med": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/pickup_med.res",
+"save_to_file/path": "uid://d4bbjtelw44qg"
+},
+"kit_pickup_recorder": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/pickup_recorder.res",
+"save_to_file/path": "uid://blm60e2aenokg"
+},
+"kit_post_low": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/post_low.res",
+"save_to_file/path": "uid://wljdlnwb0ags"
+},
+"kit_post_tall": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/post_tall.res",
+"save_to_file/path": "uid://mr45yre3qs41"
+},
+"kit_shelf": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/shelf.res",
+"save_to_file/path": "uid://dllsvyq5pte2c"
+},
+"kit_stool": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/stool.res",
+"save_to_file/path": "uid://qjybqtlfntki"
+},
+"kit_wall_low": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_low.res",
+"save_to_file/path": "uid://cu2m0pooy2lwh"
+},
+"kit_wall_med": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_med.res",
+"save_to_file/path": "uid://dc72ui1r3rchd"
+},
+"kit_wall_med_light": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_med_light.res",
+"save_to_file/path": "uid://be17x7bs016ca"
+},
+"kit_wall_med_sign": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_med_sign.res",
+"save_to_file/path": "uid://fgknq7qm1c53"
+},
+"kit_wall_tall": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_tall.res",
+"save_to_file/path": "uid://bevdp8ny0mwnq"
+},
+"kit_wall_tall_light": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_tall_light.res",
+"save_to_file/path": "uid://ch2yr5pnvwlnq"
+},
+"kit_wall_tall_pipes": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_tall_pipes.res",
+"save_to_file/path": "uid://dkiwpq3blci28"
+},
+"kit_wall_tall_screen": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_tall_screen.res",
+"save_to_file/path": "uid://xt7immo1s1mq"
+},
+"kit_wall_tall_vent": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/game/legacy/kit/meshes/wall_tall_vent.res",
+"save_to_file/path": "uid://eo76rems432m"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1
+gltf/texture_map_mode=1

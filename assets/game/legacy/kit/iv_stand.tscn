@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/iv_stand.res" id="1_j238k"]
+
+[node name="iv_stand" type="Node3D" unique_id=1257017119]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1466306685]
+mesh = ExtResource("1_j238k")

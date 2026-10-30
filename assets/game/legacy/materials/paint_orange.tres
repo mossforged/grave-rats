@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_orange_albedo.jpg" id="1_8c8cr"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_orange_normal.jpg" id="2_f6yhp"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_orange_orm.jpg" id="3_wvkkq"]
+
+[resource]
+resource_name = "paint_orange"
+albedo_texture = ExtResource("1_8c8cr")
+orm_texture = ExtResource("3_wvkkq")
+normal_enabled = true
+normal_texture = ExtResource("2_f6yhp")
+texture_filter = 5

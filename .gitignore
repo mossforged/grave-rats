@@ -3,3 +3,5 @@ builds/
 *.tmp
 .DS_Store
 /version.txt
+# Godot writes .import files next to every source asset; the source folder belongs to the art lane, so they stay local
+assets/source/**/*.import

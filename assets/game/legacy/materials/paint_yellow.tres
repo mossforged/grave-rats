@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_yellow_albedo.jpg" id="1_imdei"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_yellow_normal.jpg" id="2_s4ien"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_yellow_orm.jpg" id="3_mexvo"]
+
+[resource]
+resource_name = "paint_yellow"
+albedo_texture = ExtResource("1_imdei")
+orm_texture = ExtResource("3_mexvo")
+normal_enabled = true
+normal_texture = ExtResource("2_s4ien")
+texture_filter = 5

@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_robot_albedo.jpg" id="1_f4cl4"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_robot_normal.jpg" id="2_iyq0t"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_robot_orm.jpg" id="3_mb7y7"]
+
+[resource]
+resource_name = "paint_robot"
+albedo_texture = ExtResource("1_f4cl4")
+orm_texture = ExtResource("3_mb7y7")
+normal_enabled = true
+normal_texture = ExtResource("2_iyq0t")
+texture_filter = 5

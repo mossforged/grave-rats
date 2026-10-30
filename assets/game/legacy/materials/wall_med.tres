@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/wall_med_albedo.jpg" id="1_ojd0k"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/wall_med_normal.jpg" id="2_jysdw"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/wall_med_orm.jpg" id="3_vcfix"]
+
+[resource]
+resource_name = "wall_med"
+albedo_texture = ExtResource("1_ojd0k")
+orm_texture = ExtResource("3_vcfix")
+normal_enabled = true
+normal_texture = ExtResource("2_jysdw")
+texture_filter = 5

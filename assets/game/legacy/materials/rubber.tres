@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/rubber_albedo.jpg" id="1_hke14"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/rubber_normal.jpg" id="2_x3gjc"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/rubber_orm.jpg" id="3_kwolc"]
+
+[resource]
+resource_name = "rubber"
+albedo_texture = ExtResource("1_hke14")
+orm_texture = ExtResource("3_kwolc")
+normal_enabled = true
+normal_texture = ExtResource("2_x3gjc")
+texture_filter = 5

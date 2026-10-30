@@ -1,0 +1,32 @@
+[gd_resource type="AnimationLibrary" format=3]
+
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/F_Death.res" id="1_7x6k7"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/F_Roll.res" id="2_22muw"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Crouch_Idle.res" id="3_c2vq6"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Crouch_Walk.res" id="4_w775n"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Idle.res" id="5_ixqec"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Run_B.res" id="6_33235"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Run_F.res" id="7_hxtud"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Strafe_L.res" id="8_yhncn"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Strafe_R.res" id="9_jp3ok"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/L_Walk_F.res" id="10_2trma"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/U_Aim.res" id="11_iomg1"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/U_LowReady.res" id="12_etkpu"]
+[ext_resource type="Animation" path="res://assets/game/legacy/anim/U_Reload.res" id="13_qien0"]
+
+[resource]
+_data = {
+&"F_Death": ExtResource("1_7x6k7"),
+&"F_Roll": ExtResource("2_22muw"),
+&"L_Crouch_Idle": ExtResource("3_c2vq6"),
+&"L_Crouch_Walk": ExtResource("4_w775n"),
+&"L_Idle": ExtResource("5_ixqec"),
+&"L_Run_B": ExtResource("6_33235"),
+&"L_Run_F": ExtResource("7_hxtud"),
+&"L_Strafe_L": ExtResource("8_yhncn"),
+&"L_Strafe_R": ExtResource("9_jp3ok"),
+&"L_Walk_F": ExtResource("10_2trma"),
+&"U_Aim": ExtResource("11_iomg1"),
+&"U_LowReady": ExtResource("12_etkpu"),
+&"U_Reload": ExtResource("13_qien0")
+}

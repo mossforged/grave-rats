@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_white_albedo.jpg" id="1_uku48"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_white_normal.jpg" id="2_p53xc"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/paint_white_orm.jpg" id="3_e31as"]
+
+[resource]
+resource_name = "paint_white"
+albedo_texture = ExtResource("1_uku48")
+orm_texture = ExtResource("3_e31as")
+normal_enabled = true
+normal_texture = ExtResource("2_p53xc")
+texture_filter = 5

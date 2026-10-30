@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/crate_small.res" id="1_8jf7f"]
+
+[node name="crate_small" type="Node3D" unique_id=121569364]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=610454557]
+mesh = ExtResource("1_8jf7f")

@@ -18,6 +18,7 @@ var space := ""
 var side := ""
 
 var _pivot: Node3D
+var _frame_rect: Rect2
 var _panel: MeshInstance3D
 var _body: StaticBody3D
 var _lamp_mat: StandardMaterial3D
@@ -34,6 +35,7 @@ func setup(door: Dictionary, spec: Dictionary, config: Dictionary, wall_height: 
 	side = String(door.side)
 	slide = float(spec.get("slide", 1))
 	_height = wall_height
+	_frame_rect = door.frames[0]
 	door_state = DoorState.new(cfg, String(spec.get("state", "closed")))
 	name = "Door_%s_%s" % [space, side]
 	add_to_group(OCCLUDER_GROUP)
@@ -51,10 +53,10 @@ func _build() -> void:
 	var size := Vector3(opening.size.x, h, t) if along_x else Vector3(t, h, opening.size.y)
 	_pivot = Node3D.new()
 	_pivot.name = "Pivot"
-	_pivot.set_meta("cutaway_rect", opening)
-	_pivot.set_meta("cutaway_height", _height)
-	_pivot.add_to_group(CUTAWAY_GROUP)
 	add_child(_pivot)
+	# Only a door facing the camera can hide anything: side doors stay tall, so they read as shut.
+	if along_x:
+		_join_cutaway(_pivot, opening)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(colors.panel_locked if door_state.is_locked() else colors.panel)
 	mat.roughness = float(cfg.panel_roughness)
@@ -77,6 +79,7 @@ func _build() -> void:
 	_lamp_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_lamp_mat.emission_enabled = true
 	_lamp_mat.emission_energy_multiplier = float(cfg.lamp_energy)
+	# The lamp is on the frame post, so it follows the post when the cut-away drops it.
 	var lamp_mesh := BoxMesh.new()
 	var ls: Array = cfg.lamp_size_m
 	lamp_mesh.size = Vector3(float(ls[0]), float(ls[1]), float(ls[2])) if along_x \
@@ -87,7 +90,19 @@ func _build() -> void:
 	lamp.material_override = _lamp_mat
 	lamp.position.y = float(cfg.lamp_height_m)
 	lamp.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_pivot.add_child(lamp)
+	var post := Node3D.new()
+	post.name = "LampPost"
+	var off := _frame_rect.get_center() - opening.get_center()
+	post.position = Vector3(off.x, 0, off.y)
+	_join_cutaway(post, _frame_rect)
+	add_child(post)
+	post.add_child(lamp)
+
+
+func _join_cutaway(node: Node3D, rect: Rect2) -> void:
+	node.set_meta("cutaway_rect", rect)
+	node.set_meta("cutaway_height", _height)
+	node.add_to_group(CUTAWAY_GROUP)
 
 
 func tick(delta: float, actors: Array) -> void:

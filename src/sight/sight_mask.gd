@@ -1,6 +1,6 @@
 extends Node3D
-## Draws the mask: the sight polygon into a deck-wide SubViewport (visible channel), the grid's
-## memory into a texture, and a fullscreen quad (sight_mask.gdshader) that applies both.
+## Draws the mask: the sight polygon into two deck-wide SubViewports (one cleared each frame, the
+## visible area; one never, the memory), and a fullscreen quad (sight_mask.gdshader) applying both.
 
 const SHADER := preload("res://src/sight/sight_mask.gdshader")
 const SightSystem := preload("res://src/sight/sight_system.gd")
@@ -31,40 +31,29 @@ class PolyCanvas extends Node2D:
 var sight: SightSystem
 var material: ShaderMaterial
 
-var _viewport: SubViewport
-var _canvas: PolyCanvas
-var _memory_image: Image
-var _memory_tex: ImageTexture
+var _visible_vp: SubViewport
+var _memory_vp: SubViewport
+var _visible_canvas: PolyCanvas
+var _memory_canvas: PolyCanvas
 
 
 func setup(system: SightSystem) -> void:
 	sight = system
-	var cfg: Dictionary = sight.cfg
-	var ppm := float(cfg.mask.px_per_m)
-	_viewport = SubViewport.new()
-	_viewport.name = "VisibleMask"
-	_viewport.size = Vector2i((sight.bounds.size * ppm).ceil())
-	_viewport.disable_3d = true
-	_viewport.transparent_bg = false
-	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
-	add_child(_viewport)
-	var bg := ColorRect.new()
-	bg.color = Color.BLACK
-	bg.size = Vector2(_viewport.size)
-	_viewport.add_child(bg)
-	_canvas = PolyCanvas.new()
-	_canvas.name = "Polygon"
-	_canvas.transform = Transform2D(0.0, Vector2.ONE * ppm, 0.0, -sight.bounds.position * ppm)
-	_viewport.add_child(_canvas)
-	var grid = sight.grid
-	_memory_image = Image.create_from_data(grid.nx, grid.nz, false, Image.FORMAT_L8, grid.memory)
-	_memory_tex = ImageTexture.create_from_image(_memory_image)
+	var ppm := float(sight.cfg.mask.px_per_m)
+	_visible_vp = _make_viewport("VisibleMask", ppm)
+	_visible_vp.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
+	_visible_vp.msaa_2d = Viewport.MSAA_4X
+	_visible_canvas = _make_canvas(_visible_vp, ppm)
+	# Memory is never cleared: every frame's sight paints over the last, so what was seen stays.
+	# No MSAA here: an uncleared multisampled target comes back as garbage on Metal.
+	_memory_vp = _make_viewport("MemoryMask", ppm)
+	_memory_vp.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+	_memory_canvas = _make_canvas(_memory_vp, ppm)
 	material = ShaderMaterial.new()
 	material.shader = SHADER
 	material.render_priority = Material.RENDER_PRIORITY_MIN
-	material.set_shader_parameter("visible_mask", _viewport.get_texture())
-	material.set_shader_parameter("memory_mask", _memory_tex)
+	material.set_shader_parameter("visible_mask", _visible_vp.get_texture())
+	material.set_shader_parameter("memory_mask", _memory_vp.get_texture())
 	material.set_shader_parameter("mask_origin", sight.bounds.position)
 	material.set_shader_parameter("mask_size", sight.bounds.size)
 	apply_cfg()
@@ -80,10 +69,30 @@ func setup(system: SightSystem) -> void:
 	mi.extra_cull_margin = 16384.0
 	add_child(mi)
 	sight.sight_updated.connect(_on_sight)
+	sight.forgotten.connect(_on_forgotten)
+
+
+func _make_viewport(vp_name: String, ppm: float) -> SubViewport:
+	var vp := SubViewport.new()
+	vp.name = vp_name
+	vp.size = Vector2i((sight.bounds.size * ppm).ceil())
+	vp.disable_3d = true
+	vp.transparent_bg = true
+	vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(vp)
+	return vp
+
+
+func _make_canvas(vp: SubViewport, ppm: float) -> PolyCanvas:
+	var c := PolyCanvas.new()
+	c.name = "Polygon"
+	c.transform = Transform2D(0.0, Vector2.ONE * ppm, 0.0, -sight.bounds.position * ppm)
+	vp.add_child(c)
+	return c
 
 
 func visible_texture() -> Texture2D:
-	return _viewport.get_texture()
+	return _visible_vp.get_texture()
 
 
 ## Data to shader. Called at setup, and while the tuning panel is open.
@@ -106,10 +115,20 @@ func _on_sight(polygon: PackedVector2Array, reveal: Array) -> void:
 	fan.append_array(polygon)
 	if not polygon.is_empty():
 		fan.append(polygon[0])
-	_canvas.points = fan
-	_canvas.rects = reveal.duplicate()
-	_canvas.queue_redraw()
-	if sight.grid.memory_dirty:
-		sight.grid.memory_dirty = false
-		_memory_image.set_data(sight.grid.nx, sight.grid.nz, false, Image.FORMAT_L8, sight.grid.memory)
-		_memory_tex.update(_memory_image)
+	# The shader spreads every shape by dilate_m, so what's revealed whole is drawn that much
+	# smaller, down to a sliver: a door panel must not spill into the room behind it.
+	var dilate := float(sight.cfg.mask.dilate_m)
+	var sliver := 1.0 / float(sight.cfg.mask.px_per_m)
+	var rects: Array = []
+	for r: Rect2 in reveal:
+		var w := maxf(r.size.x - dilate * 2.0, sliver)
+		var h := maxf(r.size.y - dilate * 2.0, sliver)
+		rects.append(Rect2(r.get_center() - Vector2(w, h) * 0.5, Vector2(w, h)))
+	for c: PolyCanvas in [_visible_canvas, _memory_canvas]:
+		c.points = fan
+		c.rects = rects
+		c.queue_redraw()
+
+
+func _on_forgotten() -> void:
+	_memory_vp.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE

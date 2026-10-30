@@ -14,7 +14,7 @@ var spot: SpotLight3D
 var _beam: MeshInstance3D
 var _beam_mesh: ImmediateMesh
 var _beam_mat: ShaderMaterial
-var _motes: GPUParticles3D
+var _motes: CPUParticles3D
 var _mote_mat: ShaderMaterial
 
 
@@ -45,31 +45,27 @@ func setup(config: Dictionary) -> void:
 func _make_motes() -> void:
 	var m: Dictionary = cfg.motes
 	var half := float(m.box_half_m)
-	var pm := ParticleProcessMaterial.new()
-	pm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
-	pm.emission_box_extents = Vector3(half, float(m.height_m) * 0.5, half)
-	pm.direction = Vector3.UP
-	pm.spread = float(m.spread_deg)
-	pm.initial_velocity_min = 0.0
-	pm.initial_velocity_max = float(m.drift_m_s)
-	pm.gravity = Vector3.ZERO
 	var quad := QuadMesh.new()
 	quad.size = Vector2.ONE * float(m.size_m)
 	_mote_mat = ShaderMaterial.new()
 	_mote_mat.shader = MOTE_SHADER
 	quad.material = _mote_mat
-	_motes = GPUParticles3D.new()
+	_motes = CPUParticles3D.new()
 	_motes.name = "Motes"
 	_motes.amount = int(m.count)
 	_motes.lifetime = float(m.lifetime_s)
-	_motes.explosiveness = 0.0
 	_motes.randomness = 1.0
-	_motes.process_material = pm
-	_motes.draw_pass_1 = quad
+	_motes.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	_motes.emission_box_extents = Vector3(half, float(m.height_m) * 0.5, half)
+	_motes.direction = Vector3.UP
+	_motes.spread = float(m.spread_deg)
+	_motes.initial_velocity_min = 0.0
+	_motes.initial_velocity_max = float(m.drift_m_s)
+	_motes.gravity = Vector3.ZERO
+	_motes.mesh = quad
 	_motes.local_coords = false
 	_motes.top_level = true
 	_motes.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_motes.visibility_aabb = AABB(Vector3(-half, -half, -half), Vector3(half, half, half) * 2.0)
 	add_child(_motes)
 
 

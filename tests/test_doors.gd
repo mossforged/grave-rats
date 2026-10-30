@@ -131,11 +131,12 @@ func test_a_closed_door_blocks_sight_and_an_open_one_does_not() -> void:
 	for i in 10:
 		d.tick(DT, [])
 	check(d.blocks_sight(), "half open still has a panel")
-	var part := d.sight_rect()
-	v.set_dynamic([part])
-	var gap_side := c - Vector2(0, 0.95)
-	check(not v.blocked(gap_side + Vector2(1, 0), gap_side - Vector2(1, 0)) or v.blocked(a, b),
-			"the panel's rect slides with it")
+	# Door 0 slides north: the gap opens at its south end, the panel still covers the north.
+	v.set_dynamic([d.sight_rect()])
+	var gap := c + Vector2(0, 0.9)
+	var covered := c + Vector2(0, -0.5)
+	check(not v.blocked(gap + Vector2(1, 0), gap - Vector2(1, 0)), "half open: sight passes the gap")
+	check(v.blocked(covered + Vector2(1, 0), covered - Vector2(1, 0)), "and not the panel")
 	for i in roundi(float(d.cfg.open_s) / DT):
 		d.tick(DT, [])
 	check(not d.blocks_sight(), "open: no longer blocks")

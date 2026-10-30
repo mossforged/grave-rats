@@ -9,6 +9,7 @@ const SightTarget := preload("res://src/sight/sight_target.gd")
 const OCCLUDER_GROUP := &"sight_occluder"
 
 signal sight_updated(polygon: PackedVector2Array, reveal: Array)
+signal forgotten
 
 var cfg: Dictionary
 var visibility: Visibility
@@ -82,3 +83,4 @@ func _update_targets(from: Vector2, yaw: float, light: bool) -> void:
 func forget() -> void:
 	grid.clear()
 	_since_grid = INF
+	forgotten.emit()

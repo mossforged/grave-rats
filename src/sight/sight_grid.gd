@@ -1,5 +1,6 @@
 extends RefCounted
-## Scene-free memory of the deck: a grid of cells, each UNKNOWN, REMEMBERED or VISIBLE.
+## Scene-free memory of the deck: a grid of cells, each UNKNOWN, REMEMBERED or VISIBLE. This is
+## the rules' truth; the mask's smoother memory texture is drawn from the same polygons.
 ## Cells rather than rooms, because a sight polygon cuts rooms: seeing half a room should leave
 ## the other half unknown, and that half is the corner you fear.
 
@@ -10,10 +11,6 @@ var cell := 1.0
 var nx := 0
 var nz := 0
 var states := PackedByteArray()
-## 255 where a cell was ever seen, 0 where not: uploaded as the mask's memory texture.
-var memory := PackedByteArray()
-## True when `memory` changed since the renderer last took it.
-var memory_dirty := true
 
 var _visible_now := PackedInt32Array()
 
@@ -24,16 +21,13 @@ func _init(bounds: Rect2, cell_m: float) -> void:
 	nx = maxi(ceili(bounds.size.x / cell), 1)
 	nz = maxi(ceili(bounds.size.y / cell), 1)
 	states.resize(nx * nz)
-	memory.resize(nx * nz)
 	clear()
 
 
 ## Forgets everything (a new run).
 func clear() -> void:
 	states.fill(UNKNOWN)
-	memory.fill(0)
 	_visible_now.clear()
-	memory_dirty = true
 
 
 func state_at(p: Vector2) -> int:
@@ -63,9 +57,6 @@ func _mark(i: int) -> void:
 		return
 	states[i] = VISIBLE
 	_visible_now.append(i)
-	if memory[i] == 0:
-		memory[i] = 255
-		memory_dirty = true
 
 
 ## Scanline fill by cell centres (the polygon is a star, but this doesn't rely on it).

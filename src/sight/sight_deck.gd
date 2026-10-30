@@ -47,11 +47,29 @@ func _ready() -> void:
 		var st := SightTarget.new()
 		st.name = "SightTarget"
 		t.add_child(st)
+	_make_help()
 	_env_light = OS.get_environment("SIGHT_FLASHLIGHT")
 	if _env_light != "":
 		flashlight.set_on(_env_light == "on")
 	sight.forget()
 	_update_sight(0.0, true)
+
+
+## This scene's extra keys, just above the HUD's own key line.
+func _make_help() -> void:
+	var h: Dictionary = sight.cfg.help
+	var layer := CanvasLayer.new()
+	layer.name = "SightHelp"
+	add_child(layer)
+	var label := Label.new()
+	label.text = String(h.text)
+	label.add_theme_font_size_override("font_size", int(h.font_size))
+	layer.add_child(label)
+	label.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	label.offset_left = float(h.margin_px)
+	label.offset_top = -float(h.from_bottom_px)
+	label.offset_bottom = -float(h.from_bottom_px)
+	label.grow_vertical = Control.GROW_DIRECTION_BEGIN
 
 
 ## Sight's own darker numbers on top of the deck's, in a copy so nothing else sees them.
@@ -121,6 +139,8 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "target_hidden", "do": "target", "seen": false},
 		{"name": "target_seen", "do": "target", "seen": true},
 		{"name": "debug_f2", "do": "debug"},
+		{"name": "camera_ortho", "do": "preset", "index": 3},
+		{"name": "postfx_glow_ssao_fog", "do": "postfx"},
 	]
 
 
@@ -130,6 +150,7 @@ func apply_shot(shot: Dictionary) -> void:
 	if panel:
 		panel.visible = false
 	sight_debug.visible = false
+	flashlight.set_on(_captured_light())
 	match String(shot.do):
 		"enter":
 			await _walk_in_to_medbay()
@@ -147,14 +168,25 @@ func apply_shot(shot: Dictionary) -> void:
 			await _walk_in_to_medbay()
 			sight_debug.toggle()
 			sight_debug.redraw()
+		"preset":
+			rig.set_preset(int(shot.index))
+			await _walk_in_to_medbay()
+		"postfx":
+			rig.set_preset(int(Data.value("camera", "default_preset")))
+			_set_postfx(true)
+			await _walk_in_to_medbay()
 	await _sim(0.15)
 	Engine.time_scale = 0.0
 
 
 func release_shot() -> void:
 	super()
-	flashlight.set_on(true if _env_light == "" else _env_light == "on")
+	flashlight.set_on(_captured_light())
 	sight_debug.visible = false
+
+
+func _captured_light() -> bool:
+	return _env_light != "off"
 
 
 ## The door of `space_name` at the data's `at` (cargo has two).

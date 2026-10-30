@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/wall_tall_vent.res" id="1_ss2ye"]
+
+[node name="wall_tall_vent" type="Node3D" unique_id=708638157]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1177557565]
+mesh = ExtResource("1_ss2ye")

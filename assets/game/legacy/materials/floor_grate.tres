@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/floor_grate_albedo.jpg" id="1_4f61p"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/floor_grate_normal.jpg" id="2_5j2fn"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/floor_grate_orm.jpg" id="3_eq4ai"]
+
+[resource]
+resource_name = "floor_grate"
+albedo_texture = ExtResource("1_4f61p")
+orm_texture = ExtResource("3_eq4ai")
+normal_enabled = true
+normal_texture = ExtResource("2_5j2fn")
+texture_filter = 5

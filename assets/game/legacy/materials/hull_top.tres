@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/hull_top_albedo.jpg" id="1_phhv2"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/hull_top_normal.jpg" id="2_g67mr"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/hull_top_orm.jpg" id="3_fa367"]
+
+[resource]
+resource_name = "hull_top"
+albedo_texture = ExtResource("1_phhv2")
+orm_texture = ExtResource("3_fa367")
+normal_enabled = true
+normal_texture = ExtResource("2_g67mr")
+texture_filter = 5

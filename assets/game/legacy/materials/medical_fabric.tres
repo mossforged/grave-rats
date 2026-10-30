@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/medical_fabric_albedo.jpg" id="1_08u2d"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/medical_fabric_normal.jpg" id="2_47ynu"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/medical_fabric_orm.jpg" id="3_0yja8"]
+
+[resource]
+resource_name = "medical_fabric"
+albedo_texture = ExtResource("1_08u2d")
+orm_texture = ExtResource("3_0yja8")
+normal_enabled = true
+normal_texture = ExtResource("2_47ynu")
+texture_filter = 5

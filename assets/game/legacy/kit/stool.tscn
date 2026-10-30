@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/stool.res" id="1_3rqpx"]
+
+[node name="stool" type="Node3D" unique_id=806598887]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=35756656]
+mesh = ExtResource("1_3rqpx")

@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/floor_plate_albedo.jpg" id="1_kp2u3"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/floor_plate_normal.jpg" id="2_h3ew1"]
+[ext_resource type="Texture2D" path="res://assets/game/legacy/tex/floor_plate_orm.jpg" id="3_xmttf"]
+
+[resource]
+resource_name = "floor_plate"
+albedo_texture = ExtResource("1_kp2u3")
+orm_texture = ExtResource("3_xmttf")
+normal_enabled = true
+normal_texture = ExtResource("2_h3ew1")
+texture_filter = 5

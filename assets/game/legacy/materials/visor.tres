@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "visor"
+albedo_color = Color(0.03137255, 0.0627451, 0.078431375, 1)
+metallic = 0.1
+metallic_specular = 0.6
+roughness = 0.12
+clearcoat_enabled = true
+clearcoat = 0.6
+clearcoat_roughness = 0.12

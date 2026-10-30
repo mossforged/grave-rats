@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/game/legacy/kit/meshes/wall_tall_light.res" id="1_oo87i"]
+
+[node name="wall_tall_light" type="Node3D" unique_id=1958559066]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1999710099]
+mesh = ExtResource("1_oo87i")

@@ -12,11 +12,12 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T008 (running) → T009 (hauler swap, held until T008 merges) → T010 (slice kit, held until T009 merges).
+- Queue order (lead): T008 merged → T009 (hauler swap) running → T010 (slice kit, held until T009 merges).
 - Code: T007 merged (lead reviewed, 210/210 reproduced). T008 queued.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. John's hauler (30.8k tris, 1.80 m, unrigged) waits for a Meshy rig.
 
 ## Open questions (for John)
+- T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)
 - T007 play (`scenes/pirates/pirate_deck.tscn`, now the main scene): does cover matter? Is lock-to-cover (Space, RMB) better than plain crouch (F1 toggle)? Too lethal (3.4 s in the open)? Do the crew read as rivals? Do the barks give too much away? Bots: cover doubles survival; lock is no better than crouch when fighting from one spot.
 - Meshy models from John (`docs/handoffs/meshy-shortlist.md`): hauler, stalker, bed, console, rifle.
 - T006 open: is 8 s of door banging right?
@@ -39,5 +40,5 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Stalker: a hit interrupting a wind-up; a player death animation.
 
 ## Last session
-2026-10-30 (lead): merged T007 (210/210 reproduced). It branched before the flicker/door-noise addendum, so those went into T008 with the suit-OS HUD. Queued T008.
-2026-10-30 (code, unattended): T007: pirates as recoloured operators on the player's own weight rules; suppress and flank; lock-to-cover toggle; scale 0.85/1.15 and fade 0.65; the tipping test failure was the character scale (capsule radius).
+2026-10-30 (lead): merged T008 (231/231 reproduced); queued T009. Comparable-games study in `docs/studies/2026-10-30-comparable-games.md`.
+2026-10-30 (code, unattended): T008: the beam was the flicker's second shape, now a fixed fan clipped at walls; noise through a shut door brings stalkers to the door but never to bash it; suit-OS HUD with a noise ring drawn from the AI's own hearing.

@@ -181,3 +181,35 @@ func test_stand_in_collides_with_walls() -> void:
 	check(body.global_position.x > j.position.x - 0.01, "stand-in stops at the wall (x %.2f, wall face %.2f)" % [body.global_position.x, j.position.x])
 	scene.queue_free()
 	await tree.process_frame
+
+
+func test_johns_stage_1_picks_are_the_defaults() -> void:
+	var d: Dictionary = Data.load_data("deck")
+	check_eq(float(d.room_scale), 0.85, "rooms x0.85")
+	check_eq(float(d.character_scale), 1.15, "character x1.15")
+	var c: Dictionary = (Data.load_data("camera") as Dictionary).cutaway
+	check_eq(String(c.mode), "fade", "fade cut-away")
+	check_eq(float(c.fade_transparency), 0.65, "less see-through")
+	var has_slider := (Data.value("debug", "tuning", []) as Array).any(func(e: Dictionary) -> bool:
+		return String(e.get("path", "")) == "cutaway.fade_transparency")
+	check(has_slider, "see-through has an F1 slider")
+
+
+func test_everything_fits_at_the_default_scale() -> void:
+	var d: Dictionary = Data.load_data("deck")
+	var lay := DeckLayout.new(d, float(d.room_scale))
+	var body := float(Data.value("player", "radius_m")) * float(d.character_scale)
+	for i in lay.props.size():
+		var a: Dictionary = lay.props[i]
+		var r: Rect2 = a.rect
+		check((lay.spaces[String(a.space)].rect as Rect2).encloses(r), "%s %d inside its space" % [a.type, i])
+		for k in range(i + 1, lay.props.size()):
+			check(not r.intersects(lay.props[k].rect), "%s %d overlaps %s %d" % [a.type, i, lay.props[k].type, k])
+		for door: Dictionary in lay.doors:
+			check(not r.intersects(door.rect), "%s %d is in a doorway" % [a.type, i])
+	var spawn: Dictionary = d.spawn
+	check(lay.is_free(lay.point_in(String(spawn.space), spawn.at), body), "the spawn is clear of a scaled body")
+	for door: Dictionary in lay.doors:
+		var c: Vector2 = (door.rect as Rect2).get_center()
+		check((door.rect as Rect2).size[int(door.along_x) ^ 1] >= body * 2.0, "a scaled body fits through a door")
+		check(lay.is_free(c, body), "the doorway at %s is clear of a scaled body" % c)

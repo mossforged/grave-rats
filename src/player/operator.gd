@@ -71,6 +71,11 @@ func set_character_scale(s: float) -> void:
 	($Collision as Node3D).position.y = _shape.height * 0.5
 
 
+## The capsule's radius right now: it grows with the character scale.
+func body_radius() -> float:
+	return _shape.radius
+
+
 ## Horizontal facing of the gun including recoil (rad).
 func gun_yaw() -> float:
 	return model.torso_yaw + deg_to_rad(rifle.state.recoil_deg)

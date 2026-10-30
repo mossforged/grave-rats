@@ -3,7 +3,7 @@ extends RefCounted
 ## The lead reads these beside John's comments. See src/run_log/CONTRACT.md.
 
 const DEFAULT_DIR := "user://runs"
-const SOURCES := ["spit", "puddle", "lunge"]
+const SOURCES := ["spit", "puddle", "lunge", "rifle"]
 
 var dir := DEFAULT_DIR
 var enabled := true
@@ -15,6 +15,9 @@ var hits_in_cover := 0
 var hits_in_open := 0
 var times_protected := 0
 var killed_by: Variant = null
+var time_locked_s := 0.0
+var shots_blocked_for_you := 0
+var your_shots_blocked := 0
 var started_at := ""
 var last_path := ""
 
@@ -38,6 +41,9 @@ func begin() -> void:
 	hits_in_open = 0
 	times_protected = 0
 	killed_by = null
+	time_locked_s = 0.0
+	shots_blocked_for_you = 0
+	your_shots_blocked = 0
 	started_at = Time.get_datetime_string_from_system()
 	_written = false
 
@@ -68,8 +74,23 @@ func note_protected() -> void:
 	times_protected += 1
 
 
-func note_death(stalker_name: String, how: String) -> void:
-	killed_by = {"stalker": stalker_name, "how": how}
+## `kind` is what killed you: "stalker" or "pirate".
+func note_death(who: String, how: String, kind := "stalker") -> void:
+	killed_by = {kind: who, "how": how}
+
+
+func note_locked(delta: float) -> void:
+	time_locked_s += delta
+
+
+## Cover stopped a round on its way to you.
+func note_shot_blocked_for_you() -> void:
+	shots_blocked_for_you += 1
+
+
+## Cover stopped your round on its way to someone.
+func note_your_shot_blocked() -> void:
+	your_shots_blocked += 1
 
 
 func to_dict(ended: String) -> Dictionary:
@@ -84,6 +105,9 @@ func to_dict(ended: String) -> Dictionary:
 		"hits_in_open": hits_in_open,
 		"times_protected": times_protected,
 		"killed_by": killed_by,
+		"time_locked_s": time_locked_s,
+		"shots_blocked_for_you": shots_blocked_for_you,
+		"your_shots_blocked": your_shots_blocked,
 	}
 
 

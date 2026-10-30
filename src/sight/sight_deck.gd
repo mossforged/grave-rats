@@ -108,7 +108,7 @@ func respawn() -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
-	doors.actors = [{"position": _eye(), "radius": float(Data.value("player", "radius_m"))}]
+	doors.actors = [{"position": _eye(), "radius": operator.body_radius()}]
 	doors.show_prompt(_eye())
 	if panel and panel.visible:
 		mask.apply_cfg()

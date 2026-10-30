@@ -15,7 +15,7 @@
 - Yaw 0 = camera south of the target looking north (screen-up = world −Z). Godot keeps the vertical FOV / ortho size fixed (KEEP_HEIGHT), so wider windows see more to the sides.
 
 ### Cut-away contract
-Any `Node3D` in group `camera_cutaway` with its origin on the floor, meta `cutaway_rect` (Rect2, world XZ footprint) and `cutaway_height` (m). Each frame the rig tests the footprint against a zone running `depth_m` from `behind_m` behind the target toward the camera, `half_width_m` each side. **drop** (default) scales the node in Y down to `low_height_m`; **fade** sets `transparency` on its `GeometryInstance3D` children; **off**. Collision is untouched (keep it outside the pivot).
+Any `Node3D` in group `camera_cutaway` with its origin on the floor, meta `cutaway_rect` (Rect2, world XZ footprint) and `cutaway_height` (m). Each frame the rig tests the footprint against a zone running `depth_m` from `behind_m` behind the target toward the camera, `half_width_m` each side. **drop** scales the node in Y down to `low_height_m`; **fade** (default since T007, John's pick) sets `transparency` on its `GeometryInstance3D` children; **off**. Collision is untouched (keep it outside the pivot).
 
 ## Signals
 - `preset_changed(index: int, preset: Dictionary)`

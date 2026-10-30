@@ -64,6 +64,21 @@ func near(p: Vector2, reach: float) -> bool:
 	return false
 
 
+## The nearest low piece within `reach` of the point: {id, rect}, or {}. Lock-to-cover asks this.
+func low_near(p: Vector2, reach: float) -> Dictionary:
+	var best := {}
+	var best_d := reach
+	for id: Variant in _pieces:
+		if _pieces[id].kind != LOW:
+			continue
+		var r: Rect2 = _pieces[id].rect
+		var d := Vector2(clampf(p.x, r.position.x, r.end.x), clampf(p.y, r.position.y, r.end.y)).distance_to(p)
+		if d <= best_d:
+			best_d = d
+			best = {"id": id, "rect": r}
+	return best
+
+
 ## Slabs: where the segment enters the box over `r` from the floor to `top`, or -1.
 static func _enter_t(a: Vector3, b: Vector3, r: Rect2, top: float) -> float:
 	var span := Vector2(0.0, 1.0)

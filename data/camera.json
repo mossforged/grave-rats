@@ -64,14 +64,14 @@
     }
   ],
   "cutaway": {
-    "mode": "drop",
+    "mode": "fade",
     "modes": [
       "drop",
       "fade",
       "off"
     ],
     "low_height_m": 0.45,
-    "fade_transparency": 0.82,
+    "fade_transparency": 0.65,
     "half_width_m": 4.0,
     "depth_m": 7.0,
     "behind_m": 0.4,

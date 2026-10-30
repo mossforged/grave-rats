@@ -3,6 +3,9 @@ extends RefCounted
 ## A body on that line is aimed for at its torso height, and cover between muzzle and torso stops
 ## it there. Duck-typed bodies: shot_disc() -> {} or {center: Vector2, radius, height}, take_hit().
 
+## Cover stopped a round on its way to this body.
+signal cover_stopped(body: Object)
+
 var cover: RefCounted
 var bodies: Array = []
 var exclude: Array[RID] = []
@@ -40,6 +43,7 @@ func trace(origin: Vector3, dir: Vector3, length: float) -> Dictionary:
 	var aim := Vector3(origin.x + dir.x * best_d, best_h, origin.z + dir.z * best_d)
 	var stopped: Dictionary = cover.segment_hit(origin, aim)
 	if not stopped.is_empty():
+		cover_stopped.emit(best)
 		return {"position": stopped.point, "collider": null}
 	return {"position": aim, "collider": best}
 

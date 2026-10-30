@@ -275,6 +275,105 @@
       "min": 0.02,
       "max": 1,
       "step": 0.01
+    },
+    {
+      "section": "Sight (sight_deck)"
+    },
+    {
+      "label": "Awareness radius m",
+      "file": "sight",
+      "path": "awareness_radius_m",
+      "min": 0.5,
+      "max": 8,
+      "step": 0.1
+    },
+    {
+      "label": "Light cone range m",
+      "file": "sight",
+      "path": "cone_on.range_m",
+      "min": 3,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Light cone half angle °",
+      "file": "sight",
+      "path": "cone_on.half_angle_deg",
+      "min": 5,
+      "max": 60,
+      "step": 1
+    },
+    {
+      "label": "No-light cone range m",
+      "file": "sight",
+      "path": "cone_off.range_m",
+      "min": 1,
+      "max": 20,
+      "step": 0.5
+    },
+    {
+      "label": "No-light cone half angle °",
+      "file": "sight",
+      "path": "cone_off.half_angle_deg",
+      "min": 5,
+      "max": 90,
+      "step": 1
+    },
+    {
+      "label": "Remembered brightness",
+      "file": "sight",
+      "path": "mask.remembered_brightness",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Remembered saturation",
+      "file": "sight",
+      "path": "mask.remembered_saturation",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Unknown brightness",
+      "file": "sight",
+      "path": "mask.unknown_brightness",
+      "min": 0,
+      "max": 0.3,
+      "step": 0.005
+    },
+    {
+      "label": "Flashlight energy",
+      "file": "sight",
+      "path": "flashlight.energy",
+      "min": 0,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Beam strength",
+      "file": "sight",
+      "path": "beam.strength",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "label": "Ambient (at start only)",
+      "file": "sight",
+      "path": "lighting.ambient_energy",
+      "min": 0,
+      "max": 1.5,
+      "step": 0.01
+    },
+    {
+      "label": "Sun (at start only)",
+      "file": "sight",
+      "path": "lighting.sun_energy",
+      "min": 0,
+      "max": 1.5,
+      "step": 0.01
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "open_s": 0.45,
+  "close_s": 0.45,
+  "reach_m": 2.2,
+  "panel_thickness_m": 0.2,
+  "panel_top_gap_m": 0.02,
+  "panel_roughness": 0.7,
+  "open_tolerance": 0.001,
+  "lamp_size_m": [0.5, 0.12, 0.26],
+  "lamp_height_m": 2.3,
+  "lamp_energy": 2.5,
+  "label_height_m": 2.9,
+  "label_pixel_size": 0.012,
+  "label_font_size": 40,
+  "colors": {
+    "panel": "7b828b",
+    "panel_locked": "54373a",
+    "lamp_closed": "e6a020",
+    "lamp_open": "42e070",
+    "lamp_locked": "ff2c2c",
+    "label": "f2f2ee",
+    "label_locked": "ff6a5a"
+  },
+  "words": {
+    "open": "E  OPEN",
+    "close": "E  CLOSE",
+    "locked": "LOCKED"
+  }
+}

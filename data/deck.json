@@ -20,9 +20,10 @@
       "anchor": {"to": "cargo", "side": "south", "offset_m": 0.0, "offset_walls": -1, "open": false}}
   ],
   "doors": [
-    {"space": "medbay", "side": "east", "at": 0.7},
-    {"space": "cargo", "side": "west", "at": 0.6},
-    {"space": "side_corridor", "side": "north", "at": 0.8}
+    {"space": "medbay", "side": "east", "at": 0.7, "state": "closed", "slide": -1},
+    {"space": "cargo", "side": "west", "at": 0.6, "state": "closed", "slide": -1},
+    {"space": "side_corridor", "side": "north", "at": 0.8, "state": "closed", "slide": 1},
+    {"space": "cargo", "side": "west", "at": 0.2, "state": "locked", "slide": 1}
   ],
   "props": [
     {"type": "bed", "space": "medbay", "at": [0.2, 0.4], "size_m": [0.9, 0.75, 2.0]},
@@ -31,6 +32,7 @@
     {"type": "cabinet", "space": "medbay", "at": [0.05, 0.08], "size_m": [0.6, 1.9, 0.5]},
     {"type": "cabinet", "space": "medbay", "at": [0.12, 0.08], "size_m": [0.6, 1.9, 0.5]},
     {"type": "console", "space": "medbay", "at": [0.9, 0.35], "size_m": [0.6, 1.1, 1.2]},
+    {"type": "locker_bank", "space": "medbay", "at": [0.55, 0.5], "size_m": [0.6, 2.0, 2.4]},
     {"type": "crate_low", "space": "junction", "at": [0.8, 0.06], "size_m": [0.8, 0.8, 0.8]},
     {"type": "console", "space": "junction", "at": [0.08, 0.04], "size_m": [0.6, 1.1, 1.0]},
     {"type": "crate_high", "space": "cargo", "at": [0.4, 0.45], "size_m": [1.2, 1.2, 1.2]},
@@ -41,6 +43,7 @@
     {"type": "crate_low", "space": "cargo", "at": [0.86, 0.32], "size_m": [1.2, 0.8, 1.2]},
     {"type": "ammo_crate", "space": "cargo", "at": [0.68, 0.38], "size_m": [1.0, 0.6, 0.6]},
     {"type": "crate_low", "space": "cargo", "at": [0.2, 0.1], "size_m": [0.8, 0.8, 0.8]},
+    {"type": "crate_stack", "space": "cargo", "at": [0.24, 0.72], "size_m": [1.2, 2.1, 1.2]},
     {"type": "crate_low", "space": "side_corridor", "at": [0.35, 0.25], "size_m": [0.8, 0.8, 0.8]}
   ],
   "spawn": {"space": "junction", "at": [0.45, 0.5], "aim_deg": 30.0},

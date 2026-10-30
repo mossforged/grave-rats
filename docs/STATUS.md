@@ -13,10 +13,10 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## What builders need now
 - Code: T006 merged (lead reviewed, 181/181 reproduced). T007 queued; its step 0 applies John's stage 1 scale and fade picks.
-- Art: A006 merged (paint-overs of real frames, kit sheets at game dimensions, material board). Lane idle until John approves the slice target and says which pieces he models.
+- Art: A006 merged (paint-overs of real frames, kit sheets at game dimensions, material board). Approved as the stage 3 target. Next: the scripted kit (code lane, after T007); John makes the Meshy shortlist.
 
 ## Open questions (for John)
-- A006: is the slice target right (paint-overs 01b, 02b, 03c, 04b)? Which pieces will John model himself (walls 05b, doors 06c, props 07b), and which do scripts build? The paint-overs show T006's scale (×1.0), not his ×0.85/×1.15.
+- Meshy models from John (`docs/handoffs/meshy-shortlist.md`): hauler, stalker, bed, console, rifle.
 - T006 open: is 8 s of door banging right?
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.

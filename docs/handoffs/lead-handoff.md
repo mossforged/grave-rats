@@ -28,4 +28,5 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T001–T005 | code | merged 2026-10-30; John played T005 2026-10-30, gate not passed |
 | A001–A004 | art | merged 2026-10-30; John picked 2026-10-30 |
 | T006 | code | queued: make the stalker dangerous, playtest fixes |
+| T007 | code | written; queue when T006 merges (needs it) |
 | A005 | art | queued: hauler turnaround, crew variety, HUD, title, logo |

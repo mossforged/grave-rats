@@ -13,12 +13,12 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## What builders need now
 - Code: T006 queued (faster, dodging stalker; ambush that bites; doors broken slowly; crouch corkscrew, flashlight flicker, cover readout, camera between presets 1 and 2, awareness 2.2 m, tall crates block sight, stalker_deck as main scene).
+- Next code: T007 (rival pirates as recoloured operators, lock-to-cover prototype) is written; queue it once T006 merges.
 - Art: A005 queued (orange hauler model sheet, crew variety, suit-OS HUD with the ring, title art recomposed, logo set).
 
 ## Open questions (for John)
 - Stage 2 gate, again after T006: tense and fun with a dangerous stalker?
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
-- A shooting enemy next (security robot or rival pirate), then lock-to-cover (his Gears idea)? Lead's plan: yes, T007 after T006.
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?
 
 ## Parked

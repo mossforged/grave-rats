@@ -19,14 +19,33 @@
     "turn": {
       "prowl_deg_s": 70.0,
       "investigate_deg_s": 110.0,
-      "stalk_deg_s": 170.0,
+      "stalk_deg_s": 420.0,
       "spit_deg_s": 150.0,
       "lunge_deg_s": 900.0
     },
     "speed": {
       "prowl_m_s": 0.9,
-      "investigate_m_s": 1.7,
-      "stalk_m_s": 2.5
+      "investigate_m_s": 2.6
+    },
+    "dash": {
+      "speed_m_s": 6.5,
+      "min_s": 0.4,
+      "max_s": 0.7,
+      "pause_min_s": 0.2,
+      "pause_max_s": 0.55,
+      "turn_deg_s": 900.0,
+      "rush_s": 2.5
+    },
+    "dodge": {
+      "speed_m_s": 7.5,
+      "max_s": 0.4,
+      "reach_m": 2.6,
+      "cooldown_s": 1.2,
+      "shot_line_m": 1.4,
+      "angles_deg": [90.0, 60.0, 125.0],
+      "hidden_score": 3.0,
+      "side_score": 1.0,
+      "arrive_m": 0.5
     },
     "prowl": {
       "pause_s": 1.2,
@@ -39,7 +58,11 @@
     },
     "stalk": {
       "replan_s": 0.9,
+      "arrive_replan_s": 0.15,
       "arrive_m": 0.8,
+      "min_hop_m": 1.6,
+      "back_off_s": 1.3,
+      "flip_side_chance": 0.5,
       "ring_radii_m": [4.0, 6.0, 8.0],
       "ring_samples": 12,
       "spot_margin_m": 0.75,
@@ -61,19 +84,19 @@
       "search_rings": 12
     },
     "spit": {
-      "windup_s": 0.6,
-      "recover_s": 0.45,
-      "cooldown_s": 3.2,
-      "first_delay_s": 0.8,
+      "windup_s": 0.4,
+      "recover_s": 0.35,
+      "cooldown_s": 2.4,
+      "first_delay_s": 0.5,
       "min_range_m": 2.0,
       "max_range_m": 10.0,
       "face_deg": 40.0,
-      "damage": 16.0,
+      "damage": 22.0,
       "hit_radius_m": 0.75,
       "protect_radius_m": 2.5,
       "body_margin_m": 0.5,
-      "speed_m_s": 9.0,
-      "min_flight_s": 0.5,
+      "speed_m_s": 16.0,
+      "min_flight_s": 0.28,
       "apex_short_m": 1.5,
       "apex_long_m": 0.12,
       "short_range_m": 3.0,
@@ -94,15 +117,15 @@
       "max_count": 16
     },
     "lunge": {
-      "windup_s": 0.4,
-      "range_m": 4.2,
-      "charge_m": 5.0,
-      "speed_m_s": 8.5,
+      "windup_s": 0.3,
+      "range_m": 5.0,
+      "charge_m": 6.5,
+      "speed_m_s": 10.0,
       "damage": 34.0,
       "hit_reach_m": 1.15,
-      "recover_s": 0.9,
-      "cooldown_s": 3.5,
-      "first_delay_s": 0.3,
+      "recover_s": 0.8,
+      "cooldown_s": 2.4,
+      "first_delay_s": 0.15,
       "probe_height_m": 0.3
     },
     "flinch": {
@@ -123,6 +146,7 @@
       "glow_min_scale": 0.05,
       "windup_lean_deg": 22.0,
       "charge_stretch": 1.3,
+      "dash_stretch": 1.18,
       "recover_squash": 0.7,
       "dead_tilt_deg": 85.0,
       "visual_rate_per_s": 12.0,
@@ -152,7 +176,7 @@
     "past_m": 3.5,
     "max_range_m": 11.0,
     "behind_deg": 100.0,
-    "emerge_delay_s": 0.55,
+    "emerge_delay_s": 0.25,
     "camera_kick_m": 0.42,
     "camera_kick_recover_s": 0.6,
     "panel_color": "4a4f56",
@@ -179,7 +203,8 @@
     "unit_size_m": 12.0,
     "bang": {"length_s": 0.7, "decay_per_s": 6.0, "low_hz": 70.0, "low_share": 0.6, "volume_db": 6.0},
     "spit": {"length_s": 0.22, "decay_per_s": 18.0, "low_hz": 340.0, "low_share": 0.3, "volume_db": -4.0},
-    "lunge": {"length_s": 0.3, "decay_per_s": 10.0, "low_hz": 130.0, "low_share": 0.5, "volume_db": -2.0}
+    "lunge": {"length_s": 0.3, "decay_per_s": 10.0, "low_hz": 130.0, "low_share": 0.5, "volume_db": -2.0},
+    "bash": {"length_s": 0.5, "decay_per_s": 8.0, "low_hz": 55.0, "low_share": 0.7, "volume_db": 9.0}
   },
-  "help": {"text": "F flashlight   E door / tip bed   F2 sight debug"}
+  "help": {"text": "F flashlight   E door / tip bed   F2 sight debug   6 default camera"}
 }

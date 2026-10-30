@@ -1,5 +1,5 @@
 {
-  "default_preset": 0,
+  "default_preset": 5,
   "near_m": 0.1,
   "far_m": 150.0,
   "follow": {
@@ -51,6 +51,15 @@
       "yaw_deg": 0.0,
       "fov_deg": 18.0,
       "distance_m": 44.0,
+      "ortho_size_m": 0.0
+    },
+    {
+      "name": "john's pick",
+      "projection": "perspective",
+      "pitch_deg": 60.0,
+      "yaw_deg": 0.0,
+      "fov_deg": 35.0,
+      "distance_m": 20.5,
       "ortho_size_m": 0.0
     }
   ],

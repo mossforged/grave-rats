@@ -73,6 +73,6 @@ func show_prompt(p: Vector2) -> void:
 		return
 	var key := d.door_state.prompt_key()
 	_label.text = String(cfg.words[key])
-	_label.modulate = Color(cfg.colors.label_locked if key == "locked" else cfg.colors.label)
+	_label.modulate = Color(cfg.colors.label_locked if key == "locked" or key == "broken" else cfg.colors.label)
 	var c := d.opening.get_center()
 	_label.global_position = Vector3(c.x, float(cfg.label_height_m), c.y)

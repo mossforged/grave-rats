@@ -64,13 +64,14 @@ func _ready() -> void:
 	pack.name = "Pack"
 	add_child(pack)
 	pack.setup(layout, cover, sight.visibility.blocked, float(_health_cfg.acid.puddle_dps))
+	pack.light_on = func(p: Vector2) -> bool: return flashlight.on and sight.visibility.in_light(_eye(), operator.gun_yaw(), p)
 	pack.player_hit.connect(_on_player_hit)
 	pack.player_protected.connect(_on_player_protected)
 	for bed: TipBed in beds:
 		pack.nav.set_blocker(bed, bed.footprint())
 		bed.footprint_changed.connect(func(b: TipBed) -> void: pack.nav.set_blocker(b, b.footprint()))
 	for d: Node in doors.doors:
-		pack.nav.set_blocker(d, d.opening if d.door_state.blocks() else Rect2())
+		_on_door_changed(d)
 		d.state_changed.connect(_on_door_changed)
 	pack.nav.set_blocker(bulkhead, bulkhead.rect)
 	ambush = AmbushTrigger.new(_ambush_cfg, bulkhead.panel_center())
@@ -151,9 +152,7 @@ func respawn() -> void:
 		bed.reset()
 	var specs: Array = deck_data.doors
 	for i in specs.size():
-		var d: Node = doors.doors[i]
-		d.door_state = d.door_state.get_script().new(doors.cfg, String(specs[i].get("state", "closed")))
-		d.tick(0.0, [])
+		doors.doors[i].reset(String(specs[i].get("state", "closed")))
 	bulkhead.reset()
 	pack.nav.set_blocker(bulkhead, bulkhead.rect)
 	ambush.reset()
@@ -191,10 +190,18 @@ func simulate_world(delta: float) -> void:
 	bulkhead.tick(delta)
 	pack.tick(delta)
 	mark.set_lines(pack.shooter_lines() if not suit.dead else [])
+	mark.set_in_cover(in_cover_now())
 
 
 func _sync_target() -> void:
 	pack.target = {"pos": _eye(), "height": body_height(), "alive": not suit.dead}
+
+
+## Crouched and tucked in beside something, and not rising to fire over it.
+func in_cover_now() -> bool:
+	var m: Dictionary = _cover_cfg.mark
+	return not suit.dead and _brace_left <= 0.0 and operator.model.crouch_amount >= float(m.in_cover_min_crouch) \
+			and cover.near(_eye(), float(m.in_cover_reach_m))
 
 
 ## The torso a shot at the player aims for right now.
@@ -233,7 +240,7 @@ func _step_emerge(delta: float) -> void:
 		pack.nav.set_blocker(bulkhead, Rect2())
 		for s: Node in pack.stalkers:
 			if s.brain.state == s.brain.State.DORMANT:
-				s.brain.wake(_eye())
+				s.brain.wake(_eye(), s.floor_position())
 
 
 ## The burst: bang, kick, debris, then it comes out. The player hears it first.
@@ -305,18 +312,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		interact()
 		get_viewport().set_input_as_handled()
 		return
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_6:
+		rig.set_preset(int(Data.value("camera", "default_preset")))
+		get_viewport().set_input_as_handled()
+		return
 	super(event)
 
 
 func _on_door_changed(d: Node) -> void:
-	pack.nav.set_blocker(d, d.opening if d.door_state.blocks() else Rect2())
+	pack.nav.set_blocker(d, d.opening if d.door_state.blocks() else Rect2(), not d.door_state.is_locked())
 
 
-func _on_rifle_fired(from: Vector3, _to: Vector3, _direction: Vector3, hit: Object) -> void:
+func _on_rifle_fired(from: Vector3, to: Vector3, _direction: Vector3, hit: Object) -> void:
 	if operator.model.crouch_amount > 0.0:
 		_brace_left = float(_cover_cfg.brace_hold_s)
 	run_log.note_shot(hit != null and hit.has_method("shot_disc"))
 	pack.noise("gunfire", Vector2(from.x, from.z))
+	pack.shot_at(Vector2(from.x, from.z), Vector2(to.x, to.z))
 
 
 func _on_player_hit(source: String, amount: float, stalker: Node3D, in_cover: bool) -> void:

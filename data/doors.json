@@ -12,8 +12,23 @@
   "label_height_m": 2.9,
   "label_pixel_size": 0.012,
   "label_font_size": 40,
+  "bash": {
+    "break_s": 8.0,
+    "bang_interval_s": 0.85,
+    "reach_m": 0.45,
+    "shake_m": 0.05,
+    "shake_s": 0.3,
+    "shake_hz": 22.0,
+    "dent_count": 7,
+    "dent_size_m": [0.45, 0.4, 0.07],
+    "dent_seed": 11,
+    "broken_lean_deg": 84.0
+  },
   "colors": {
     "panel": "38506a",
+    "panel_dented": "1e2a36",
+    "panel_broken": "23272c",
+    "lamp_broken": "3a2a20",
     "panel_locked": "5a2a2c",
     "lamp_closed": "e6a020",
     "lamp_open": "42e070",
@@ -24,6 +39,7 @@
   "words": {
     "open": "E  OPEN",
     "close": "E  CLOSE",
-    "locked": "LOCKED"
+    "locked": "LOCKED",
+    "broken": "BROKEN"
   }
 }

@@ -18,7 +18,9 @@ var patrol: Array = []
 var stalk_point := Vector2.ZERO
 var path := PackedVector2Array()
 var side := 1.0
+var door: Node3D = null  # the shut door between it and where it thinks you are
 
+var _door_left := 0.0
 var _repath_left := 0.0
 var _replan_left := 0.0
 var _cs: CollisionShape3D
@@ -51,6 +53,9 @@ func setup(config: Dictionary, entry: Dictionary, at: Vector2, patrol_points: Ar
 
 func reset() -> void:
 	brain = StalkerBrain.new(cfg, patrol, bool(spec.get("dormant", false)), deg_to_rad(float(spec.get("yaw_deg", 0.0))))
+	brain.rng.randomize()
+	door = null
+	_door_left = 0.0
 	global_position = Vector3(home.x, 0.0, home.y)
 	velocity = Vector3.ZERO
 	stalk_point = home
@@ -105,10 +110,17 @@ func simulate(delta: float, pack: Node) -> Array:
 		return []
 	var pos := floor_position()
 	_replan_left -= delta
+	if brain.flip_side:
+		brain.flip_side = false
+		side = -side
+	if brain.plan_now:
+		brain.plan_now = false
+		_replan_left = minf(_replan_left, float(cfg.stalk.arrive_replan_s))
 	if brain.state == StalkerBrain.State.STALK and _replan_left <= 0.0:
 		_replan_left = float(cfg.stalk.replan_s)
 		stalk_point = pack.next_stalk_point(self)
 		_repath_left = 0.0
+	_look_for_door(delta, pack)
 	if brain.wants_move:
 		_repath_left -= delta
 		if _repath_left <= 0.0 or path.is_empty():
@@ -117,6 +129,9 @@ func simulate(delta: float, pack: Node) -> Array:
 	var s: Dictionary = pack.senses_for(self)
 	s.next_point = _next_point(pos)
 	s.stalk_point = stalk_point
+	_fill_door_senses(s, pos, pack)
+	if brain.wants_dodge():
+		s.dodge_point = pack.next_dodge_point(self)
 	var events: Array = brain.step(delta, s)
 	velocity = Vector3(brain.velocity.x, 0.0, brain.velocity.y)
 	move_and_slide()
@@ -126,12 +141,43 @@ func simulate(delta: float, pack: Node) -> Array:
 	return events
 
 
-## A few cells ahead on the path, dropping points already passed.
+## Every so often: is a shut door all that's between it and where it thinks you are?
+func _look_for_door(delta: float, pack: Node) -> void:
+	var hunting_for_you: bool = brain.state == StalkerBrain.State.STALK or brain.state == StalkerBrain.State.INVESTIGATE \
+			or brain.state == StalkerBrain.State.BASH
+	if not hunting_for_you:
+		door = null
+		return
+	_door_left -= delta
+	if _door_left <= 0.0:
+		_door_left = float(cfg.nav.repath_s)
+		door = pack.door_towards(self)
+	if door != null and not door.door_state.blocks():
+		door = null
+
+
+func _fill_door_senses(s: Dictionary, pos: Vector2, pack: Node) -> void:
+	s.door_ahead = door != null
+	if door == null:
+		return
+	s.door_at = door.front_point(pos, float(cfg.radius_m))
+	s.door_face = door.opening.get_center()
+	s.at_door = door.within_reach(pos, float(cfg.radius_m))
+	if pack.nav.path(pos, s.door_at).is_empty() and not s.at_door:
+		s.door_ahead = false
+
+
+## A few cells ahead of the nearest point on the path. At dash speed a path gets old fast, and
+## points behind it would turn it back on itself.
 func _next_point(pos: Vector2) -> Vector2:
-	var cell := float(cfg.nav.cell_m)
-	var k := 0
-	while k < path.size() and path[k].distance_to(pos) < cell:
-		k += 1
-	if k >= path.size():
+	if path.is_empty():
 		return brain.goal
-	return path[mini(k + int(cfg.nav.lookahead_cells) - 1, path.size() - 1)]
+	var nearest := 0
+	var best := INF
+	for k in path.size():
+		var d := path[k].distance_squared_to(pos)
+		if d < best:
+			best = d
+			nearest = k
+	var ahead := nearest + int(cfg.nav.lookahead_cells)
+	return path[ahead] if ahead < path.size() else brain.goal

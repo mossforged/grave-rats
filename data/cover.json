@@ -21,15 +21,26 @@
   },
   "mark": {
     "layer": 50,
-    "size_px": 44.0,
-    "word_gap_px": 18.0,
+    "size_px": 76.0,
+    "word_gap_px": 22.0,
     "gap_px": 26.0,
-    "from_bottom_px": 150.0,
-    "line_px": 3.0,
+    "from_right_px": 24.0,
+    "from_bottom_px": 290.0,
+    "line_px": 4.0,
     "protected_color": "62e08a",
     "exposed_color": "e0604a",
     "word_protected": "COVER",
     "word_exposed": "OPEN",
-    "font_size": 16
+    "font_size": 20,
+    "in_cover_word": "IN COVER",
+    "in_cover_font_size": 22,
+    "in_cover_from_right_px": 170.0,
+    "in_cover_from_bottom_px": 148.0,
+    "in_cover_pad_px": 10.0,
+    "in_cover_height_px": 34.0,
+    "in_cover_color": "62e08a",
+    "in_cover_text_color": "08140c",
+    "in_cover_reach_m": 1.0,
+    "in_cover_min_crouch": 0.5
   }
 }

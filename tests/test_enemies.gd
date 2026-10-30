@@ -710,7 +710,7 @@ func test_a_dash_is_faster_than_the_players_walk_and_comes_in_bursts() -> void:
 		if v > 0.0 and not last_moving:
 			runs += 1
 		last_moving = v > 0.0
-	check_eq(fast, float(cfg.dash.speed_m_s), "it reaches dash speed")
+	check(absf(fast - float(cfg.dash.speed_m_s)) < 0.01, "it reaches dash speed (%.2f m/s)" % fast)
 	check(fast > walk, "faster than the walk")
 	check(still > 0 and moving > 0, "dashes and pauses (%d steps moving, %d still)" % [moving, still])
 	check(runs >= 5, "several separate dashes in 10 s (%d)" % runs)
@@ -871,7 +871,7 @@ func test_the_burst_stalker_comes_out_fast_and_goes_straight_at_you() -> void:
 	await _run(scene, float(scene._ambush_cfg.emerge_delay_s) + 2.0 * DT)
 	check(s.brain.rushing, "it's rushing")
 	await _run(scene, 0.2)
-	check_eq(s.brain.velocity.length(), float(s.cfg.dash.speed_m_s), "at a dash, with no pause first")
+	check(absf(s.brain.velocity.length() - float(s.cfg.dash.speed_m_s)) < 0.01, "at a dash, with no pause first (%.2f m/s)" % s.brain.velocity.length())
 	await _run(scene, 1.0)
 	check(s.brain.state == StalkerBrain.State.LUNGE or s.brain.state == StalkerBrain.State.RECOVER, "and into a lunge: %s" % s.brain.state_name())
 

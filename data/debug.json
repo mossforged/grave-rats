@@ -623,6 +623,22 @@
       "step": 10
     },
     {
+      "label": "Skitter °",
+      "file": "enemies",
+      "path": "stalker.dash.jink_deg",
+      "min": 0,
+      "max": 80,
+      "step": 1
+    },
+    {
+      "label": "Skitter /s",
+      "file": "enemies",
+      "path": "stalker.dash.jink_hz",
+      "min": 0,
+      "max": 10,
+      "step": 0.1
+    },
+    {
       "label": "Backs off after an attack s",
       "file": "enemies",
       "path": "stalker.stalk.back_off_s",

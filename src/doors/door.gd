@@ -114,7 +114,7 @@ func _make_dents(panel_size: Vector3) -> void:
 	rng.seed = int(b.dent_seed) + hash(name)
 	var mesh := BoxMesh.new()
 	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(cfg.colors.panel_dented)
+	mat.albedo_color = Color(cfg.colors.dent_mark)
 	mat.roughness = float(cfg.panel_roughness)
 	mesh.material = mat
 	mesh.size = Vector3(float(s[0]), float(s[1]), panel_size.z + float(s[2])) if along_x \
@@ -250,7 +250,9 @@ func _show_panel(local: Vector3, half_h: float) -> void:
 		_panel.position = Vector3(0, y, out) if along_x else Vector3(out, y, 0)
 		_panel.rotation = Vector3(lean, 0, 0) if along_x else Vector3(0, 0, -lean)
 		return
-	_panel.rotation = Vector3.ZERO
+	# Bowing away from the blows, which is what reads from above on a door seen edge-on.
+	var bow := deg_to_rad(float(b.bow_deg)) * dented * _fall_sign
+	_panel.rotation = Vector3(bow, 0, 0) if along_x else Vector3(0, 0, -bow)
 	var shake := 0.0
 	if _shake_left > 0.0:
 		shake = sin(_shake_t * TAU * float(b.shake_hz)) * float(b.shake_m) * _shake_left / float(b.shake_s)

@@ -53,6 +53,7 @@ var _dodge_wanted := false
 var _dodge_dir := Vector2.ZERO
 var _was_lit := false
 var _bang_left := 0.0
+var _jink_t := 0.0
 
 
 func _init(config: Dictionary, patrol_points: Array, dormant := false, start_yaw := 0.0) -> void:
@@ -502,6 +503,9 @@ func _step_dash_body(delta: float, s: Dictionary, look: Vector2) -> void:
 	if dashing and wants_move:
 		_turn(delta, yaw_to(pos, s.next_point), float(cfg.dash.turn_deg_s))
 		_walk(float(cfg.dash.speed_m_s), s)
+		# It skitters: the body points along the path, the feet throw it side to side.
+		_jink_t += delta
+		velocity = velocity.rotated(deg_to_rad(float(cfg.dash.jink_deg)) * sin(_jink_t * TAU * float(cfg.dash.jink_hz)))
 	else:
 		_turn(delta, yaw_to(pos, look), float(cfg.turn.stalk_deg_s))
 

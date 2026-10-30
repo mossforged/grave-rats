@@ -20,13 +20,15 @@
     "shake_s": 0.3,
     "shake_hz": 22.0,
     "dent_count": 7,
-    "dent_size_m": [0.45, 0.4, 0.07],
+    "dent_size_m": [0.45, 0.4, 0.14],
+    "bow_deg": 7.0,
     "dent_seed": 11,
     "broken_lean_deg": 84.0
   },
   "colors": {
     "panel": "38506a",
     "panel_dented": "1e2a36",
+    "dent_mark": "9aa6b2",
     "panel_broken": "23272c",
     "lamp_broken": "3a2a20",
     "panel_locked": "5a2a2c",

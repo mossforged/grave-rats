@@ -373,16 +373,21 @@ func _die(who: String, how: String) -> void:
 
 func capture_shots() -> Array[Dictionary]:
 	return [
+		{"name": "camera_default", "do": "camera", "preset": int(Data.value("camera", "default_preset"))},
+		{"name": "camera_preset_1", "do": "camera", "preset": 0},
+		{"name": "dash_mid_motion", "do": "dash"},
+		{"name": "dodge", "do": "dodge"},
+		{"name": "spit_windup_fast", "do": "windup"},
+		{"name": "lunge_charge", "do": "lunge"},
+		{"name": "door_mid_bash", "do": "bash", "done": 0.6},
+		{"name": "door_broken", "do": "bash", "done": 1.0},
+		{"name": "in_cover_readout", "do": "cover_alone"},
 		{"name": "cover_protected", "do": "cover"},
 		{"name": "cover_braced_exposed", "do": "braced"},
-		{"name": "bed_tipping", "do": "tipping"},
-		{"name": "spit_windup", "do": "windup"},
-		{"name": "acid_puddle", "do": "puddle"},
-		{"name": "lunge_charge", "do": "lunge"},
-		{"name": "lunge_recover", "do": "recover"},
-		{"name": "ambush_1_burst", "do": "ambush", "wait": 0.05},
-		{"name": "ambush_2_turning", "do": "ambush", "wait": 0.5},
-		{"name": "ambush_3_coming_out", "do": "ambush", "wait": 1.5},
+		{"name": "light_off_hud", "do": "light_off"},
+		{"name": "ambush_1_bang", "do": "ambush", "wait": 0.05},
+		{"name": "ambush_2_out_and_dashing", "do": "ambush", "wait": 0.45},
+		{"name": "ambush_3_lunging", "do": "ambush", "wait": 1.0},
 		{"name": "death_screen", "do": "death"},
 	]
 
@@ -394,6 +399,7 @@ func apply_shot(shot: Dictionary) -> void:
 		panel.visible = false
 	sight_debug.visible = false
 	respawn()
+	rig.set_preset(int(Data.value("camera", "default_preset")))
 	flashlight.set_on(true)
 	var hunter: Node = pack.stalkers[0]
 	var bed: TipBed = beds[2]
@@ -412,12 +418,37 @@ func apply_shot(shot: Dictionary) -> void:
 			_hunt_from(hunter, infront, behind)
 			operator.scripted = {"crouch": true, "fire": true}
 			await _sim(0.3)
-		"tipping":
-			var upright: TipBed = beds[0]
-			var c: Vector2 = upright.upright_rect.get_center()
-			await _stand_at(c + Vector2(upright.upright_rect.size.x, 0), c + Vector2(-float(_cover_cfg.bed.reach_m), 0))
-			interact()
-			await _sim(float(_cover_cfg.bed.tip_s) * 0.5)
+		"camera":
+			rig.set_preset(int(shot.preset))
+			await _open_medbay_door()
+			await _stand_at(behind, behind + Vector2(-float(pack.cfg.lunge.range_m), 0))
+		"dash":
+			await _open_medbay_door()
+			var far := behind + Vector2(-float(pack.cfg.lunge.range_m), 0)
+			await _stand_at(behind, far)
+			_hunt_from(hunter, far + Vector2(-float(pack.cfg.lunge.range_m), 0), behind)
+			hunter.brain._lunge_cd = INF
+			hunter.brain._spit_cd = INF
+			await _until_dash(hunter)
+		"dodge":
+			await _open_medbay_door()
+			var at := behind + Vector2(-float(pack.cfg.lunge.range_m) * 1.2, 0)
+			await _stand_at(behind, at)
+			_hunt_from(hunter, at, behind)
+			hunter.brain._lunge_cd = INF
+			hunter.brain._spit_cd = INF
+			await _sim(0.05)
+			hunter.take_hit({"damage": 1.0, "origin": operator.global_position})
+			await _sim(float(pack.cfg.dodge.max_s) * 0.6)
+		"bash":
+			await _bash_shot(hunter, float(shot.done))
+		"cover_alone":
+			await _crouch_at(behind, infront)
+		"light_off":
+			await _open_medbay_door()
+			await _stand_at(behind, behind + Vector2(-float(pack.cfg.lunge.range_m), 0))
+			flashlight.set_on(false)
+			await _sim(0.1)
 		"windup":
 			await _open_medbay_door()
 			await _stand_at(behind, infront)
@@ -452,6 +483,35 @@ func apply_shot(shot: Dictionary) -> void:
 			_hurt("lunge", float(_health_cfg.suit.max), hunter.label, false)
 			await _sim(0.1)
 	Engine.time_scale = 0.0
+
+
+## Mid-dash, a stride after it set off.
+func _until_dash(s: Node) -> void:
+	var left := float(pack.cfg.dash.pause_max_s) + float(pack.cfg.stalk.replan_s) * 2.0
+	while left > 0.0 and s.brain.velocity.length() < float(pack.cfg.dash.speed_m_s) * 0.5:
+		await get_tree().process_frame
+		left -= get_process_delta_time()
+	await _sim(float(pack.cfg.dash.min_s) * 0.25)
+
+
+## From inside the medbay, the shut door with a stalker on the far side. It walks up and bangs for
+## real; `done` then jumps its progress, since nobody needs eight seconds in a capture.
+func _bash_shot(s: Node, done: float) -> void:
+	var d := _door("medbay", 0.7)
+	var inside := _door_side(d, -1.0, 3.0)
+	await _stand_at(inside, d.opening.get_center())
+	s.place_hunting(_door_side(d, 1.0, 2.2), inside)
+	var left := float(d.cfg.bash.break_s)
+	while left > 0.0 and not s.brain.bashing:
+		await get_tree().process_frame
+		left -= get_process_delta_time()
+	d.door_state.bash_progress = done - float(pack.cfg.nav.cell_m) * 0.01 if done < 1.0 else 1.0 - float(pack.cfg.nav.cell_m) * 0.001
+	if done < 1.0:
+		await _sim(float(d.cfg.bash.bang_interval_s))
+		d.bang()
+		await _sim(float(d.cfg.bash.shake_s) * 0.2)
+	else:
+		await _sim(0.1)
 
 
 func _crouch_at(p: Vector2, look: Vector2) -> void:

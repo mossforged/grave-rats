@@ -1,0 +1,121 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/debug/asset_viewer.gd" id="viewer"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/operator.glb" id="op"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/robot.tscn" id="robot"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/canister.tscn" id="k0"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/crate_large.tscn" id="k1"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/crate_small.tscn" id="k2"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/floor_grate_tile.tscn" id="k3"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/floor_tile.tscn" id="k4"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/med_bed.tscn" id="k5"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/post_tall.tscn" id="k6"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/wall_low.tscn" id="k7"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/wall_tall.tscn" id="k8"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/wall_tall_light.tscn" id="k9"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/wall_tall_pipes.tscn" id="k10"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/wall_tall_screen.tscn" id="k11"]
+[ext_resource type="PackedScene" path="res://assets/game/legacy/kit/wall_tall_vent.tscn" id="k12"]
+
+[node name="AssetViewer" type="Node3D"]
+script = ExtResource("viewer")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+
+[node name="PracticalCool" type="OmniLight3D" parent="."]
+
+[node name="PracticalAmber" type="OmniLight3D" parent="."]
+
+[node name="Room" type="Node3D" parent="."]
+
+[node name="Floor_0_0" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -3.3, 0, -2.2)
+
+[node name="Floor_0_1" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -3.3, 0, 0)
+
+[node name="Floor_0_2" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -3.3, 0, 2.2)
+
+[node name="Floor_1_0" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -1.1, 0, -2.2)
+
+[node name="Floor_1_1" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -1.1, 0, 0)
+
+[node name="Floor_1_2" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -1.1, 0, 2.2)
+
+[node name="Floor_2_0" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 1.1, 0, -2.2)
+
+[node name="Floor_2_1" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 1.1, 0, 0)
+
+[node name="Floor_2_2" parent="Room" instance=ExtResource("k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 1.1, 0, 2.2)
+
+[node name="Floor_3_0" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 3.3, 0, -2.2)
+
+[node name="Floor_3_1" parent="Room" instance=ExtResource("k4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 3.3, 0, 0)
+
+[node name="Floor_3_2" parent="Room" instance=ExtResource("k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 3.3, 0, 2.2)
+
+[node name="Back_wall_tall" parent="Room" instance=ExtResource("k8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -3.3, 0, -3.5)
+
+[node name="Back_wall_tall_screen" parent="Room" instance=ExtResource("k11")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -1.1, 0, -3.5)
+
+[node name="Back_wall_tall_pipes" parent="Room" instance=ExtResource("k10")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 1.1, 0, -3.5)
+
+[node name="Back_wall_tall_light" parent="Room" instance=ExtResource("k9")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 3.3, 0, -3.5)
+
+[node name="Left_wall_tall_vent" parent="Room" instance=ExtResource("k12")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -4.6, 0, -2.2)
+
+[node name="Left_wall_tall" parent="Room" instance=ExtResource("k8")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -4.6, 0, 0)
+
+[node name="Left_wall_low" parent="Room" instance=ExtResource("k7")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -4.6, 0, 2.2)
+
+[node name="Post_-4.6_-3.5" parent="Room" instance=ExtResource("k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -4.6, 0, -3.5)
+
+[node name="Post_4.6_-3.5" parent="Room" instance=ExtResource("k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 4.6, 0, -3.5)
+
+[node name="Post_-4.6_3.3" parent="Room" instance=ExtResource("k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -4.6, 0, 3.3)
+
+[node name="MedBed" parent="Room" instance=ExtResource("k5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -3.6, 0, -1.4)
+
+[node name="CrateLarge" parent="Room" instance=ExtResource("k1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 3.4, 0, -2.3)
+
+[node name="CrateSmall" parent="Room" instance=ExtResource("k2")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.3, 0, -2.8)
+
+[node name="Canister" parent="Room" instance=ExtResource("k0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 3.9, 0, -0.6)
+
+[node name="Operator1" parent="." instance=ExtResource("op")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -1.6, 0, 0.6)
+
+[node name="Flashlight" type="SpotLight3D" parent="Operator1"]
+
+[node name="Operator2" parent="." instance=ExtResource("op")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0.4, 0, 1.9)
+
+[node name="Robot" parent="." instance=ExtResource("robot")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 1.8, 0, -1)

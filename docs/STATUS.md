@@ -13,7 +13,7 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## What builders need now
 - Code: T002 queued. T003 (weighty operator and gun) and T004 (sight, flashlight, doors) are written; each queues after the previous one is merged.
-- Art: A001 merged (15 concepts). The next art packet waits on John's picks for the crew and threats; environment work can run meanwhile.
+- Art: A001 merged (15 concepts). A002 (slice environment concepts: kit, props, cover read, signage, lighting) queued. Crew and threat development waits on John's A001 picks.
 
 ## Open questions (for John)
 - A001 picks: which crew looks and threat directions to develop (art lane's recommendation: 01 orange hauler; 11 acid stalker, with 09 rogue AI as the systemic complement).

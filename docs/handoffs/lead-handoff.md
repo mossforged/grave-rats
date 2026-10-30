@@ -29,4 +29,5 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A001–A004 | art | merged 2026-10-30; John picked 2026-10-30 |
 | T006 | code | merged 2026-10-30; waits for John's play |
 | T007 | code | queued 2026-10-30 (step 0: scale 0.85/1.15, fade) |
-| A005 | art | merged 2026-10-30; waits for John's approval |
+| A005 | art | merged and approved 2026-10-30 |
+| A006 | art | queued: stage 3 paint-overs, kit sheets, materials |

@@ -13,11 +13,11 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 
 ## What builders need now
 - Code: T006 merged (lead reviewed, 181/181 reproduced). T007 queued; its step 0 applies John's stage 1 scale and fade picks.
-- Art: A005 merged. Lane idle until John approves the hauler for modelling, the crew-variety direction, the HUD and the title art.
+- Art: A006 queued (paint-overs of the real grey-box frames, kit sheets at game dimensions, material board).
 
 ## Open questions (for John)
 - T006 open: is 8 s of door banging right?
-- A005: approve 01b/02/03b for a blockout model (the rifle-grip inset is wrong; we need a separate rifle reference), the crew-variety direction (04), the suit-OS HUD with the ammo ring (05/06b), the title art (07), the logo set (08b).
+- A005 HUD ring: what should it show? (A005 has it as magazine ammo, turning red for suit danger.)
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
 - `tools/capture.sh` only reaches 1920×954 on this display; accept, or make the capture window borderless?

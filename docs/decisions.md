@@ -23,4 +23,5 @@
 - 2026-10-30: Second enemy = **rival pirates** (John), using **a recolour of the player body** to save time (John). T007 is written; the lead queues it once T006 merges.
 - 2026-10-30: **Stage 2 gate passed** (John, after T006: "definitely scarier", "I think we can call it passed", difficulty "not too much right now"). Placeholder motion, animation and sound are known and belong to stage 3.
 - 2026-10-30: Noise doesn't start door-breaking (John: "I don't want one fight to cause everything to trigger"). Only a stalker already hunting you breaks a door; gunfire through a door brings it to investigate. Added to T007.
+- 2026-10-30: A005 approved (John: "a005's art is great"; "the logo is good and the patch, the door shot too"). The hauler (01b/02/03b) is OK for a blockout model, pending a rifle reference. The crew family is the direction. HUD: suit OS approved; what the ring shows is still open.
 

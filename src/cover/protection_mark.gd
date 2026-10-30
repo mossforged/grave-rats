@@ -1,9 +1,12 @@
 extends CanvasLayer
-## The HUD's shield marks: one per stalker hunting you, solid when cover stops what it would throw
-## at you right now, a hollow red outline when its line is open. Numbers: data/cover.json "mark".
+## The HUD's cover readout, beside the stance word where the eye already looks: IN COVER whenever
+## you're crouched behind something, and above it one shield per stalker hunting you, solid when
+## cover stops what it would throw at you right now, a hollow red outline when its line is open.
+## Numbers: data/cover.json "mark".
 
 var cfg: Dictionary
 var lines: Array = []  # bools, per shooter: true = blocked
+var in_cover := false
 
 var _canvas: Control
 
@@ -26,6 +29,13 @@ func set_lines(new_lines: Array) -> void:
 	_canvas.queue_redraw()
 
 
+func set_in_cover(now: bool) -> void:
+	if now == in_cover:
+		return
+	in_cover = now
+	_canvas.queue_redraw()
+
+
 func protected_count() -> int:
 	return lines.count(true)
 
@@ -35,9 +45,11 @@ func _draw_marks() -> void:
 	var gap := float(cfg.gap_px)
 	var total := lines.size() * size + maxi(lines.size() - 1, 0) * gap
 	var view := _canvas.size
-	var x := (view.x - total) * 0.5
+	var x := view.x - float(cfg.from_right_px) - total
 	var y := view.y - float(cfg.from_bottom_px)
 	var font := ThemeDB.fallback_font
+	if in_cover:
+		_draw_in_cover(font, view)
 	for blocked: bool in lines:
 		var col := Color(String(cfg.protected_color if blocked else cfg.exposed_color))
 		var pts := _shield(Vector2(x, y), size)
@@ -51,6 +63,18 @@ func _draw_marks() -> void:
 		_canvas.draw_string(font, Vector2(x + (size - w) * 0.5, y + size + float(cfg.word_gap_px)), word,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, int(cfg.font_size), col)
 		x += size + gap
+
+
+func _draw_in_cover(font: Font, view: Vector2) -> void:
+	var word := String(cfg.in_cover_word)
+	var fs := int(cfg.in_cover_font_size)
+	var pad := float(cfg.in_cover_pad_px)
+	var h := float(cfg.in_cover_height_px)
+	var w := font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x + pad * 2.0
+	var at := Vector2(view.x - float(cfg.in_cover_from_right_px) - w, view.y - float(cfg.in_cover_from_bottom_px))
+	_canvas.draw_rect(Rect2(at, Vector2(w, h)), Color(String(cfg.in_cover_color)))
+	var base := at.y + (h + font.get_ascent(fs) - font.get_descent(fs)) * 0.5
+	_canvas.draw_string(font, Vector2(at.x + pad, base), word, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(String(cfg.in_cover_text_color)))
 
 
 func _shield(at: Vector2, s: float) -> PackedVector2Array:

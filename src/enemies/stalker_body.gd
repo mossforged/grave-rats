@@ -78,7 +78,8 @@ func show_state(delta: float, brain: RefCounted) -> void:
 	if brain.flinch_left > 0.0:
 		lean = -float(brain.cfg.flinch.pitch_deg)
 	_lean = lerpf(_lean, lean, minf(rate, 1.0))
-	_stretch = lerpf(_stretch, float(cfg.charge_stretch) if brain.charging else 1.0, minf(rate, 1.0))
+	var stretch := float(cfg.charge_stretch) if brain.charging else (float(cfg.dash_stretch) if brain.velocity.length() > 0.0 and brain.state != State.PROWL and brain.state != State.INVESTIGATE else 1.0)
+	_stretch = lerpf(_stretch, stretch, minf(rate, 1.0))
 	_squash = lerpf(_squash, float(cfg.recover_squash) if recovering else 1.0, minf(rate, 1.0))
 	_tilt = lerpf(_tilt, float(cfg.dead_tilt_deg) if dead else 0.0, minf(rate, 1.0))
 	_pose.rotation_degrees = Vector3(_lean, 0.0, _tilt)

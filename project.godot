@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Grave Rats"
-run/main_scene="res://scenes/dev/asset_viewer.tscn"
+run/main_scene="res://scenes/enemies/stalker_deck.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 
 [autoload]

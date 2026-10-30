@@ -17,6 +17,7 @@ var doors: DoorSystem
 var sight_debug: SightDebug
 
 var _env_light := ""
+var _light_off_label: Label
 
 
 func _ready() -> void:
@@ -70,6 +71,20 @@ func _make_help() -> void:
 	label.offset_top = -float(h.from_bottom_px)
 	label.offset_bottom = -float(h.from_bottom_px)
 	label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	var off: Dictionary = sight.cfg.light_off
+	_light_off_label = Label.new()
+	_light_off_label.name = "LightOff"
+	_light_off_label.text = String(off.word)
+	_light_off_label.add_theme_font_size_override("font_size", int(off.font_size))
+	_light_off_label.add_theme_color_override("font_color", Color(String(off.color)))
+	layer.add_child(_light_off_label)
+	_light_off_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	_light_off_label.offset_right = -float(off.from_right_px)
+	_light_off_label.offset_left = -float(off.from_right_px)
+	_light_off_label.offset_top = -float(off.from_bottom_px)
+	_light_off_label.offset_bottom = -float(off.from_bottom_px)
+	_light_off_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_light_off_label.visible = not flashlight.on
 
 
 func _help_text() -> String:
@@ -98,6 +113,7 @@ func _process(delta: float) -> void:
 	if panel and panel.visible:
 		mask.apply_cfg()
 		flashlight.apply_cfg()
+	_light_off_label.visible = not flashlight.on
 	_update_sight(delta, false)
 
 

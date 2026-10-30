@@ -3,6 +3,7 @@
 ## Owns
 - `fps_overlay.gd`: FPS / frame-time overlay. Autoload `DebugOverlay` (CanvasLayer 100). F3 toggles. Hidden in headless runs.
 - `capture.gd`: windowed capture driver. Autoload `Capture`, idle unless the command line has `--capture-out=` (started by `tools/capture.sh`).
+- Main scene: `scenes/enemies/stalker_deck.tscn` (in `project.godot`), so F5 runs the latest build.
 - `tuning_panel.gd`: F1 tuning panel (dev only; the scene that wants it adds it). Sliders from `data/debug.json` "tuning" write into the loaded data live; Save writes changed files back to `data/`.
 - `asset_viewer.gd`: script of `scenes/dev/asset_viewer.tscn`, the legacy asset viewer (dev only).
 

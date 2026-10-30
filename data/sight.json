@@ -1,6 +1,6 @@
 {
-  "tall_prop_min_m": 1.5,
-  "awareness_radius_m": 2.6,
+  "tall_prop_min_m": 1.2,
+  "awareness_radius_m": 2.2,
   "cone_on": {"range_m": 15.0, "half_angle_deg": 24.0},
   "cone_off": {"range_m": 7.0, "half_angle_deg": 36.0},
   "arc_step_deg": 8.0,
@@ -60,5 +60,6 @@
     "floor_y_m": 0.06,
     "outline_hz": 5.0
   },
-  "help": {"text": "F flashlight   E door   F2 sight debug", "font_size": 18, "margin_px": 16, "from_bottom_px": 62}
+  "help": {"text": "F flashlight   E door   F2 sight debug", "font_size": 18, "margin_px": 16, "from_bottom_px": 62},
+  "light_off": {"word": "LIGHT OFF", "font_size": 20, "color": "e6c35a", "from_right_px": 24, "from_bottom_px": 180}
 }

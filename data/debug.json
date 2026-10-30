@@ -360,6 +360,14 @@
       "step": 0.01
     },
     {
+      "label": "Dust motes strength",
+      "file": "sight",
+      "path": "motes.strength",
+      "min": 0,
+      "max": 5,
+      "step": 0.1
+    },
+    {
       "label": "Ambient (at start only)",
       "file": "sight",
       "path": "lighting.ambient_energy",
@@ -540,14 +548,6 @@
       "step": 0.05
     },
     {
-      "label": "Stalk m/s",
-      "file": "enemies",
-      "path": "stalker.speed.stalk_m_s",
-      "min": 0.2,
-      "max": 6,
-      "step": 0.05
-    },
-    {
       "label": "Prowl turn °/s",
       "file": "enemies",
       "path": "stalker.turn.prowl_deg_s",
@@ -570,6 +570,124 @@
       "min": 60,
       "max": 1800,
       "step": 10
+    },
+    {
+      "section": "Stalker dash"
+    },
+    {
+      "label": "Dash m/s",
+      "file": "enemies",
+      "path": "stalker.dash.speed_m_s",
+      "min": 1,
+      "max": 14,
+      "step": 0.1
+    },
+    {
+      "label": "Dash shortest s",
+      "file": "enemies",
+      "path": "stalker.dash.min_s",
+      "min": 0.05,
+      "max": 2,
+      "step": 0.05
+    },
+    {
+      "label": "Dash longest s",
+      "file": "enemies",
+      "path": "stalker.dash.max_s",
+      "min": 0.05,
+      "max": 2,
+      "step": 0.05
+    },
+    {
+      "label": "Pause shortest s",
+      "file": "enemies",
+      "path": "stalker.dash.pause_min_s",
+      "min": 0,
+      "max": 2,
+      "step": 0.05
+    },
+    {
+      "label": "Pause longest s",
+      "file": "enemies",
+      "path": "stalker.dash.pause_max_s",
+      "min": 0,
+      "max": 3,
+      "step": 0.05
+    },
+    {
+      "label": "Dash turn °/s",
+      "file": "enemies",
+      "path": "stalker.dash.turn_deg_s",
+      "min": 60,
+      "max": 1800,
+      "step": 10
+    },
+    {
+      "label": "Skitter °",
+      "file": "enemies",
+      "path": "stalker.dash.jink_deg",
+      "min": 0,
+      "max": 80,
+      "step": 1
+    },
+    {
+      "label": "Skitter /s",
+      "file": "enemies",
+      "path": "stalker.dash.jink_hz",
+      "min": 0,
+      "max": 10,
+      "step": 0.1
+    },
+    {
+      "label": "Backs off after an attack s",
+      "file": "enemies",
+      "path": "stalker.stalk.back_off_s",
+      "min": 0,
+      "max": 5,
+      "step": 0.1
+    },
+    {
+      "section": "Stalker dodge"
+    },
+    {
+      "label": "Dodge m/s",
+      "file": "enemies",
+      "path": "stalker.dodge.speed_m_s",
+      "min": 1,
+      "max": 16,
+      "step": 0.1
+    },
+    {
+      "label": "Dodge longest s",
+      "file": "enemies",
+      "path": "stalker.dodge.max_s",
+      "min": 0.05,
+      "max": 1.5,
+      "step": 0.05
+    },
+    {
+      "label": "Dodge reach m",
+      "file": "enemies",
+      "path": "stalker.dodge.reach_m",
+      "min": 0.5,
+      "max": 6,
+      "step": 0.1
+    },
+    {
+      "label": "Dodge cooldown s",
+      "file": "enemies",
+      "path": "stalker.dodge.cooldown_s",
+      "min": 0,
+      "max": 10,
+      "step": 0.1
+    },
+    {
+      "label": "Shot passes within m",
+      "file": "enemies",
+      "path": "stalker.dodge.shot_line_m",
+      "min": 0,
+      "max": 5,
+      "step": 0.1
     },
     {
       "section": "Stalker spit"
@@ -688,6 +806,33 @@
       "min": 0,
       "max": 100,
       "step": 1
+    },
+    {
+      "section": "Door breaking"
+    },
+    {
+      "label": "Breaks after s",
+      "file": "doors",
+      "path": "bash.break_s",
+      "min": 1,
+      "max": 30,
+      "step": 0.5
+    },
+    {
+      "label": "Bang every s",
+      "file": "doors",
+      "path": "bash.bang_interval_s",
+      "min": 0.1,
+      "max": 3,
+      "step": 0.05
+    },
+    {
+      "label": "Shake m",
+      "file": "doors",
+      "path": "bash.shake_m",
+      "min": 0,
+      "max": 0.3,
+      "step": 0.01
     },
     {
       "section": "Ambush"

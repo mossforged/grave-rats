@@ -170,6 +170,15 @@ func can_see(eye: Vector2, aim_yaw: float, light_on: bool, p: Vector2) -> bool:
 	return not blocked(eye, p)
 
 
+## Is the flashlight's wedge on `p` right now, with nothing between? The circle doesn't count.
+func in_light(eye: Vector2, aim_yaw: float, p: Vector2) -> bool:
+	var to := p - eye
+	var c := cone(true)
+	if to.length() > float(c.range) or absf(angle_difference(aim_yaw, atan2(-to.x, -to.y))) > float(c.half):
+		return false
+	return not blocked(eye, p)
+
+
 ## True when any occluder edge crosses the straight line from `a` to `b`.
 func blocked(a: Vector2, b: Vector2) -> bool:
 	var dx := b.x - a.x

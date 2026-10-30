@@ -141,8 +141,10 @@ func draw_beam(polygon: PackedVector2Array, eye: Vector2, yaw: float, muzzle: Ve
 	var ring := PackedVector2Array()
 	for p in polygon:
 		var to := p - eye
-		if to.length() > ahead and absf(angle_difference(yaw, atan2(-to.x, -to.y))) <= half:
-			ring.append(p)
+		if absf(angle_difference(yaw, atan2(-to.x, -to.y))) <= half:
+			# Closer than the muzzle: pushed out to it. Dropping the point would join its neighbours
+			# in one big triangle that snapped in and out as a wall came within reach.
+			ring.append(eye + to.normalized() * ahead if to.length() < ahead else p)
 	if ring.size() < 2:
 		return
 	var apex := Vector3(muzzle.x, start_y, muzzle.z)

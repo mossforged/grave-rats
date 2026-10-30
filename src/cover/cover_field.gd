@@ -53,6 +53,17 @@ func line_blocked(a: Vector3, b: Vector3) -> bool:
 	return not segment_hit(a, b).is_empty()
 
 
+## Is any cover within `reach` of the point on the floor? The HUD's IN COVER asks this: it's about
+## where you are, with or without anyone shooting; who it actually stops is ProtectionMark's business.
+func near(p: Vector2, reach: float) -> bool:
+	for id: Variant in _pieces:
+		var r: Rect2 = _pieces[id].rect
+		var q := Vector2(clampf(p.x, r.position.x, r.end.x), clampf(p.y, r.position.y, r.end.y))
+		if q.distance_to(p) <= reach:
+			return true
+	return false
+
+
 ## Slabs: where the segment enters the box over `r` from the floor to `top`, or -1.
 static func _enter_t(a: Vector3, b: Vector3, r: Rect2, top: float) -> float:
 	var span := Vector2(0.0, 1.0)

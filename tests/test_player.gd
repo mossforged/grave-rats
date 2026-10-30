@@ -331,3 +331,45 @@ func test_strafing_plants_the_feet_against_the_move() -> void:
 				along += samples[i + 1].x - samples[i].x
 		check(along * side < 0.0, "moving %+.0f in x, the planted foot goes the other way (%.2f m)" % [side, along])
 		op.free()
+
+
+## T006, John's corkscrew: the idle clips held each thigh half a turn from the walk clips, and the
+## blend into a crouch swung each foot in a loop around the body.
+func test_crouching_from_standing_does_not_swing_the_legs_around() -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	var op: Node3D = (load("res://src/player/operator.gd") as GDScript).new()
+	tree.root.add_child(op)
+	op.input_enabled = false
+	op.face_now(Vector3(0, 1.2, -100))
+	var sk: Skeleton3D = op.anim.skeleton
+	var foot: int = sk.find_bone("foot_L")
+	for i in 20:
+		await tree.physics_frame
+	await tree.process_frame
+	var start: Vector3 = sk.get_bone_global_pose(foot).origin
+	var furthest := 0.0
+	op.scripted = {"crouch": true}
+	for i in 24:
+		await tree.physics_frame
+		await tree.process_frame
+		var at: Vector3 = sk.get_bone_global_pose(foot).origin
+		furthest = maxf(furthest, Vector2(at.x - start.x, at.z - start.z).length())
+	var end: Vector3 = sk.get_bone_global_pose(foot).origin
+	var settled := Vector2(end.x - start.x, end.z - start.z).length()
+	check(furthest <= settled + 0.03, "the foot goes straight to its crouched place: strayed %.2f m, ends %.2f m away" % [furthest, settled])
+	op.free()
+
+
+func test_a_second_operator_does_not_untwist_the_shared_clips_again() -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	var a: Node3D = (load("res://src/player/operator.gd") as GDScript).new()
+	tree.root.add_child(a)
+	var clip: Animation = a.anim.tree.get_animation("L_Idle")
+	var track := clip.find_track(NodePath("Rig/Skeleton3D:thigh_L"), Animation.TYPE_ROTATION_3D)
+	var once: Quaternion = clip.track_get_key_value(track, 0)
+	var b: Node3D = (load("res://src/player/operator.gd") as GDScript).new()
+	tree.root.add_child(b)
+	var twice: Quaternion = clip.track_get_key_value(track, 0)
+	check(once.is_equal_approx(twice), "the clip is the same after a second operator")
+	a.free()
+	b.free()

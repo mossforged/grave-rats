@@ -193,7 +193,7 @@ func test_low_props_do_not_block_and_tall_props_do() -> void:
 	var low: Dictionary = {}
 	var tall: Dictionary = {}
 	for p: Dictionary in layout.props:
-		if p.type == "crate_high":
+		if p.type == "crate_low":
 			low = p
 		if p.type == "locker_bank":
 			tall = p

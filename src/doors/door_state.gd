@@ -1,11 +1,13 @@
 extends RefCounted
-## Scene-free door rules: closed, opening, open, closing, locked, and how far the panel has slid.
+## Scene-free door rules: closed, opening, open, closing, locked, broken, and how far the panel has
+## slid. Only a person opens a door; a stalker can only break it, slowly, and then it stays broken.
 ## Numbers from data/doors.json. See src/doors/CONTRACT.md.
 
-enum State { CLOSED, OPENING, OPEN, CLOSING, LOCKED }
+enum State { CLOSED, OPENING, OPEN, CLOSING, LOCKED, BROKEN }
 
 var state := State.CLOSED
 var progress := 0.0            # 0 = shut, 1 = fully slid away
+var bash_progress := 0.0       # 0 = untouched, 1 = broken; damage stays if the basher leaves
 var cfg: Dictionary
 
 
@@ -29,6 +31,8 @@ func interact(doorway_clear := true) -> String:
 	match state:
 		State.LOCKED:
 			return "locked"
+		State.BROKEN:
+			return "broken"
 		State.CLOSED, State.CLOSING:
 			state = State.OPENING
 			return "opening"
@@ -37,6 +41,22 @@ func interact(doorway_clear := true) -> String:
 				return "blocked"
 			state = State.CLOSING
 			return "closing"
+
+
+## A stalker working on a shut door for `delta`. True on the step it breaks. A locked door holds.
+func bash(delta: float) -> bool:
+	if state == State.LOCKED or state == State.BROKEN or not blocks():
+		return false
+	bash_progress = minf(bash_progress + delta / float(cfg.bash.break_s), 1.0)
+	if bash_progress < 1.0:
+		return false
+	state = State.BROKEN
+	progress = 1.0
+	return true
+
+
+func is_broken() -> bool:
+	return state == State.BROKEN
 
 
 func unlock() -> void:
@@ -67,8 +87,10 @@ func blocks() -> bool:
 	return progress < 1.0 - float(cfg.open_tolerance)
 
 
-## The word for the prompt: "open", "close" or "locked".
+## The word for the prompt: "open", "close", "locked" or "broken".
 func prompt_key() -> String:
 	if state == State.LOCKED:
 		return "locked"
+	if state == State.BROKEN:
+		return "broken"
 	return "open" if state == State.CLOSED or state == State.CLOSING else "close"

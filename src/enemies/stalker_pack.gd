@@ -23,6 +23,8 @@ var spits: SpitSystem
 var target := {"pos": Vector2.ZERO, "height": 0.0, "alive": true}
 ## (a: Vector2, b: Vector2) -> bool: walls, shut doors and tall cover on the floor plan.
 var plan_blocked := Callable()
+## (p: Vector2) -> bool: the player's light is on this point. The scene sets it.
+var light_on := func(_p: Vector2) -> bool: return false
 
 var _sounds := {}
 
@@ -50,7 +52,7 @@ func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, acid_
 		side = -side
 		stalkers.append(s)
 	var mix := int(all.sound.mix_rate)
-	for key: String in ["bang", "spit", "lunge"]:
+	for key: String in ["bang", "spit", "lunge", "bash"]:
 		var p := AudioStreamPlayer3D.new()
 		p.name = key.capitalize()
 		p.stream = PlaceholderSound.make(all.sound[key], mix)
@@ -70,6 +72,15 @@ func reset() -> void:
 	spits.clear()
 	for s: Node in stalkers:
 		s.reset()
+
+
+## A round went from `from` to `to`: whoever it passed close to tries to get out of the line.
+func shot_at(from: Vector2, to: Vector2) -> void:
+	var near := float(cfg.dodge.shot_line_m)
+	for s: Node in stalkers:
+		var at: Vector2 = s.floor_position()
+		if at.distance_to(Geometry2D.get_closest_point_to_segment(at, from, to)) <= near:
+			s.brain.notice_shot(from)
 
 
 ## A noise anyone may hear ("gunfire", "sprint").
@@ -103,21 +114,47 @@ func senses_for(s: Node) -> Dictionary:
 		"ground_clear": ground_clear,
 		"next_point": pos,
 		"stalk_point": pos,
+		"lit": s.brain.state != StalkerBrain.State.DORMANT and light_on.call(pos),
+		"dodge_point": pos,
+		"door_ahead": false,
+		"door_at": pos,
+		"door_face": pos,
+		"at_door": false,
 	}
 
 
 func next_stalk_point(s: Node) -> Vector2:
 	var player: Vector2 = s.brain.last_known
 	var hidden := func(p: Vector2) -> bool: return plan_blocked.call(player, p)
-	return nav.stalk_point(s.floor_position(), player, s.side, hidden)
+	return nav.stalk_point(s.floor_position(), player, s.side, hidden, s.brain.backing_off())
+
+
+func next_dodge_point(s: Node) -> Vector2:
+	var player: Vector2 = s.brain.last_known
+	var hidden := func(p: Vector2) -> bool: return plan_blocked.call(player, p)
+	return nav.dodge_point(s.floor_position(), player, s.side, hidden)
+
+
+## The shut door that's all that stands between this stalker and where it thinks you are, or null.
+func door_towards(s: Node) -> Node3D:
+	var pos: Vector2 = s.floor_position()
+	if not nav.path(pos, s.brain.last_known).is_empty():
+		return null
+	return nav.door_on_way(pos, s.brain.last_known)
 
 
 ## One step of everything.
 func tick(delta: float) -> void:
 	var body := target_body()
+	var worked_on := {}
 	for s: Node in stalkers:
 		for ev: String in s.simulate(delta, self):
 			_handle(ev, s, body)
+		if s.brain.bashing and s.door != null:
+			worked_on[s.door] = s
+	# Two on one door don't break it any sooner.
+	for d: Node3D in worked_on:
+		d.bash(delta, worked_on[d].floor_position())
 	spits.tick(delta, body)
 
 
@@ -130,6 +167,10 @@ func _handle(ev: String, s: Node, body: Vector3) -> void:
 			play_sound("spit", s.mouth())
 		StalkerBrain.EV_LUNGE_START:
 			play_sound("lunge", s.global_position)
+		StalkerBrain.EV_BANG:
+			if s.door != null:
+				s.door.bang()
+				play_sound("bash", s.door.global_position)
 		StalkerBrain.EV_LUNGE_HIT:
 			player_hit.emit("lunge", float(cfg.lunge.damage), s, in_cover_from(s))
 

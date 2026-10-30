@@ -24,6 +24,11 @@ var _body: StaticBody3D
 var _lamp_mat: StandardMaterial3D
 var _height := 0.0
 var _last_state := -1
+var _panel_mat: StandardMaterial3D
+var _dents: Array = []
+var _shake_left := 0.0
+var _shake_t := 0.0
+var _fall_sign := 1.0
 
 
 ## `door` is one entry of DeckLayout.doors, `spec` the matching entry of data/deck.json "doors".
@@ -60,6 +65,7 @@ func _build() -> void:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(colors.panel_locked if door_state.is_locked() else colors.panel)
 	mat.roughness = float(cfg.panel_roughness)
+	_panel_mat = mat
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	_panel = MeshInstance3D.new()
@@ -67,6 +73,7 @@ func _build() -> void:
 	_panel.mesh = mesh
 	_panel.material_override = mat
 	_pivot.add_child(_panel)
+	_make_dents(size)
 	_body = StaticBody3D.new()
 	_body.name = "PanelBody"
 	var box := BoxShape3D.new()
@@ -99,6 +106,31 @@ func _build() -> void:
 	post.add_child(lamp)
 
 
+## Dark dents on both faces of the panel, shown one by one as a stalker works on it.
+func _make_dents(panel_size: Vector3) -> void:
+	var b: Dictionary = cfg.bash
+	var s: Array = b.dent_size_m
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(b.dent_seed) + hash(name)
+	var mesh := BoxMesh.new()
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(cfg.colors.dent_mark)
+	mat.roughness = float(cfg.panel_roughness)
+	mesh.material = mat
+	mesh.size = Vector3(float(s[0]), float(s[1]), panel_size.z + float(s[2])) if along_x \
+			else Vector3(panel_size.x + float(s[2]), float(s[1]), float(s[0]))
+	for i in int(b.dent_count):
+		var dent := MeshInstance3D.new()
+		dent.name = "Dent%d" % i
+		dent.mesh = mesh
+		var along := rng.randf_range(-0.5, 0.5) * (panel_size.x if along_x else panel_size.z) * (1.0 - float(s[0]))
+		var up := rng.randf_range(-0.5, 0.5) * panel_size.y * (1.0 - float(s[1]))
+		dent.position = Vector3(along, up, 0.0) if along_x else Vector3(0.0, up, along)
+		dent.visible = false
+		_panel.add_child(dent)
+		_dents.append(dent)
+
+
 func _join_cutaway(node: Node3D, rect: Rect2) -> void:
 	node.set_meta("cutaway_rect", rect)
 	node.set_meta("cutaway_height", _height)
@@ -107,7 +139,44 @@ func _join_cutaway(node: Node3D, rect: Rect2) -> void:
 
 func tick(delta: float, actors: Array) -> void:
 	door_state.step(delta, doorway_clear(actors))
+	_shake_left = maxf(_shake_left - delta, 0.0)
+	_shake_t += delta
 	_apply()
+
+
+## Back to how the level starts it, dents and all.
+func reset(start: String) -> void:
+	door_state = DoorState.new(cfg, start)
+	_shake_left = 0.0
+	_last_state = -1
+	_apply()
+
+
+## A stalker worked on it for `delta`, from where it stands.
+func bash(delta: float, from: Vector2) -> void:
+	var c := opening.get_center()
+	_fall_sign = -signf((from - c).y if along_x else (from - c).x)
+	if door_state.bash(delta):
+		_shake_left = 0.0
+	_apply()
+
+
+## One blow: the panel jumps and a dent may show. The time to break it is counted in bash().
+func bang() -> void:
+	_shake_left = float(cfg.bash.shake_s)
+
+
+## Where a body of `radius` stands to work on this door, on the side of `from`.
+func front_point(from: Vector2, radius: float) -> Vector2:
+	var c := opening.get_center()
+	if along_x:
+		return Vector2(c.x, c.y + signf(from.y - c.y) * (opening.size.y * 0.5 + radius + float(cfg.bash.reach_m) * 0.5))
+	return Vector2(c.x + signf(from.x - c.x) * (opening.size.x * 0.5 + radius + float(cfg.bash.reach_m) * 0.5), c.y)
+
+
+func within_reach(p: Vector2, radius: float) -> bool:
+	var q := Vector2(clampf(p.x, opening.position.x, opening.end.x), clampf(p.y, opening.position.y, opening.end.y))
+	return q.distance_to(p) <= radius + float(cfg.bash.reach_m)
 
 
 ## E pressed by someone. Returns the door's answer (see DoorState.interact).
@@ -145,16 +214,46 @@ func sight_rect() -> Rect2:
 func _apply() -> void:
 	var c := opening.get_center()
 	var off := sight_rect().get_center() - c
-	var local := Vector3(off.x, (_height - float(cfg.panel_top_gap_m)) * 0.5, off.y)
-	_panel.position = local
+	var half_h := (_height - float(cfg.panel_top_gap_m)) * 0.5
+	var local := Vector3(off.x, half_h, off.y)
 	_body.position = local
+	_show_panel(local, half_h)
 	var s := int(door_state.state)
 	if s == _last_state:
 		return
 	_last_state = s
 	var colors: Dictionary = cfg.colors
-	var hex: String = colors.lamp_locked if door_state.is_locked() else (
-			colors.lamp_closed if door_state.blocks() else colors.lamp_open)
+	var hex: String = colors.lamp_broken if door_state.is_broken() else (colors.lamp_locked if door_state.is_locked() else (
+			colors.lamp_closed if door_state.blocks() else colors.lamp_open))
 	_lamp_mat.albedo_color = Color(hex)
 	_lamp_mat.emission = Color(hex)
 	state_changed.emit(self)
+
+
+## The panel you see: shaking under blows, showing its dents, flat on the floor once broken. Fully
+## slid away it lies inside the wall and is hidden: there it fought the door post's surfaces.
+func _show_panel(local: Vector3, half_h: float) -> void:
+	var b: Dictionary = cfg.bash
+	var broken := door_state.is_broken()
+	var colors: Dictionary = cfg.colors
+	_panel.visible = broken or door_state.progress < 1.0 - float(cfg.open_tolerance)
+	var dented := door_state.bash_progress
+	if not door_state.is_locked():
+		_panel_mat.albedo_color = Color(colors.panel_broken) if broken else Color(colors.panel).lerp(Color(colors.panel_dented), dented)
+	var shown := ceili(dented * _dents.size())
+	for i in _dents.size():
+		_dents[i].visible = i < shown
+	if broken:
+		var lean := deg_to_rad(float(b.broken_lean_deg)) * _fall_sign
+		var out := sin(lean) * half_h
+		var y := cos(lean) * half_h
+		_panel.position = Vector3(0, y, out) if along_x else Vector3(out, y, 0)
+		_panel.rotation = Vector3(lean, 0, 0) if along_x else Vector3(0, 0, -lean)
+		return
+	# Bowing away from the blows, which is what reads from above on a door seen edge-on.
+	var bow := deg_to_rad(float(b.bow_deg)) * dented * _fall_sign
+	_panel.rotation = Vector3(bow, 0, 0) if along_x else Vector3(0, 0, -bow)
+	var shake := 0.0
+	if _shake_left > 0.0:
+		shake = sin(_shake_t * TAU * float(b.shake_hz)) * float(b.shake_m) * _shake_left / float(b.shake_s)
+	_panel.position = local + (Vector3(0, 0, shake) if along_x else Vector3(shake, 0, 0))

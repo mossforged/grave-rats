@@ -13,11 +13,11 @@ Later (parked): competitive modes, ship generation, contracts and meta, the "wei
 
 ## What builders need now
 - Code: T001 queued.
-- Art: A001 (crew and threat concept exploration) is ready to queue once John confirms the pillars.
+- Art: A001 (crew and threat concept exploration) queued.
 
 ## Open questions (for John)
-- Pillars in `docs/handoffs/game-brief.md`: confirm or edit.
-- Who or what took over the ships? (robots, an organism, something stranger; pick later, A001 explores)
+- Threat mix and roster (A001 explores rogue AI, robots, aliens, horrors, rival crews).
+- How weighty? Turn speed, aim settle and reload times get tuned in stage 2 by playing.
 
 ## Parked
 - Competitive modes; procedural ship generation; contracts and meta-progression; the in-game "shift" framing (runs as shifts, timecard end screen).

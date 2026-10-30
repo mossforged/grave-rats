@@ -1,15 +1,16 @@
 # Grave Rats — game brief (paste-ready for any agent)
 
-## Pillars (lead draft, 2026-10-29, pending John's sign-off)
+## Pillars (approved by John 2026-10-29)
 1. **The ship is the arena.** Tight, interconnected rooms, loops and side doors; every doorway is a decision and every route is readable from the camera.
 2. **Know the room, fear the corner.** Light and sight are the core mechanic: walls and doors block vision, the flashlight shows what's real, explored space is remembered but enemies outside sight vanish.
-3. **Scoundrels, not heroes.** The crew are cheap, scrappy salvagers working dead ships for money. Greed versus survival drives every run. The tone is gritty and darkly funny, never heroic and never gory for its own sake.
-4. **Match or beat the concept, and keep the art doable.** The steep oblique camera, chunky industrial interiors and a readable astronaut are the bar. Art is built from kits, scripts and image generation, plus John's own models case by case; no hand-animated epics.
+3. **Weight, not speed.** Combat is visceral and deliberate. Turning, aiming, firing, reloading and getting up all take time, so position and cover matter: you crouch behind an overturned medical table while something acid-spitting stalks into the room. When something bursts through the bulkhead behind you it's scary *because* you can't spin and kill it instantly. No bouncing off the walls.
+4. **Desperate scoundrels in a satirical future.** Two hundred years on, an even worse capitalism drives broke crews into derelict ships overrun by rogue AI, robots, aliens and horrors, and into fights with other pirate crews, all to score some credits. The humour comes from that desperation (contracts, fees, waivers, debt). The violence still lands; it isn't slapstick.
+5. **Match or beat the concept, and keep the art doable.** The steep oblique camera, chunky industrial interiors and a readable astronaut are the bar. Art is built from kits, scripts and image generation, plus John's own models case by case; no hand-animated epics.
 
 ## The game
 Co-op (1–4) top-down sci-fi shooter, possibly with competitive modes later. Crews of scrappers board derelict ships that were lost, or taken over by something weird. They scavenge gear and salvage, fight what's aboard and get out. The setting is a ship graveyard where wrecks drift.
 
-Mission structure, modes, meta-progression, enemy roster and the exact threat are **all open**. The Dead Circuit prototype's "board, find the recorder, extract" was a placeholder.
+Threats aboard: rogue AI, robots, aliens, horrors, and rival pirate crews (so PvPvE is on the table). Mission structure, modes, meta-progression and the exact roster are **open**. The Dead Circuit prototype's "board, find the recorder, extract" was a placeholder.
 
 ## Look
 - **Target:** `docs/concepts/C001-dead-circuit-key-art/`. A steep oblique view (about 55–65° pitch), perspective, with walls cut away so interiors read.

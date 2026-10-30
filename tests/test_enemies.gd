@@ -1114,7 +1114,9 @@ func test_a_hunting_stalker_still_breaks_the_door_you_went_behind() -> void:
 	var inside: Vector2 = scene._door_side(door, -1.0, 3.0)
 	scene._open_medbay_door()
 	_at(scene, outside + Vector2(0, -1), inside)
-	s.place_hunting(outside + Vector2(3, 0), outside)
+	scene.ambush.fired = true
+	s.place_hunting(outside + Vector2(1, 1), outside)
+	check_eq(scene.layout.space_at(s.floor_position()), "junction", "fixture: on your side of every other door")
 	await _run(scene, 0.3)
 	check(s.brain.hunting(), "fixture: hunting you with the door open")
 	# You step through and shut it.
@@ -1133,6 +1135,7 @@ func test_a_hunting_stalker_still_breaks_the_door_you_went_behind() -> void:
 	while t < 5.0 and door.door_state.bash_progress == 0.0:
 		await _run(scene, DT)
 		t += DT
+	check(s.door == door, "that door")
 	check(door.door_state.bash_progress > 0.0, "and it does")
 
 
@@ -1237,11 +1240,11 @@ func test_light_off_shows_on_the_hud() -> void:
 	var tree := Engine.get_main_loop() as SceneTree
 	scene.flashlight.set_on(true)
 	await tree.process_frame
-	check(not scene._light_off_label.visible, "light on: nothing")
+	var words := func() -> Array: return scene.hud.status_now().map(func(i: Dictionary) -> String: return i.word)
+	check(not words.call().has("LIGHT OFF"), "light on: nothing")
 	scene.flashlight.set_on(false)
 	await tree.process_frame
-	check(scene._light_off_label.visible, "light off: says so")
-	check_eq(scene._light_off_label.text, "LIGHT OFF", "in those words")
+	check(words.call().has("LIGHT OFF"), "light off: says so, in those words")
 
 
 func test_tall_crates_block_sight_and_stop_being_low_cover() -> void:

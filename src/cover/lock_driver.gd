@@ -19,7 +19,6 @@ var _tap := false
 var _aim_hold := 0.0
 var _face_left := 0.0
 var _prompt: Label3D
-var _word: Label
 
 
 func setup(op: Node3D, cover_field: RefCounted, config: Dictionary, free_check: Callable) -> void:
@@ -37,20 +36,6 @@ func setup(op: Node3D, cover_field: RefCounted, config: Dictionary, free_check: 
 	_prompt.text = String(config.prompt)
 	_prompt.visible = false
 	add_child(_prompt)
-	var layer := CanvasLayer.new()
-	layer.layer = int(config.layer)
-	add_child(layer)
-	_word = Label.new()
-	_word.name = "LockWord"
-	_word.add_theme_font_size_override("font_size", int(config.word_font_size))
-	layer.add_child(_word)
-	_word.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_word.offset_right = -float(config.word_from_right_px)
-	_word.offset_left = _word.offset_right
-	_word.offset_top = -float(config.word_from_bottom_px)
-	_word.offset_bottom = _word.offset_top
-	_word.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_word.visible = false
 
 
 func spot_here() -> Dictionary:
@@ -127,17 +112,20 @@ func step(delta: float) -> void:
 		operator.aim_point = Vector3(across.x, operator.aim_point.y, across.y)
 
 
-## Prompt and readout; call once a frame.
+## "", "locked" or "exposed": what the suit OS says about you.
+func state_word() -> String:
+	if not lock.locked():
+		return ""
+	return "exposed" if lock.exposed() else "locked"
+
+
+## The prompt; call once a frame.
 func show_state(alive: bool) -> void:
 	var spot: Dictionary = spot_here() if alive and not lock.locked() else {}
 	_prompt.visible = not spot.is_empty() and not operator.control_held() and not hide_prompt
 	if _prompt.visible:
 		var at: Vector2 = spot.cover_center
 		_prompt.global_position = Vector3(at.x, float(lock.cfg.prompt_height_m), at.y)
-	_word.visible = alive and lock.locked()
-	if _word.visible:
-		_word.text = String(lock.cfg.word_exposed if lock.exposed() else lock.cfg.word_locked)
-		_word.add_theme_color_override("font_color", Color(String(lock.cfg.word_exposed_color if lock.exposed() else lock.cfg.word_color)))
 
 
 func _flat() -> Vector2:

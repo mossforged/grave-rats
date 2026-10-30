@@ -2,7 +2,7 @@ extends Node3D
 ## Root of scenes/player/weight_deck.tscn: the operator and the rifle in the T002 grey-box deck
 ## with six target dummies, the minimal HUD and the F1 tuning panel.
 ##   WASD move, Shift sprint, C/Ctrl crouch, mouse aim, LMB fire, R reload,
-##   1-5 camera presets, V cut-away mode, Backspace respawn, F1 tuning, F3 frame time.
+##   1-5 camera presets, V cut-away mode, Backspace respawn, F1 tuning, F3 frame time, H key help.
 ## Capture hooks feed tools/capture.sh and hold each moment by freezing Engine.time_scale.
 
 const DeckLayout := preload("res://src/study/deck_layout.gd")
@@ -10,7 +10,8 @@ const DeckBuilder := preload("res://src/study/deck_builder.gd")
 const CameraRig := preload("res://src/camera/camera_rig.gd")
 const Operator := preload("res://src/player/operator.gd")
 const OperatorModel := preload("res://src/player/operator_model.gd")
-const PlayerHud := preload("res://src/player/player_hud.gd")
+const SuitOsHud := preload("res://src/hud/suit_os_hud.gd")
+const NoiseRing := preload("res://src/hud/noise_ring.gd")
 const TargetDummy := preload("res://src/weapons/target_dummy.gd")
 const TuningPanel := preload("res://src/debug/tuning_panel.gd")
 
@@ -18,7 +19,8 @@ var deck_data: Dictionary
 var layout: DeckLayout
 var rig: Node3D
 var operator: Operator
-var hud: PlayerHud
+var hud: SuitOsHud
+var noise_ring: NoiseRing
 var panel: TuningPanel
 var targets: Array[TargetDummy] = []
 var aim_from_mouse := true
@@ -44,10 +46,16 @@ func _ready() -> void:
 	rig.name = "CameraRig"
 	add_child(rig)
 	rig.target = operator
-	hud = PlayerHud.new()
+	hud = SuitOsHud.new()
 	hud.name = "Hud"
 	add_child(hud)
 	hud.operator = operator
+	hud.camera_rig = rig
+	noise_ring = NoiseRing.new()
+	noise_ring.name = "NoiseRing"
+	add_child(noise_ring)
+	noise_ring.setup(hud.cfg.ring, _noise_senses())
+	operator.rifle.fired.connect(_on_noise_shot)
 	if OS.is_debug_build():
 		panel = TuningPanel.new()
 		panel.name = "TuningPanel"
@@ -67,6 +75,8 @@ func respawn() -> void:
 	operator.global_position = Vector3(p.x, 0, p.y)
 	operator.model.reset_motion()
 	operator.rifle.state.refill()
+	hud.reset()
+	noise_ring.state.reset()
 	var a := deg_to_rad(float(sp.aim_deg))
 	operator.face_now(Vector3(p.x + sin(a) * 5.0, _aim_height, p.y - cos(a) * 5.0))
 	rig.aim_dir = operator.aim_dir()
@@ -86,6 +96,16 @@ func _process(delta: float) -> void:
 	operator.move_yaw_deg = float(rig.preset().yaw_deg)
 	rig.aim_dir = operator.aim_dir()
 	_apply_camera_kick()
+	noise_ring.tick(delta, operator.global_position, operator.model.noise_kind())
+
+
+## The ears the ring shows: whoever hunts on this deck. The ring reads these, it doesn't copy them.
+func _noise_senses() -> Dictionary:
+	return (Data.value("enemies", "stalker") as Dictionary).senses
+
+
+func _on_noise_shot(_from: Vector3, _to: Vector3, _direction: Vector3, _hit: Object) -> void:
+	noise_ring.state.fire()
 
 
 ## The small kick pushes the view back along the shot, through the camera's own offsets so the
@@ -110,6 +130,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		respawn()
 	elif k == KEY_F1 and panel:
 		panel.toggle()
+	elif k == KEY_H:
+		hud.toggle_help()
 	else:
 		return
 	get_viewport().set_input_as_handled()

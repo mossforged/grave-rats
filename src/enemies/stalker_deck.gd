@@ -56,10 +56,11 @@ func _ready() -> void:
 	suit_hud = HealthHud.new()
 	suit_hud.name = "SuitHud"
 	add_child(suit_hud)
-	suit_hud.suit = suit
+	hud.suit = suit
 	mark = ProtectionMark.new()
 	mark.name = "ProtectionMark"
 	add_child(mark)
+	hud.mark = mark
 	pack = StalkerPack.new()
 	pack.name = "Pack"
 	add_child(pack)
@@ -225,7 +226,7 @@ func _step_noise(delta: float, pos: Vector2) -> void:
 
 func _step_acid(delta: float, pos: Vector2) -> void:
 	var dmg: float = pack.spits.puddles.damage_at(pos, delta)
-	suit_hud.in_acid = dmg > 0.0
+	hud.in_acid = dmg > 0.0
 	if dmg <= 0.0:
 		return
 	var owner_name := String(pack.spits.puddles.puddle_at(pos).owner)
@@ -391,6 +392,15 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "ambush_2_out_and_dashing", "do": "ambush", "wait": 0.45},
 		{"name": "ambush_3_lunging", "do": "ambush", "wait": 1.0},
 		{"name": "death_screen", "do": "death"},
+		{"name": "flicker_fixed", "do": "flicker", "beam": true},
+		{"name": "flicker_fixed_beam_off", "do": "flicker", "beam": false},
+		{"name": "hud_rest", "do": "ring", "keys": Vector2.ZERO},
+		{"name": "hud_walk", "do": "ring", "keys": Vector2(0, 1)},
+		{"name": "hud_crouch_walk", "do": "ring", "keys": Vector2(0, 1), "crouch": true},
+		{"name": "hud_sprint", "do": "ring", "keys": Vector2(0, 1), "sprint": true},
+		{"name": "hud_fire_bloom", "do": "fire", "wait": 0.1},
+		{"name": "hud_fire_shrinking", "do": "fire", "wait": 1.2},
+		{"name": "hud_tense", "do": "tense"},
 	]
 
 
@@ -403,6 +413,7 @@ func apply_shot(shot: Dictionary) -> void:
 	respawn()
 	rig.set_preset(int(Data.value("camera", "default_preset")))
 	flashlight.set_on(true)
+	flashlight._beam.visible = true
 	var hunter: Node = pack.stalkers[0]
 	var bed: TipBed = beds[2]
 	var r: Rect2 = bed.footprint()
@@ -486,7 +497,47 @@ func apply_shot(shot: Dictionary) -> void:
 			await _stand_at(behind, infront)
 			_hurt("lunge", float(_health_cfg.suit.max), hunter.label, false)
 			await _sim(0.1)
+		"flicker":
+			var d := _door("medbay", 0.7)
+			_open_medbay_door()
+			ambush.fired = true
+			await _stand_at(_door_side(d, -1.0, 0.9), _door_side(d, -1.0, 6.0))
+			flashlight._beam.visible = bool(shot.beam)
+			await _sim(0.3)
+		"ring":
+			ambush.fired = true
+			await _stand_at(layout.point_in("junction", [0.5, 0.2]), layout.point_in("junction", [0.5, 0.9]))
+			operator.scripted = {"keys": shot.keys, "crouch": shot.get("crouch", false), "sprint": shot.get("sprint", false)}
+			await _sim(0.9 if shot.get("crouch", false) else 0.7)
+		"fire":
+			ambush.fired = true
+			await _stand_at(layout.point_in("junction", [0.5, 0.5]), layout.point_in("junction", [0.5, 0.1]))
+			await _sim(0.5)
+			operator.scripted = {"fire": true}
+			await operator.rifle.fired
+			operator.scripted = {}
+			await _sim(float(shot.wait))
+		"tense":
+			await _tense_shot(hunter, bed)
 	Engine.time_scale = 0.0
+
+
+## A005-06b: low suit, standing in acid, low on rounds, tucked in behind the overturned bed with a
+## stalker across the room.
+func _tense_shot(hunter: Node, bed: TipBed) -> void:
+	ambush.fired = true
+	await _open_medbay_door()
+	var r: Rect2 = bed.footprint()
+	var me := Vector2(r.position.x - 0.6, r.get_center().y)
+	var far := Vector2(r.end.x + float(pack.cfg.spit.short_range_m) * 1.5, r.get_center().y)
+	await _crouch_at(me, far)
+	pack.spits.add_puddle(me, hunter.label)
+	_hunt_from(hunter, far, me)
+	hunter.brain._lunge_cd = INF
+	hunter.brain._spit_cd = INF
+	operator.rifle.state.mag = maxi(int(hud.cfg.ammo.low_rounds) / 2, 1)
+	suit.integrity = float(_health_cfg.suit.max) * float(hud.cfg.suit.low_fraction) * 0.5 + float(_health_cfg.acid.puddle_dps)
+	await _sim(0.5)
 
 
 ## Mid-dash, a stride after it set off.

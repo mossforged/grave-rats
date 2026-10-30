@@ -1,37 +1,21 @@
 extends CanvasLayer
-## Suit integrity bar, hit flash, acid warning, the death screen. Numbers: data/health.json "hud".
+## Hit flash and the death screen; the suit readout is the suit OS (src/hud). Numbers: data/health.json "hud".
 
-var suit: RefCounted
 var cfg: Dictionary
 
-var _word: Label
-var _back: ColorRect
-var _bar: ColorRect
 var _flash: ColorRect
 var _death: ColorRect
 var _death_word: Label
 var _detail: Label
 var _flash_left := 0.0
-var in_acid := false
 
 
 func _ready() -> void:
 	cfg = (Data.load_data("health") as Dictionary).hud
 	layer = int(cfg.layer)
-	var m := float(cfg.margin_px)
-	var w := float(cfg.bar_width_px)
-	var h := float(cfg.bar_height_px)
 	_flash = _rect("Flash", Color(String(cfg.flash_color)))
 	_flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_flash.visible = false
-	_back = _rect("Back", Color.BLACK)
-	_back.position = Vector2(m, m)
-	_back.size = Vector2(w, h)
-	_bar = _rect("Bar", Color(String(cfg.bar_color)))
-	_bar.position = Vector2(m, m)
-	_bar.size = Vector2(w, h)
-	_word = _label(int(cfg.label_font_size))
-	_word.position = Vector2(m, m + h)
 	_death = _rect("Death", Color(String(cfg.death_color)))
 	_death.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_death.visible = false
@@ -57,13 +41,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if suit == null:
-		return
-	var f: float = suit.fraction()
-	_bar.size.x = float(cfg.bar_width_px) * f
-	_bar.color = Color(String(cfg.low_color if f <= float(cfg.low_fraction) else cfg.bar_color))
-	_word.text = "SUIT %d" % ceili(suit.integrity) if not in_acid else "SUIT %d   ACID" % ceili(suit.integrity)
-	_word.modulate = Color(String(cfg.acid_color)) if in_acid else Color.WHITE
 	_flash_left = maxf(_flash_left - delta, 0.0)
 	_flash.visible = _flash_left > 0.0
 	if _flash.visible:

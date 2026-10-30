@@ -68,13 +68,14 @@ func point(i: int) -> Vector2:
 ## each triangle, so the shader's soft edges and fade don't depend on where the vertices are.
 func fill(mesh: ImmediateMesh, muzzle: Vector3, pitch_rad: float, floor_m: float) -> void:
 	mesh.clear_surfaces()
+	# A surface can't be empty: no reach at all means no surface.
+	if _all_zero():
+		return
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	var added := false
 	var slope := tan(pitch_rad)
 	for i in reach.size() - 1:
 		if reach[i] <= 0.0 and reach[i + 1] <= 0.0:
 			continue
-		added = true
 		mesh.surface_set_uv(Vector2.ZERO)
 		mesh.surface_add_vertex(muzzle)
 		for k in 2:
@@ -83,9 +84,11 @@ func fill(mesh: ImmediateMesh, muzzle: Vector3, pitch_rad: float, floor_m: float
 			mesh.surface_set_uv(Vector2(cos(off), sin(off)) * r / range_m)
 			var p := point(i + k)
 			mesh.surface_add_vertex(Vector3(p.x, maxf(muzzle.y + slope * r, floor_m), p.y))
-	if not added:
-		# A surface can't be empty.
-		mesh.surface_set_uv(Vector2.ZERO)
-		for k in 3:
-			mesh.surface_add_vertex(muzzle)
 	mesh.surface_end()
+
+
+func _all_zero() -> bool:
+	for r in reach:
+		if r > 0.0:
+			return false
+	return true

@@ -13,7 +13,9 @@ const NUMBER_FREE := ["res://src/player/operator_model.gd", "res://src/player/op
 	"res://src/player/aim_visuals.gd", "res://src/player/spine_twist.gd",
 	"res://src/weapons/aim_cone.gd", "res://src/weapons/rifle_state.gd", "res://src/weapons/rifle.gd",
 	"res://src/weapons/rifle_fx.gd", "res://src/weapons/target_dummy.gd", "res://src/cover/cover_lock.gd",
-	"res://src/pirates/squad_tactics.gd", "res://src/pirates/hit_tally.gd"]
+	"res://src/pirates/squad_tactics.gd", "res://src/pirates/hit_tally.gd",
+	"res://src/hud/noise_state.gd", "res://src/hud/noise_ring.gd", "res://src/hud/suit_os.gd", "res://src/hud/suit_os_hud.gd",
+	"res://src/sight/beam_fan.gd"]
 
 var _nodes: Array[Node] = []
 

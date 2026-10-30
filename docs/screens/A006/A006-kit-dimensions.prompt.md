@@ -1,0 +1,1 @@
+Authored technical diagram, no generative prompt. build-dimensions.py draws literal deck bounds at uniform 140 pixels/metre on 0.5 m grid. Door aperture height, leaf thickness and storage construction explicitly proposed. Tipped bed uses rigid 90-degree long-axis rotation of .9 x .75 x2 m bound. No art images edited.

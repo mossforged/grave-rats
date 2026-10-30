@@ -18,6 +18,8 @@ var cone: AimCone
 var fx: RifleFx
 var trigger_held := false
 var exclude: Array[RID] = []
+## Optional: replaces the flat physics ray. (origin, dir, length) -> {} or {position, collider}.
+var shot_tracer := Callable()
 
 var _cfg: Dictionary
 
@@ -61,15 +63,19 @@ func request_reload(sprinting: bool) -> bool:
 func _shoot(origin: Vector3, yaw: float, muzzle: Vector3) -> void:
 	var dir := Vector3(-sin(yaw), 0.0, -cos(yaw))
 	var to := origin + dir * float(_cfg.range_m)
-	var query := PhysicsRayQueryParameters3D.create(origin, to)
-	query.exclude = exclude
-	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	var hit: Dictionary
+	if shot_tracer.is_valid():
+		hit = shot_tracer.call(origin, dir, float(_cfg.range_m))
+	else:
+		var query := PhysicsRayQueryParameters3D.create(origin, to)
+		query.exclude = exclude
+		hit = get_world_3d().direct_space_state.intersect_ray(query)
 	var target: Object = null
 	if not hit.is_empty():
 		to = hit.position
 		target = hit.collider
-		if target.has_method("take_hit"):
-			target.take_hit({"point": to, "direction": dir, "damage": float(_cfg.damage)})
+		if target != null and target.has_method("take_hit"):
+			target.take_hit({"point": to, "direction": dir, "damage": float(_cfg.damage), "origin": origin})
 		fx.impact(to)
 	fx.shot(muzzle, to)
 	fired.emit(muzzle, to, dir, target)

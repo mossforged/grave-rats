@@ -19,6 +19,7 @@ var input_enabled := true
 ## When input is off: "keys" (Vector2 screen-relative), "crouch", "sprint", "fire".
 var scripted := {}
 var anim_speed := 0.0          # speed the animation got this step
+var crouch_shown := 1.0        # share of the crouch the body shows (a braced shot rises out of it)
 
 var _cfg: Dictionary
 var _rifle_cfg: Dictionary
@@ -26,6 +27,7 @@ var _visual: Node3D
 var _shape: CapsuleShape3D
 var _muzzle_offset := Vector3.ZERO
 var _trigger_tap := false
+var _hold_left := 0.0
 
 
 func _ready() -> void:
@@ -100,6 +102,19 @@ func face_now(point: Vector3) -> void:
 	_apply_facing()
 
 
+## Takes control away for `seconds` (a stagger, tipping a bed, death): no moving, turning or firing.
+func hold_control(seconds: float) -> void:
+	_hold_left = maxf(_hold_left, seconds)
+
+
+func release_control() -> void:
+	_hold_left = 0.0
+
+
+func control_held() -> bool:
+	return _hold_left > 0.0
+
+
 ## R pressed (or a script asking). Starts this step: the upper body changes the same frame.
 func request_reload() -> bool:
 	return rifle.request_reload(model.sprinting)
@@ -137,8 +152,15 @@ func simulate(delta: float) -> void:
 		_trigger_tap = false
 	else:
 		rifle.trigger_held = scripted.get("fire", false)
+	var to_yaw := model.aim_yaw_for(global_position, aim_point)
+	if _hold_left > 0.0:
+		_hold_left = maxf(_hold_left - delta, 0.0)
+		keys = Vector2.ZERO
+		sprint = false
+		rifle.trigger_held = false
+		to_yaw = model.aim_yaw
 	var wish := OperatorModel.wish_from_keys(keys, move_yaw_deg)
-	model.step(delta, wish, model.aim_yaw_for(global_position, aim_point), crouch, sprint)
+	model.step(delta, wish, to_yaw, crouch, sprint)
 	# Everything the animation reads is fixed here, before the body moves.
 	anim_speed = model.speed
 	var walk := float(_cfg.move.walk_speed_m_s)
@@ -152,7 +174,7 @@ func simulate(delta: float) -> void:
 	elif model.sprinting:
 		upper = "low"
 	anim.update(model.leg_blend(), model.leg_time_scale(), model.crouch_time_scale(),
-			model.crouch_amount, model.torso_lead(), upper, rifle.state.reload_total)
+			model.crouch_amount * crouch_shown, model.torso_lead(), upper, rifle.state.reload_total)
 	velocity = model.velocity
 	move_and_slide()
 	global_position.y = 0.0

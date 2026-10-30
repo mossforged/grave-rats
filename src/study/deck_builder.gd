@@ -28,6 +28,8 @@ static func build(layout: DeckLayout) -> Node3D:
 		_add_box(floors, n, layout.space_rect(n), -FLOOR_SLAB, FLOOR_SLAB, mats.floor, false)
 	for door in layout.doors:
 		_add_box(floors, "Doorway", door.rect, -FLOOR_SLAB, FLOOR_SLAB, mats.floor, false)
+	for breach in layout.breaches:
+		_add_box(floors, "Breach", breach.rect, -FLOOR_SLAB, FLOOR_SLAB, mats.floor, false)
 	var walls := Node3D.new()
 	walls.name = "Walls"
 	root.add_child(walls)

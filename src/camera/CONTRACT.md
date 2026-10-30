@@ -22,7 +22,7 @@ Any `Node3D` in group `camera_cutaway` with its origin on the floor, meta `cutaw
 - `cutaway_mode_changed(mode: String)`
 
 ## Data keys (`data/camera.json`)
-- `default_preset` (index), `near_m`, `far_m`.
+- `default_preset` (index; 5, John's pick between old presets 1 and 2, in every deck. The first five presets stay on keys 1-5; only `stalker_deck` has a key for the sixth, 6), `near_m`, `far_m`.
 - `follow` {`smoothing_hz` (exponential rate; 0 = locked), `look_ahead_m`, `focus_height_m`}.
 - `presets` [{`name`, `projection` ("perspective"|"orthographic"), `pitch_deg` (below horizontal), `yaw_deg`, `fov_deg` (vertical), `distance_m`, `ortho_size_m` (vertical extent)}].
 - `cutaway` {`mode`, `modes`, `low_height_m`, `fade_transparency`, `half_width_m`, `depth_m`, `behind_m`, `speed_per_s`}.

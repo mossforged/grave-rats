@@ -23,6 +23,7 @@ The weighty operator (T003). The rule: the intent responds the same step, the co
 - Turn rate: standing to crouched by crouch amount, and the slower of that and firing while a shot is recent.
 - Hips stay planted until the torso runs out of lead, then get dragged; while moving they also catch up at `hip_settle_deg_s`.
 - Sprinting needs Shift, a move held, no crouch key and fully upright, so crouch beats sprint.
+- `L_Idle` and `L_Crouch_Idle` hold each thigh half a turn about its length from the walk clips and the rest pose, which made the blend into a crouch swing the feet around the body. `operator_anim.gd` rewrites those keys at load, same pose, the short way. It edits the shared clip resources once.
 - The legacy `L_Strafe_L/R` clips are named backwards (planted feet sweep the wrong way); the blend tree swaps them. `tests/test_player.gd` guards it.
 
 ## Signals

@@ -1,0 +1,5 @@
+# A007-10 — console front
+
+Built-in image_gen tool. Edit target: console-34.png (same folder).
+
+Use case: precise-object-edit. Asset A007-10. Edit target: attached med console three-quarter master. Change ONLY camera to exact orthographic front elevation. Directly face front, no visible side faces. Preserve EXACT same broad stepped cabinet geometry and parts, 1.4m wide x 1.1m tall x 0.6m deep, large DARK blank screen upper left, ivory square hatch upper right, keyboard shelf under screen, broad lower ivory door left, dark vent with yellow stripe right, narrower ivory rightmost cabinet, outer red recessed grip, black reinforced corners and continuous low black plinth. Worn chipped ivory, dark metal and yellow trim. No wheels or new equipment. Unseen side surfaces inferred as simple flush matching service panels. Whole object centred with generous margins. One complete object, one view, flat light-grey backdrop, soft even studio light, minimal contact shadow. No text, numbers, dimensions, labels, people, extra props, screen light, glow, fog or dramatic shadows. Orthographic, no perspective.

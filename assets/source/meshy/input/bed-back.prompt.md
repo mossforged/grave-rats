@@ -1,0 +1,5 @@
+# A007-08 — bed back
+
+Built-in image_gen tool. Edit target: bed-34.png (same folder).
+
+Use case: precise-object-edit. Asset A007-08. Edit target attached upright bed master. Change ONLY camera to strict orthographic back elevation. Exact rear/head-end view, looking toward foot end; rear of raised backrest visible. Preserve EXACT same bed geometry, proportions (0.9m width x 0.75m height x 2.0m length), black segmented vinyl pad, raised headrest and small head pad, ivory tubular foot handle, dark tubular side rails, chipped ivory frame, red recessed accents, yellow base strip, paired dark crossed scissor supports, rectangular low base and four double caster assemblies. Continuous SOLID ivory plate beneath full mattress deck, no open lattice in that underside; scissor supports below it. Upright normal use position, never tipped. No new attachments. Only unseen rear surfaces inferred simply. Whole object centred with generous margins. ONE object and ONE view, flat light grey background, soft even light, minimal contact shadow. No text, numbers, labels, dimensions, props, people, glow or dramatic shadows. Orthographic, no perspective.

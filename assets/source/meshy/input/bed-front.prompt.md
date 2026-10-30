@@ -1,0 +1,5 @@
+# A007-06 — bed front
+
+Built-in image_gen tool. Edit target: bed-34.png (same folder).
+
+Use case: precise-object-edit. Asset A007-06. Edit target: attached bed three-quarter master. Change ONLY camera to a strict orthographic front view, directly facing foot end looking toward raised headrest, bed stays upright on its wheels. Preserve EXACT same object design, proportions, panel layout, material colours, silhouette and pose. Black segmented vinyl pad with raised headrest, ivory plated underside under mattress, dark scissor supports above low rectangular base, four caster assemblies, same tubular side rails and ivory foot handle. Bed width 0.9m height 0.75m length 2.0m. Only unseen back-facing surfaces may be inferred using simple matching materials. Whole object centred with generous margins. One object, one view. Uniform flat light-grey background, soft even light and minimal contact shadow. No humans, props, text, dimensions, diagrams, glow, fog or dramatic shadows. Orthographic, no perspective.

@@ -1,0 +1,7 @@
+ %CPU COMM
+ 57.4 WindowServer
+ 53.6 mds_stores
+ 41.3 Camera Hub
+ 27.6 python3
+ 20.2 mdworker_shared
+ 18.7 mdworker_shared

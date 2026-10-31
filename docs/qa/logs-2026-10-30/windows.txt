@@ -1,0 +1,4 @@
+pirate_deck 1 rc=0 before=3.26 4.48 4.64 after=3.47 4.39 4.60
+stalker_deck 1 rc=0 before=3.47 4.39 4.60 after=4.23 4.45 4.61
+pirate_deck 2 rc=0 before=4.23 4.45 4.61 after=3.58 4.27 4.53
+stalker_deck 2 rc=0 before=3.58 4.27 4.53 after=6.63 4.87 4.74

@@ -27,7 +27,7 @@ Band = the medbay's north wall top, in grey levels out of 255, six repeats of T0
 | This branch before the fix, 2 runs | 13.82, 15.31 |
 | After the fix, 2 runs | 1.22, 0.62 |
 
-So it **predates T016**. T016's 13.9 is the same thing. What's left in those runs is the same millimetre moving the edges. With the camera held still on one seed (`wall_repeat.json`, the final capture):
+So it **predates T016**. T016's 13.9 is the same thing. The two "after" runs and the fog runs below had the core's top at the cap's underside; I then raised it to halfway up the cap, because the new test found that plane shared with the face plates' hidden tops. Both are buried, and the pinned pair below is the final code. What's left in those runs is the same millimetre moving the edges. With the camera held still on one seed (`wall_repeat.json`, the final capture):
 
 | Pair | Band mean | Band max |
 |---|---|---|
@@ -77,4 +77,4 @@ A trial merge of `auto/t020-mac` onto this branch, in a scratch worktree since r
 - `src/pirates/CONTRACT.md`: keep T020's "Their guns" line, drop mine, keep "The lock is a command".
 - `src/audio/CONTRACT.md`: drop my `src/pirates` line under "Who calls what" if T020 has its own.
 
-For the trial I took my side on the contract and STATUS conflicts without resolving them by hand, since only `pirate_squad.gd` affects the tests.
+For the trial I resolved only `pirate_squad.gd`, and left the conflict markers in the docs, since they don't affect the tests.

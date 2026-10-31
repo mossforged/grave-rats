@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T018 merged, waiting on John's gates (T017 is sound: his ear decides). Q002 health check merged. T019 corridors on `auto/t019-mac`, awaiting merge. **Next:** John plays a shift: T015 past tier 2 with the black box, pick an AA mode (F1 → Display), listen (T017), check solo feels unchanged (T018 routes input through commands), and judge the corridors (T019). Code lane: T020 gun feel.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T019 merged, waiting on John's gates (T017 sound: his ear). A013 room graphics merged, waiting on his copy approval. **Next:** John plays a shift (black box past tier 2, AA pick, listen, solo feel, the dressed corridors). Code lane: T020 gun feel, then T021 polish. Art: A014 second derelict concept. QA: Q003 once T021 merges.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -69,5 +69,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (code, unattended): T019 corridor dressing on both decks: `src/kit/corridor_dressing.gd`, rules in `data/deck.json`, 511/511. Bot runs identical; shift +0.28 ms, pirate +0.25 ms. Spark flicker parked. Nobody has walked it.
-2026-10-31 (lead): merged T017 and T018 (492/492 after resolving T018's listed conflicts in `shift_deck.gd`, `weight_deck.gd`, `operator.gd`, shift contract). Earlier: Q002, T016, prop library (104), VFX textures, gun-feel spec, sound shortlist.
+2026-10-31 (lead): merged T019 (511/511 reproduced) and A013. Earlier today: T016-T018, Q002, prop library, VFX textures, gun-feel spec, sound shortlist; queued T021, A013, A014.
+2026-10-31 (code, unattended): T019 corridor dressing from the hallway set (63 pieces on the shift deck, 60 on pirate), fixtures for every corridor light, intrusion and route tests, bots identical; +0.28 ms shift deck. Spark flicker parked; `conduit_tray` unused (too deep).

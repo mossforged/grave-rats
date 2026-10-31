@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T018 merged, waiting on John's gates (T017 is sound: his ear decides). Q002 health check merged. **Next:** John plays a shift: T015 past tier 2 with the black box, pick an AA mode (F1 → Display), listen (T017), and check solo feels unchanged (T018 routes input through commands). Code lane: T019 corridors, then T020 gun feel.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T018 merged, waiting on John's gates (T017 is sound: his ear decides). Q002 health check merged. T019 corridors on `auto/t019-mac`, awaiting merge. **Next:** John plays a shift: T015 past tier 2 with the black box, pick an AA mode (F1 → Display), listen (T017), check solo feels unchanged (T018 routes input through commands), and judge the corridors (T019). Code lane: T020 gun feel.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T019 look (`docs/screens/T019/sheet.png`, then walk the junction and the side corridor): is it realistic enough? North-facing walls gain the most; the long junction's side walls mostly show their tops from the steep camera. Lever if the junction stays flat: floor-level pieces and more light there, not more wall pieces. Calls in `auto-T019`.
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
 - T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
 - T015 balance: the prize route may now be too lethal. Greedy bot survives 1 of 12 (was 6 of 12), even reading the cutter's ring; cautious stays 12 of 12 because it leaves before CUSTODIAN wakes. First lever: move the cargo cutter off the prize's route.
@@ -63,8 +64,10 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
 - T018: lock to cover through the `LOCK` command (`src/cover`, `src/pirates`); E through commands on the older dev decks; `src/pirates` randomness on the session's seed.
 - T018: per-stalker targets (the pack hunts one player at a time, and the cover-shield lines follow it); a death bill for a player left behind; spectating when you're down with the crew alive; a second input device in the two-player scene.
+- T019: `hanging_cables` spark flicker. T008's "flicker" was a bug fix, not an effect, and T012's flickers whole sections from `src/shift`; the tip glows steadily for now.
+- T019: door surrounds on doors' room faces; a generated `floor_grate` rule that exempts flush grates from route keep-outs.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
+2026-10-31 (code, unattended): T019 corridor dressing on both decks: `src/kit/corridor_dressing.gd`, rules in `data/deck.json`, 511/511. Bot runs identical; shift +0.28 ms, pirate +0.25 ms. Spark flicker parked. Nobody has walked it.
 2026-10-31 (lead): merged T017 and T018 (492/492 after resolving T018's listed conflicts in `shift_deck.gd`, `weight_deck.gd`, `operator.gd`, shift contract). Earlier: Q002, T016, prop library (104), VFX textures, gun-feel spec, sound shortlist.
-2026-10-31 (code, unattended): T017 placeholder sound (`src/audio`, 44 cues, limiter; nobody has heard it). T018 `src/session` (players, commands, seeded RNG, authority), two-player debug scene; solo about 0.17 ms slower, cause not found.

@@ -50,20 +50,30 @@ static func _on_floor(layout: RefCounted, spec: Dictionary, mesh: ArrayMesh) -> 
 static func _on_wall(layout: RefCounted, spec: Dictionary, mesh: ArrayMesh) -> Dictionary:
 	var wall := String(spec.wall)
 	var r: Rect2 = layout.space_rect(String(spec.space))
-	var along := float(spec.at)
-	var out := -mesh.get_aabb().position.z
-	var y := float(KitMaterials.cfg().wall_mounts[String(spec.type)].mount_y_m)
-	var p := Vector2.ZERO
+	var pose := wall_pose(r, wall, float(wall_face(r, wall).length) * float(spec.at), mesh, String(spec.type))
+	return _piece(spec, wall, mesh, pose.at, pose.yaw)
+
+
+## A wall of room `r` as a line: `start` (its low end, on the room's face), `along`, `inward`, `length`.
+static func wall_face(r: Rect2, wall: String) -> Dictionary:
 	match wall:
 		"north":
-			p = Vector2(r.position.x + r.size.x * along, r.position.y + out)
+			return {"start": r.position, "along": Vector2.RIGHT, "inward": Vector2.DOWN, "length": r.size.x}
 		"south":
-			p = Vector2(r.position.x + r.size.x * along, r.end.y - out)
+			return {"start": Vector2(r.position.x, r.end.y), "along": Vector2.RIGHT, "inward": Vector2.UP, "length": r.size.x}
 		"west":
-			p = Vector2(r.position.x + out, r.position.y + r.size.y * along)
-		"east":
-			p = Vector2(r.end.x - out, r.position.y + r.size.y * along)
-	return _piece(spec, wall, mesh, Vector3(p.x, y, p.y), float(WALL_YAW[wall]))
+			return {"start": r.position, "along": Vector2.DOWN, "inward": Vector2.RIGHT, "length": r.size.y}
+	return {"start": Vector2(r.end.x, r.position.y), "along": Vector2.DOWN, "inward": Vector2.LEFT, "length": r.size.y}
+
+
+## Where a wall prop stands: its back `along_m` down the wall's face (less the type's `sink_m`), at its
+## `mount_y_m` from data/kit.json "wall_mounts". {at: Vector3, yaw}.
+static func wall_pose(r: Rect2, wall: String, along_m: float, mesh: ArrayMesh, type: String) -> Dictionary:
+	var f := wall_face(r, wall)
+	var mount: Dictionary = KitMaterials.cfg().wall_mounts[type]
+	var out := -mesh.get_aabb().position.z - float(mount.get("sink_m", 0.0))
+	var p: Vector2 = (f.start as Vector2) + (f.along as Vector2) * along_m + (f.inward as Vector2) * out
+	return {"at": Vector3(p.x, float(mount.mount_y_m), p.y), "yaw": float(WALL_YAW[wall])}
 
 
 static func _piece(spec: Dictionary, wall: String, mesh: ArrayMesh, at: Vector3, yaw: float) -> Dictionary:

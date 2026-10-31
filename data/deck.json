@@ -54,6 +54,56 @@
     {"type": "trolley", "space": "medbay", "at": [0.05, 0.159]},
     {"type": "med_station", "space": "medbay", "wall": "north", "at": 0.235}
   ],
+  "dressing_max_intrusion_m": 0.3,
+  "corridor_dressing": {
+    "below_m": 2.0,
+    "door_clear_m": 0.6,
+    "door_touch_m": 0.03,
+    "prop_gap_m": 0.1,
+    "low_cover_line_m": 0.8,
+    "corner_probe_m": 0.02,
+    "run_search_m": 0.1,
+    "single_step_m": 0.1,
+    "single_slide_m": 1.2,
+    "over_limit_ok": ["corner_pillar", "wall_panel_breached"],
+    "cast_shadow": ["wall_rib", "door_jamb", "door_lintel", "corner_pillar", "pipe_run_high", "air_duct", "wall_panel_breached"],
+    "corridors": {
+      "junction": {
+        "clear": [{"wall": "west", "at": 0.3, "half_m": 0.6}],
+        "pillars": ["nw", "ne", "sw", "se"],
+        "ribs": {"type": "wall_rib", "every_m": 2.7, "start_m": {"west": 1.2, "east": 2.55}},
+        "runs": [{"type": "pipe_run_high", "wall": "west"}, {"type": "pipe_run_low", "wall": "east"}],
+        "singles": [
+          {"type": "fire_hose_reel", "wall": "east", "at": 0.71},
+          {"type": "wall_sign_arrow", "wall": "west", "at": 0.17},
+          {"type": "handrail", "wall": "east", "at": 0.83},
+          {"type": "maintenance_hatch", "wall": "west", "at": 0.8}
+        ],
+        "floor": [
+          {"type": "floor_grate", "at": [0.14, 0.9]},
+          {"type": "floor_grate", "at": [0.86, 0.94]}
+        ]
+      },
+      "side_corridor": {
+        "pillars": ["ne", "se"],
+        "ribs": {"type": "wall_rib", "every_m": 2.7, "start_m": {"north": 1.2, "south": 2.55}},
+        "landmarks": [
+          {"type": "wall_panel_breached", "wall": "north", "at": 0.1958},
+          {"type": "hanging_cables", "wall": "north", "at": 0.235, "over": true}
+        ],
+        "runs": [{"type": "pipe_run_low", "wall": "north"}, {"type": "air_duct", "wall": "south"}],
+        "singles": [
+          {"type": "fire_hose_reel", "wall": "north", "at": 0.433},
+          {"type": "handrail", "wall": "south", "at": 0.3},
+          {"type": "maintenance_hatch", "wall": "south", "at": 0.7},
+          {"type": "wall_sign_arrow", "wall": "south", "at": 0.9}
+        ],
+        "floor": [
+          {"type": "debris_pile", "at": [0.1875, 0.145], "scale_x": 0.95}
+        ]
+      }
+    }
+  },
   "spawn": {"space": "junction", "at": [0.45, 0.5], "aim_deg": 30.0},
   "path_check": {"from": "medbay", "to": "cargo", "cell_m": 0.1, "margin_m": 0.05},
   "stand_in": {

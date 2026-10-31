@@ -1,0 +1,135 @@
+{
+ "summary": {
+  "shift_deck": {
+   "off": {
+    "avg": 6.780331047560197,
+    "p95": 9.813,
+    "avg_min": 6.58438525669153,
+    "avg_max": 6.95042149143123
+   },
+   "on": {
+    "avg": 7.0595000691472505,
+    "p95": 10.160666666666666,
+    "avg_min": 6.9931607642125,
+    "avg_max": 7.18735296934866
+   }
+  },
+  "pirate_deck": {
+   "off": {
+    "avg": 6.104990173777644,
+    "p95": 7.982666666666667,
+    "avg_min": 6.06039943457189,
+    "avg_max": 6.16051909650922
+   },
+   "on": {
+    "avg": 6.350850233055667,
+    "p95": 8.339,
+    "avg_min": 6.31746231578947,
+    "avg_max": 6.37641606459838
+   }
+  }
+ },
+ "runs": [
+  {
+   "round": 0,
+   "scene": "shift_deck",
+   "corridors": "off",
+   "avg": 6.80618639455783,
+   "p95": 10.047,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 0,
+   "scene": "shift_deck",
+   "corridors": "on",
+   "avg": 6.9931607642125,
+   "p95": 10.164,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 0,
+   "scene": "pirate_deck",
+   "corridors": "off",
+   "avg": 6.06039943457189,
+   "p95": 7.914,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 0,
+   "scene": "pirate_deck",
+   "corridors": "on",
+   "avg": 6.37641606459838,
+   "p95": 8.382,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 1,
+   "scene": "shift_deck",
+   "corridors": "on",
+   "avg": 7.18735296934866,
+   "p95": 10.352,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 1,
+   "scene": "shift_deck",
+   "corridors": "off",
+   "avg": 6.95042149143123,
+   "p95": 9.907,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 1,
+   "scene": "pirate_deck",
+   "corridors": "on",
+   "avg": 6.35867231877915,
+   "p95": 8.33,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 1,
+   "scene": "pirate_deck",
+   "corridors": "off",
+   "avg": 6.16051909650922,
+   "p95": 8.049,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 2,
+   "scene": "shift_deck",
+   "corridors": "off",
+   "avg": 6.58438525669153,
+   "p95": 9.485,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 2,
+   "scene": "shift_deck",
+   "corridors": "on",
+   "avg": 6.99798647388059,
+   "p95": 9.966,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 2,
+   "scene": "pirate_deck",
+   "corridors": "off",
+   "avg": 6.09405199025182,
+   "p95": 7.985,
+   "resolution": "1920x953"
+  },
+  {
+   "round": 2,
+   "scene": "pirate_deck",
+   "corridors": "on",
+   "avg": 6.31746231578947,
+   "p95": 8.305,
+   "resolution": "1920x953"
+  }
+ ],
+ "load_end": [
+  6.82666015625,
+  5.18115234375,
+  4.44384765625
+ ]
+}

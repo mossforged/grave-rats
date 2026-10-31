@@ -206,7 +206,10 @@ func test_it_dies_in_four_or_five_rifle_hits_and_rounds_add_up_to_a_stagger() ->
 # --- the picture ---
 
 func test_the_rival_paint_is_a_data_swap_with_no_orange_left() -> void:
+	var body: GDScript = load("res://src/player/operator_body.gd")
+	body.forced = "legacy"
 	var scene: Node = await _scene()
+	body.forced = ""
 	var model: Node = scene.squad.pirates[0].get_node("Model")
 	var specs: Dictionary = _cfg().body.materials
 	var swapped := 0

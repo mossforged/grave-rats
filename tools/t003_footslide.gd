@@ -1,7 +1,7 @@
 extends SceneTree
 ## T003: how badly do the feet slide? Walks the real operator in each direction and measures how
 ## fast a planted foot moves over the ground (foot in the lowest 3 cm of its swing). 0 = perfect.
-## usage: godot --headless --path . -s tools/t003_footslide.gd
+## usage: godot --headless --path . -s tools/t003_footslide.gd [-- --body=legacy]
 
 const CASES := [
 	["walk forward", Vector2(0, -1), false, false],
@@ -20,6 +20,9 @@ func _init() -> void:
 func _run() -> void:
 	# Loaded here, not preloaded: the script needs the Data autoload, which -s scripts compile before.
 	var Operator: GDScript = load("res://src/player/operator.gd")
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--body="):
+			load("res://src/player/operator_body.gd").forced = arg.trim_prefix("--body=")
 	for c: Array in CASES:
 		var op: Node3D = Operator.new()
 		root.add_child(op)
@@ -28,7 +31,7 @@ func _run() -> void:
 		op.aim_point = Vector3(0, 1.2, -100000)
 		op.scripted = {"keys": c[1], "crouch": c[2], "sprint": c[3]}
 		var sk: Skeleton3D = op.anim.skeleton
-		var foot: int = sk.find_bone("foot_L")
+		var foot: int = sk.find_bone(op.anim.foot_bones()[0])
 		for i in 40:
 			await physics_frame
 		var samples: Array[Vector3] = []

@@ -35,6 +35,7 @@ var _kick_recover := 1.0
 var _ready_done := false
 var _hold_squad := false       # captures only: the squad stays exactly where the shot put it
 var _shot_light: OmniLight3D
+var _shot_legacy: Node3D
 
 
 func _ready() -> void:
@@ -282,6 +283,7 @@ func _hurt(source: String, amount: float, who: String, in_cover: bool) -> void:
 func _stagger() -> void:
 	var st: Dictionary = _health_cfg.stagger
 	operator.hold_control(float(st.control_loss_s))
+	operator.play_hit(float(st.control_loss_s))
 	operator.rifle.cone.spread_deg = maxf(operator.rifle.cone.spread_deg, float(st.cone_deg))
 	_start_kick(float(st.camera_kick_m), float(st.kick_recover_s))
 
@@ -297,6 +299,8 @@ func _die(who: String, how: String) -> void:
 # --- capture hooks (src/debug/capture.gd) ---
 
 func capture_shots() -> Array[Dictionary]:
+	if OS.get_environment("CAPTURE_HAULER") != "":
+		return _hauler_shots()
 	return [
 		{"name": "deck_overview", "do": "overview"},
 		{"name": "pirate_beside_operator", "do": "beside"},
@@ -332,6 +336,16 @@ func apply_shot(shot: Dictionary) -> void:
 	var low := _piece_rect(5)
 	var inside := Vector2(low.position.x - 0.7, low.get_center().y)
 	match String(shot.do):
+		"hauler":
+			await _hauler_shot(String(shot.state))
+		"hauler_beside":
+			await _hauler_beside_shot(false)
+		"hauler_legacy":
+			await _hauler_beside_shot(true)
+		"hauler_close":
+			await _hauler_beside_shot(true, Vector3(0.0, 1.5, 3.2))
+		"hauler_side":
+			await _hauler_beside_shot(false, Vector3(3.0, 0.9, 0.9))
 		"overview":
 			await _show_room(Vector2(9.0, 8.8), Vector2(15.0, 8.8))
 			mask.visible = false
@@ -422,6 +436,9 @@ func _beside_shot() -> void:
 
 func release_shot() -> void:
 	super()
+	if _shot_legacy:
+		_shot_legacy.free()
+		_shot_legacy = null
 	_hold_squad = false
 	driver.hide_prompt = false
 	hud.visible = true
@@ -430,6 +447,112 @@ func release_shot() -> void:
 	if _shot_light:
 		_shot_light.queue_free()
 		_shot_light = null
+
+
+## T009: the hauler at the default camera, state by state (env CAPTURE_HAULER=1).
+func _hauler_shots() -> Array[Dictionary]:
+	var shots: Array[Dictionary] = []
+	for state: String in ["idle", "walk", "run", "sprint", "strafe", "crouch", "crouch_walk", "aiming", "reload", "rolling", "dead"]:
+		shots.append({"name": "hauler_%s" % state, "do": "hauler", "state": state})
+	shots.append({"name": "hauler_beside_pirate", "do": "hauler_beside"})
+	shots.append({"name": "hauler_pirate_legacy", "do": "hauler_legacy"})
+	shots.append({"name": "hauler_close_up", "do": "hauler_close"})
+	shots.append({"name": "hauler_close_side", "do": "hauler_side"})
+	return shots
+
+
+func _hauler_stage() -> Vector2:
+	var at := Vector2(11.8, 6.9)
+	await _stand_at(at, at + Vector2(0, 6))
+	_hold_squad = true
+	driver.hide_prompt = true
+	squad.hide_barks()
+	_shot_light = OmniLight3D.new()
+	_shot_light.omni_range = 9.0
+	_shot_light.light_energy = 3.0
+	add_child(_shot_light)
+	_shot_light.global_position = Vector3(at.x + 0.6, 3.5, at.y + 3.0)
+	return at
+
+
+func _hauler_shot(state: String) -> void:
+	var at := await _hauler_stage()
+	for o: Node in squad.pirates:
+		o.global_position = Vector3(16.5, 0, 1.0)
+	var away := Vector2(0, 1)
+	match state:
+		"idle":
+			await _sim(0.6)
+		"walk":
+			operator.scripted = {"keys": away}
+			await _sim(0.08)
+		"run":
+			operator.scripted = {"keys": away}
+			await _sim(0.5)
+		"sprint":
+			operator.scripted = {"keys": away, "sprint": true}
+			await _sim(0.5)
+		"strafe":
+			operator.scripted = {"keys": Vector2(1, 0)}
+			await _sim(0.5)
+		"crouch":
+			operator.scripted = {"crouch": true}
+			await _sim(0.5)
+		"crouch_walk":
+			operator.scripted = {"keys": away, "crouch": true}
+			await _sim(0.6)
+		"aiming":
+			operator.aim_point = Vector3(at.x + 5.0, _aim_height, at.y + 2.0)
+			operator.scripted = {"fire": true}
+			await _sim(0.5)
+		"reload":
+			operator.rifle.state.mag = 0
+			operator.request_reload()
+			await _sim(0.7)
+		"rolling":
+			operator.anim.play_state("roll")
+			await _sim(0.55)
+		"dead":
+			operator.hold_control(INF)
+			await _sim(3.2)
+
+
+## Beside a pirate at the default camera; with `legacy` the old operator on your other side; with
+## a non-zero `close` the camera moved in to that offset.
+func _hauler_beside_shot(legacy: bool, close := Vector3.ZERO) -> void:
+	var at := await _hauler_stage()
+	var moved_in := close != Vector3.ZERO
+	hud.visible = not moved_in
+	noise_ring.visible = not moved_in
+	var q: Node = squad.pirates[0]
+	for o: Node in squad.pirates:
+		if o != q:
+			o.global_position = Vector3(16.5, 0, 1.0)
+	q.global_position = Vector3(at.x + 1.3, 0, at.y)
+	q.brain.model.reset_motion()
+	q.brain.model.face_now(q.brain.model.yaw_to(q.global_position, q.global_position + Vector3(0, 0, 6)))
+	q.anim.update(Vector2.ZERO, 1.0, 1.0, 0.0, 0.0, "aim", 1.0)
+	q._visual.rotation.y = q.brain.model.hips_yaw
+	q.get_node("SightTarget").set_seen(true)
+	if legacy:
+		var Body: GDScript = operator.OperatorBody
+		Body.forced = "legacy"
+		_shot_legacy = (operator.get_script() as GDScript).new()
+		add_child(_shot_legacy)
+		Body.forced = ""
+		_shot_legacy.input_enabled = false
+		_shot_legacy.set_character_scale(float(Data.value("deck", "character_scale", 1.0)))
+		_shot_legacy.visuals.visible = false
+		_shot_legacy.global_position = Vector3(at.x - 1.3, 0, at.y)
+		_shot_legacy.face_now(_shot_legacy.global_position + Vector3(0, _aim_height, 6))
+	await _sim(0.5)
+	if moved_in:
+		rig.set_process(false)
+		var cam: Camera3D = rig.camera
+		var mid := Vector3(at.x, 1.05, at.y)
+		cam.global_position = mid + close
+		cam.look_at(mid)
+		await _sim(0.05)
 
 
 ## A pirate coming along the south wall, its colder light crossing yours.

@@ -4,12 +4,14 @@ extends "res://tests/test_case.gd"
 
 const OperatorModel := preload("res://src/player/operator_model.gd")
 const Operator := preload("res://src/player/operator.gd")
+const OperatorBody := preload("res://src/player/operator_body.gd")
 const DT := 1.0 / 60.0
 
 var _nodes: Array[Node] = []
 
 
 func after_each() -> void:
+	OperatorBody.forced = ""
 	for n in _nodes:
 		if is_instance_valid(n):
 			n.free()
@@ -227,9 +229,10 @@ func test_operator_collides_with_a_wall() -> void:
 
 
 func test_legs_animate_while_walking() -> void:
+	OperatorBody.forced = "legacy"
 	var tree := Engine.get_main_loop() as SceneTree
 	var op := _spawn_operator()
-	var sk := op.anim.skeleton
+	var sk: Skeleton3D = op.anim.skeleton
 	var thigh := sk.find_bone("thigh_L")
 	op.scripted = {"keys": Vector2(0, -1)}
 	var lo := INF
@@ -307,6 +310,7 @@ func test_weight_deck_scene_runs_and_fires() -> void:
 
 ## A planted foot has to travel against the body. Guards the legacy strafe clips' swapped names.
 func test_strafing_plants_the_feet_against_the_move() -> void:
+	OperatorBody.forced = "legacy"
 	var tree := Engine.get_main_loop() as SceneTree
 	for side: float in [1.0, -1.0]:
 		var op := _spawn_operator()
@@ -315,7 +319,7 @@ func test_strafing_plants_the_feet_against_the_move() -> void:
 		op.scripted = {"keys": Vector2(side, 0)}
 		for i in 40:
 			await tree.physics_frame
-		var sk := op.anim.skeleton
+		var sk: Skeleton3D = op.anim.skeleton
 		var foot := sk.find_bone("foot_L")
 		var samples: Array[Vector3] = []
 		for i in 120:
@@ -336,6 +340,7 @@ func test_strafing_plants_the_feet_against_the_move() -> void:
 ## T006, John's corkscrew: the idle clips held each thigh half a turn from the walk clips, and the
 ## blend into a crouch swung each foot in a loop around the body.
 func test_crouching_from_standing_does_not_swing_the_legs_around() -> void:
+	OperatorBody.forced = "legacy"
 	var tree := Engine.get_main_loop() as SceneTree
 	var op: Node3D = (load("res://src/player/operator.gd") as GDScript).new()
 	tree.root.add_child(op)
@@ -361,6 +366,7 @@ func test_crouching_from_standing_does_not_swing_the_legs_around() -> void:
 
 
 func test_a_second_operator_does_not_untwist_the_shared_clips_again() -> void:
+	OperatorBody.forced = "legacy"
 	var tree := Engine.get_main_loop() as SceneTree
 	var a: Node3D = (load("res://src/player/operator.gd") as GDScript).new()
 	tree.root.add_child(a)

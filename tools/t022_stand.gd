@@ -6,14 +6,14 @@ const EIGHT := {"fwd": Vector2(0, -1), "fwd_right": Vector2(1, -1), "right": Vec
 	"back": Vector2(0, 1), "back_left": Vector2(-1, 1), "left": Vector2(-1, 0), "fwd_left": Vector2(-1, -1)}
 const WALK_SHARE := 0.5
 const MOVIE_S := 16.0
-const CIRCLE_M := 3.0
+const CIRCLE_M := 2.2
 ## Seen from the game camera the body is close to the floor plan: a lamp over it shows the pose, not the mood.
 const LAMP_ENERGY := 3.0
 const LAMP_RANGE_M := 10.0
 
 var _lamp: OmniLight3D
 var _at := {}
-var _world_on := false   # the take only finishes with the world running
+var _world_on := false   # the take only finishes, and the load only follows, with the world running
 
 
 func _ready() -> void:
@@ -60,6 +60,7 @@ func capture_shots() -> Array[Dictionary]:
 
 func apply_shot(shot: Dictionary) -> void:
 	Engine.time_scale = 1.0
+	_world_on = false
 	if panel:
 		panel.visible = false
 	sight_debug.visible = false
@@ -119,7 +120,6 @@ func apply_shot(shot: Dictionary) -> void:
 		"carry":
 			_world_on = true
 			await _carry_shot("heavy")
-			_world_on = false
 			op.scripted = hold
 			await _sim(0.8)
 	_lamp.global_position = op.global_position + Vector3(0, 3.5, 1.0)
@@ -150,7 +150,15 @@ func _movie() -> void:
 	aim_from_mouse = false
 	set_kit_view("known")
 	flashlight.set_on(true)
-	var center: Vector2 = layout.space_rect("cargo").get_center()
+	hud.visible = false
+	noise_ring.visible = false
+	var center := _open_circle()
+	var lamp := OmniLight3D.new()
+	lamp.omni_range = LAMP_RANGE_M
+	lamp.light_energy = LAMP_ENERGY
+	add_child(lamp)
+	# Dev only: nothing stops the walk, so the whole circle gets filmed.
+	(operator.get_node("Collision") as CollisionShape3D).disabled = true
 	await _stand_at(center + Vector2(CIRCLE_M, 0), center)
 	var aim := Vector3(center.x, 1.2, center.y)
 	var left := MOVIE_S
@@ -158,6 +166,7 @@ func _movie() -> void:
 		await get_tree().process_frame
 		left -= get_process_delta_time()
 		var p := Vector2(operator.global_position.x, operator.global_position.z)
+		lamp.global_position = operator.global_position + Vector3(0, 3.5, 1.0)
 		var out_dir := (p - center).normalized()
 		var tangent := out_dir.rotated(PI / 2.0)
 		# Back onto the circle if the walk has drifted off it.
@@ -165,3 +174,23 @@ func _movie() -> void:
 		operator.aim_point = aim
 		operator.scripted = {"keys": keys}
 	get_tree().quit()
+
+
+## The first spot on the deck with a clear ring of floor round it.
+func _open_circle() -> Vector2:
+	var radius: float = operator.body_radius() + 0.1
+	for space: String in ["cargo", "junction", "medbay"]:
+		if not layout.spaces.has(space):
+			continue
+		for fx in range(2, 9):
+			for fy in range(2, 9):
+				var c: Vector2 = layout.point_in(space, [fx / 10.0, fy / 10.0])
+				var clear := true
+				for a in 24:
+					if not layout.is_free(c + Vector2(CIRCLE_M, 0).rotated(TAU * a / 24.0), radius):
+						clear = false
+						break
+				if clear:
+					return c
+	push_warning("T022: no clear ring of floor")
+	return layout.space_rect("cargo").get_center()

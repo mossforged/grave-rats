@@ -1,0 +1,178 @@
+[
+ {
+  "run": "shift_before1",
+  "avg": 7.65,
+  "p95": 11.017,
+  "p99": 16.447,
+  "max": 27.943,
+  "frames": 1961,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_before2",
+  "avg": 7.78,
+  "p95": 11.107,
+  "p99": 13.307,
+  "max": 21.588,
+  "frames": 1927,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_before3",
+  "avg": 7.91,
+  "p95": 11.124,
+  "p99": 14.09,
+  "max": 65.742,
+  "frames": 1896,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_before4",
+  "avg": 7.54,
+  "p95": 10.567,
+  "p99": 13.975,
+  "max": 26.767,
+  "frames": 1991,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_before5",
+  "avg": 7.62,
+  "p95": 10.824,
+  "p99": 14.947,
+  "max": 23.069,
+  "frames": 1971,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_after1",
+  "avg": 7.67,
+  "p95": 10.815,
+  "p99": 13.069,
+  "max": 78.841,
+  "frames": 1956,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_after2",
+  "avg": 9.21,
+  "p95": 15.503,
+  "p99": 31.557,
+  "max": 258.297,
+  "frames": 1629,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_after3",
+  "avg": 7.81,
+  "p95": 10.843,
+  "p99": 16.64,
+  "max": 65.852,
+  "frames": 1922,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_after4",
+  "avg": 7.44,
+  "p95": 10.458,
+  "p99": 14.35,
+  "max": 23.07,
+  "frames": 2018,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "shift_after5",
+  "avg": 7.78,
+  "p95": 11.138,
+  "p99": 14.75,
+  "max": 25.683,
+  "frames": 1927,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "pirate_before1",
+  "avg": 7.21,
+  "p95": 9.737,
+  "p99": 13.584,
+  "max": 26.76,
+  "frames": 2082,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "pirate_before2",
+  "avg": 7.25,
+  "p95": 9.774,
+  "p99": 14.824,
+  "max": 35.021,
+  "frames": 2069,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "pirate_before3",
+  "avg": 7.22,
+  "p95": 9.977,
+  "p99": 14.262,
+  "max": 18.992,
+  "frames": 2078,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "pirate_after1",
+  "avg": 7.15,
+  "p95": 9.839,
+  "p99": 13.41,
+  "max": 19.404,
+  "frames": 2099,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "pirate_after2",
+  "avg": 7.25,
+  "p95": 10.166,
+  "p99": 14.673,
+  "max": 23.908,
+  "frames": 2069,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ },
+ {
+  "run": "pirate_after3",
+  "avg": 7.24,
+  "p95": 9.758,
+  "p99": 14.009,
+  "max": 22.341,
+  "frames": 2072,
+  "resolution": "1920x957",
+  "adapter": "Apple M2 Pro (Apple8)",
+  "msaa": "2x"
+ }
+]

@@ -11,7 +11,7 @@ The rifle and the things it shoots (T003).
 - `target_dummy.gd`: grey-box target. Takes hits, flinches, falls, resets.
 
 ## Sounds (T017)
-The layers in `ShotTimeline` (`gun` in `data/audio.json`), dry fire and its tail on an empty magazine, mag out, then `reload_stages`, through `src/audio`. The charging handle (`only_empty`) only plays when the magazine ran dry. A cancelled reload stops there.
+The layers in `ShotTimeline` (`gun` in `data/audio.json`), dry fire and its tail on an empty magazine, then `reload_stages`, through `src/audio`: mag out, the magazine falling (`drop`), mag in, the charge. The rules don't wait for them: starting a reload still drops the rounds at once. The hauler's reload clips are bent to the same moments (T022). The charging handle (`only_empty`) only plays when the magazine ran dry. A cancelled reload stops there.
 
 ## Does not own
 - Input, facing, where the gun points (the owner passes those in; see `src/player`). Camera movement: the owner reads `camera_kick_m`.

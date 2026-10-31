@@ -494,10 +494,12 @@ func test_a_full_reload_has_no_charge_but_an_empty_one_does() -> void:
 	var op: Node = scene.operator
 	op.rifle.state.mag = 10
 	await _tree().physics_frame
+	var before := Vfx.magazines.count
 	check(op.request_reload(), "from a part magazine")
-	var mags := Vfx.magazines.count
-	check(mags > 0, "the old one falls")
+	check_eq(Vfx.magazines.count, before, "the old one's still in the gun as the reload starts")
 	await _sim(float(op.rifle.state.reload_total) + 0.1)
+	var mags := Vfx.magazines.count
+	check_eq(mags, before + 1, "the old one falls")
 	check(_heard.has("rifle_mag_in"), "mag in")
 	check(not _heard.has("rifle_charge"), "no charge")
 	_heard.clear()

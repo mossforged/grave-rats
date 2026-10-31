@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. **Next:** John plays a shift (expected tomorrow night). Code lane: T022 (his 88 Mixamo clips on the hauler), then T023 (build the survey vessel). QA: Q003 after T022.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T022 built; T022 on `auto/t022-mac`, the rest merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands; T022: does the hauler move like a soldier?). A013 approved; A014 pitch B (biological survey vessel) approved. **Next:** John plays a shift (expected tomorrow night). Code lane: T023 (build the survey vessel). QA: Q003 now T022 is built.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T022 play (`godot --path .`; sheet `docs/screens/T022/sheet.png`, `circle_aiming.mp4`): does the hauler finally move like a soldier? Strafe, back up, fire walking, reload, take a hit, die, carry heavy. Calls and levers in `auto-T022`.
 - T021 look (`docs/screens/T021/sheet.png`): the wall tops now always show their paint (a z-fight used to hide it), so there's more yellow up there; beds carry a hazard stripe on their long rims. Enough to read the overturned bed with your light off? Calls in `auto-T021`.
 - T019 look (`docs/screens/T019/sheet.png`, then walk the junction and the side corridor): is it realistic enough? North-facing walls gain the most; the long junction's side walls mostly show their tops from the steep camera. Lever if the junction stays flat: floor-level pieces and more light there, not more wall pieces. Calls in `auto-T019`.
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
@@ -57,9 +58,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - `src/study` deck dressing and the deck copy in `stalker_deck` want a real level module.
 - Stalker: a hit interrupting a wind-up.
 - A roll move: the hauler has the clip (`anim.play_state("roll")`), but no key or rule uses it yet.
-- `stalker_deck` stagger doesn't call `operator.play_hit` (`src/enemies` was outside T009); its death does play the clip.
 - Door state lights tell states apart by colour alone; a pattern per state would help colourblind players.
-- T012: a carry pose; drawn vents and closets at spawn points; the airlock as a real room; stale `p_size` engine errors from headless HUD text.
+- T012: drawn vents and closets at spawn points; the airlock as a real room; stale `p_size` engine errors from headless HUD text.
 - T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
 - T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
@@ -68,8 +68,10 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T018: per-stalker targets (the pack hunts one player at a time, and the cover-shield lines follow it); a death bill for a player left behind; spectating when you're down with the crew alive; a second input device in the two-player scene.
 - T019: `hanging_cables` spark flicker. T008's "flicker" was a bug fix, not an effect, and T012's flickers whole sections from `src/shift`; the tip glows steadily for now.
 - T019: door surrounds on doors' room faces; a generated `floor_grate` rule that exempts flush grates from route keep-outs.
-- Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
+- Hauler: left-hand IK onto the foregrip; the Meshy roll's feet aren't auto-grounded.
+- Available Mixamo clips, in `assets/source/mixamo-shooter/`, no system uses them (T022): jumps (`rifle_jump*`, `unarmed_jump*`, `pistol_jump`), falls (`fall_loop`, `fall_to_land`), `ladder_climb_loop`, `vault`, `run_slide`, `rifle_melee`, `rifle_throw_grenade`, the `pistol_*` set, `unarmed_punch`, `unarmed_run_loop`, `rifle_equip`, `rifle_idle_loop`, `knocked_down`, `get_up`.
+- T022: heavy-carry hands on the load; strafing with a heavy load (forward-only clips slide sideways); a low-ready walk for pirates looting; a death body reaching through a wall (it can slide about 1.1 m from the collision).
+- `test_vfx.gd::test_pools_never_allocate_after_warm_up` fails when `test_vfx` runs alone (27 more objects, on main too); it passes in the full suite.
 
 ## Last session
-2026-10-31 (lead): merged T020 (559/559 with T019), T021 (566/566; T020 and T021 conflicts resolved as T021's handoff said: T020's layered shot for pirates), A014. Filed John's 88 Mixamo clips in `assets/source/mixamo-shooter/` with a manifest; queued T022.
-2026-10-31 (code, unattended): T020 `src/vfx` (16 recipes, pooled), shot timeline, 88 placeholder sound files, F1 → Effects gallery; mag dump +0.4 ms; a mag dump touches the limiter. T021: bed hazard stripe, wall-top z-fight fixed (in since T010), lock as commands.
+2026-10-31 (code, unattended): T022: 54 of John's Mixamo clips on the hauler and pirates: eight-way walk and run, sprint, four-way crouch, fire, reload, hits by direction, deaths by cause, pick up, press, cover, heavy carry with the rifle slung. 587/587. No measurable frame cost. Nobody has played it. See `auto-T022`.

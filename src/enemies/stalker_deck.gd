@@ -585,9 +585,10 @@ func _kit_door(shot: Dictionary) -> void:
 	var d := _door(String(shot.space), float(shot.at))
 	set_kit_view("off")
 	var from: Vector2 = _door_side(d, 1.0, 2.2)
+	# Light off and aimed at it, so the look-ahead centres the door and only the deck's lights show it.
+	flashlight.set_on(false)
 	var along := Vector2(1.5, 0.0) if d.along_x else Vector2(0.0, 1.5)
-	var stand: Vector2 = _door_side(d, 1.0, 1.6) + along
-	await _stand_at(stand, stand + along * 2.0)
+	await _stand_at(_door_side(d, 1.0, 1.6) + along, d.opening.get_center())
 	match String(shot.state):
 		"open":
 			d.door_state.progress = 1.0

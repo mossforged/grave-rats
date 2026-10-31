@@ -132,9 +132,9 @@
   },
   "material_shared": {"normal_scale": 1.0, "ao_light_affect": 0.5, "vertex_grime": true},
   "textures": {
-    "hull": {"px": 1024, "paint": "b5ae9c", "steel": "33363a", "cover": 0.985, "rough_paint": [0.65, 0.85], "rough_steel": [0.4, 0.55], "rust": "5a3a20", "seed": 21},
+    "hull": {"px": 1024, "paint": "8d8778", "steel": "33363a", "cover": 0.985, "rough_paint": [0.65, 0.85], "rough_steel": [0.4, 0.55], "rust": "5a3a20", "seed": 21},
     "steel": {"px": 1024, "paint": "26292d", "steel": "74787e", "cover": 0.975, "rough_paint": [0.55, 0.72], "rough_steel": [0.35, 0.5], "rust": "4a3220", "seed": 22},
-    "clinical": {"px": 1024, "paint": "c4bfaf", "steel": "3c3f44", "cover": 0.993, "rough_paint": [0.45, 0.65], "rough_steel": [0.4, 0.5], "rust": "6a4a2a", "seed": 23},
+    "clinical": {"px": 1024, "paint": "949082", "steel": "3c3f44", "cover": 0.993, "rough_paint": [0.45, 0.65], "rough_steel": [0.4, 0.5], "rust": "6a4a2a", "seed": 23},
     "deck": {"px": 1024, "base": "5e6166", "dark": "242527", "stain_cover": 0.22, "stain_strength": 0.6, "rough": [0.48, 0.8], "polish_rough": [0.22, 0.36], "polish_cover": 0.2, "metal": 0.35, "seed": 24},
     "grate": {"px": 512, "bar": "3a3d41", "hole": "050506", "rows": 6, "cols": 3, "rough": [0.6, 0.8], "metal": 0.8, "seed": 25},
     "hazard": {"px": 512, "yellow": "d6a31c", "dark": "17181a", "stripes": 2, "rough": [0.65, 0.85], "seed": 26},

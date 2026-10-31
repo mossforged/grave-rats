@@ -184,8 +184,6 @@
     "emerge_delay_s": 0.25,
     "camera_kick_m": 0.42,
     "camera_kick_recover_s": 0.6,
-    "panel_color": "4a4f56",
-    "panel_roughness": 0.85,
     "debris": {
       "count": 18,
       "size_min_m": 0.08,

@@ -84,7 +84,8 @@ static func _wall_body(m: KitMesh, length: float, depth: float, height: float, e
 	m.box(Vector3(x0 + end_a, 0.0, -half + inset), Vector3(x1 - end_b, height, half - inset), "steel")
 	_post(m, x0, x0 + end_a, depth, height)
 	_post(m, x1 - end_b, x1, depth, height)
-	m.box(Vector3(x0 + end_a, 0.0, -half), Vector3(x1 - end_b, float(d.kick_h_m), half), "steel", c)
+	var kick_z := half - float(d.proud_m)
+	m.box(Vector3(x0 + end_a, 0.0, -kick_z), Vector3(x1 - end_b, float(d.kick_h_m), kick_z), "steel", c)
 	m.box(Vector3(x0 + end_a, height - float(d.cap_h_m), -half), Vector3(x1 - end_b, height - float(d.cap_insert_drop_m), half), "steel", c)
 
 
@@ -125,7 +126,7 @@ static func _face(m: KitMesh, x0: float, x1: float, depth: float, height: float,
 	var proud := float(d.proud_m)
 	var band := width * float(d.hazard_kick_frac)
 	var kx := x0 + (width - band) * (0.5 if variant % 2 == 0 else 0.15)
-	_zbox(m, kx, kx + band, kick * 0.2, kick * 0.8, depth * 0.5 + proud * 0.0, proud, side, String(fam.kick_band), 0.0)
+	_zbox(m, kx, kx + band, kick * 0.2, kick * 0.8, depth * 0.5, proud * 2.0, side, String(fam.kick_band), 0.0)
 	match family:
 		"pipe":
 			_pipe_face(m, x0, x1, y0, y1, depth, side, fam)
@@ -196,11 +197,12 @@ static func door_jamb(width: float, depth: float, height: float) -> ArrayMesh:
 		var look: Dictionary = _cfg().door_look
 		var half := depth * 0.5
 		var hw := width * 0.5
-		m.box(Vector3(-hw, 0.0, -half), Vector3(hw, height, half), "steel", float(d.chamfer_m))
+		var proud := float(d.proud_m)
+		m.box(Vector3(-hw, 0.0, -half + proud), Vector3(hw, height, half - proud), "steel", float(d.chamfer_m))
 		var band := float(look.jamb_band_m)
 		var inset := float(look.jamb_inset_m)
 		for side: float in [-1.0, 1.0]:
-			_zbox(m, -band, band, inset, float(d.door_aperture_h_m) - inset, half + float(d.proud_m), float(d.proud_m), side, "hazard", 0.0)
+			_zbox(m, -band, band, inset, float(d.door_aperture_h_m) - inset, half, proud * 2.0, side, "hazard", 0.0)
 		return m.build())
 
 
@@ -442,7 +444,7 @@ static func _ammo(m: KitMesh, size: Vector3, c: Dictionary) -> void:
 	var cham := float(_cfg().dims.chamfer_m)
 	m.box(Vector3(-hx, 0.0, -hz), Vector3(hx, size.y, hz), "ammo", cham * 2.0)
 	var strap := float(c.ammo_strap_m)
-	for sx: float in [-0.5, 0.5]:
+	for sx: float in [-0.3, 0.3]:
 		m.box(Vector3(sx * size.x - strap * 0.5, 0.0, -hz), Vector3(sx * size.x + strap * 0.5, size.y, hz), "steel", cham * 0.5)
 
 

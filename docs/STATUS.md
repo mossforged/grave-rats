@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 in progress. Stage 2 passed (tag `stage-2`, pushed by John). T009 done on `auto/t009-mac`, waiting on John: his hauler is now the player and the pirates' body. T010 is next once it merges.
+**Stage:** 3 in progress. Stage 2 passed (tag `stage-2`, pushed by John). T009 merged. T010 done on `auto/t010-mac`, waiting on John's gate: *does it match or beat the concept?*
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,12 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T009 awaiting review and John's gate → T010 (slice kit, held until T009 merges).
-- Code: T008 merged. T009 on `auto/t009-mac`: 247/247 tests; see `docs/handoffs/auto-T009.md`.
+- Queue order (lead): T010 awaiting review and John's gate. Meshy bed, console and stalker slot in next (`data/kit.json` "slots").
+- Code: T009 merged. T010 on `auto/t010-mac`: 263/263 tests; 7.81 ms pirate_deck, 7.12 ms stalker_deck; see `docs/handoffs/auto-T010.md`.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T010 gate: sheet at `docs/screens/T010/sheet.png`, then play. My read: mood and palette are there; surfaces are too clean and the Meshy props are still boxes. Watch for fog shimmer and whether a side door's state reads.
 - T009 play: does the hauler look and move right from the game camera? Known: the head bows forward when aiming, the left hand sits below the foregrip, feet slide on strafes, and firing has no clip yet. Next clips worth fetching from Mixamo: strafe run left/right, run backward, rifle firing, crouch backward/strafes, low-ready walk.
 - T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
 - T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)
@@ -42,8 +43,9 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Stalker: a hit interrupting a wind-up.
 - A roll move: the hauler has the clip (`anim.play_state("roll")`), but no key or rule uses it yet.
 - `stalker_deck` stagger doesn't call `operator.play_hit` (`src/enemies` was outside T009); its death does play the clip.
+- Flaky test: `test_hauler` turn-in-place counts frames; failed 1 run of 4 on unchanged main.
+- T010: reflection probes for wet floor sheen; hide the aim cone for the final look; faded walls draw over the sight mask.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T009 (247/247 reproduced); queued T010. Open Tender decided as the competitive mode. A009 and A010 queued for the art lane.
-2026-10-31 (code, unattended): T009: hauler imported at 1.80 m; Meshy and Mixamo clips retargeted per state in `data/hauler_anim.json`; root motion pinned; rifle on the right hand; pirates repainted navy by shader; `body` switch keeps the legacy model.
+2026-10-31 (code, unattended): T010: kit, materials, practicals, fog and signage generated from `data/kit.json`; door leaf dents from the T006 value; collision, occluders and cover identical to T009 by snapshot. Not seen in motion; T008 flicker not re-measured with fog.

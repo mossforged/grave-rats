@@ -4,6 +4,11 @@ extends RefCounted
 
 var cfg: Dictionary
 var oxygen_left := 0.0
+var oxygen_total := 0.0
+var driven := false            # a shift owns the clock (src/shift); otherwise it's a placeholder
+
+var _announce := ""
+var _announce_left := 0.0
 
 
 func _init(config: Dictionary) -> void:
@@ -12,11 +17,39 @@ func _init(config: Dictionary) -> void:
 
 
 func reset() -> void:
-	oxygen_left = float(cfg.oxygen.start_s)
+	_announce = ""
+	_announce_left = 0.0
+	if not driven:
+		oxygen_total = float(cfg.oxygen.start_s)
+		oxygen_left = oxygen_total
 
 
 func step(delta: float) -> void:
-	oxygen_left = maxf(oxygen_left - delta, 0.0)
+	_announce_left = maxf(_announce_left - delta, 0.0)
+	if not driven:
+		oxygen_left = maxf(oxygen_left - delta, 0.0)
+
+
+## The real clock: from here on the suit reads this and counts nothing itself.
+func set_oxygen(left: float, total: float) -> void:
+	driven = true
+	oxygen_left = left
+	oxygen_total = total
+
+
+## One terse line across the top, in the suit's voice. A new one replaces the old.
+func announce(line: String) -> void:
+	_announce = line
+	_announce_left = float(cfg.announce.life_s)
+
+
+## The line showing now and how solid it is, or "" when there's none.
+func announcement() -> String:
+	return _announce if _announce_left > 0.0 else ""
+
+
+func announcement_alpha() -> float:
+	return minf(_announce_left / float(cfg.announce.fade_s), 1.0)
 
 
 func oxygen_text() -> String:
@@ -26,7 +59,7 @@ func oxygen_text() -> String:
 
 
 func oxygen_fraction() -> float:
-	return oxygen_left / float(cfg.oxygen.start_s)
+	return oxygen_left / oxygen_total
 
 
 func suit_low(fraction: float) -> bool:
@@ -49,9 +82,17 @@ func credits_text(credits: int) -> String:
 	return out
 
 
-## The alarm strip over the right dock, most urgent first.
-func alerts(in_acid: bool, mag: int) -> Array:
+## The hold as far as the suit knows: an estimate until the payslip.
+func hold_text(estimate: int) -> String:
+	return String(cfg.salvage.approx) + credits_text(estimate)
+
+
+## The alarm strip over the right dock, most urgent first. `urgent`: keys of `words` that outrank the
+## rest ("alarm", "o2_out").
+func alerts(in_acid: bool, mag: int, urgent := []) -> Array:
 	var out: Array = []
+	for key: String in urgent:
+		out.append({"word": String(cfg.words[key]), "color": String(cfg.colors.danger)})
 	if in_acid:
 		out.append({"word": String(cfg.words.acid), "color": String(cfg.colors.danger)})
 	if ammo_low(mag):
@@ -60,7 +101,7 @@ func alerts(in_acid: bool, mag: int) -> Array:
 
 
 ## The states over the operator. `f`: in_cover, lock ("", "locked", "exposed"), crouched, sprinting,
-## reloading, empty, light_off.
+## reloading, empty, light_off, and maybe hands_full.
 func status(f: Dictionary) -> Array:
 	var w: Dictionary = cfg.words
 	var c: Dictionary = cfg.colors
@@ -80,6 +121,8 @@ func status(f: Dictionary) -> Array:
 		out.append({"word": String(w.empty), "color": String(c.danger)})
 	elif bool(f.sprinting):
 		out.append({"word": String(w.sprinting), "color": String(c.text)})
+	if bool(f.get("hands_full", false)):
+		out.append({"word": String(w.hands_full), "color": String(c.warn)})
 	if bool(f.light_off):
 		out.append({"word": String(w.light_off), "color": String(c.warn)})
 	return out

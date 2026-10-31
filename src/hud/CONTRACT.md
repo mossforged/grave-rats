@@ -18,23 +18,26 @@ The company-issue suit OS (T008, picked by John: A003-02 / A005-05), with a ring
 - Each deck passes its own ears through `_noise_senses()`: stalkers by default, pirates in `pirate_deck`.
 - A shot goes out to `gunfire_m` in `bloom_s`, holds `hold_s`, comes back over `shrink_s`. At the default camera the gunfire radius is mostly off screen, so each shot also sends a pulse, restarted once the last has run `ripple_restart_m`.
 - Over the sight mask, under walls and props (depth-tested): it shows across rooms you haven't seen.
-- Placeholders: oxygen counts down and does nothing at zero; salvage credits are a data value; one crew row, its bar being your suit.
+- **Oxygen and salvage (T012):** a deck with a shift calls `os_state.set_oxygen(left, total)` and sets `hold_estimate`; the suit then counts nothing itself. Other decks keep the placeholders: oxygen counts down from data and does nothing at zero, salvage credits are a data value. One crew row, its bar being your suit.
+- **The hold reads `≈`** (`salvage.approx`) until the payslip (T013).
+- A loud thing other than a shot (a dropped pod) blooms the ring to its own radius with `state.fire(kind)`.
+- Announcements are one line at a time, terse, in the suit's voice; a new one replaces the old.
 - Decks without a suit read as a full suit.
 - Sizes are at `ref_height_px` and scale with the window's height. Data is read live, so the F1 panel works.
 
 ## Public API
-- `NoiseState.new(ring_cfg, senses)`: `step(delta, feet_kind)`, `fire()`, `reset()`, `heard_at(kind)`, `alpha_at(r)`, `heat_at(r)`; fields `kind`, `radius`, `ripple`.
+- `NoiseState.new(ring_cfg, senses)`: `step(delta, feet_kind)`, `fire(loud_kind := "gunfire")`, `reset()`, `heard_at(kind)`, `alpha_at(r)`, `heat_at(r)`; fields `kind`, `radius`, `ripple`.
 - `NoiseRing`: `setup(ring_cfg, senses)`, `tick(delta, at, feet_kind)`; field `state`.
 - `HitDirection.new(cfg)`: `add(from, source)`, `step(delta)`, `reset()`, `color_for(source)`, `alpha_of(arc)`; field `arcs`.
-- `SuitOs.new(cfg)`: `step(delta)`, `reset()`, `oxygen_text()`, `oxygen_fraction()`, `suit_low(f)`, `ammo_low(mag)`, `credits_text(n)`, `alerts(in_acid, mag)`, `status(facts)`.
-- `SuitOsHud`: set `operator`, `camera_rig`, `suit`, `mark`, `in_acid`, `light_off`, `lock_state`, `scene_help`; `reset()`, `toggle_help()`, `status_now()`, `suit_fraction()`; fields `cfg`, `os_state`, `hits`, `help_on`.
+- `SuitOs.new(cfg)`: `step(delta)`, `reset()`, `oxygen_text()`, `oxygen_fraction()`, `suit_low(f)`, `ammo_low(mag)`, `credits_text(n)`, `alerts(in_acid, mag, urgent := [])` (`urgent`: keys of `words`, listed first), `status(facts)` (facts may add `hands_full`), `set_oxygen(left, total)`, `hold_text(estimate)`, `announce(line)`, `announcement()`, `announcement_alpha()`; fields `oxygen_left`, `oxygen_total`, `driven`.
+- `SuitOsHud`: set `operator`, `camera_rig`, `suit`, `mark`, `in_acid`, `light_off`, `lock_state`, `scene_help`, `hold_estimate` (below zero: the placeholder), `carry` {`slots_used`, `slots_max`, `in_hand`, `class_word`, `class_key`} (empty: no plate), `action` {`word`, `share`}, `urgent_alerts`, `hands_full`, `banner` [big, lines...]; `reset()`, `toggle_help()`, `status_now()`, `suit_fraction()`; fields `cfg`, `os_state`, `hits`, `help_on`.
 - Key: H toggles the help (handled in `weight_deck`).
 
 ## Signals
 None. The deck connects `Rifle.fired` to `NoiseState.fire()`.
 
 ## Data keys (`data/hud.json`)
-`layer`, `ref_height_px`; `font` {`regular`, `bold`}; `colors` {`plate`, `line`, `track`, `bar`, `accent`, `text`, `text_dim`, `watermark`, `good`, `warn`, `danger`}; `words`; `mark`; `crew`; `oxygen`; `watermark`; `dock`; `suit` {`word`, `unit`, `percent`, `low_fraction`}; `ammo` {`word`, `digits`, `low_rounds`}; `salvage` {`word`, `unit`, `credits`, `fill`, `group_digits`, `separator`}; `alert`; `shields`; `status`; `help` {`start_on`, `text`, `font_px`, `line_px`, `pad_px`, `from_bottom_px`}; `icons` (polygons and circles in a unit box); `hit_direction` {`only_out_of_sight`, `life_s`, `fade_s`, `merge_m`, `max_arcs`, `radius_px`, `width_px`, `tip_px`, `span_deg`, `segments`, `colors` {`default`, source names}}; `ring` {`height_m`, `line_m`, `segments`, `gap`, `bloom_s`, `hold_s`, `shrink_s`, `swell_m_s`, `ripple_restart_m`, `cold_color`, `hot_color`, `alpha` {`walk`, `sprint`, `gunfire`, `ripple`}}.
+`layer`, `ref_height_px`; `font` {`regular`, `bold`}; `colors` {`plate`, `line`, `track`, `bar`, `accent`, `text`, `text_dim`, `watermark`, `good`, `warn`, `danger`}; `words`; `mark`; `crew`; `oxygen`; `watermark`; `dock`; `suit` {`word`, `unit`, `percent`, `low_fraction`}; `ammo` {`word`, `digits`, `low_rounds`}; `salvage` {`word`, `unit`, `credits`, `fill`, `approx`, `group_digits`, `separator`}; `carry` {`word`, `x_px`, `from_bottom_px`, `w_px`, `h_px`, `label_px`, `slot_px`, `slot_gap_px`, `slots_x_px`, `line_gap_px`, `font_px`, `empty`, `hand`, `slot_filled`, `class_colors`}; `announce` {`y_px`, `h_px`, `pad_px`, `font_px`, `font_drop_px`, `life_s`, `fade_s`}; `action` {`above_m`, `w_px`, `h_px`, `font_px`, `gap_px`}; `banner` {`y_px`, `h_px`, `w_px`, `big_px`, `font_px`, `line_px`}; `alert`; `shields`; `status`; `help` {`start_on`, `text`, `font_px`, `line_px`, `pad_px`, `from_bottom_px`}; `icons` (polygons and circles in a unit box); `hit_direction` {`only_out_of_sight`, `life_s`, `fade_s`, `merge_m`, `max_arcs`, `radius_px`, `width_px`, `tip_px`, `span_deg`, `segments`, `colors` {`default`, source names}}; `ring` {`height_m`, `line_m`, `segments`, `gap`, `bloom_s`, `hold_s`, `shrink_s`, `swell_m_s`, `ripple_restart_m`, `cold_color`, `hot_color`, `alpha` {`walk`, `sprint`, `gunfire`, `ripple`}}.
 
 Font: Barlow Condensed, SIL Open Font License 1.1 (`assets/game/fonts/OFL.txt`). If it won't load, the HUD falls back to Godot's default.
 

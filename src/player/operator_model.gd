@@ -18,6 +18,8 @@ var crouch_amount := 0.0       # 0 standing, 1 fully down
 var sprinting := false
 var turned_deg := 0.0          # how far the torso turned this step
 var hip_turn_deg_s := 0.0      # how fast the hips turned this step (signed)
+var speed_mult := 1.0          # what you're carrying: share of every top speed (src/salvage)
+var can_sprint := true         # what you're carrying: no sprint with your hands full
 
 var _firing_left := 0.0
 
@@ -110,15 +112,15 @@ func aim_error() -> float:
 func top_speed() -> float:
 	var m: Dictionary = cfg.move
 	if sprinting:
-		return float(m.sprint_speed_m_s)
-	return lerpf(float(m.walk_speed_m_s), float(m.crouch_speed_m_s), crouch_amount)
+		return float(m.sprint_speed_m_s) * speed_mult
+	return lerpf(float(m.walk_speed_m_s), float(m.crouch_speed_m_s), crouch_amount) * speed_mult
 
 
 ## One step. `wish` is a world XZ direction (length <= 1), `to_yaw` the cursor's yaw.
 func step(delta: float, wish: Vector2, to_yaw: float, wants_crouch: bool, wants_sprint: bool) -> void:
 	_firing_left = maxf(_firing_left - delta, 0.0)
 	_step_crouch(delta, wants_crouch)
-	sprinting = wants_sprint and wish.length() > 0.0 and not wants_crouch and crouch_amount == 0.0
+	sprinting = wants_sprint and can_sprint and wish.length() > 0.0 and not wants_crouch and crouch_amount == 0.0
 	_step_velocity(delta, wish)
 	_step_turn(delta, to_yaw)
 

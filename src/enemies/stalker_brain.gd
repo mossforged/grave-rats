@@ -131,6 +131,19 @@ func wake(player: Vector2, from := Vector2.INF) -> void:
 	wants_move = true
 
 
+## Told where you are (the prize alarm): it hunts, however it was before. Through a shut door too:
+## being told counts as having been hunting. A dormant one waits for its panel.
+func alert(at: Vector2) -> void:
+	if state == State.DORMANT or state == State.DEAD:
+		return
+	last_known = at
+	_memory_left = float(cfg.senses.memory_s)
+	knows = true
+	if state == State.PROWL or state == State.INVESTIGATE:
+		_start_stalk()
+		plan_now = true
+
+
 ## Straight into a state, for captures and tests.
 func force_hunt(from: Vector2, at: Vector2) -> void:
 	yaw = yaw_to(from, at)

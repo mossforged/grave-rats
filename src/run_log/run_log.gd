@@ -4,6 +4,14 @@ extends RefCounted
 
 const DEFAULT_DIR := "user://runs"
 const SOURCES := ["spit", "puddle", "lunge", "rifle"]
+## Damage from no one: neither a hit in cover nor one in the open.
+const NOT_HITS := ["puddle", "oxygen"]
+## A shift's fields, as they read on a deck with no shift.
+const NO_SHIFT := {
+	"shift_outcome": null, "oxygen_at_exit_s": null, "deposited_by_class": {}, "deposited_items": 0,
+	"deposited_value": 0, "banked_value": 0, "items_lost": 0, "items_lost_value": 0, "prize_taken": false,
+	"tier_reached": 0, "survivors": [],
+}
 
 var dir := DEFAULT_DIR
 var enabled := true
@@ -20,6 +28,8 @@ var shots_blocked_for_you := 0
 var your_shots_blocked := 0
 var started_at := ""
 var last_path := ""
+## () -> Dictionary: this shift's fields (ShiftState.report), when the scene has a shift.
+var shift_report := Callable()
 
 var _written := false
 
@@ -61,7 +71,7 @@ func note_shot(hit: bool) -> void:
 ## `in_cover`: a piece of cover stood on the straight line from the source to you.
 func note_damage(source: String, amount: float, in_cover: bool) -> void:
 	damage_by_source[source] = float(damage_by_source.get(source, 0.0)) + amount
-	if source == "puddle":
+	if NOT_HITS.has(source):
 		return
 	if in_cover:
 		hits_in_cover += 1
@@ -74,7 +84,7 @@ func note_protected() -> void:
 	times_protected += 1
 
 
-## `kind` is what killed you: "stalker" or "pirate".
+## `kind` is what killed you: "stalker", "pirate" or "suit" (out of air).
 func note_death(who: String, how: String, kind := "stalker") -> void:
 	killed_by = {kind: who, "how": how}
 
@@ -94,7 +104,7 @@ func note_your_shot_blocked() -> void:
 
 
 func to_dict(ended: String) -> Dictionary:
-	return {
+	var out := {
 		"started_at": started_at,
 		"ended": ended,
 		"time_alive_s": time_alive_s,
@@ -108,7 +118,10 @@ func to_dict(ended: String) -> Dictionary:
 		"time_locked_s": time_locked_s,
 		"shots_blocked_for_you": shots_blocked_for_you,
 		"your_shots_blocked": your_shots_blocked,
+		"cause_of_death": killed_by.how if killed_by != null else null,
 	}
+	out.merge(shift_report.call() if shift_report.is_valid() else NO_SHIFT, true)
+	return out
 
 
 ## Writes this life once ("death", "respawn" or "quit"). Returns the path, or "" when off or

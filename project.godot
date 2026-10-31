@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Grave Rats"
-run/main_scene="res://scenes/pirates/pirate_deck.tscn"
+run/main_scene="res://scenes/shift/shift_deck.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 
 [autoload]

@@ -8,6 +8,7 @@ const StalkerNav := preload("res://src/enemies/stalker_nav.gd")
 const SpitSystem := preload("res://src/enemies/spit_system.gd")
 const SpitArc := preload("res://src/enemies/spit_arc.gd")
 const PlaceholderSound := preload("res://src/enemies/placeholder_sound.gd")
+const SpawnPicker := preload("res://src/enemies/spawn_picker.gd")
 
 ## Something reached the player. `in_cover`: cover stood on the straight line from the thrower.
 signal player_hit(source: String, amount: float, stalker: Node3D, in_cover: bool)
@@ -27,11 +28,22 @@ var plan_blocked := Callable()
 var light_on := func(_p: Vector2) -> bool: return false
 
 var _sounds := {}
+var _layout: RefCounted
+var _spawn_points: Array = []
+var _spawn_specs: Array = []
+var _spawn_used: Array = []
+var _spawn_cfg: Dictionary
+var _base_count := 0
 
 
 func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, acid_dps: float) -> void:
 	var all: Dictionary = Data.load_data("enemies")
 	cfg = all.stalker
+	_layout = layout
+	_spawn_cfg = all.spawning
+	_spawn_specs = all.spawn_points
+	for spec: Dictionary in _spawn_specs:
+		_spawn_points.append(layout.point_in(String(spec.space), spec.at))
 	cover = cover_field
 	plan_blocked = blocked
 	nav = StalkerNav.new(cfg, layout)
@@ -51,6 +63,7 @@ func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, acid_
 		s.setup(cfg, entry, layout.point_in(String(entry.space), entry.at), patrol, side)
 		side = -side
 		stalkers.append(s)
+	_base_count = stalkers.size()
 	var mix := int(all.sound.mix_rate)
 	for key: String in ["bang", "spit", "lunge", "bash"]:
 		var p := AudioStreamPlayer3D.new()
@@ -70,8 +83,45 @@ func play_sound(key: String, at: Vector3) -> void:
 
 func reset() -> void:
 	spits.clear()
+	# In place: the shot tracer holds this same array.
+	while stalkers.size() > _base_count:
+		var extra: Node = stalkers.pop_back()
+		remove_child(extra)
+		extra.queue_free()
+	_spawn_used = []
 	for s: Node in stalkers:
 		s.reset()
+
+
+## Another one wakes, at a spawn point (`spawn_points` in data) nobody can see: `viewers` holds one
+## (p: Vector2) -> bool per player, `players` where they are. Null when nowhere will do yet; ask
+## again after `spawning.retry_s`.
+func spawn_out_of_view(viewers: Array, players: Array, rng: RandomNumberGenerator) -> Node3D:
+	var i := SpawnPicker.pick(_spawn_points, viewers, players, _spawn_used, float(_spawn_cfg.min_player_m), rng)
+	if i < 0:
+		return null
+	_spawn_used.append(i)
+	var entry: Dictionary = _spawn_specs[i]
+	var s := Stalker.new()
+	s.name = "Stalker%d" % (stalkers.size() + 1)
+	add_child(s)
+	var patrol: Array = []
+	for at: Array in entry.patrol:
+		patrol.append(_layout.point_in(String(entry.space), at))
+	s.setup(cfg, entry, _spawn_points[i], patrol, 1.0 if stalkers.size() % 2 == 0 else -1.0)
+	s.brain.rng.seed = rng.randi()
+	stalkers.append(s)
+	return s
+
+
+func spawn_points() -> Array:
+	return _spawn_points
+
+
+## Everyone's told where you are: the prize alarm.
+func alert(at: Vector2) -> void:
+	for s: Node in stalkers:
+		s.brain.alert(at)
 
 
 ## A round went from `from` to `to`: whoever it passed close to tries to get out of the line.

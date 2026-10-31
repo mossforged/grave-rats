@@ -1,0 +1,51 @@
+{
+  "player_id": 1,
+  "oxygen_s": 480.0,
+  "out_of_air": {"suit_fraction_per_s": 0.02, "who": "OUT OF AIR"},
+  "tiers": [
+    {
+      "at_oxygen": 0.6, "stalkers": 1,
+      "announce": "O2 60%. MOVEMENT IN THE VENTS. BILLING CONTINUES."
+    },
+    {
+      "at_oxygen": 0.3, "stalkers": 1, "lights": ["medbay", "cargo"], "wake": ["custodian"],
+      "announce": "O2 30%. POWER LOSS: %s. BILLING CONTINUES."
+    }
+  ],
+  "section_words": {"medbay": "MEDBAY", "cargo": "CARGO"},
+  "lights": {"flicker_s": 1.6, "gap_min_s": 0.05, "gap_max_s": 0.22, "flicker_energy": 0.7},
+  "airlock": {
+    "space": "junction", "from": [0.0, 0.84], "to": [1.0, 1.0],
+    "strip_m": 0.1, "strip_height_m": 0.015, "color": "7fe0a0", "energy": 1.8, "unknown_share": 1.0,
+    "sign": "AIRLOCK / HOLD", "sign_height_m": 2.3, "sign_pixel_size": 0.008, "sign_font_size": 44, "sign_color": "7fe0a0"
+  },
+  "leave": {"hold_s": 1.5, "hold_after_s": 3600.0},
+  "alarm": {
+    "reveal_s": 10.0,
+    "refresh_s": 1.0,
+    "announce": "ASSET TAMPER ALARM. POSITION BROADCAST.",
+    "marker": {
+      "radius_m": 1.3, "ring_width_m": 0.12, "segments": 48, "height_m": 0.03, "pulse_hz": 1.6,
+      "pulse_grow": 1.8, "column_radius_m": 0.14, "column_height_m": 7.0, "color": "ff3a2a", "energy": 3.0, "min_alpha": 0.15
+    },
+    "siren": {"low_hz": 480.0, "high_hz": 880.0, "sweep_s": 0.7, "length_s": 1.4, "volume_db": -6.0}
+  },
+  "tier_chirp": {"low_hz": 620.0, "high_hz": 620.0, "sweep_s": 0.2, "length_s": 0.5, "volume_db": -10.0},
+  "mix_rate": 22050,
+  "drop_sound": {"thud": "bash"},
+  "prompt": {
+    "take": "E: TAKE %s (%s)",
+    "pockets_full": "POCKETS FULL: %s",
+    "hands_full": "HANDS FULL: %s",
+    "leave": "HOLD E: LEAVE",
+    "height_m": 1.2, "pixel_size": 0.006, "font_size": 40, "color": "e8e6d8", "refused_color": "d29a3a"
+  },
+  "words": {
+    "taking": "TAKING", "dropping": "DROPPING", "leaving": "LEAVING",
+    "deposit": "HOLD: +%d ITEMS.",
+    "oxygen_out": "O2 DEPLETED. SUIT INTEGRITY FAILING.",
+    "closed": "SHIFT CLOSED", "hold_line": "HOLD %s CR, UNCONFIRMED", "next": "Backspace: next shift"
+  },
+  "demo": {"hunter_ahead_m": 6.0, "hunter_side_m": 2.0, "pace_s": 4.0, "pace_share": 0.25},
+  "help": {"text": "F flashlight   E take / door / tip bed   G drop   hold E in the airlock: leave   Backspace next shift   6 default camera"}
+}

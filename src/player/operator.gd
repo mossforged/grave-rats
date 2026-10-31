@@ -27,6 +27,9 @@ var _shape: CapsuleShape3D
 var _muzzle_offset := Vector3.ZERO
 var _trigger_tap := false
 var _hold_left := 0.0
+var _can_fire := true
+var _cone_extra := 0.0
+var _cone_next := 0.0
 
 
 func _ready() -> void:
@@ -120,6 +123,19 @@ func control_held() -> bool:
 	return _hold_left > 0.0
 
 
+## What you're carrying costs you: {speed_mult, can_sprint, can_fire, cone_extra_deg}. The numbers are
+## the salvage's (data/salvage.json); this only obeys them.
+func set_carry(p: Dictionary) -> void:
+	model.speed_mult = float(p.speed_mult)
+	model.can_sprint = bool(p.can_sprint)
+	_can_fire = bool(p.can_fire)
+	_cone_next = float(p.cone_extra_deg)
+
+
+func can_fire() -> bool:
+	return _can_fire
+
+
 ## R pressed (or a script asking). Starts this step: the upper body changes the same frame.
 func request_reload() -> bool:
 	return rifle.request_reload(model.sprinting)
@@ -164,12 +180,18 @@ func simulate(delta: float) -> void:
 		sprint = false
 		rifle.trigger_held = false
 		to_yaw = model.aim_yaw
+	if not _can_fire:
+		rifle.trigger_held = false
 	var wish := OperatorModel.wish_from_keys(keys, move_yaw_deg)
 	model.step(delta, wish, to_yaw, crouch, sprint)
 	# Everything the animation reads is fixed here, before the body moves.
 	anim_speed = model.speed
 	var walk := float(_cfg.move.walk_speed_m_s)
+	# The cone settles as it always does; one-handed fire sits on top of that.
+	rifle.cone.spread_deg -= _cone_extra
 	rifle.cone.step(delta, model.speed / walk, model.moving(), model.sprinting, model.turned_deg)
+	_cone_extra = _cone_next
+	rifle.cone.spread_deg += _cone_extra
 	var origin := global_position + Vector3.UP * float(_cfg.aim_height_m)
 	if rifle.tick(delta, model.sprinting, origin, gun_yaw(), muzzle_position()):
 		model.note_shot()

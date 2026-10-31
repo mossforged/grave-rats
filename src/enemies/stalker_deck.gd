@@ -13,6 +13,8 @@ const StalkerPack := preload("res://src/enemies/stalker_pack.gd")
 const Bulkhead := preload("res://src/enemies/bulkhead.gd")
 const AmbushTrigger := preload("res://src/enemies/ambush_trigger.gd")
 const RunLog := preload("res://src/run_log/run_log.gd")
+## Hurts that come from no one, so no flash and no hit.
+const QUIET_HURTS := ["puddle", "oxygen"]
 
 var cover: CoverField
 var tracer: ShotTracer
@@ -349,7 +351,7 @@ func _hurt(source: String, amount: float, who: String, in_cover: bool) -> void:
 	if float(result.amount) <= 0.0:
 		return
 	run_log.note_damage(source, float(result.amount), in_cover)
-	if source != "puddle":
+	if not QUIET_HURTS.has(source):
 		suit_hud.flash()
 	if bool(result.staggered):
 		_stagger()
@@ -367,10 +369,15 @@ func _stagger() -> void:
 
 func _die(who: String, how: String) -> void:
 	operator.hold_control(INF)
-	run_log.note_death(who, how)
+	run_log.note_death(who, how, _killer_kind(how))
 	run_log.write("death")
 	killed_by_text = "%s: %s" % [who, how]
 	suit_hud.show_death(killed_by_text)
+
+
+## What the run log calls whatever did this.
+func _killer_kind(_how: String) -> String:
+	return "stalker"
 
 
 # --- capture hooks (src/debug/capture.gd) ---

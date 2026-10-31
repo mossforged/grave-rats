@@ -1264,7 +1264,7 @@ func test_tall_crates_block_sight_and_stop_being_low_cover() -> void:
 
 func test_awareness_circle_and_main_scene() -> void:
 	check_eq(float(Data.value("sight", "awareness_radius_m")), 2.2, "the circle is John's 2.2 m")
-	check_eq(String(ProjectSettings.get_setting("application/run/main_scene")), "res://scenes/pirates/pirate_deck.tscn", "F5 runs the latest build")
+	check_eq(String(ProjectSettings.get_setting("application/run/main_scene")), "res://scenes/shift/shift_deck.tscn", "F5 runs the latest build")
 
 
 func test_an_open_door_hides_its_panel_and_a_shut_one_shows_it() -> void:

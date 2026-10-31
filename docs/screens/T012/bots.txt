@@ -1,0 +1,18 @@
+== greedy, 12 seeds
+   survived 6 of 12 (50%)
+   banked     mean   2379.7  median   3044.0  min      0.0  max   5617.0
+   deposited  mean   4675.2  median   4921.0  min   1581.0  max   6288.0
+   items      mean     19.0  median     19.0  min     11.0  max     25.0
+   tier       mean      1.8  median      2.0  min      1.0  max      2.0
+   time_s     mean    357.2  median    374.7  min    220.8  max    398.1
+   prize      mean      0.8  median      1.0  min      0.0  max      1.0
+   deaths by {"puddle":1,"spit":5}
+== cautious, 12 seeds
+   survived 12 of 12 (100%)
+   banked     mean   1309.3  median   1316.0  min    832.0  max   1620.0
+   deposited  mean   1309.3  median   1316.0  min    832.0  max   1620.0
+   items      mean     14.4  median     14.0  min      8.0  max     18.0
+   tier       mean      1.0  median      1.0  min      1.0  max      1.0
+   time_s     mean    204.1  median    204.3  min    198.0  max    208.4
+   prize      mean      0.0  median      0.0  min      0.0  max      0.0
+   deaths by {}

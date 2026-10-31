@@ -263,7 +263,7 @@ func _act_drop(p: Session.SessionPlayer) -> void:
 		return
 	var c: CarryState = shift.carry(p.id)
 	for ev: Dictionary in c.drop():
-		_on_carry_event(p, ev)
+		_on_carry_event(ev, p)
 	if c.busy():
 		p.operator.hold_control(c.busy_left())
 
@@ -605,7 +605,7 @@ func _step_shift(delta: float) -> void:
 				pack.alert(_alarm_at())
 	for p: Session.SessionPlayer in session.players:
 		for ev: Dictionary in shift.carry(p.id).step(delta):
-			_on_carry_event(p, ev)
+			_on_carry_event(ev, p)
 		var inside := airlock.has_point(player_pos(p))
 		shift.set_aboard(p.id, inside)
 		if inside and shift.alive(p.id):
@@ -735,7 +735,9 @@ func _sees_from(p: Vector2, who: Session.SessionPlayer) -> bool:
 	return false
 
 
-func _on_carry_event(p: Session.SessionPlayer, ev: Dictionary) -> void:
+## Whose lift or drop this was; no one named is the local player.
+func _on_carry_event(ev: Dictionary, who: Session.SessionPlayer = null) -> void:
+	var p: Session.SessionPlayer = who if who != null else session.local()
 	var item: RefCounted = ev.item
 	var at := player_pos(p)
 	if String(ev.type) == CarryState.EV_TAKEN:

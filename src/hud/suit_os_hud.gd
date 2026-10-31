@@ -19,6 +19,13 @@ var in_acid := false
 var light_off := false
 var lock_state := ""       # "", "locked", "exposed"
 var scene_help := ""
+var hold_estimate := -1    # below zero there's no hold on this deck: the placeholder shows
+## {slots_used, slots_max, in_hand ("" for none), class_word, class_key}; empty on decks without salvage.
+var carry := {}
+var action := {}           # {word, share}: a lift, a drop, LEAVE, over the operator; empty for none
+var urgent_alerts: Array = []
+var hands_full := false
+var banner: Array = []     # [big line, lines...]: the shift's over, until T013's screens
 var help_on := true
 
 var _canvas: Control
@@ -53,6 +60,8 @@ func reset() -> void:
 	if os_state:
 		os_state.reset()
 		hits.reset()
+	banner = []
+	action = {}
 
 
 func toggle_help() -> void:
@@ -79,6 +88,7 @@ func status_now() -> Array:
 		"reloading": bool(s.reloading()),
 		"empty": int(s.mag) == 0,
 		"light_off": light_off,
+		"hands_full": hands_full,
 	})
 
 
@@ -94,12 +104,16 @@ func _draw_hud() -> void:
 	_draw_mark()
 	_draw_crew()
 	_draw_oxygen(view)
+	_draw_carry(view)
 	_draw_watermark(view)
 	var top := _draw_right_dock(view)
 	top = _draw_alerts(view, top)
 	_draw_shields(view, top)
 	_draw_status()
 	_draw_hit_arcs()
+	_draw_action()
+	_draw_announcement(view)
+	_draw_banner(view)
 	if help_on:
 		_draw_help(view)
 
@@ -211,6 +225,79 @@ func _draw_oxygen(view: Vector2) -> void:
 	_canvas.draw_rect(Rect2(bar.position, Vector2(bar.size.x * minf(f, float(d.accent)), bh)), _col("accent"))
 
 
+## Pocket slots and what's in your hands, on a plate over the oxygen dock.
+func _draw_carry(view: Vector2) -> void:
+	if carry.is_empty():
+		return
+	var c: Dictionary = cfg.carry
+	var r := Rect2(_px(c.x_px), view.y - _px(c.from_bottom_px), _px(c.w_px), _px(c.h_px))
+	_plate(r)
+	var pad := _px(cfg.dock.pad_px)
+	var x := r.position.x + pad
+	var y := r.position.y + pad
+	_text(_regular, Vector2(x, y + _px(c.label_px)), String(c.word), c.label_px, _col("text_dim"))
+	var slot := _px(c.slot_px)
+	for i in int(carry.slots_max):
+		var box := Rect2(x + _px(c.slots_x_px) + (slot + _px(c.slot_gap_px)) * float(i), y, slot, slot)
+		_canvas.draw_rect(box, _col("track"))
+		if i < int(carry.slots_used):
+			_canvas.draw_rect(box, Color(String(c.slot_filled)))
+	var base := y + slot + _px(c.line_gap_px) + _px(c.font_px)
+	if String(carry.in_hand) == "":
+		_text(_regular, Vector2(x, base), String(c.empty), c.font_px, _col("text_dim"))
+	else:
+		var line := String(c.hand) % [String(carry.in_hand), String(carry.class_word)]
+		_text(_bold, Vector2(x, base), line, c.font_px, Color(String(c.class_colors[String(carry.class_key)])))
+
+
+## A lift, a drop or LEAVE under way: a word and a bar over the operator.
+func _draw_action() -> void:
+	if action.is_empty() or camera_rig == null or camera_rig.camera == null:
+		return
+	var a: Dictionary = cfg.action
+	var head := operator.global_position + Vector3.UP * float(a.above_m)
+	if camera_rig.camera.is_position_behind(head):
+		return
+	var at: Vector2 = camera_rig.camera.unproject_position(head)
+	var w := _px(a.w_px)
+	var word := String(action.word)
+	var y := at.y - _px(a.h_px) - _px(a.gap_px)
+	_text(_bold, Vector2(at.x - _text_w(_bold, word, a.font_px) * 0.5, y), word, a.font_px, _col("text"))
+	_bar(Rect2(at.x - w * 0.5, at.y - _px(a.h_px), w, _px(a.h_px)), float(action.share), _col("accent"))
+
+
+func _draw_announcement(view: Vector2) -> void:
+	var line: String = os_state.announcement()
+	if line == "":
+		return
+	var a: Dictionary = cfg.announce
+	var w := _text_w(_bold, line, a.font_px) + _px(a.pad_px) * 2.0
+	var r := Rect2((view.x - w) * 0.5, _px(a.y_px), w, _px(a.h_px))
+	var fade: float = os_state.announcement_alpha()
+	var plate := _col("plate")
+	plate.a *= fade
+	_canvas.draw_rect(r, plate)
+	var col := _col("warn")
+	col.a *= fade
+	_text(_bold, Vector2(r.position.x + _px(a.pad_px), r.position.y + (r.size.y + _px(a.font_px)) * 0.5 - _px(a.font_drop_px)), line, a.font_px, col)
+
+
+## The shift's over: the first line big, the rest under it.
+func _draw_banner(view: Vector2) -> void:
+	if banner.is_empty():
+		return
+	var b: Dictionary = cfg.banner
+	var w := _px(b.w_px)
+	_canvas.draw_rect(Rect2((view.x - w) * 0.5, _px(b.y_px), w, _px(b.h_px)), _col("plate"))
+	var y := _px(b.y_px) + _px(b.big_px)
+	var big := String(banner[0])
+	_text(_bold, Vector2((view.x - _text_w(_bold, big, b.big_px)) * 0.5, y), big, b.big_px, _col("text"))
+	for i in range(1, banner.size()):
+		y += _px(b.line_px)
+		var line := String(banner[i])
+		_text(_regular, Vector2((view.x - _text_w(_regular, line, b.font_px)) * 0.5, y), line, b.font_px, _col("text_dim"))
+
+
 func _draw_watermark(view: Vector2) -> void:
 	var w: Dictionary = cfg.watermark
 	_text(_regular, Vector2(_px(w.x_px), view.y - _px(w.from_bottom_px)), String(w.text), w.font_px, _col("watermark"))
@@ -237,7 +324,8 @@ func _draw_right_dock(view: Vector2) -> float:
 	var ammo_digits := int(cfg.ammo.digits)
 	_cell(r, 1, cell, "ammo", String(cfg.ammo.word), String.num_int64(int(s.mag)).pad_zeros(ammo_digits), " / %d" % int(s.reserve),
 			_col("danger") if low_ammo else _col("text"), ammo_fill, ammo_bar)
-	_cell(r, 2, cell, "salvage", String(cfg.salvage.word), os_state.credits_text(int(cfg.salvage.credits)), " %s" % String(cfg.salvage.unit),
+	var salvage_big: String = os_state.credits_text(int(cfg.salvage.credits)) if hold_estimate < 0 else os_state.hold_text(hold_estimate)
+	_cell(r, 2, cell, "salvage", String(cfg.salvage.word), salvage_big, " %s" % String(cfg.salvage.unit),
 			_col("text"), float(cfg.salvage.fill), _col("bar"))
 	for i in int(d.cells) - 1:
 		var x := r.position.x + cell * float(i + 1)
@@ -264,7 +352,7 @@ func _cell(r: Rect2, i: int, cell: float, icon: String, label: String, big: Stri
 
 ## The alarm strip above the right dock. Returns the y of the top of what's now stacked there.
 func _draw_alerts(view: Vector2, top: float) -> float:
-	var list: Array = os_state.alerts(in_acid, int(operator.rifle.state.mag))
+	var list: Array = os_state.alerts(in_acid, int(operator.rifle.state.mag), urgent_alerts)
 	if list.is_empty():
 		return top
 	var a: Dictionary = cfg.alert

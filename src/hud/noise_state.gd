@@ -11,6 +11,7 @@ var ripple := -1.0        # metres: a pulse running out from a shot; below zero 
 
 var _hold_left := 0.0
 var _blooming := false
+var _bloom_kind := "gunfire"
 
 
 func _init(ring_cfg: Dictionary, enemy_senses: Dictionary) -> void:
@@ -31,8 +32,10 @@ func reset() -> void:
 	_blooming = false
 
 
-## A shot: out to the gunfire radius, and a new pulse if the last has run far enough.
-func fire() -> void:
+## A shot: out to the gunfire radius, and a new pulse if the last has run far enough. Anything else
+## that loud (a dropped pod) names its own radius.
+func fire(loud_kind := "gunfire") -> void:
+	_bloom_kind = loud_kind
 	_blooming = true
 	_hold_left = float(cfg.bloom_s) + float(cfg.hold_s)
 	if ripple < 0.0 or ripple >= float(cfg.ripple_restart_m):
@@ -48,7 +51,8 @@ func step(delta: float, feet_kind: String) -> void:
 			ripple = -1.0
 	_hold_left = maxf(_hold_left - delta, 0.0)
 	if _blooming:
-		radius = move_toward(radius, gun, gun / float(cfg.bloom_s) * delta)
+		var loud := heard_at(_bloom_kind)
+		radius = move_toward(radius, loud, loud / float(cfg.bloom_s) * delta)
 		if _hold_left == 0.0:
 			_blooming = false
 		return

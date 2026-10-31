@@ -1,12 +1,13 @@
 extends RefCounted
 ## John's hauler's clips: one AnimationLibrary, one clip per animation state, from data/hauler_anim.json
-## "states". A state's source is a clip in the hauler's file ("Walking"), a Mixamo or Meshy file in
-## clip_dir ("hauler-reload.fbx"), or a legacy clip ("legacy:U_LowReady"). Dropping
+## "states". A state's source is a clip in the hauler's file ("Roll_Dodge"), a Mixamo or Meshy file in
+## clip_dir ("clips/rifle_reload.fbx"), or a legacy clip ("legacy:U_LowReady"). Dropping
 ## `hauler-<state>.fbx` or `.glb` into clip_dir takes over that state with no data edit
 ## (`crouch_walk` -> `hauler-crouch-walk.fbx`). Built once and shared: every hauler plays the same clips.
 
 const Retarget := preload("res://src/player/hauler_retarget.gd")
 const LEGACY := "res://assets/game/legacy/operator.glb"
+const FRAME_RATE := 30.0   # the Mixamo files' frames; marks in the data count these
 
 ## The bone chains that say which way a bone points, for straightening rests.
 const CHAIN_NAMES := [["Hips", "Spine", "Spine1", "Spine2", "Neck", "Head", "HeadTop_End"],
@@ -36,12 +37,23 @@ static func library(cfg: Dictionary, player: AnimationPlayer, rest: Dictionary) 
 			_sources[state] = "stand-in: %s" % String(spec.get("stand_in", "holds the pose"))
 			continue
 		var own := clip.duplicate() as Animation
-		own.loop_mode = Animation.LOOP_LINEAR if bool(spec.get("loop", false)) else Animation.LOOP_NONE
 		var hip_path := "%s:%s" % [cfg.skeleton_path, cfg.bones.hips]
+		# Deaths move the body on screen; the collision stays where it fell because nothing here moves it.
+		if not bool(spec.get("keep_travel", false)):
+			Retarget.strip_hip_travel(own, hip_path)
+		if spec.has("trim_frames"):
+			var f: Array = spec.trim_frames
+			own = Retarget.warped(own, [float(f[0]) / FRAME_RATE, float(f[1]) / FRAME_RATE],
+				[0.0, (float(f[1]) - float(f[0])) / FRAME_RATE], float(cfg.retarget_fps))
+		if spec.has("marks"):
+			own = _on_reload_timeline(own, spec.marks, cfg)
+		own.loop_mode = Animation.LOOP_LINEAR if bool(spec.get("loop", false)) else Animation.LOOP_NONE
 		if spec.has("hip_y_offset_m"):
 			Retarget.lift_hips(own, hip_path, float(spec.hip_y_offset_m))
 		if bool(spec.get("strip_yaw", false)):
 			Retarget.strip_hip_yaw(own, hip_path)
+		if bool(spec.get("additive", false)):
+			Retarget.make_additive(own, rest, cfg.skeleton_path)
 		_library.add_animation(state, own)
 		_sources[state] = key if not spec.has("stand_in") else "stand-in: %s (%s)" % [key, spec.stand_in]
 	return _library
@@ -83,8 +95,21 @@ static func _build(key: String, cfg: Dictionary, player: AnimationPlayer, rest: 
 	if clip == null:
 		push_warning("hauler clip %s not found" % key)
 		return null
-	Retarget.strip_hip_travel(clip, "%s:%s" % [cfg.skeleton_path, cfg.bones.hips])
 	return clip
+
+
+## Each reload's marked frames fall where `reload_stages` (data/audio.json) says the sounds do, so the variants
+## can blend mid-reload and a sound always lands on its moment. All come out `reload_clip_s` long.
+static func _on_reload_timeline(clip: Animation, marks: Dictionary, cfg: Dictionary) -> Animation:
+	var length := float(cfg.anim.reload_clip_s)
+	var from: Array = [float(marks.start) / FRAME_RATE]
+	var to: Array = [0.0]
+	for s: Dictionary in Data.value("audio", "reload_stages"):
+		from.append(float(marks[s.mark]) / FRAME_RATE)
+		to.append(float(s.at) * length)
+	from.append(float(marks.end) / FRAME_RATE)
+	to.append(length)
+	return Retarget.warped(clip, from, to, float(cfg.retarget_fps))
 
 
 ## A file's clip, moved onto the hauler and stood on the floor.

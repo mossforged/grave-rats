@@ -9,8 +9,8 @@ const PirateRecolour := preload("res://src/pirates/pirate_recolour.gd")
 const Operator := preload("res://src/player/operator.gd")
 
 ## Every animation state in the packet, as named in the data.
-const PACKET_STATES := ["idle", "walk_forward", "walk_back", "strafe_left", "strafe_right", "run", "sprint",
-	"turn_left", "turn_right", "crouch_idle", "crouch_walk", "aim", "fire", "reload", "roll", "hit", "death"]
+const PACKET_STATES := ["idle", "walk_fwd", "walk_back", "walk_left", "walk_right", "run_fwd", "sprint_fwd",
+	"turn_left", "turn_right", "crouch_idle", "crouch_walk_fwd", "aim", "fire", "reload", "roll", "hit_front", "death"]
 
 var _nodes: Array[Node] = []
 
@@ -95,8 +95,8 @@ func test_each_state_resolves_to_a_clip_or_a_declared_stand_in() -> void:
 func test_a_new_file_named_for_a_state_takes_it_over() -> void:
 	var cfg := _cfg().duplicate(true)
 	cfg.clip_dir = "res://assets/game/hauler/"
-	var key: String = HaulerClips._source_key("reload", {"source": "Walking"}, cfg)
-	check_eq(key, "hauler-reload.fbx", "hauler-reload.fbx beats what the data says")
+	var key: String = HaulerClips._source_key("rigged", {"source": "Walking"}, cfg)
+	check_eq(key, "hauler-rigged.glb", "hauler-<state> beats what the data says")
 	check_eq(HaulerClips._source_key("run", {"source": "Running"}, cfg), "Running", "no file: the data")
 
 
@@ -120,6 +120,8 @@ func test_no_clip_moves_the_hips_horizontally() -> void:
 	var lib := _library(op)
 	var path := "%s:%s" % [_cfg().skeleton_path, _cfg().bones.hips]
 	for state: StringName in lib.get_animation_list():
+		if bool(_cfg().states[String(state)].get("keep_travel", false)):
+			continue
 		var clip := lib.get_animation(state)
 		check(clip.find_track(NodePath(path), Animation.TYPE_POSITION_3D) >= 0, "%s has a hips track" % state)
 		check(Retarget.hip_travel(clip, path) < 0.0005, "%s stays put (%.3f m)" % [state, Retarget.hip_travel(clip, path)])
@@ -157,7 +159,7 @@ func test_retargeted_clips_stand_on_the_floor() -> void:
 	var cfg := _cfg()
 	var rest: Dictionary = op.anim.rest
 	var ankle: float = rest.world_pos[rest.index[cfg.bones.feet[0]]].y
-	for state: String in ["idle", "crouch_idle", "crouch_walk", "strafe_left", "strafe_right"]:
+	for state: String in ["idle", "crouch_idle", "crouch_walk_fwd", "walk_left", "run_right"]:
 		var low: float = Retarget.lowest(lib.get_animation(state), rest, cfg.skeleton_path, cfg.bones.feet)
 		check(absf(low - ankle) < 0.02, "%s: lowest ankle %.3f, rest %.3f" % [state, low, ankle])
 
@@ -168,10 +170,10 @@ func test_the_strafe_clips_step_the_way_they_are_named() -> void:
 	var cfg := _cfg()
 	var rest: Dictionary = op.anim.rest
 	# The hauler's file faces +Z, so its right is -X. foot_speed is positive when the body goes along the axis.
-	var to_right: float = Retarget.foot_speed(lib.get_animation("strafe_right"), rest, cfg.skeleton_path, cfg.bones.feet, Vector3(-1, 0, 0))
-	var to_left: float = Retarget.foot_speed(lib.get_animation("strafe_left"), rest, cfg.skeleton_path, cfg.bones.feet, Vector3(1, 0, 0))
-	check(to_right > 0.0, "strafe_right goes right (%.2f m/s)" % to_right)
-	check(to_left > 0.0, "strafe_left goes left (%.2f m/s)" % to_left)
+	var to_right: float = Retarget.foot_speed(lib.get_animation("walk_right"), rest, cfg.skeleton_path, cfg.bones.feet, Vector3(-1, 0, 0))
+	var to_left: float = Retarget.foot_speed(lib.get_animation("walk_left"), rest, cfg.skeleton_path, cfg.bones.feet, Vector3(1, 0, 0))
+	check(to_right > 0.0, "walk_right goes right (%.2f m/s)" % to_right)
+	check(to_left > 0.0, "walk_left goes left (%.2f m/s)" % to_left)
 
 
 ## The rifle's mount against the hand as the spine modifier left it. Godot puts bone poses back after
@@ -246,7 +248,8 @@ func test_a_step_crouch_does_not_swing_the_feet_around_the_body() -> void:
 		furthest = maxf(furthest, Vector2(at.x - start.x, at.z - start.z).length())
 	var end: Vector3 = sk.get_bone_global_pose(foot).origin
 	var settled := Vector2(end.x - start.x, end.z - start.z).length()
-	check(furthest <= settled + 0.1, "strayed %.2f m, ends %.2f m away" % [furthest, settled])
+	# The crouch's own clip takes a short step on the way down (T022), so 15 cm, not T009's 10.
+	check(furthest <= settled + 0.15, "strayed %.2f m, ends %.2f m away" % [furthest, settled])
 
 
 func test_a_turn_in_place_plays_only_when_the_hips_are_dragged() -> void:

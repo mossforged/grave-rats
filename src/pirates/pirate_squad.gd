@@ -388,6 +388,7 @@ func _fire(p: Node) -> void:
 	if b.role == Tactics.Role.SUPPRESS:
 		_covering_fire = true
 	fired.emit(p)
+	p.anim.note_shot()
 	var yaw: float = b.gun.shot_yaw(b.gun_yaw(), b.cone.spread_deg)
 	var dir := Vector3(-sin(yaw), 0.0, -cos(yaw))
 	var origin: Vector3 = p.shot_origin()

@@ -30,7 +30,7 @@ The rival crew (T007): an enemy that shoots back, by your rules, in a squad of 3
 - **Stagger:** at least a quarter of the suit within `big_hit.window_s`, for them and, in this deck, for you.
 - **Doors:** they open shut, unlocked doors on their way. Locked ones hold.
 - **Barks:** text labels, and they show even when the one shouting can't be seen. A voice carries.
-- **Body:** a stagger plays the hit clip, death plays the death clip and holds it. The legacy body still leans and tilts instead.
+- **Body:** the same states as the player's (T022): eight-way gaits, crouch, firing and reload clips, flinches by where the round came from, a stagger flinches for as long as it lasts, death by the last round and holds. The legacy body still leans and tilts instead. Looting still wears the sprint's arms at a walk (`low`).
 - **Beam:** additive sheet, drawn only where the player has sight, so it can't shine out of a room you can't see. Its spot lights the floor for real, so a remembered room shows it dimly.
 
 - **Their guns (T020):** each pirate holds a `ShotTimeline`, so a round has the same layers, smoke, casing and landing as yours, through `src/audio` (filtered by range and walls), not a sound of its own. A hit on one calls `Vfx.body_hit("pirate", ...)`: red-brown spray, grunt, a floor splat. A round in the player does the same (`PlayerTarget.hit_surface`).

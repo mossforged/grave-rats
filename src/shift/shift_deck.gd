@@ -234,6 +234,7 @@ func _act_take(p: Session.SessionPlayer) -> bool:
 	if item == null or c.begin_take(item) != CarryState.OK:
 		return false
 	p.operator.hold_control(c.busy_left())
+	p.operator.play_action("pick_up")
 	return true
 
 
@@ -248,8 +249,8 @@ func _act_tip(p: Session.SessionPlayer) -> bool:
 
 
 func _act_door(p: Session.SessionPlayer) -> void:
-	if _can_act(p):
-		doors.interact(player_pos(p))
+	if _can_act(p) and doors.interact(player_pos(p)) != "":
+		p.operator.play_action("interact")
 
 
 ## G: lets go of what's in your hands, the heavy kind at once and loudly.
@@ -329,6 +330,7 @@ func _on_player_hit(source: String, amount: float, stalker: Node3D, in_cover: bo
 	if _hunted_id == player_id:
 		super(source, amount, stalker, in_cover)
 	else:
+		session.player(_hunted_id).operator.note_hit_from(stalker.floor_position())
 		hurt_player(_hunted_id, source, amount, stalker.label, in_cover)
 
 
@@ -435,6 +437,7 @@ func _player_knows(p: Vector2) -> bool:
 
 func _on_custodian_hit(id: int, source: String, amount: float, from: Vector2, who: String) -> void:
 	if id != player_id:
+		session.player(id).operator.note_hit_from(from)
 		hurt_player(id, source, amount, who, false)
 		return
 	note_hit_from(from, source)

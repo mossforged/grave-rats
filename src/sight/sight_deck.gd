@@ -114,7 +114,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_F:
 				flashlight.toggle()
 			KEY_E:
-				doors.interact(_eye())
+				if doors.interact(_eye()) != "":
+					operator.play_action("interact")
 			KEY_F2:
 				sight_debug.toggle()
 			_:
@@ -126,7 +127,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 ## Something at `from` hurt the player. If they couldn't see it, the suit OS says which way it came from.
-func note_hit_from(from: Vector2, source: String) -> void:
+func note_hit_from(from: Vector2, source: String, point_y := -1.0) -> void:
+	operator.note_hit_from(from, point_y)
 	var saw: bool = sight.visibility.can_see(_eye(), operator.gun_yaw(), flashlight.on, from)
 	if not saw or not bool(hud.hits.cfg.only_out_of_sight):
 		hud.hits.add(from, source)

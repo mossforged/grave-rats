@@ -204,7 +204,7 @@ func test_speed_is_computed_before_the_move() -> void:
 		op.simulate(DT)
 	check(is_equal_approx(op.anim_speed, walk), "pushing a wall still reads walk speed (%.2f)" % op.anim_speed)
 	check(op.global_position.distance_to(start) < 0.25, "and the wall really stopped it (%.2f)" % op.global_position.distance_to(start))
-	check(op.anim.tree.get("parameters/legs/blend_position").length() > 0.9, "the leg blend got that speed")
+	check(float(op.anim.tree.get("parameters/gait/blend_amount")) > 0.9, "the legs got that speed: the run")
 
 
 func test_operator_collides_with_a_wall() -> void:

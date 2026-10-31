@@ -154,6 +154,50 @@ static func strip_hip_travel(clip: Animation, hip_path: String) -> void:
 		clip.track_set_key_value(t, k, Vector3(first.x, at.y, first.z))
 
 
+## A new clip with time bent piecewise: the moment `from[i]` (s) of the clip plays at `to[i]`. Both rising. The
+## clip before from[0] and after the last is cut, and it starts at to[0], which should be 0.
+static func warped(clip: Animation, from: Array, to: Array, fps: float) -> Animation:
+	var out := Animation.new()
+	out.length = float(to[-1])
+	var frames := maxi(int(ceil(out.length * fps)), 1)
+	for t in clip.get_track_count():
+		var kind := clip.track_get_type(t)
+		var n := out.add_track(kind)
+		out.track_set_path(n, clip.track_get_path(t))
+		for f in frames + 1:
+			var at := minf(f / fps, out.length)
+			var source := _piecewise(at, to, from)
+			if kind == Animation.TYPE_ROTATION_3D:
+				out.rotation_track_insert_key(n, at, clip.rotation_track_interpolate(t, source))
+			elif kind == Animation.TYPE_POSITION_3D:
+				out.position_track_insert_key(n, at, clip.position_track_interpolate(t, source))
+	return out
+
+
+static func _piecewise(x: float, xs: Array, ys: Array) -> float:
+	for i in xs.size() - 1:
+		if x <= float(xs[i + 1]):
+			return remap(x, float(xs[i]), float(xs[i + 1]), float(ys[i]), float(ys[i + 1]))
+	return float(ys[-1])
+
+
+## Turns a clip into a change on top of whatever's under it (an Add2): each bone's rotation becomes its change
+## from the clip's first frame, written over the rest pose, because that's what the mixer measures from.
+static func make_additive(clip: Animation, rest: Dictionary, skeleton_path: String) -> void:
+	var prefix := skeleton_path + ":"
+	for t in clip.get_track_count():
+		if clip.track_get_type(t) != Animation.TYPE_ROTATION_3D:
+			continue
+		var bone := String(clip.track_get_path(t)).trim_prefix(prefix)
+		if not rest.index.has(bone) or clip.track_get_key_count(t) == 0:
+			continue
+		var base: Quaternion = rest.local_rot[rest.index[bone]]
+		var first: Quaternion = clip.track_get_key_value(t, 0)
+		for k in clip.track_get_key_count(t):
+			var q: Quaternion = clip.track_get_key_value(t, k)
+			clip.track_set_key_value(t, k, (base * first.inverse() * q).normalized())
+
+
 ## Largest horizontal distance the hips stray from where they start.
 static func hip_travel(clip: Animation, hip_path: String) -> float:
 	var t := clip.find_track(NodePath(hip_path), Animation.TYPE_POSITION_3D)

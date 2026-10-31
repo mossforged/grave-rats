@@ -190,6 +190,7 @@ func body_height() -> float:
 func _step_brace(delta: float) -> void:
 	_brace_left = maxf(_brace_left - delta, 0.0)
 	var shown := float(_cover_cfg.brace_crouch_shown)
+	operator.anim.set_cover(1.0 - driver.lock.raise if driver.lock.locked() else 0.0, driver.lock.locked())
 	if driver.lock.locked():
 		operator.crouch_shown = lerpf(1.0, shown, driver.lock.raise)
 		return
@@ -278,7 +279,7 @@ func _on_rifle_fired(from: Vector3, to: Vector3, _direction: Vector3, hit: Objec
 
 func _on_round_landed(hit: Dictionary) -> void:
 	var who: String = hit.shooter.label
-	note_hit_from(hit.shooter.floor_position(), "rifle")
+	note_hit_from(hit.shooter.floor_position(), "rifle", (hit.point as Vector3).y if hit.has("point") else -1.0)
 	_hurt("rifle", float(hit.damage), who, in_cover_now())
 
 

@@ -123,6 +123,8 @@ func take_hit(hit: Dictionary) -> void:
 	if hit.has("origin"):
 		var o: Vector3 = hit.origin
 		from = Vector2(o.x, o.z)
+	var point_y: float = (hit.point as Vector3).y if hit.has("point") else -1.0
+	anim.note_hit(from - floor_position(), brain.model.torso_yaw, point_y, float(cfg.aim_height_m) * 1.5, brain.model.firing())
 	was_shot.emit(self, dealt, from)
 	if not brain.alive():
 		_cs.disabled = true

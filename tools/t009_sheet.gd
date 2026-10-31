@@ -5,8 +5,8 @@ extends Node3D
 
 const OperatorBody := preload("res://src/player/operator_body.gd")
 
-const STATES := ["idle", "walk_forward", "walk_back", "strafe_left", "strafe_right", "run", "sprint", "crouch_idle",
-	"crouch_walk", "crouch_aim", "aim", "low", "reload", "roll", "hit", "death", "turn_left"]
+const STATES := ["idle", "walk_fwd", "walk_back", "walk_left", "walk_right", "run_fwd", "sprint_fwd", "crouch_idle",
+	"crouch_walk_fwd", "crouch_aim", "aim", "low", "reload", "roll", "hit_front", "death", "turn_left"]
 
 var _out := "docs/screens/T009"
 var _cam: Camera3D

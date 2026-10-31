@@ -14,11 +14,6 @@ var lights: Array[Light3D] = []
 var fog_volume: FogVolume
 var probes: Array[ReflectionProbe] = []
 
-var _room_lights := {}   # space -> Array of its lights
-var _room_rects := {}    # space -> Rect2
-var _dark_rooms: Array = []
-var _cull_after := 0.0
-
 ## Gives each fixture a home on the wall behind it, so it fades with the wall.
 func setup(layout: RefCounted, env: Environment, deck: Node3D) -> void:
 	cfg = KitMaterials.cfg().lighting
@@ -27,45 +22,6 @@ func setup(layout: RefCounted, env: Environment, deck: Node3D) -> void:
 	_apply_sheen(env, layout)
 	if _switched_on("KIT_PRACTICALS"):
 		_place_fixtures(layout, deck.get_node("Walls"))
-	_cull_after = float(cfg.fixtures.cull_rooms_after_s)
-	_dark_rooms = _room_lights.keys()
-
-
-## A room nobody has looked into yet shows at the mask's near-black, so its lamps needn't run. Every frame,
-## from where sight reaches now: `reach` is a rect round it, so a lamp is on before any of its light shows.
-## The probes take their one picture in the first moments, so nothing's put out until `cull_rooms_after_s`.
-func cull_rooms(reach: Rect2, delta: float) -> void:
-	_cull_after -= delta
-	if _cull_after > 0.0:
-		return
-	for space: String in _dark_rooms.duplicate():
-		if reach.intersects(_room_rects[space]):
-			_set_room_lit(space, true)
-			_dark_rooms.erase(space)
-
-
-## Back to no room having been seen: a new run. `cull_rooms` lights them again as they come into reach.
-func forget_rooms() -> void:
-	_dark_rooms = _room_lights.keys()
-	if _cull_after <= 0.0:
-		for space: String in _dark_rooms:
-			_set_room_lit(space, false)
-
-
-## Everything on: captures of what the art looks like with the mask off.
-func light_all_rooms() -> void:
-	for space: String in _room_lights.keys():
-		_set_room_lit(space, true)
-	_dark_rooms.clear()
-
-
-func room_lit(space: String) -> bool:
-	return (_room_lights[space][0] as Light3D).visible
-
-
-func _set_room_lit(space: String, on: bool) -> void:
-	for light: Light3D in _room_lights[space]:
-		light.visible = on
 
 
 func _switched_on(env_name: String) -> bool:
@@ -224,10 +180,6 @@ func _place_fixture(layout: RefCounted, walls: Node3D, space: String, e: Diction
 	light.light_specular = float(look.specular)
 	light.light_volumetric_fog_energy = float(cfg.fog.practical_energy)
 	light.light_cull_mask = 1 | layer
-	if not _room_lights.has(space):
-		_room_lights[space] = []
-		_room_rects[space] = r
-	_room_lights[space].append(light)
 	light.shadow_enabled = bool(e.get("shadow", false))
 	light.shadow_blur = float(fx.shadow_blur)
 	light.omni_shadow_mode = OmniLight3D.SHADOW_DUAL_PARABOLOID if String(fx.shadow_mode) == "dual" else OmniLight3D.SHADOW_CUBE

@@ -334,7 +334,6 @@
       },
       "shadow_blur": 1.2,
       "shadow_mode": "cube",
-      "cull_rooms_after_s": 1.0,
       "spaces": {
         "medbay": [
           {"look": "cool", "wall": "north", "at": 0.25},

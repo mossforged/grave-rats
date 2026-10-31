@@ -79,7 +79,6 @@ func respawn() -> void:
 	super()
 	if sight:
 		sight.forget()
-		deck_lighting.forget_rooms()
 		_update_sight(0.0, true)
 
 
@@ -101,18 +100,9 @@ func _eye() -> Vector2:
 func _update_sight(delta: float, force_memory: bool) -> void:
 	var yaw := operator.gun_yaw()
 	sight.update_sight(_eye(), yaw, flashlight.on, delta, force_memory)
-	deck_lighting.cull_rooms(_sight_reach(), delta)
 	var muzzle := operator.muzzle_position()
 	flashlight.follow(muzzle, yaw)
 	flashlight.draw_beam(sight.visibility, _eye(), yaw, muzzle, delta)
-
-
-## A rect round all the player's sight this frame, and the mask's spread on top.
-func _sight_reach() -> Rect2:
-	var r := Rect2(_eye(), Vector2.ZERO)
-	for p: Vector2 in sight.polygon:
-		r = r.expand(p)
-	return r.grow(float(sight.cfg.mask.dilate_m))
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -145,7 +135,6 @@ func set_kit_view(view: String) -> void:
 	mask.visible = view != "off"
 	if view != "play":
 		mask.reveal_all()
-		deck_lighting.light_all_rooms()
 
 
 # --- capture hooks (src/debug/capture.gd) ---

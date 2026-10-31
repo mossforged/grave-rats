@@ -197,31 +197,6 @@ func test_sheen_is_one_probe_per_room() -> void:
 		check_eq(p.cull_mask & 1, 0, "and doesn't see people, doors or the mask")
 
 
-func test_a_room_nobody_has_seen_runs_no_lamps() -> void:
-	var layout := _layout()
-	var built := DeckBuilder.build(layout)
-	var lighting := DeckLighting.new()
-	lighting.add_child(built)
-	(Engine.get_main_loop() as SceneTree).root.add_child(lighting)
-	_nodes.append(lighting)
-	lighting.setup(layout, Environment.new(), built)
-	var wait := float(lighting.cfg.fixtures.cull_rooms_after_s)
-	var nowhere := Rect2(-1000.0, -1000.0, 1.0, 1.0)
-	lighting.cull_rooms(nowhere, wait * 0.5)
-	check(lighting.room_lit("medbay"), "on at first, while the probes take their picture")
-	lighting.cull_rooms(nowhere, wait)
-	lighting.forget_rooms()
-	check(not lighting.room_lit("medbay"), "then out, with no one having seen it")
-	check(not lighting.room_lit("cargo"), "every room")
-	lighting.cull_rooms(layout.space_rect("medbay").grow(0.1), 0.01)
-	check(lighting.room_lit("medbay"), "on as soon as sight can reach it")
-	check(not lighting.room_lit("cargo"), "and only that room")
-	lighting.cull_rooms(nowhere, 0.01)
-	check(lighting.room_lit("medbay"), "and it stays on: you remember it")
-	lighting.forget_rooms()
-	check(not lighting.room_lit("medbay"), "until a new run")
-
-
 # --- the mask over what draws after it ---
 
 func test_the_aim_cone_is_masked_but_the_ring_is_not() -> void:

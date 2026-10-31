@@ -36,6 +36,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A006 | art | merged and approved 2026-10-30 |
 | A007 | art | merged 2026-10-30 (rifle refused by the image tool) |
 | A008 | art | merged 2026-10-30: hauler A-pose inputs |
+| A009 | art | queued: rival crew design and Meshy inputs |
+| A010 | art | queued: company graphics, decals, posters, signage for T010 |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

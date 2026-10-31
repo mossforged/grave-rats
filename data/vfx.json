@@ -1,0 +1,1341 @@
+{
+  "manifest": "res://assets/game/vfx/manifest.json",
+  "texture_dir": "res://assets/game/vfx",
+  "budgets": {
+    "max_particles": 1000,
+    "max_decals": 96,
+    "max_casings": 60,
+    "max_magazines": 10,
+    "max_emitters": 24,
+    "max_lights": 6,
+    "max_pools": 2
+  },
+  "decals": {
+    "fade_band": 8,
+    "fade_s": 0.6,
+    "depth_m": 0.14,
+    "normal_fade": 0.35,
+    "edge_fade": 0.05,
+    "out_m": 0.01,
+    "splat_floor_y_m": 0.0,
+    "parallel_dot": 0.95
+  },
+  "floor_y_m": 0.02,
+  "default_cull_m": 22.0,
+  "sheets": {
+    "smoke_puff": {
+      "share": 0.22,
+      "look": "lit",
+      "emit_share": 0.12,
+      "spin_deg_s": 18,
+      "fade_power": 1.0,
+      "fade_in": 0.08,
+      "soft_m": 0.3,
+      "priority": 1
+    },
+    "impact_dust": {
+      "share": 0.08,
+      "look": "lit",
+      "emit_share": 0.3,
+      "spin_deg_s": 40,
+      "fade_power": 0.8,
+      "fade_in": 0.0,
+      "soft_m": 0.12,
+      "priority": 2
+    },
+    "fire_loop": {
+      "share": 0.04,
+      "look": "add",
+      "spin_deg_s": 0,
+      "fade_power": 0.5,
+      "fade_in": 0.2,
+      "soft_m": 0.25,
+      "priority": 3
+    },
+    "explosion": {
+      "share": 0.02,
+      "look": "blend",
+      "spin_deg_s": 12,
+      "fade_power": 0.3,
+      "fade_in": 0.0,
+      "soft_m": 0.4,
+      "priority": 4
+    },
+    "acid_bubble": {
+      "share": 0.03,
+      "look": "blend",
+      "spin_deg_s": 0,
+      "fade_power": 0.0,
+      "fade_in": 0.1,
+      "soft_m": 0.0,
+      "priority": 2
+    },
+    "electric_arc": {
+      "share": 0.02,
+      "look": "add",
+      "spin_deg_s": 0,
+      "fade_power": 0.0,
+      "fade_in": 0.0,
+      "soft_m": 0.0,
+      "priority": 5
+    },
+    "spark_streak": {
+      "share": 0.22,
+      "look": "add",
+      "align_velocity": true,
+      "spin_deg_s": 0,
+      "fade_power": 0.6,
+      "fade_in": 0.0,
+      "soft_m": 0.0,
+      "priority": 5
+    },
+    "glow_dot": {
+      "share": 0.12,
+      "look": "add",
+      "spin_deg_s": 0,
+      "fade_power": 1.0,
+      "fade_in": 0.0,
+      "soft_m": 0.0,
+      "priority": 5
+    },
+    "fleck": {
+      "texture": "glow_dot",
+      "share": 0.15,
+      "look": "blend",
+      "alpha_from_luma": true,
+      "spin_deg_s": 0,
+      "fade_power": 0.4,
+      "fade_in": 0.0,
+      "soft_m": 0.0,
+      "priority": 3
+    },
+    "mote": {
+      "texture": "glow_dot",
+      "share": 0.1,
+      "look": "add",
+      "cone_only": true,
+      "spin_deg_s": 0,
+      "fade_power": 0.0,
+      "fade_in": 0.2,
+      "soft_m": 0.0,
+      "priority": 0
+    }
+  },
+  "surfaces": {
+    "by_material": {
+      "hull": "metal",
+      "steel": "metal",
+      "deck": "metal",
+      "grate": "metal",
+      "hazard": "metal",
+      "leaf": "metal",
+      "floor_slab": "metal",
+      "brass": "metal",
+      "ammo": "metal",
+      "line": "metal",
+      "housing": "metal",
+      "leak": "metal",
+      "clinical": "panel",
+      "rubber": "panel",
+      "glass": "glass",
+      "emit_cool": "glass",
+      "emit_amber": "glass",
+      "emit_blue": "glass",
+      "emit_red": "glass"
+    },
+    "by_prop": {
+      "crate_low": "hull",
+      "crate_high": "hull",
+      "crate_stack": "hull",
+      "ammo_crate": "ammo",
+      "console": "housing",
+      "locker_bank": "steel",
+      "cabinet": "clinical",
+      "gurney": "steel",
+      "bed": "clinical"
+    },
+    "default_prop": "hull",
+    "frame_material": "steel",
+    "door_material": "leaf",
+    "default_body": "metal",
+    "recipes": {
+      "metal": "impact_metal",
+      "panel": "impact_panel",
+      "glass": "impact_glass",
+      "stalker": "impact_stalker",
+      "pirate": "impact_pirate",
+      "chew": "impact_chew"
+    },
+    "face_probe_m": 0.15,
+    "prop_grow_m": 0.06,
+    "window_min_insets": 3.0
+  },
+  "shot": {
+    "smoke": "muzzle_smoke",
+    "haze": "muzzle_haze",
+    "wisps": "barrel_wisps",
+    "haze_after_rounds": 6,
+    "haze_every_s": 0.45,
+    "wisps_after_rounds": 10,
+    "burst_gap_s": 0.28
+  },
+  "casing": {
+    "mesh": "res://assets/game/props/shell_casing.glb",
+    "scale": 1.8,
+    "color": "c9a14e",
+    "metallic": 1.0,
+    "roughness": 0.32,
+    "port_back_m": 0.34,
+    "speed_right_m_s": [
+      1.5,
+      2.5
+    ],
+    "speed_up_m_s": [
+      1.3,
+      2.2
+    ],
+    "speed_back_m_s": [
+      0.0,
+      0.6
+    ],
+    "spin_deg_s": [
+      500,
+      1400
+    ],
+    "gravity_m_s2": 9.8,
+    "restitution": 0.38,
+    "friction": 0.55,
+    "bounces": [
+      1,
+      2
+    ],
+    "rest_y_m": 0.012,
+    "settle_share": 0.45,
+    "wall_reach_m": 1.3
+  },
+  "magazine": {
+    "mesh": "res://assets/game/props/spent_magazine.glb",
+    "scale": 1.2,
+    "color": "2c2f33",
+    "metallic": 0.6,
+    "roughness": 0.55,
+    "drop_below_m": 0.12,
+    "speed_right_m_s": [
+      0.1,
+      0.4
+    ],
+    "speed_up_m_s": [
+      -0.2,
+      0.2
+    ],
+    "speed_back_m_s": [
+      0.0,
+      0.3
+    ],
+    "spin_deg_s": [
+      120,
+      320
+    ],
+    "gravity_m_s2": 9.8,
+    "restitution": 0.22,
+    "friction": 0.45,
+    "bounces": [
+      1,
+      1
+    ],
+    "rest_y_m": 0.018,
+    "settle_share": 0.6,
+    "wall_reach_m": 0.4
+  },
+  "room_draft": {
+    "medbay": [
+      0.05,
+      0.02
+    ],
+    "cargo": [
+      0.16,
+      -0.04
+    ],
+    "junction": [
+      0.02,
+      0.14
+    ],
+    "side_corridor": [
+      -0.12,
+      0.0
+    ]
+  },
+  "gallery": {
+    "section": "Effects",
+    "spawn_label": "Spawn at cursor (P)",
+    "sequence_label": "Shot sequence on each surface (O)",
+    "all_label": "Spawn every environment effect",
+    "clear_label": "Clear",
+    "floor_recipes": [
+      "fire",
+      "acid_pool",
+      "explosion",
+      "smoke_plume"
+    ],
+    "environment": [
+      "sparking_console",
+      "smoke_plume",
+      "steam_jet",
+      "fire",
+      "acid_pool",
+      "dust_motes"
+    ],
+    "row_step_m": 2.4,
+    "row_back_m": 3.0,
+    "walls": [
+      {
+        "material": "steel"
+      },
+      {
+        "material": "hull"
+      },
+      {
+        "material": "clinical"
+      },
+      {
+        "material": "glass"
+      }
+    ],
+    "wall_size_m": [
+      1.0,
+      2.2,
+      0.2
+    ],
+    "wall_distance_m": 3.6,
+    "wall_step_m": 1.1,
+    "sequence_rounds": 6,
+    "sequence_gap_s": 0.11,
+    "wall_gap_s": 0.5,
+    "sideways": [
+      "steam_jet"
+    ],
+    "spawn_height_m": 1.1
+  },
+  "recipes": {
+    "muzzle_smoke": {
+      "layers": [
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            0.7,
+            1.1
+          ],
+          "speed_m_s": [
+            0.25,
+            0.6
+          ],
+          "spread_deg": 35,
+          "axis": "normal",
+          "size_m": [
+            0.1,
+            0.16
+          ],
+          "size_end_m": [
+            0.45,
+            0.7
+          ],
+          "gravity_m_s2": -0.35,
+          "drag_per_s": 2.2,
+          "color": "b9b4aa",
+          "alpha": 0.3,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ]
+    },
+    "muzzle_haze": {
+      "layers": [
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            2.4,
+            3.2
+          ],
+          "speed_m_s": [
+            0.06,
+            0.16
+          ],
+          "spread_deg": 90,
+          "axis": "up",
+          "offset_m": 0.25,
+          "size_m": [
+            0.5,
+            0.8
+          ],
+          "size_end_m": [
+            1.3,
+            1.9
+          ],
+          "gravity_m_s2": -0.04,
+          "drag_per_s": 0.6,
+          "color": "a8a49c",
+          "alpha": 0.09,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ]
+    },
+    "barrel_wisps": {
+      "loop": true,
+      "life_s": 1.5,
+      "layers": [
+        {
+          "rate_per_s": 9,
+          "life_s": [
+            0.6,
+            0.9
+          ],
+          "speed_m_s": [
+            0.15,
+            0.3
+          ],
+          "spread_deg": 18,
+          "axis": "up",
+          "size_m": [
+            0.025,
+            0.045
+          ],
+          "size_end_m": [
+            0.14,
+            0.22
+          ],
+          "gravity_m_s2": -0.2,
+          "drag_per_s": 1.0,
+          "color": "cfcac0",
+          "alpha": 0.3,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ]
+    },
+    "impact_metal": {
+      "sound": "impact_metal",
+      "ricochet": {
+        "cue": "ricochet",
+        "chance": 0.15,
+        "shallow_deg": 35
+      },
+      "layers": [
+        {
+          "count": [
+            8,
+            14
+          ],
+          "life_s": [
+            0.14,
+            0.34
+          ],
+          "speed_m_s": [
+            2.5,
+            7.5
+          ],
+          "spread_deg": 62,
+          "axis": "normal",
+          "size_m": [
+            0.07,
+            0.16
+          ],
+          "size_end_m": [
+            0.02,
+            0.05
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.4,
+          "color": "ffbf7a",
+          "energy": 2.6,
+          "sheet": "spark_streak"
+        },
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            0.05,
+            0.08
+          ],
+          "speed_m_s": [
+            0.0,
+            0.0
+          ],
+          "spread_deg": 0,
+          "axis": "normal",
+          "size_m": [
+            0.3,
+            0.42
+          ],
+          "size_end_m": [
+            0.12,
+            0.18
+          ],
+          "color": "ffb46a",
+          "energy": 1.7,
+          "sheet": "glow_dot"
+        }
+      ],
+      "decal": {
+        "sheet": "decal_bullet_holes",
+        "frames": [
+          0,
+          3
+        ],
+        "size_m": [
+          0.13,
+          0.2
+        ]
+      }
+    },
+    "impact_panel": {
+      "sound": "impact_panel",
+      "layers": [
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            0.28,
+            0.42
+          ],
+          "speed_m_s": [
+            0.15,
+            0.4
+          ],
+          "spread_deg": 30,
+          "axis": "normal",
+          "size_m": [
+            0.18,
+            0.26
+          ],
+          "size_end_m": [
+            0.4,
+            0.62
+          ],
+          "gravity_m_s2": 0.3,
+          "color": "d6cbb2",
+          "alpha": 0.65,
+          "play": "fit",
+          "sheet": "impact_dust"
+        },
+        {
+          "count": [
+            2,
+            4
+          ],
+          "life_s": [
+            0.25,
+            0.5
+          ],
+          "speed_m_s": [
+            1.0,
+            2.8
+          ],
+          "spread_deg": 55,
+          "axis": "normal",
+          "size_m": [
+            0.018,
+            0.034
+          ],
+          "size_end_m": [
+            0.018,
+            0.03
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.25,
+          "color": "d9d2c0",
+          "sheet": "fleck"
+        }
+      ],
+      "decal": {
+        "sheet": "decal_bullet_holes",
+        "frames": [
+          4,
+          7
+        ],
+        "size_m": [
+          0.13,
+          0.2
+        ]
+      }
+    },
+    "impact_glass": {
+      "sound": "impact_glass",
+      "layers": [
+        {
+          "count": [
+            4,
+            7
+          ],
+          "life_s": [
+            0.2,
+            0.42
+          ],
+          "speed_m_s": [
+            1.2,
+            3.4
+          ],
+          "spread_deg": 48,
+          "axis": "normal",
+          "size_m": [
+            0.012,
+            0.026
+          ],
+          "size_end_m": [
+            0.01,
+            0.02
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.3,
+          "color": "eef4f6",
+          "sheet": "fleck"
+        }
+      ],
+      "decal": {
+        "sheet": "decal_bullet_holes",
+        "frames": [
+          4,
+          7
+        ],
+        "size_m": [
+          0.08,
+          0.12
+        ],
+        "tint": "cfd8dd"
+      }
+    },
+    "impact_stalker": {
+      "sound": "impact_wet",
+      "layers": [
+        {
+          "count": [
+            8,
+            13
+          ],
+          "life_s": [
+            0.18,
+            0.42
+          ],
+          "speed_m_s": [
+            2.0,
+            5.5
+          ],
+          "spread_deg": 42,
+          "axis": "back",
+          "size_m": [
+            0.03,
+            0.06
+          ],
+          "size_end_m": [
+            0.015,
+            0.03
+          ],
+          "gravity_m_s2": 11.0,
+          "color": "9fb531",
+          "sheet": "fleck"
+        },
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            0.22,
+            0.32
+          ],
+          "speed_m_s": [
+            0.5,
+            1.0
+          ],
+          "spread_deg": 25,
+          "axis": "back",
+          "size_m": [
+            0.14,
+            0.2
+          ],
+          "size_end_m": [
+            0.32,
+            0.44
+          ],
+          "gravity_m_s2": 1.5,
+          "color": "8fa52c",
+          "alpha": 0.55,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ],
+      "splat": {
+        "sheet": "decal_splats",
+        "frames": [
+          0,
+          3
+        ],
+        "size_m": [
+          0.4,
+          0.7
+        ],
+        "reach_m": 1.5
+      }
+    },
+    "impact_pirate": {
+      "sound": "impact_flesh",
+      "voice": "grunt",
+      "layers": [
+        {
+          "count": [
+            4,
+            7
+          ],
+          "life_s": [
+            0.16,
+            0.34
+          ],
+          "speed_m_s": [
+            1.5,
+            4.0
+          ],
+          "spread_deg": 38,
+          "axis": "back",
+          "size_m": [
+            0.022,
+            0.042
+          ],
+          "size_end_m": [
+            0.012,
+            0.022
+          ],
+          "gravity_m_s2": 11.0,
+          "color": "5c1d12",
+          "sheet": "fleck"
+        },
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            0.16,
+            0.24
+          ],
+          "speed_m_s": [
+            0.3,
+            0.7
+          ],
+          "spread_deg": 25,
+          "axis": "back",
+          "size_m": [
+            0.09,
+            0.13
+          ],
+          "size_end_m": [
+            0.2,
+            0.28
+          ],
+          "gravity_m_s2": 1.5,
+          "color": "5a2a1e",
+          "alpha": 0.45,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ],
+      "splat": {
+        "sheet": "decal_splats",
+        "frames": [
+          0,
+          3
+        ],
+        "size_m": [
+          0.22,
+          0.36
+        ],
+        "reach_m": 0.0,
+        "tint": "6e2013"
+      }
+    },
+    "impact_chew": {
+      "sound": "impact_chew",
+      "scale_by_damage": 18.0,
+      "layers": [
+        {
+          "count": [
+            1,
+            2
+          ],
+          "life_s": [
+            0.3,
+            0.5
+          ],
+          "speed_m_s": [
+            0.3,
+            0.9
+          ],
+          "spread_deg": 50,
+          "axis": "normal",
+          "size_m": [
+            0.2,
+            0.3
+          ],
+          "size_end_m": [
+            0.5,
+            0.8
+          ],
+          "gravity_m_s2": 0.6,
+          "color": "a39a88",
+          "alpha": 0.55,
+          "play": "fit",
+          "sheet": "impact_dust"
+        },
+        {
+          "count": [
+            3,
+            6
+          ],
+          "life_s": [
+            0.1,
+            0.24
+          ],
+          "speed_m_s": [
+            2.0,
+            5.0
+          ],
+          "spread_deg": 70,
+          "axis": "normal",
+          "size_m": [
+            0.06,
+            0.12
+          ],
+          "size_end_m": [
+            0.02,
+            0.04
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.3,
+          "color": "ffbf7a",
+          "energy": 2.2,
+          "sheet": "spark_streak"
+        }
+      ]
+    },
+    "sparking_console": {
+      "loop": true,
+      "sound_loop": "env_buzz",
+      "crackle": {
+        "cue": "env_crackle",
+        "every_s": [
+          0.5,
+          2.2
+        ]
+      },
+      "light": {
+        "color": "9ec7ff",
+        "energy": 0.9,
+        "range_m": 3.2,
+        "flicker_hz": 17,
+        "flicker_depth": 0.85
+      },
+      "layers": [
+        {
+          "rate_per_s": 5,
+          "life_s": [
+            0.1,
+            0.16
+          ],
+          "speed_m_s": [
+            0.0,
+            0.0
+          ],
+          "spread_deg": 0,
+          "axis": "normal",
+          "box_m": [
+            0.3,
+            0.12,
+            0.3
+          ],
+          "size_m": [
+            0.26,
+            0.42
+          ],
+          "size_end_m": [
+            0.26,
+            0.42
+          ],
+          "color": "a8d0ff",
+          "energy": 2.2,
+          "play": "loop",
+          "fps": 24,
+          "sheet": "electric_arc"
+        },
+        {
+          "burst_every_s": [
+            0.4,
+            1.8
+          ],
+          "count": [
+            6,
+            14
+          ],
+          "life_s": [
+            0.16,
+            0.4
+          ],
+          "speed_m_s": [
+            1.0,
+            4.0
+          ],
+          "spread_deg": 70,
+          "axis": "normal",
+          "size_m": [
+            0.06,
+            0.13
+          ],
+          "size_end_m": [
+            0.02,
+            0.04
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.35,
+          "color": "ffd59a",
+          "energy": 2.4,
+          "sheet": "spark_streak"
+        }
+      ]
+    },
+    "smoke_plume": {
+      "loop": true,
+      "draft": true,
+      "layers": [
+        {
+          "rate_per_s": 7,
+          "life_s": [
+            3.0,
+            4.2
+          ],
+          "speed_m_s": [
+            0.3,
+            0.55
+          ],
+          "spread_deg": 14,
+          "axis": "up",
+          "offset_m": 0.12,
+          "size_m": [
+            0.32,
+            0.5
+          ],
+          "size_end_m": [
+            1.4,
+            2.1
+          ],
+          "gravity_m_s2": -0.03,
+          "drag_per_s": 0.08,
+          "color": "3e3c3a",
+          "alpha": 0.45,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ]
+    },
+    "steam_jet": {
+      "loop": true,
+      "sound_loop": "env_hiss",
+      "pulse": {
+        "on_s": [
+          0.8,
+          1.6
+        ],
+        "off_s": [
+          0.3,
+          0.9
+        ],
+        "quiet_db": -18.0
+      },
+      "layers": [
+        {
+          "rate_per_s": 26,
+          "life_s": [
+            0.45,
+            0.8
+          ],
+          "speed_m_s": [
+            3.2,
+            5.0
+          ],
+          "spread_deg": 8,
+          "axis": "normal",
+          "size_m": [
+            0.06,
+            0.1
+          ],
+          "size_end_m": [
+            0.55,
+            0.85
+          ],
+          "gravity_m_s2": -0.5,
+          "drag_per_s": 2.6,
+          "color": "e6ecef",
+          "alpha": 0.34,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ]
+    },
+    "fire": {
+      "loop": true,
+      "sound_loop": "env_fire",
+      "draft": true,
+      "light": {
+        "color": "ff9a52",
+        "energy": 1.5,
+        "range_m": 4.5,
+        "flicker_hz": 9,
+        "flicker_depth": 0.4,
+        "height_m": 0.7
+      },
+      "layers": [
+        {
+          "rate_per_s": 4,
+          "life_s": [
+            0.8,
+            1.1
+          ],
+          "speed_m_s": [
+            0.1,
+            0.25
+          ],
+          "spread_deg": 12,
+          "axis": "up",
+          "offset_m": 0.14,
+          "lift_m": 0.35,
+          "size_m": [
+            0.7,
+            1.0
+          ],
+          "size_end_m": [
+            0.8,
+            1.1
+          ],
+          "color": "ffffff",
+          "energy": 1.4,
+          "play": "loop",
+          "sheet": "fire_loop"
+        },
+        {
+          "rate_per_s": 10,
+          "life_s": [
+            0.7,
+            1.5
+          ],
+          "speed_m_s": [
+            0.5,
+            1.3
+          ],
+          "spread_deg": 26,
+          "axis": "up",
+          "offset_m": 0.2,
+          "lift_m": 0.3,
+          "size_m": [
+            0.025,
+            0.05
+          ],
+          "size_end_m": [
+            0.005,
+            0.015
+          ],
+          "gravity_m_s2": -0.3,
+          "color": "ff9a4a",
+          "energy": 2.2,
+          "sheet": "glow_dot"
+        },
+        {
+          "rate_per_s": 4,
+          "life_s": [
+            2.2,
+            3.2
+          ],
+          "speed_m_s": [
+            0.5,
+            0.8
+          ],
+          "spread_deg": 12,
+          "axis": "up",
+          "offset_m": 0.14,
+          "lift_m": 1.0,
+          "size_m": [
+            0.4,
+            0.6
+          ],
+          "size_end_m": [
+            1.3,
+            1.9
+          ],
+          "gravity_m_s2": -0.04,
+          "color": "2e2c2a",
+          "alpha": 0.4,
+          "play": "fit",
+          "sheet": "smoke_puff"
+        }
+      ]
+    },
+    "acid_pool": {
+      "loop": true,
+      "sound_loop": "env_sizzle",
+      "light": {
+        "color": "8bff4d",
+        "energy": 0.35,
+        "range_m": 2.4,
+        "flicker_hz": 1.5,
+        "flicker_depth": 0.2,
+        "height_m": 0.25
+      },
+      "pool": {
+        "mask": "decal_splats_6",
+        "size_m": 2.2,
+        "color": "6fbf2c",
+        "edge_color": "c5ff5e",
+        "edge_energy": 1.6,
+        "scroll_a": [
+          0.012,
+          0.007
+        ],
+        "scroll_b": [
+          -0.009,
+          0.014
+        ],
+        "noise_scale_m": 1.2
+      },
+      "layers": [
+        {
+          "rate_per_s": 4,
+          "life_s": [
+            0.5,
+            0.8
+          ],
+          "speed_m_s": [
+            0.0,
+            0.0
+          ],
+          "spread_deg": 0,
+          "axis": "up",
+          "box_m": [
+            1.2,
+            0.0,
+            1.2
+          ],
+          "lift_m": 0.05,
+          "size_m": [
+            0.1,
+            0.2
+          ],
+          "size_end_m": [
+            0.1,
+            0.2
+          ],
+          "color": "b7f06a",
+          "play": "fit",
+          "sheet": "acid_bubble"
+        }
+      ]
+    },
+    "explosion": {
+      "shake": {
+        "kick_m": 0.32,
+        "reach_m": 14.0,
+        "recover_s": 0.55
+      },
+      "sound_by_distance": {
+        "near": "explosion_near",
+        "far": "explosion_far",
+        "near_m": 14.0
+      },
+      "room_tail": true,
+      "light": {
+        "color": "ffb070",
+        "energy": 7.0,
+        "range_m": 11.0,
+        "life_s": 0.35,
+        "height_m": 1.0
+      },
+      "decal": {
+        "sheet": "decal_splats",
+        "frames": [
+          4,
+          5
+        ],
+        "size_m": [
+          2.0,
+          2.8
+        ],
+        "floor": true
+      },
+      "layers": [
+        {
+          "count": [
+            1,
+            1
+          ],
+          "life_s": [
+            1.6,
+            1.8
+          ],
+          "speed_m_s": [
+            0.0,
+            0.0
+          ],
+          "spread_deg": 0,
+          "axis": "up",
+          "lift_m": 0.9,
+          "size_m": [
+            2.6,
+            3.0
+          ],
+          "size_end_m": [
+            3.6,
+            4.2
+          ],
+          "color": "ffffff",
+          "energy": 1.25,
+          "play": "fit",
+          "sheet": "explosion"
+        },
+        {
+          "count": [
+            2,
+            2
+          ],
+          "life_s": [
+            1.2,
+            1.5
+          ],
+          "speed_m_s": [
+            0.2,
+            0.6
+          ],
+          "spread_deg": 80,
+          "axis": "up",
+          "offset_m": 0.5,
+          "lift_m": 0.7,
+          "size_m": [
+            1.3,
+            1.8
+          ],
+          "size_end_m": [
+            2.0,
+            2.6
+          ],
+          "color": "ffffff",
+          "energy": 1.1,
+          "play": "fit",
+          "sheet": "explosion"
+        },
+        {
+          "count": [
+            24,
+            36
+          ],
+          "life_s": [
+            0.35,
+            0.8
+          ],
+          "speed_m_s": [
+            4.0,
+            11.0
+          ],
+          "spread_deg": 85,
+          "axis": "up",
+          "lift_m": 0.5,
+          "size_m": [
+            0.12,
+            0.24
+          ],
+          "size_end_m": [
+            0.03,
+            0.06
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.35,
+          "color": "ffc88a",
+          "energy": 3.0,
+          "sheet": "spark_streak"
+        },
+        {
+          "count": [
+            14,
+            22
+          ],
+          "life_s": [
+            0.6,
+            1.1
+          ],
+          "speed_m_s": [
+            3.0,
+            8.0
+          ],
+          "spread_deg": 80,
+          "axis": "up",
+          "lift_m": 0.5,
+          "size_m": [
+            0.04,
+            0.09
+          ],
+          "size_end_m": [
+            0.03,
+            0.07
+          ],
+          "gravity_m_s2": 9.8,
+          "bounce": 0.3,
+          "color": "2b2825",
+          "sheet": "fleck"
+        }
+      ]
+    },
+    "dust_motes": {
+      "loop": true,
+      "cull_m": 14.0,
+      "layers": [
+        {
+          "rate_per_s": 9,
+          "life_s": [
+            6.0,
+            9.0
+          ],
+          "speed_m_s": [
+            0.02,
+            0.08
+          ],
+          "spread_deg": 180,
+          "axis": "up",
+          "box_m": [
+            6.0,
+            1.0,
+            6.0
+          ],
+          "lift_m": 1.0,
+          "size_m": [
+            0.03,
+            0.05
+          ],
+          "size_end_m": [
+            0.03,
+            0.05
+          ],
+          "color": "fff2d8",
+          "energy": 0.8,
+          "sheet": "mote"
+        }
+      ]
+    }
+  },
+  "world_half_m": 200.0,
+  "max_spread_deg": 85.0,
+  "ball_share": 0.75,
+  "flicker_beat": 0.37
+}

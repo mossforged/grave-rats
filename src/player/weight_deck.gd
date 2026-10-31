@@ -7,6 +7,7 @@ extends Node3D
 
 const DeckLayout := preload("res://src/study/deck_layout.gd")
 const DeckBuilder := preload("res://src/study/deck_builder.gd")
+const KitPieces := preload("res://src/kit/kit_pieces.gd")
 const CameraRig := preload("res://src/camera/camera_rig.gd")
 const Operator := preload("res://src/player/operator.gd")
 const OperatorModel := preload("res://src/player/operator_model.gd")
@@ -42,6 +43,8 @@ func _ready() -> void:
 	_make_lighting()
 	layout = DeckLayout.new(deck_data, float(deck_data.room_scale))
 	add_child(DeckBuilder.build(layout))
+	Vfx.set_layout(layout)
+	Vfx.place_effects(deck_data.get("effects", []), layout, func(space: String) -> int: return KitPieces.space_layer(layout, space))
 	_make_targets()
 	session = Session.new(Data.load_data("session"))
 	operator = spawn_player(session.local_id, String(session.cfg.crew), Session.SOURCE_LOCAL)
@@ -74,6 +77,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	Vfx.clear()
 	Audio.stop_all()
 
 
@@ -108,6 +112,7 @@ func _place_player(player: Session.SessionPlayer) -> void:
 
 ## Everyone back to the spawn.
 func respawn() -> void:
+	Vfx.clear_debris()
 	for p: Session.SessionPlayer in session.players:
 		_place_player(p)
 	hud.reset()
@@ -147,8 +152,9 @@ func _apply_camera_kick() -> void:
 	var cam: Camera3D = rig.camera
 	var k: float = operator.rifle.state.camera_kick_m
 	var back := -operator.aim_dir() * k
-	cam.h_offset = back.dot(cam.global_basis.x)
-	cam.v_offset = back.dot(cam.global_basis.y)
+	var shake := Vfx.camera_shake()
+	cam.h_offset = back.dot(cam.global_basis.x) + shake.x
+	cam.v_offset = back.dot(cam.global_basis.y) + shake.y
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -114,8 +114,8 @@ func test_every_cue_has_its_fields_and_its_file_loads() -> void:
 
 func test_packet_list_is_all_in_the_bank() -> void:
 	for cue: String in ["step_deck", "step_grate", "step_wet", "crouch_rustle", "suit_breath", "pickup_small", "pickup_medium",
-			"pickup_heavy", "drop_small", "drop_medium", "drop_heavy", "rifle_shot", "rifle_dry", "rifle_mag_out", "rifle_mag_in",
-			"rifle_charge", "rifle_casing", "stalker_click", "stalker_chirp", "stalker_spit_windup", "stalker_spit", "stalker_lunge",
+			"pickup_heavy", "drop_small", "drop_medium", "drop_heavy", "rifle_body_1", "rifle_dry", "rifle_mag_out", "rifle_mag_in",
+			"rifle_charge", "tink_deck_1", "stalker_click", "stalker_chirp", "stalker_spit_windup", "stalker_spit", "stalker_lunge",
 			"stalker_hit", "stalker_death", "stalker_scuttle", "stalker_bash", "cutter_warm", "cutter_burn", "drone_chirp",
 			"custodian_chime", "amb_medbay", "amb_cargo", "amb_junction", "door_open", "door_close", "door_locked", "door_break",
 			"lights_fail", "alarm_siren", "oxygen_warning", "stamp_accept", "stamp_acknowledge", "ledger_tick"]:
@@ -190,7 +190,7 @@ func test_voices_are_a_fixed_pool_and_a_loop_keeps_its_voice() -> void:
 	Audio.loop("hold", "cutter_warm", Vector3.ZERO)
 	var voice: Node = Audio._loops["hold"].voice
 	for i in int(cfg.voices.positional) * 2:
-		var other: Node = Audio._voice_for("rifle_shot", Vector3.ZERO, 1.0, 0.0)
+		var other: Node = Audio._voice_for("rifle_body_1", Vector3.ZERO, 1.0, 0.0)
 		other.play()
 		check(other != voice, "a one-shot doesn't take a loop's voice")
 	check_eq(Audio._positional.size(), int(cfg.voices.positional), "the pool stayed its size")
@@ -215,7 +215,8 @@ func test_buses_exist_and_the_master_has_a_limiter() -> void:
 
 func test_bus_sliders_in_f1_move_the_bus_live() -> void:
 	var entries: Array = Data.value("debug", "tuning").filter(func(e: Dictionary) -> bool: return e.get("file", "") == "audio")
-	check_eq(entries.size(), 1 + (Data.value("audio", "buses") as Dictionary).size(), "one slider per bus and the master")
+	var top: Array = (Data.value("audio", "buses") as Dictionary).values().filter(func(b: Dictionary) -> bool: return not b.has("send"))
+	check_eq(entries.size(), 1 + top.size(), "one slider per bus and the master; the range filters follow SFX")
 	var cfg: Dictionary = Audio.cfg
 	var was := float(cfg.buses.SFX.volume_db)
 	cfg.buses.SFX.volume_db = was - 7.0
@@ -234,9 +235,9 @@ func test_the_mix_has_the_rifle_and_alarm_on_top_and_ambience_low() -> void:
 	check(ambience.size() >= 3, "three room tones")
 	for cue: String in ambience:
 		check(float(cues[cue].volume_db) < float(cues.alarm_siren.volume_db) - 12.0, "%s is well under the alarm" % cue)
-		check(float(cues[cue].volume_db) < float(cues.rifle_shot.volume_db) - 12.0, "%s is well under the rifle" % cue)
+		check(float(cues[cue].volume_db) < float(cues.rifle_body_1.volume_db) - 12.0, "%s is well under the rifle" % cue)
 	for cue: String in ["step_deck", "crouch_rustle", "stalker_click", "rifle_mag_in", "door_open"]:
-		check(float(cues[cue].volume_db) < float(cues.rifle_shot.volume_db), "%s is under the rifle" % cue)
+		check(float(cues[cue].volume_db) < float(cues.rifle_body_1.volume_db), "%s is under the rifle" % cue)
 
 
 func test_listener_is_at_the_player_turned_with_the_camera() -> void:
@@ -381,7 +382,7 @@ func test_a_heavy_drop_still_makes_the_noise_ring_fire_and_the_sound_is_separate
 	ring_state.reset()
 	_clear()
 	Audio.play("drop_heavy", s.global_position)
-	Audio.play("rifle_shot", s.global_position)
+	Audio.play("rifle_body", s.global_position)
 	check_eq(s.brain._noise_left, noise_left, "a stalker doesn't hear the audio module")
 	check_eq(s.brain.state, StalkerBrain.State.PROWL, "and goes on prowling")
 	check(not ring_state._blooming, "the ring doesn't either")
@@ -408,6 +409,14 @@ func test_breathing_runs_on_a_shift_and_stops_with_a_form_or_a_death() -> void:
 
 # --- weapons ---
 
+func _body_heard() -> bool:
+	return _heard.any(func(c: String) -> bool: return c.begins_with("rifle_body_"))
+
+
+func _tink_heard() -> bool:
+	return _heard.any(func(c: String) -> bool: return c.begins_with("tink_"))
+
+
 func test_shot_casing_dry_fire_and_reload_stages() -> void:
 	var scene: Node = await _scene()
 	_quiet(scene)
@@ -415,10 +424,11 @@ func test_shot_casing_dry_fire_and_reload_stages() -> void:
 	_clear()
 	op.scripted = {"fire": true}
 	await _sim(scene, 0.05)
-	check(_heard.has("rifle_shot"), "the shot")
-	check(not _heard.has("rifle_casing"), "the casing lands later")
-	await _sim(scene, float(Audio.cfg.cues.rifle_casing.delay_s) + 0.05)
-	check(_heard.has("rifle_casing"), "and there it is")
+	check(_body_heard(), "the shot")
+	check(not _tink_heard(), "the casing lands later")
+	op.scripted = {}
+	await _sim(scene, 1.2)
+	check(_tink_heard(), "and there it is")
 	op.scripted = {}
 	op.rifle.state.mag = 0
 	await _sim(scene, 0.2)
@@ -426,7 +436,7 @@ func test_shot_casing_dry_fire_and_reload_stages() -> void:
 	op.scripted = {"fire": true}
 	await _sim(scene, 0.05)
 	check(_heard.has("rifle_dry"), "dry fire on an empty magazine")
-	check(not _heard.has("rifle_shot"), "and no shot")
+	check(not _body_heard(), "and no shot")
 	var dry := _heard.count("rifle_dry")
 	await _sim(scene, 0.1)
 	check_eq(_heard.count("rifle_dry"), dry, "the trigger held doesn't machine-gun it")

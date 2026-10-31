@@ -11,6 +11,21 @@
     },
     "VoicePlaceholder": {
       "volume_db": 0.0
+    },
+    "SFX_Far": {
+      "volume_db": 0.0,
+      "send": "SFX",
+      "lowpass_hz": 3200
+    },
+    "SFX_Distant": {
+      "volume_db": 0.0,
+      "send": "SFX",
+      "lowpass_hz": 1400
+    },
+    "SFX_Muffled": {
+      "volume_db": 0.0,
+      "send": "SFX",
+      "lowpass_hz": 620
     }
   },
   "master": {
@@ -22,12 +37,14 @@
     }
   },
   "voices": {
-    "positional": 24,
+    "positional": 40,
     "flat": 12
   },
   "positional": {
     "unit_size_m": 5.0,
-    "max_db": 0.0
+    "max_db": 0.0,
+    "attenuation_filter_db": -18.0,
+    "attenuation_filter_hz": 6000.0
   },
   "listener": {
     "height_m": 1.5
@@ -75,7 +92,8 @@
     },
     {
       "at": 0.8,
-      "cue": "rifle_charge"
+      "cue": "rifle_charge",
+      "only_empty": true
     }
   ],
   "stalker_idle": {
@@ -223,15 +241,6 @@
       "bus": "SFX",
       "placeholder": true
     },
-    "rifle_shot": {
-      "file": "res://assets/game/audio/weapons/ph_rifle_shot.wav",
-      "volume_db": -2,
-      "pitch_variance": 0.03,
-      "max_distance_m": 45,
-      "cooldown_s": 0,
-      "bus": "SFX",
-      "placeholder": true
-    },
     "rifle_dry": {
       "file": "res://assets/game/audio/weapons/ph_rifle_dry.wav",
       "volume_db": -10,
@@ -267,16 +276,6 @@
       "cooldown_s": 0.1,
       "bus": "SFX",
       "placeholder": true
-    },
-    "rifle_casing": {
-      "file": "res://assets/game/audio/weapons/ph_rifle_casing.wav",
-      "volume_db": -24,
-      "pitch_variance": 0.1,
-      "max_distance_m": 10,
-      "cooldown_s": 0.2,
-      "bus": "SFX",
-      "placeholder": true,
-      "delay_s": 0.32
     },
     "stalker_click": {
       "file": "res://assets/game/audio/stalker/ph_stalker_click.wav",
@@ -525,6 +524,568 @@
       "cooldown_s": 0,
       "bus": "UI",
       "placeholder": true
+    },
+    "rifle_body_1": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_body_1.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "volume_jitter_db": 1.5
+    },
+    "rifle_body_2": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_body_2.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "volume_jitter_db": 1.5
+    },
+    "rifle_body_3": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_body_3.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "volume_jitter_db": 1.5
+    },
+    "rifle_body_4": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_body_4.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "volume_jitter_db": 1.5
+    },
+    "rifle_body_5": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_body_5.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "volume_jitter_db": 1.5
+    },
+    "rifle_mech": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_mech.wav",
+      "volume_db": -12,
+      "pitch_variance": 0.03,
+      "max_distance_m": 16,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_mech_bright": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_mech_bright.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.02,
+      "max_distance_m": 16,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_thump": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_thump.wav",
+      "volume_db": -6,
+      "pitch_variance": 0.02,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tail_slap": {
+      "file": "res://assets/game/audio/weapons/ph_tail_slap.wav",
+      "volume_db": -14,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tail_room": {
+      "file": "res://assets/game/audio/weapons/ph_tail_room.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tail_hold": {
+      "file": "res://assets/game/audio/weapons/ph_tail_hold.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.03,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_dry_tail": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_dry_tail.wav",
+      "volume_db": -24,
+      "pitch_variance": 0.03,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_deck_1": {
+      "file": "res://assets/game/audio/weapons/ph_tink_deck_1.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_deck_2": {
+      "file": "res://assets/game/audio/weapons/ph_tink_deck_2.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_deck_3": {
+      "file": "res://assets/game/audio/weapons/ph_tink_deck_3.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_grate_1": {
+      "file": "res://assets/game/audio/weapons/ph_tink_grate_1.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_grate_2": {
+      "file": "res://assets/game/audio/weapons/ph_tink_grate_2.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_wet_1": {
+      "file": "res://assets/game/audio/weapons/ph_tink_wet_1.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "tink_wet_2": {
+      "file": "res://assets/game/audio/weapons/ph_tink_wet_2.wav",
+      "volume_db": -27,
+      "pitch_variance": 0.08,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "mag_clatter_deck": {
+      "file": "res://assets/game/audio/weapons/ph_mag_clatter_deck.wav",
+      "volume_db": -16,
+      "pitch_variance": 0.05,
+      "max_distance_m": 14,
+      "cooldown_s": 0.08,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "mag_clatter_grate": {
+      "file": "res://assets/game/audio/weapons/ph_mag_clatter_grate.wav",
+      "volume_db": -16,
+      "pitch_variance": 0.05,
+      "max_distance_m": 14,
+      "cooldown_s": 0.08,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "mag_clatter_wet": {
+      "file": "res://assets/game/audio/weapons/ph_mag_clatter_wet.wav",
+      "volume_db": -16,
+      "pitch_variance": 0.05,
+      "max_distance_m": 14,
+      "cooldown_s": 0.08,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_metal_1": {
+      "file": "res://assets/game/audio/impacts/ph_impact_metal_1.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.06,
+      "max_distance_m": 34,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_metal_2": {
+      "file": "res://assets/game/audio/impacts/ph_impact_metal_2.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.06,
+      "max_distance_m": 34,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_metal_3": {
+      "file": "res://assets/game/audio/impacts/ph_impact_metal_3.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.06,
+      "max_distance_m": 34,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "ricochet_1": {
+      "file": "res://assets/game/audio/impacts/ph_ricochet_1.wav",
+      "volume_db": -19,
+      "pitch_variance": 0.08,
+      "max_distance_m": 34,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "ricochet_2": {
+      "file": "res://assets/game/audio/impacts/ph_ricochet_2.wav",
+      "volume_db": -19,
+      "pitch_variance": 0.08,
+      "max_distance_m": 34,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_panel_1": {
+      "file": "res://assets/game/audio/impacts/ph_impact_panel_1.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.06,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_panel_2": {
+      "file": "res://assets/game/audio/impacts/ph_impact_panel_2.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.06,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_panel_3": {
+      "file": "res://assets/game/audio/impacts/ph_impact_panel_3.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.06,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_glass_1": {
+      "file": "res://assets/game/audio/impacts/ph_impact_glass_1.wav",
+      "volume_db": -17,
+      "pitch_variance": 0.06,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_glass_2": {
+      "file": "res://assets/game/audio/impacts/ph_impact_glass_2.wav",
+      "volume_db": -17,
+      "pitch_variance": 0.06,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_wet_1": {
+      "file": "res://assets/game/audio/impacts/ph_impact_wet_1.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.06,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_wet_2": {
+      "file": "res://assets/game/audio/impacts/ph_impact_wet_2.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.06,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_flesh_1": {
+      "file": "res://assets/game/audio/impacts/ph_impact_flesh_1.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.06,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_flesh_2": {
+      "file": "res://assets/game/audio/impacts/ph_impact_flesh_2.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.06,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "grunt_1": {
+      "file": "res://assets/game/audio/impacts/ph_grunt_1.wav",
+      "volume_db": -14,
+      "pitch_variance": 0.05,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "grunt_2": {
+      "file": "res://assets/game/audio/impacts/ph_grunt_2.wav",
+      "volume_db": -14,
+      "pitch_variance": 0.05,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "impact_chew": {
+      "file": "res://assets/game/audio/impacts/ph_impact_chew.wav",
+      "volume_db": -13,
+      "pitch_variance": 0.06,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "env_buzz": {
+      "file": "res://assets/game/audio/effects/ph_env_buzz.wav",
+      "volume_db": -27,
+      "pitch_variance": 0,
+      "max_distance_m": 9,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "env_crackle": {
+      "file": "res://assets/game/audio/effects/ph_env_crackle.wav",
+      "volume_db": -23,
+      "pitch_variance": 0.1,
+      "max_distance_m": 11,
+      "cooldown_s": 0.05,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "env_hiss": {
+      "file": "res://assets/game/audio/effects/ph_env_hiss.wav",
+      "volume_db": -25,
+      "pitch_variance": 0,
+      "max_distance_m": 10,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "env_fire": {
+      "file": "res://assets/game/audio/effects/ph_env_fire.wav",
+      "volume_db": -21,
+      "pitch_variance": 0,
+      "max_distance_m": 13,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "env_sizzle": {
+      "file": "res://assets/game/audio/effects/ph_env_sizzle.wav",
+      "volume_db": -27,
+      "pitch_variance": 0,
+      "max_distance_m": 8,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "explosion_near": {
+      "file": "res://assets/game/audio/effects/ph_explosion_near.wav",
+      "volume_db": -2,
+      "pitch_variance": 0.04,
+      "max_distance_m": 60,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "explosion_far": {
+      "file": "res://assets/game/audio/effects/ph_explosion_far.wav",
+      "volume_db": -8,
+      "pitch_variance": 0.04,
+      "max_distance_m": 80,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
     }
+  },
+  "groups": {
+    "rifle_body": {
+      "cues": [
+        "rifle_body_1",
+        "rifle_body_2",
+        "rifle_body_3",
+        "rifle_body_4",
+        "rifle_body_5"
+      ]
+    },
+    "tink_deck": {
+      "cues": [
+        "tink_deck_1",
+        "tink_deck_2",
+        "tink_deck_3"
+      ],
+      "cooldown_s": 0.03
+    },
+    "tink_grate": {
+      "cues": [
+        "tink_grate_1",
+        "tink_grate_2"
+      ],
+      "cooldown_s": 0.03
+    },
+    "tink_wet": {
+      "cues": [
+        "tink_wet_1",
+        "tink_wet_2"
+      ],
+      "cooldown_s": 0.03
+    },
+    "impact_metal": {
+      "cues": [
+        "impact_metal_1",
+        "impact_metal_2",
+        "impact_metal_3"
+      ]
+    },
+    "ricochet": {
+      "cues": [
+        "ricochet_1",
+        "ricochet_2"
+      ],
+      "cooldown_s": 0.25
+    },
+    "impact_panel": {
+      "cues": [
+        "impact_panel_1",
+        "impact_panel_2",
+        "impact_panel_3"
+      ]
+    },
+    "impact_glass": {
+      "cues": [
+        "impact_glass_1",
+        "impact_glass_2"
+      ]
+    },
+    "impact_wet": {
+      "cues": [
+        "impact_wet_1",
+        "impact_wet_2"
+      ]
+    },
+    "impact_flesh": {
+      "cues": [
+        "impact_flesh_1",
+        "impact_flesh_2"
+      ]
+    },
+    "grunt": {
+      "cues": [
+        "grunt_1",
+        "grunt_2"
+      ],
+      "cooldown_s": 0.9
+    }
+  },
+  "gun": {
+    "body": "rifle_body",
+    "mechanical": "rifle_mech",
+    "last_rounds_cue": "rifle_mech_bright",
+    "last_rounds": 5,
+    "thump": "rifle_thump",
+    "dry": "rifle_dry",
+    "dry_tail": "rifle_dry_tail",
+    "others_mechanical_db": -12.0,
+    "voices_per_gun": 8,
+    "default_tail": "tail_room"
+  },
+  "room_tail": {
+    "medbay": "tail_room",
+    "cargo": "tail_hold",
+    "junction": "tail_slap",
+    "side_corridor": "tail_slap",
+    "closet": "tail_slap"
+  },
+  "tinks": {
+    "deck": "tink_deck",
+    "grate": "tink_grate",
+    "wet": "tink_wet"
+  },
+  "clatter": {
+    "deck": "mag_clatter_deck",
+    "grate": "mag_clatter_grate",
+    "wet": "mag_clatter_wet"
+  },
+  "distance_mix": {
+    "bands": [
+      {
+        "from_m": 0.0,
+        "bus": "SFX",
+        "tail_db": 0.0
+      },
+      {
+        "from_m": 9.0,
+        "bus": "SFX_Far",
+        "tail_db": 3.0
+      },
+      {
+        "from_m": 20.0,
+        "bus": "SFX_Distant",
+        "tail_db": 5.0
+      }
+    ],
+    "occluded": {
+      "bus": "SFX_Muffled",
+      "extra_db": -5.0,
+      "tail_db": 4.0
+    }
+  },
+  "ambience_duck": {
+    "db": -3.0,
+    "recover_s": 0.5,
+    "heavy_shots": 3.0,
+    "heat_decay_per_s": 4.0,
+    "reach_m": 24.0
   }
 }

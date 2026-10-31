@@ -15,6 +15,11 @@ func shot_disc() -> Dictionary:
 	return {"center": center, "radius": radius, "height": height}
 
 
+## A pirate's round in the player: the same red-brown spray (src/vfx).
+func hit_surface() -> String:
+	return "pirate"
+
+
 func take_hit(hit: Dictionary) -> void:
 	if on_hit.is_valid():
 		on_hit.call(hit)

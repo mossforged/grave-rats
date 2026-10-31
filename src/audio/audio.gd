@@ -30,6 +30,10 @@ var _following: Node3D
 var _room_shares := {}        # room tone cue -> 0..1
 var _room_cue := ""
 var _ambience_on := false
+var _duck := SoundRules.Duck.new()
+var _voice_gun := {}          # voice -> the gun that last took it
+## (Vector2, Vector2) -> bool: is there a wall in the way? The deck sets it.
+var occluded_by := Callable()
 
 
 func _ready() -> void:
@@ -54,7 +58,11 @@ func _build_buses() -> void:
 			AudioServer.add_bus()
 			var i := AudioServer.bus_count - 1
 			AudioServer.set_bus_name(i, bus)
-			AudioServer.set_bus_send(i, AudioServer.get_bus_name(0))
+			AudioServer.set_bus_send(i, String(cfg.buses[bus].get("send", AudioServer.get_bus_name(0))))
+			if cfg.buses[bus].has("lowpass_hz"):
+				var lp := AudioEffectLowPassFilter.new()
+				lp.cutoff_hz = float(cfg.buses[bus].lowpass_hz)
+				AudioServer.add_bus_effect(i, lp)
 	var l: Dictionary = cfg.master.limiter
 	var limiter := AudioEffectHardLimiter.new()
 	limiter.ceiling_db = float(l.ceiling_db)
@@ -72,6 +80,8 @@ func _build_voices() -> void:
 		a.name = "World%d" % i
 		a.unit_size = float(p.unit_size_m)
 		a.max_db = float(p.max_db)
+		a.attenuation_filter_db = float(p.attenuation_filter_db)
+		a.attenuation_filter_cutoff_hz = float(p.attenuation_filter_hz)
 		a.doppler_tracking = AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED
 		add_child(a)
 		_positional.append(a)
@@ -115,6 +125,7 @@ func _process(delta: float) -> void:
 ## Time passes for the cooldowns, the delayed cues and the room tones. Public so tests can step it.
 func advance(delta: float) -> void:
 	bank.advance(delta)
+	_duck.step(delta, cfg.ambience_duck)
 	var still: Array = []
 	for p: Dictionary in _pending:
 		p.left = float(p.left) - delta
@@ -132,12 +143,20 @@ func _apply_bus_volumes() -> void:
 	AudioServer.set_bus_volume_db(0, float(cfg.master.volume_db))
 	for bus: String in cfg.buses:
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index(bus), float(cfg.buses[bus].volume_db))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Ambience"), float(cfg.buses.Ambience.volume_db) + _duck.db(cfg.ambience_duck))
 
 
-## Plays a cue unless it's resting. `at` is ignored by flat cues. opts: "pitch" (times the cue's own
-## variance), "volume_db" (on top of the bank's), "delay" (seconds, instead of the bank's "delay_s").
+## Plays a cue, or the next of a group, unless it's resting. `at` is ignored by flat cues. opts: "pitch" (times
+## the cue's own variance), "volume_db" (on top of the bank's), "delay" (seconds, instead of the bank's
+## "delay_s"), "muffle" (filtered by range and walls, as heard from the listener), "gun" (an id: its voices are
+## capped), "tail" (a room's answer: it carries further than the rest).
 ## False if it's on cooldown or isn't in the bank (which is also an error).
-func play(cue: String, at := Vector3.ZERO, opts := {}) -> bool:
+func play(name: String, at := Vector3.ZERO, opts := {}) -> bool:
+	var cue := name
+	if bank.is_group(name):
+		if not bank.take_group(name):
+			return false
+		cue = bank.next_in_group(name, rng)
 	if not bank.has(cue):
 		push_error("Audio: no cue %s" % cue)
 		return false
@@ -153,18 +172,29 @@ func play(cue: String, at := Vector3.ZERO, opts := {}) -> bool:
 
 func _start(cue: String, at: Vector3, opts: Dictionary) -> void:
 	var pitch := bank.pitch_for(cue, rng) * float(opts.get("pitch", 1.0))
+	var db := float(opts.get("volume_db", 0.0)) + bank.volume_jitter(cue, rng)
+	var bus := ""
+	if bool(opts.get("muffle", false)):
+		var mix := SoundRules.distance_mix(cfg.distance_mix, listener_distance(at), _blocked_from_listener(at))
+		bus = String(mix.bus)
+		db += float(mix.extra_db)
+		if bool(opts.get("tail", false)):
+			db += float(mix.tail_db)
 	if streams.has(cue):
-		_voice_for(cue, at, pitch, float(opts.get("volume_db", 0.0))).play()
+		_voice_for(cue, at, pitch, db, bus, int(opts.get("gun", -1))).play()
 	played.emit(cue, at, pitch)
 
 
-func _voice_for(cue: String, at: Vector3, pitch: float, extra_db: float) -> Node:
+func _voice_for(cue: String, at: Vector3, pitch: float, extra_db: float, bus := "", gun := -1) -> Node:
 	var c: Dictionary = bank.spec(cue)
 	var positional := bank.positional(cue)
-	var v: Node = _free_voice(_positional if positional else _flat)
+	var v: Node = _gun_voice(gun) if gun >= 0 and positional else null
+	if v == null:
+		v = _free_voice(_positional if positional else _flat)
+	_voice_gun[v] = gun
 	v.stop()
 	v.stream = streams[cue]
-	v.bus = String(c.bus)
+	v.bus = bus if bus != "" else String(c.bus)
 	v.volume_db = float(c.volume_db) + extra_db
 	v.pitch_scale = pitch
 	if positional:
@@ -174,6 +204,27 @@ func _voice_for(cue: String, at: Vector3, pitch: float, extra_db: float) -> Node
 	_order += 1
 	_started[v] = _order
 	return v
+
+
+## This gun's oldest voice once it holds all it may, so one gun can't take the whole pool. Else null.
+func _gun_voice(gun: int) -> Node:
+	var held := 0
+	var oldest: Node = null
+	for v: Node in _positional:
+		if v.playing and int(_voice_gun.get(v, -1)) == gun:
+			held += 1
+			if oldest == null or int(_started.get(v, 0)) < int(_started.get(oldest, 0)):
+				oldest = v
+	return oldest if held >= int(cfg.gun.voices_per_gun) else null
+
+
+## How many voices this gun has sounding.
+func gun_voices(gun: int) -> int:
+	var held := 0
+	for v: Node in _positional:
+		if v.playing and int(_voice_gun.get(v, -1)) == gun:
+			held += 1
+	return held
 
 
 ## An idle voice, or the one-shot that's been going longest. A loop's voice is never taken.
@@ -304,6 +355,44 @@ func _place_listener() -> void:
 	listener.global_transform = Transform3D(cam.global_basis if cam != null else Basis.IDENTITY, at)
 
 
+func following() -> Node3D:
+	return _following if is_instance_valid(_following) else null
+
+
+## Where the local player hears from, or null with nobody to follow.
+func listener_position() -> Variant:
+	var f := following()
+	return f.global_position if f != null and f.is_inside_tree() else null
+
+
+func listener_distance(at: Vector3) -> float:
+	var from: Variant = listener_position()
+	return (from as Vector3).distance_to(at) if from != null else 0.0
+
+
+func _blocked_from_listener(at: Vector3) -> bool:
+	var from: Variant = listener_position()
+	if from == null or not occluded_by.is_valid():
+		return false
+	var a: Vector3 = from
+	return bool(occluded_by.call(Vector2(a.x, a.z), Vector2(at.x, at.z)))
+
+
+## The tail for a space: data "room_tail".
+func room_tail(space: String) -> String:
+	return String((cfg.room_tail as Dictionary).get(space, cfg.gun.default_tail))
+
+
+## A shot went off here. Heavy fire nearby ducks the ambience.
+func note_gunfire(at: Vector3) -> void:
+	if listener_distance(at) <= float(cfg.ambience_duck.reach_m):
+		_duck.note_shot(cfg.ambience_duck)
+
+
+func ambience_duck_db() -> float:
+	return _duck.db(cfg.ambience_duck)
+
+
 ## The world's gone: everything stops, loops and queued cues alike.
 func stop_all() -> void:
 	for key: String in _loops.keys():
@@ -317,6 +406,8 @@ func stop_all() -> void:
 	for v: Node in _flat:
 		v.stop()
 	_following = null
+	occluded_by = Callable()
+	_duck.reset()
 	listener.clear_current()
 
 

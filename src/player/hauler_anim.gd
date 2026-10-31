@@ -54,6 +54,7 @@ func setup(model_root: Node3D, anim_cfg: Dictionary, weapon_offset: Transform3D)
 	skeleton.add_child(twist)
 	var b: Dictionary = _cfg.bones
 	twist.setup(skeleton, skeleton.find_bone(b.hand_right), b.spine_lower, b.spine_upper)
+	twist.set_arms(skeleton, String(b.arm_right), String(b.arm_left))
 	twist.weapon_offset = weapon_offset
 	twist.forward = Vector3(0, 0, 1)
 
@@ -105,6 +106,11 @@ func set_motion(sprinting: bool, speed: float, hip_turn_deg_s: float) -> void:
 ## 0..1: how fresh the last shot is. Kicks the upper spine back.
 func set_recoil(share: float) -> void:
 	_kick_deg = share * float(_cfg.aim.recoil_kick_deg)
+
+
+## 0..1: one round's kick, through both arms. Sharp, on top of set_recoil's slower lean.
+func set_arm_kick(share: float) -> void:
+	twist.arm_kick_deg = share * float(_cfg.aim.arm_kick_deg)
 
 
 ## Plays "roll", "hit" or "death" over everything. Death holds its last frame until `clear_states`.

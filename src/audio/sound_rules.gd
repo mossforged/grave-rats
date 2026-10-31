@@ -17,6 +17,78 @@ class StepClock:
 		_walked = 0.0
 
 
+## Hands out 0..count-1: every one once, in a new order each time round, never the same twice in a row.
+class RoundRobin:
+	var _deck: Array[int] = []
+	var _at := 0
+
+	func _init(count: int) -> void:
+		for i in count:
+			_deck.append(i)
+		_at = count
+
+	func next(rng: RandomNumberGenerator) -> int:
+		if _at >= _deck.size():
+			var last := _deck[-1]
+			for i in range(_deck.size() - 1, 0, -1):
+				var j := rng.randi_range(0, i)
+				var hold := _deck[i]
+				_deck[i] = _deck[j]
+				_deck[j] = hold
+			if _deck[0] == last and _deck.size() > 1:
+				_deck[0] = _deck[1]
+				_deck[1] = last
+			_at = 0
+		_at += 1
+		return _deck[_at - 1]
+
+
+## Heavy fire pushes the ambience down, and it comes back once the firing stops. "ambience_duck" in data.
+class Duck:
+	var _heat := 0.0
+	var _level := 0.0
+
+	func note_shot(cfg: Dictionary) -> void:
+		_heat += 1.0
+		if _heat >= float(cfg.heavy_shots):
+			_level = 1.0
+
+	func step(delta: float, cfg: Dictionary) -> void:
+		_heat = maxf(_heat - float(cfg.heat_decay_per_s) * delta, 0.0)
+		if _heat < float(cfg.heavy_shots):
+			_level = maxf(_level - delta / float(cfg.recover_s), 0.0)
+
+	func db(cfg: Dictionary) -> float:
+		return float(cfg.db) * _level
+
+	func reset() -> void:
+		_heat = 0.0
+		_level = 0.0
+
+
+## How a sound reaches you: {bus, extra_db, tail_db}. Further is duller and has more room in it. Behind a wall
+## it's muffled whatever the range. "distance_mix" in data.
+static func distance_mix(cfg: Dictionary, distance_m: float, occluded: bool) -> Dictionary:
+	if occluded:
+		return cfg.occluded
+	var at: Dictionary = cfg.bands[0]
+	for b: Dictionary in cfg.bands:
+		if distance_m >= float(b.from_m):
+			at = b
+	return {"bus": at.bus, "extra_db": 0.0, "tail_db": at.tail_db}
+
+
+## Which layers of "gun" one shot plays, by name. `rounds_left` is what's in the magazine after it went off.
+## `local`: the shot is the local player's own.
+static func shot_layers(gun: Dictionary, rounds_left: int, local: bool) -> Array:
+	var out: Array = [gun.mechanical, gun.body]
+	if local:
+		out.append(gun.thump)
+		if rounds_left < int(gun.last_rounds):
+			out.append(gun.last_rounds_cue)
+	return out
+
+
 ## Which gait a body is in, for "footsteps.gaits".
 static func gait(crouched: bool, sprinting: bool) -> String:
 	if sprinting:

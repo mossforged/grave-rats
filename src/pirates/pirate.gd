@@ -7,6 +7,7 @@ const PirateLight := preload("res://src/pirates/pirate_light.gd")
 const PirateRecolour := preload("res://src/pirates/pirate_recolour.gd")
 const OperatorBody := preload("res://src/player/operator_body.gd")
 const RifleFx := preload("res://src/weapons/rifle_fx.gd")
+const ShotTimeline := preload("res://src/weapons/shot_timeline.gd")
 const SightTarget := preload("res://src/sight/sight_target.gd")
 
 signal was_shot(pirate: Node3D, damage: float, from: Vector2)
@@ -20,6 +21,7 @@ var home := Vector2.ZERO
 var loot: Array = []
 var anim: Node
 var fx: RifleFx
+var timeline := ShotTimeline.new()
 var light: PirateLight
 var path := PackedVector2Array()
 
@@ -105,11 +107,17 @@ func shot_disc() -> Dictionary:
 	return {"center": floor_position(), "radius": float(cfg.hit_radius_m), "height": torso_height}
 
 
+## The spray and the grunt are this body's own (src/vfx), so the rifle leaves them to it.
+func plays_own_hit() -> bool:
+	return true
+
+
 ## Rifle contract.
 func take_hit(hit: Dictionary) -> void:
 	var dealt := brain.take_hit(float(hit.damage))
 	if dealt <= 0.0:
 		return
+	Vfx.body_hit("pirate", hit, get_rid())
 	_lean = float(cfg.body.hit_lean_deg)
 	var from := floor_position()
 	if hit.has("origin"):
@@ -154,6 +162,7 @@ func _show(delta: float) -> void:
 		upper = "low"
 	anim.set_motion(m.sprinting, m.speed, m.hip_turn_deg_s)
 	anim.set_recoil(m.firing_share())
+	anim.set_arm_kick(brain.gun.arm_kick)
 	anim.update(m.leg_blend(), m.leg_time_scale(), m.crouch_time_scale(), m.crouch_amount * shown,
 			m.torso_lead(), upper, brain.gun.reload_total)
 	var staggered: bool = brain.suit.staggered()

@@ -88,6 +88,11 @@ func shot_disc() -> Dictionary:
 	return {"center": floor_position(), "radius": float(cfg.hit_radius_m), "height": float(cfg.torso_m)}
 
 
+## The spray and the splat are this body's own (src/vfx), so the rifle leaves them to it.
+func plays_own_hit() -> bool:
+	return true
+
+
 ## Rifle contract. `hit` has damage, and origin when it came from the rifle.
 func take_hit(hit: Dictionary) -> void:
 	var from := floor_position()
@@ -97,6 +102,7 @@ func take_hit(hit: Dictionary) -> void:
 	var dealt := brain.take_hit(float(hit.damage), from)
 	if dealt > 0.0:
 		Audio.play("stalker_hit" if brain.alive() else "stalker_death", global_position)
+		Vfx.body_hit("stalker", hit, get_rid())
 		was_shot.emit(self, dealt, from)
 	if not brain.alive():
 		_cs.disabled = true

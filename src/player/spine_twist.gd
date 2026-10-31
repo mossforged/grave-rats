@@ -11,10 +11,13 @@ var weapon_offset := Transform3D.IDENTITY # the weapon's frame in its bone's spa
 var forward := Vector3(0, 0, -1)          # the skeleton's front
 var aim_lock := 0.0                       # 0..1, how much of the barrel's error to take up
 var kick_deg := 0.0                       # recoil: the upper spine thrown back
+var arm_kick_deg := 0.0                   # one round: both arms up from the shoulder, gun with them
 
 var _spine1 := -1
 var _spine2 := -1
 var _weapon := -1
+var _arm_r := -1
+var _arm_l := -1
 
 
 ## Godot restores bone poses after the modifier stage, so the gun's pose is kept here for the muzzle.
@@ -22,6 +25,12 @@ func setup(skeleton: Skeleton3D, weapon_bone: int, lower := "spine1", upper := "
 	_weapon = weapon_bone
 	_spine1 = skeleton.find_bone(lower)
 	_spine2 = skeleton.find_bone(upper)
+
+
+## The two upper arm bones, for the shot's kick. Without them it's only the spine.
+func set_arms(skeleton: Skeleton3D, right: String, left: String) -> void:
+	_arm_r = skeleton.find_bone(right)
+	_arm_l = skeleton.find_bone(left)
 
 
 func _process_modification_with_delta(_delta: float) -> void:
@@ -45,6 +54,9 @@ func _process_modification_with_delta(_delta: float) -> void:
 		_turn(sk, _spine2, side, -pitch)
 	if kick_deg != 0.0:
 		_turn(sk, _spine2, side, deg_to_rad(kick_deg))
+	if arm_kick_deg != 0.0 and _arm_r >= 0 and _arm_l >= 0:
+		_turn(sk, _arm_r, side, deg_to_rad(arm_kick_deg))
+		_turn(sk, _arm_l, side, deg_to_rad(arm_kick_deg))
 	weapon_pose = sk.get_bone_global_pose(_weapon) * weapon_offset
 
 

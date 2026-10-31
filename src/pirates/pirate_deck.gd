@@ -99,6 +99,7 @@ func _make_lighting() -> void:
 	deck_data.doors = (d.doors as Array).duplicate(true)
 	deck_data.props = (d.props as Array).duplicate(true)
 	deck_data.spawn = d.spawn
+	deck_data.effects = (d.effects as Array).duplicate(true)
 
 
 func _make_targets() -> void:

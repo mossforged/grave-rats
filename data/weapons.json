@@ -31,24 +31,38 @@
     "camera_kick": {
       "kick_m": 0.06,
       "recover_s": 0.12
+    },
+    "arm_kick": {
+      "recover_s": 0.09
     }
   },
   "fx": {
     "flash_life_s": 0.05,
-    "flash_size_m": 0.7,
-    "flash_color": "ffd9a0",
-    "flash_energy": 3.0,
+    "flash_color": "ffe2b8",
+    "flash_energy": 1.6,
     "flash_light_energy": 2.0,
     "flash_light_range_m": 5.0,
     "tracer_life_s": 0.07,
     "tracer_width_m": 0.035,
     "tracer_color": "ffe6b0",
     "tracer_energy": 3.0,
-    "impact_life_s": 0.12,
-    "impact_size_m": 0.28,
-    "impact_color": "ffb46a",
-    "impact_energy": 2.0,
-    "pool_size": 6.0
+    "pool_size": 6.0,
+    "flash_sheet": "res://assets/game/vfx/muzzle_flash.png",
+    "flash_cols": 4.0,
+    "flash_rows": 2.0,
+    "flash_star_frames": [
+      0,
+      3
+    ],
+    "flash_cone_frames": [
+      4,
+      7
+    ],
+    "flash_cone_length_m": 0.8,
+    "flash_cone_width_m": 0.42,
+    "flash_star_size_m": 0.42,
+    "flash_scale_jitter": 0.2,
+    "flash_frames": 2.0
   },
   "targets": {
     "health": 100.0,

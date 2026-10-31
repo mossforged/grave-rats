@@ -649,6 +649,7 @@ const RANDOM_EXEMPT := {
 	"res://src/pirates/pirate_squad.gd": "src/pirates isn't on the shift deck; parked",
 	"res://src/enemies/stalker.gd": "randomize() at reset, reseeded from the session as the shift starts",
 	"res://src/weapons/rifle_state.gd": "randomize() at _init, reseeded from the session as the shift starts",
+	"res://src/vfx/vfx.gd": "effects, this screen only; no rule reads them",
 }
 
 

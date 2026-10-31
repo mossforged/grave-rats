@@ -62,7 +62,8 @@
       "max_deg": 8.0,
       "same_side_chance": 0.7
     },
-    "camera_kick": {"kick_m": 0.0, "recover_s": 0.12}
+    "camera_kick": {"kick_m": 0.0, "recover_s": 0.12},
+    "arm_kick": {"recover_s": 0.09}
   },
   "senses": {
     "sight_range_m": 14.0,
@@ -201,12 +202,14 @@
       "lost": ["Lost them. Back to work."]
     }
   },
-  "sound": {
-    "mix_rate": 22050,
-    "unit_size_m": 12.0,
-    "shot": {"length_s": 0.14, "decay_per_s": 26.0, "low_hz": 180.0, "low_share": 0.25, "volume_db": 0.0}
-  },
   "deck": {
+    "effects": [
+      {"recipe": "sparking_console", "space": "junction", "at": [0.12, 0.7], "y_m": 1.15, "facing": [0.0, 1.0, 0.0]},
+      {"recipe": "smoke_plume", "space": "cargo", "at": [0.9, 0.9], "y_m": 0.1},
+      {"recipe": "steam_jet", "space": "side_corridor", "at": [0.55, 0.01], "y_m": 1.7, "facing": [0.0, -0.1, 1.0]},
+      {"recipe": "dust_motes", "space": "cargo", "at": [0.5, 0.5], "box_m": [12.0, 1.2, 10.0]},
+      {"recipe": "dust_motes", "space": "junction", "at": [0.5, 0.5], "box_m": [5.0, 1.2, 20.0]}
+    ],
     "keep_spaces": ["junction", "cargo", "side_corridor"],
     "doors": [
       {"space": "cargo", "side": "west", "at": 0.6, "state": "closed", "slide": -1},

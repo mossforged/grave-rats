@@ -1,0 +1,11 @@
+# drone-34 / A011-04
+
+Byte-identical alias of `assets/source/A011-rogue-ai/A011-04.png`. Built-in image_gen. Preferred geometry master: A011-04.
+
+Exact prompt:
+
+Use case: stylized-concept
+Asset type: A011-04, clean single-object Meshy image-to-3D master.
+Use the PATROL rover in the supplied design sheet as the exact design reference; ignore other columns. Make ONE whole centred small four-wheel maintenance rover, front three-quarter view, 0.65 m length. Wedge-shaped chipped ivory enamel shell, faded teal side panels, black lower bumper, two small wide rubber wheels per side, one recessed round front camera with mint glass in broken-square bracket bezel, short top-left rectangular spotlight, rear-top black grille with three thick pale mint indicator bars. No arms or flight rotors. Keep the design chunky and simple. Flat light-grey background, soft even studio light, subtle contact shadow only. No glow, fog, motion, beams, people, labels, text, logos, props, dimensions or multiple views. Entire object comfortably inside image. This is an industrial inspection machine, no weapons.
+
+Reference: A011-02.png, PATROL column.

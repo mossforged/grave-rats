@@ -127,6 +127,7 @@ func _make_bulkhead() -> void:
 	bulkhead = Bulkhead.new()
 	add_child(bulkhead)
 	bulkhead.setup(layout.breaches[0], _ambush_cfg, float(deck_data.wall_height_m))
+	bulkhead.use_mask(mask.bind)
 
 
 func _help_text() -> String:
@@ -334,6 +335,7 @@ func _on_rifle_fired(from: Vector3, to: Vector3, _direction: Vector3, hit: Objec
 
 
 func _on_player_hit(source: String, amount: float, stalker: Node3D, in_cover: bool) -> void:
+	note_hit_from(stalker.floor_position(), source)
 	_hurt(source, amount, stalker.label, in_cover)
 
 
@@ -401,13 +403,15 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "hud_fire_bloom", "do": "fire", "wait": 0.1},
 		{"name": "hud_fire_shrinking", "do": "fire", "wait": 1.2},
 		{"name": "hud_tense", "do": "tense"},
-		{"name": "t010_cutaway_fade", "do": "kit_cutaway", "mode": "fade"},
-		{"name": "t010_cutaway_off", "do": "kit_cutaway", "mode": "off"},
-		{"name": "t010_rooms_junction", "do": "kit_room", "space": "junction", "at": [0.5, 0.25]},
-		{"name": "t010_rooms_cargo", "do": "kit_room", "space": "cargo", "at": [0.55, 0.55]},
-		{"name": "t010_rooms_corridor", "do": "kit_room", "space": "side_corridor", "at": [0.4, 0.5]},
+		{"name": "t011_cutaway_fade", "do": "kit_cutaway", "mode": "fade"},
+		{"name": "t011_cutaway_off", "do": "kit_cutaway", "mode": "off"},
+		{"name": "t011_rooms_medbay", "do": "kit_room", "space": "medbay", "at": [0.5, 0.45]},
+		{"name": "t011_rooms_junction", "do": "kit_room", "space": "junction", "at": [0.5, 0.25]},
+		{"name": "t011_rooms_cargo", "do": "kit_room", "space": "cargo", "at": [0.55, 0.55]},
+		{"name": "t011_rooms_corridor", "do": "kit_room", "space": "side_corridor", "at": [0.4, 0.5]},
 	]
 	shots.append_array(_kit_shots())
+	shots.append({"name": "t011_ambush_tell", "do": "kit_tell"})
 	return shots
 
 
@@ -417,10 +421,10 @@ func _kit_shots() -> Array[Dictionary]:
 	var shots: Array[Dictionary] = []
 	for frame: String in ["01b", "02b", "03c", "04b"]:
 		for view: String in ["off", "known", "play"]:
-			shots.append({"name": "t010_%s_%s" % [frame, view], "do": "kit_frame", "frame": frame, "view": view})
+			shots.append({"name": "t011_%s_%s" % [frame, view], "do": "kit_frame", "frame": frame, "view": view})
 	for state: String in ["closed", "open", "locked", "bashed", "broken"]:
-		shots.append({"name": "t010_door_%s_front" % state, "do": "kit_door", "state": state, "space": "side_corridor", "at": 0.8})
-		shots.append({"name": "t010_door_%s_side" % state, "do": "kit_door", "state": state, "space": "medbay", "at": 0.7})
+		shots.append({"name": "t011_door_%s_front" % state, "do": "kit_door", "state": state, "space": "side_corridor", "at": 0.8})
+		shots.append({"name": "t011_door_%s_side" % state, "do": "kit_door", "state": state, "space": "medbay", "at": 0.7})
 	return shots
 
 
@@ -555,6 +559,13 @@ func apply_shot(shot: Dictionary) -> void:
 			await _stand_at(Vector2(r2.get_center().x, r2.end.y - 1.2), r2.get_center())
 			rig.snap()
 			await _sim(0.3)
+		"kit_tell":
+			ambush.fired = true
+			var c := bulkhead.panel_center()
+			var p := c + Vector2(float(deck_data.grid_m) * 5.0, 3.5)
+			await _stand_at(p, c)
+			await _sim(0.2)
+			await _stand_at(p, p + Vector2(4.0, 4.0))
 		"kit_room":
 			ambush.fired = true
 			set_kit_view("off")

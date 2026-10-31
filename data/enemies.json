@@ -173,6 +173,7 @@
       "dormant": true, "patrol": [[0.5, 0.5]]}
   ],
   "ambush": {
+    "tell": {"color": "ff9a3a", "energy": 1.6, "length_frac": 0.72, "width_m": 0.03, "height_m": 0.01, "out_m": 0.03},
     "closet": {"name": "bulkhead_closet", "kind": "room", "size_m": [2.5, 3.0],
       "anchor": {"to": "junction", "side": "west", "offset_m": 16.0}},
     "breach": {"space": "bulkhead_closet", "side": "east", "at": 0.5},

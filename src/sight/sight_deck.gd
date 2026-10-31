@@ -122,11 +122,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	super(event)
 
 
+## Something at `from` hurt the player. If they couldn't see it, the suit OS says which way it came from.
+func note_hit_from(from: Vector2, source: String) -> void:
+	var saw: bool = sight.visibility.can_see(_eye(), operator.gun_yaw(), flashlight.on, from)
+	if not saw or not bool(hud.hits.cfg.only_out_of_sight):
+		hud.hits.add(from, source)
+
+
 ## Captures: how much the mask hides. "off" no mask (the art alone), "known" everything already seen
 ## (the paint-overs show rooms you know), "play" as it is.
 func set_kit_view(view: String) -> void:
 	mask.visible = view != "off"
-	if view == "known":
+	if view != "play":
 		mask.reveal_all()
 
 

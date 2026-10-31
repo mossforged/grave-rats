@@ -65,7 +65,7 @@ static func floor_material(wear: Image, rect: Rect2) -> ShaderMaterial:
 	m.set_shader_parameter("wear_size", rect.size)
 	m.set_shader_parameter("normal_scale", float(spec.get("normal_scale", cfg().material_shared.normal_scale)))
 	m.set_shader_parameter("ao_light_affect", float(cfg().material_shared.ao_light_affect))
-	for key: String in ["breakup_m", "traffic_rough", "traffic_bright", "traffic_metal", "damp_rough", "damp_dark", "damp_flatten", "damp_edge", "damp_soft"]:
+	for key: String in ["breakup_m", "traffic_rough", "traffic_bright", "traffic_metal", "damp_rough", "damp_dark", "damp_flatten", "base_damp", "tone"]:
 		m.set_shader_parameter(key, float(f.look[key]))
 	return m
 

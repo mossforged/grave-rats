@@ -265,7 +265,7 @@ static func _sign_quad(image: String, width: float, layers: int) -> MeshInstance
 	var mi := MeshInstance3D.new()
 	mi.name = "Sign_%s" % image
 	mi.mesh = quad
-	mi.material_override = mat
+	quad.material = mat
 	mi.layers = layers
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	mi.set_meta("kit_piece", "sign")

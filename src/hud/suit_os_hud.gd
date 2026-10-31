@@ -6,9 +6,11 @@ extends CanvasLayer
 ## scale, read live so the F1 panel works.
 
 const SuitOs := preload("res://src/hud/suit_os.gd")
+const HitDirection := preload("res://src/hud/hit_direction.gd")
 
 var cfg: Dictionary
 var os_state: SuitOs
+var hits: HitDirection
 var operator: Node3D
 var camera_rig: Node3D     # its `camera` places the states over the operator
 var suit: RefCounted       # null in the decks without one: reads as a full suit
@@ -29,6 +31,7 @@ func _ready() -> void:
 	cfg = Data.load_data("hud")
 	layer = int(cfg.layer)
 	os_state = SuitOs.new(cfg)
+	hits = HitDirection.new(cfg.hit_direction)
 	help_on = bool(cfg.help.start_on)
 	_regular = _font(String(cfg.font.regular))
 	_bold = _font(String(cfg.font.bold))
@@ -49,6 +52,7 @@ func _font(path: String) -> Font:
 func reset() -> void:
 	if os_state:
 		os_state.reset()
+		hits.reset()
 
 
 func toggle_help() -> void:
@@ -59,6 +63,7 @@ func _process(delta: float) -> void:
 	if os_state == null:
 		return
 	os_state.step(delta)
+	hits.step(delta)
 	_canvas.queue_redraw()
 
 
@@ -94,6 +99,7 @@ func _draw_hud() -> void:
 	top = _draw_alerts(view, top)
 	_draw_shields(view, top)
 	_draw_status()
+	_draw_hit_arcs()
 	if help_on:
 		_draw_help(view)
 
@@ -305,6 +311,32 @@ func _shield(at: Vector2, size: float, col: Color, solid: bool) -> void:
 
 
 ## The states, over the operator's head, as in A005-06b.
+## An arc round the player, on the side the hit came from.
+func _draw_hit_arcs() -> void:
+	if hits.arcs.is_empty() or camera_rig == null or camera_rig.camera == null:
+		return
+	var c: Dictionary = hits.cfg
+	var cam: Camera3D = camera_rig.camera
+	var at := cam.unproject_position(operator.global_position)
+	var radius := _px(c.radius_px)
+	var half := deg_to_rad(float(c.span_deg)) * 0.5
+	var segs := int(c.segments)
+	for a: Dictionary in hits.arcs:
+		var from: Vector2 = a.from
+		var dir := cam.unproject_position(Vector3(from.x, operator.global_position.y, from.y)) - at
+		var mid := dir.angle()
+		var col := hits.color_for(String(a.source))
+		col.a = hits.alpha_of(a)
+		var points := PackedVector2Array()
+		for i in segs + 1:
+			points.append(at + Vector2.from_angle(mid - half + half * 2.0 * i / segs) * radius)
+		_canvas.draw_polyline(points, col, _px(c.width_px), true)
+		var tip := at + Vector2.from_angle(mid) * (radius + _px(c.tip_px))
+		var side := Vector2.from_angle(mid + PI * 0.5) * _px(c.tip_px)
+		_canvas.draw_colored_polygon(PackedVector2Array([tip, at + Vector2.from_angle(mid) * radius + side,
+				at + Vector2.from_angle(mid) * radius - side]), col)
+
+
 func _draw_status() -> void:
 	var list := status_now()
 	if list.is_empty() or camera_rig == null or camera_rig.camera == null:

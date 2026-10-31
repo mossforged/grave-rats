@@ -32,6 +32,7 @@ PREVIEW = {
     "emit_blue": (0.2, 0.6, 1.0, 0.3, 0.0),
     "emit_red": (1.0, 0.1, 0.05, 0.3, 0.0),
     "emit_cool": (0.8, 0.95, 1.0, 0.3, 0.0),
+    "brass": (0.72, 0.42, 0.18, 0.35, 1.0),
 }
 
 
@@ -68,17 +69,34 @@ class Builder:
     def box(self, cx, cy, cz, sx, sy, sz, m, bevel=0.008):
         self.parts.append((Vector((cx, cy, cz)), Vector((sx, sy, sz)), m, bevel))
 
+    def cyl(self, cx, cy, cz, r, length, axis, m, segments=12):
+        """A capped cylinder centred at (cx, cy, cz), its length along axis 'x', 'y' or 'z'."""
+        self.parts.append(("cyl", Vector((cx, cy, cz)), r, length, axis, m, segments))
+
     def build(self):
         objs = []
-        for i, (c, s, m, bev) in enumerate(self.parts):
+        for i, part in enumerate(self.parts):
             me = bpy.data.meshes.new(f"{self.name}_{i}")
             bm = bmesh.new()
-            bmesh.ops.create_cube(bm, size=1.0)
-            for v in bm.verts:
-                v.co = Vector((v.co.x * s.x, v.co.y * s.y, v.co.z * s.z)) + c
-            if bev > 0:
-                bmesh.ops.bevel(bm, geom=list(bm.edges), offset=min(bev, min(s) * 0.45),
-                                segments=1, affect="EDGES", profile=0.5)
+            if part[0] == "cyl":
+                _, c, r, length, axis, m, segs = part
+                bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=segs,
+                                      radius1=r, radius2=r, depth=length)
+                for v in bm.verts:
+                    x, y, z = v.co
+                    if axis == "x":
+                        v.co = Vector((z, y, x))
+                    elif axis == "y":
+                        v.co = Vector((x, z, y))
+                    v.co += c
+            else:
+                c, s, m, bev = part
+                bmesh.ops.create_cube(bm, size=1.0)
+                for v in bm.verts:
+                    v.co = Vector((v.co.x * s.x, v.co.y * s.y, v.co.z * s.z)) + c
+                if bev > 0:
+                    bmesh.ops.bevel(bm, geom=list(bm.edges), offset=min(bev, min(s) * 0.45),
+                                    segments=1, affect="EDGES", profile=0.5)
             bm.to_mesh(me)
             bm.free()
             ob = bpy.data.objects.new(f"{self.name}_{i}", me)

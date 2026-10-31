@@ -46,7 +46,10 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T014 | code | merged 2026-10-31; waits for John's play (balance flags in STATUS) |
 | T015 | code | merged 2026-10-31; waits for John's play |
 | Q002 | qa | queued 2026-10-31: health rerun after T012–T015 |
-| (pause) | code | no new gameplay until John plays T012–T015 and answers the balance questions |
+| (pause) | code | no new gameplay/balance until John plays T012–T015; non-balance work continues |
+| T016 | code | queued: bed, medbay dressing, salvage models in; live AA toggle |
+| T017 | code | queued: placeholder sound pass |
+| T018 | code | queued: co-op groundwork (no networking) |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

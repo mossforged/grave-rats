@@ -16,3 +16,6 @@ Built by `tools/blender/props.py` (run `python3 tools/blender/props.py assets/so
 - Nothing pokes out of the deck footprint; collision, occluders and cover still come from the deck data, never the mesh.
 
 - The locker bank is a freestanding island: doors on both long faces, and a light (`clinical`) top cap with a vent grille and a hazard stencil plate, so it reads from the steep camera (T013 found the first version a dark slab).
+
+## Set 1 and 2 (`tools/blender/props_set_medbay_salvage.py`)
+Medbay: `bed`, `surgical_lamp`, `iv_stand`, `gurney`, `trolley`, `med_station` (wall). Salvage: `salvage_<kind>.glb` for all nine kinds in `data/salvage.json`. Roles and sizes in `catalogue.json`; previews `docs/screens/props/medbay_*.jpg`, `salvage_*.jpg`.

@@ -1,0 +1,146 @@
+{
+ "smoke_puff": {
+  "file": "smoke_puff.png",
+  "blend": "blend",
+  "frames": 64,
+  "cols": 8,
+  "size_px": [
+   1024,
+   1024
+  ],
+  "fps": 30,
+  "use": "one puff growing and thinning; particle base for plumes, muzzle smoke, steam (tint)"
+ },
+ "impact_dust": {
+  "file": "impact_dust.png",
+  "blend": "blend",
+  "frames": 16,
+  "cols": 4,
+  "size_px": [
+   256,
+   256
+  ],
+  "fps": 30,
+  "use": "short dust/paint puff at a bullet hit on clinical panels (tint by surface)"
+ },
+ "fire_loop": {
+  "file": "fire_loop.png",
+  "blend": "add",
+  "frames": 64,
+  "cols": 8,
+  "size_px": [
+   1024,
+   1024
+  ],
+  "fps": 30,
+  "use": "looping flame for burning consoles, fuel fires (scale and layer 2-3)"
+ },
+ "explosion": {
+  "file": "explosion.png",
+  "blend": "blend",
+  "frames": 64,
+  "cols": 8,
+  "size_px": [
+   1024,
+   1024
+  ],
+  "fps": 30,
+  "use": "fireball cooling to smoke; unshaded (fire is bright in RGB); pair with a light flash"
+ },
+ "acid_bubble": {
+  "file": "acid_bubble.png",
+  "blend": "blend",
+  "frames": 16,
+  "cols": 4,
+  "size_px": [
+   256,
+   256
+  ],
+  "fps": 24,
+  "use": "one bubble rising, swelling and popping on an acid/slime pool (tint)"
+ },
+ "muzzle_flash": {
+  "file": "muzzle_flash.png",
+  "blend": "add",
+  "frames": 8,
+  "cols": 4,
+  "size_px": [
+   1024,
+   512
+  ],
+  "fps": null,
+  "use": "frames 0-3 front-on star, 4-7 side cone (muzzle on the left); one random frame per shot, 1-2 frames on screen, random roll"
+ },
+ "electric_arc": {
+  "file": "electric_arc.png",
+  "blend": "add",
+  "frames": 4,
+  "cols": 1,
+  "size_px": [
+   256,
+   256
+  ],
+  "fps": null,
+  "use": "4 arcs, one per 64-px row; swap rows every 2-3 frames; shorting panels, cutter, damaged reactor"
+ },
+ "spark_streak": {
+  "file": "spark_streak.png",
+  "blend": "add",
+  "frames": 1,
+  "cols": 1,
+  "size_px": [
+   128,
+   32
+  ],
+  "fps": null,
+  "use": "velocity-aligned spark (head on the right); bursts of 8-20 for metal hits and shorting consoles"
+ },
+ "glow_dot": {
+  "file": "glow_dot.png",
+  "blend": "add",
+  "frames": 1,
+  "cols": 1,
+  "size_px": [
+   64,
+   64
+  ],
+  "fps": null,
+  "use": "soft glow for embers, spark heads, dust motes in a torch beam, warning-lamp halos (tint)"
+ },
+ "decal_bullet_holes": {
+  "file": "decal_bullet_holes.png",
+  "blend": "blend",
+  "frames": 8,
+  "cols": 4,
+  "size_px": [
+   512,
+   256
+  ],
+  "fps": null,
+  "use": "row 0: holes in bare metal (scuffed ring, soot); row 1: holes in clinical panels (chipped paint, cracks)"
+ },
+ "decal_splats": {
+  "file": "decal_splats.png",
+  "blend": "blend",
+  "frames": 8,
+  "cols": 4,
+  "size_px": [
+   512,
+   256
+  ],
+  "fps": null,
+  "use": "0-3 stalker ichor splats (sickly yellow-green; re-tint if the stalker's blood changes); 4-5 scorch marks (explosions, cutter burns); 6-7 puddle shapes for acid/slime pools (white, tint; pair with liquid_noise)"
+ },
+ "liquid_noise": {
+  "file": "liquid_noise.png",
+  "blend": "data",
+  "frames": 1,
+  "cols": 1,
+  "size_px": [
+   256,
+   256
+  ],
+  "fps": null,
+  "use": "seamless; R/G noise at two scales to scroll against each other for the pool surface (emission + slow distortion), B for bubble spots"
+ }
+}

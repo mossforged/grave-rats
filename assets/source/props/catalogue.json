@@ -962,5 +962,25 @@
   ],
   "role": "clutter",
   "set": "mess"
+ },
+ "shell_casing": {
+  "size_m": [
+   0.045,
+   0.0096,
+   0.0096
+  ],
+  "role": "fx_debris",
+  "set": "gun",
+  "note": "ejected per shot; no collision with players; may be scaled up in data to read from the camera"
+ },
+ "spent_magazine": {
+  "size_m": [
+   0.2,
+   0.025,
+   0.08
+  ],
+  "role": "fx_debris",
+  "set": "gun",
+  "note": "dropped on a tactical reload; despawns after a cap"
  }
 }

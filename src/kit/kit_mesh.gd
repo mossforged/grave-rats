@@ -183,6 +183,38 @@ func box(lo: Vector3, hi: Vector3, mat: String, chamfer := 0.0) -> void:
 				_poly(s, [pt.call(sx, sy, sz, 0), pt.call(sx, sy, sz, 1), pt.call(sx, sy, sz, 2)], n, t)
 
 
+## Triangles from a file (Godot's winding), which brings no UVs or tangents of its own: box-projected
+## by each vertex's main normal axis, in metres like every other piece, with the point `tile_centre` at
+## the middle of the tile so the texture's worn rim stays off a small prop's faces.
+func add_triangles(mat: String, verts: PackedVector3Array, normals: PackedVector3Array, indices: PackedInt32Array, tile_centre: Vector3) -> void:
+	var s := _surface(mat)
+	var m: float = s.uv_m
+	var base: int = s.v.size()
+	for k in verts.size():
+		var p := verts[k]
+		var n := normals[k].normalized()
+		var t := (_box_tangent(n) - n * n.dot(_box_tangent(n))).normalized()
+		var b := n.cross(t)
+		var d := p - tile_centre
+		s.v.append(p)
+		s.n.append(n)
+		s.t.append_array(PackedFloat32Array([t.x, t.y, t.z, 1.0]))
+		s.uv.append(Vector2(d.dot(t) / m + 0.5, -d.dot(b) / m + 0.5) + uv_offset)
+		s.c.append(_colour(p))
+	for i in indices:
+		s.i.append(base + i)
+
+
+## The tangent box() gives a face turned to `n`'s main axis.
+static func _box_tangent(n: Vector3) -> Vector3:
+	var a := n.abs()
+	if a.x >= a.y and a.x >= a.z:
+		return Vector3.BACK * -signf(n.x)
+	if a.z >= a.y:
+		return Vector3.RIGHT * signf(n.z)
+	return Vector3.RIGHT
+
+
 ## An upright cylinder, smooth-shaded, no caps below.
 func cylinder(base: Vector3, height: float, radius: float, sides: int, mat: String) -> void:
 	var s := _surface(mat)

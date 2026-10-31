@@ -85,6 +85,10 @@ def main():
     d.text((margin, y), "Frame time, 1920x1080 on this Mac, ms (average / p95 / p99). Target, pirate deck: under 7.5 average, under 9.5 p95.", font=font(25), fill=GOLD)
     y += 40
     for name, avg, p95, p99 in times:
+        if name.startswith("---"):
+            d.text((margin, y), name[4:], font=font(24), fill=MUT)
+            y += 34
+            continue
         d.text((margin, y), name, font=font(24), fill=FG)
         d.text((margin + 900, y), f"{avg:5.2f} / {p95:5.2f} / {p99:5.2f}", font=font(24), fill=FG)
         y += 34

@@ -36,6 +36,7 @@ var _ready_done := false
 var _hold_squad := false       # captures only: the squad stays exactly where the shot put it
 var _shot_light: OmniLight3D
 var _shot_legacy: Node3D
+var _shot_focus: Node3D
 
 
 func _ready() -> void:
@@ -440,6 +441,10 @@ func _beside_shot() -> void:
 
 
 func release_shot() -> void:
+	if _shot_focus:
+		rig.target = operator
+		_shot_focus.free()
+		_shot_focus = null
 	super()
 	if _shot_legacy:
 		_shot_legacy.free()
@@ -621,6 +626,13 @@ func _hit_shot() -> void:
 		push_error("pirate_deck: the hit capture never landed a round")
 	suit_hud._flash_left = 0.0
 	suit_hud._flash.visible = false
+	# The squad has moved them by now: frame the two of you together.
+	_shot_focus = Node3D.new()
+	add_child(_shot_focus)
+	_shot_focus.global_position = (operator.global_position + q.global_position) * 0.5
+	rig.target = _shot_focus
+	rig.aim_dir = Vector3.ZERO
+	rig.snap()
 
 
 ## You behind low cover near the door; the suppressor keeps you down and the flanker goes round.

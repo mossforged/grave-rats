@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 in progress. Stage 2 passed (tag `stage-2`, pushed by John). T009 done on `auto/t009-mac`, waiting on John: his hauler is now the player and the pirates' body. T010 is next once it merges.
+**Stage:** 3 in progress. Stage 2 passed (tag `stage-2`). T010 merged. T011 (slice polish) done on `auto/t011-mac`, waiting on review and John's gate. **Next:** John plays T011; Meshy props when his files land.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,12 +12,14 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T009 awaiting review and John's gate → T010 (slice kit, held until T009 merges).
-- Code: T008 merged. T009 on `auto/t009-mac`: 247/247 tests; see `docs/handoffs/auto-T009.md`.
+- Queue order (lead): T011 awaiting review and John's gate.
+- Code: T011 on `auto/t011-mac`: 282/282, three runs in a row; see `docs/handoffs/auto-T011.md`.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
-- T010 play (stage 3, first pass): walk medbay → junction → cargo. Does it match the concept? Are the room lights too bright for "fear the corner"? Does fog shimmer? Can you read a side door's state?
+- T011 play (stage 3): sheet `docs/screens/T011/sheet.png`, then medbay to junction to cargo. Does it match or beat the concept?
+- T011 calls: MSAA 4x to 2x (biggest frame win; rougher edges?), dimmer rooms with no shadowed practicals, the ambush panel's new tell, door strips in a fight, shimmer when turning (twinkle up 30% on T010).
+- T011 frame time: pirate deck met the target in one window (7.07 / 9.1) and missed in a busier one (7.7 / 10.4; T010 8.2 / 10.5). Re-measure T010 against T011 on a quiet Mac.
 - A009: approve the rival crew **Prior Claim** (white/navy, sponsor Lien Capital)? Its Meshy A-pose inputs are in `assets/source/meshy/input/rival-apose-*.png`.
 - T009 play: does the hauler look and move right from the game camera? Known: the head bows forward when aiming, the left hand sits below the foregrip, feet slide on strafes, and firing has no clip yet. Next clips worth fetching from Mixamo: strafe run left/right, run backward, rifle firing, crouch backward/strafes, low-ready walk.
 - T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
@@ -37,15 +39,15 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Physics interpolation: the operator steps at 60 Hz, so a faster display may show slight camera jitter.
 - Legacy clips: a real walk (the run clips stand in), a crouch walk with real steps, turn-in-place feet. Foot slide numbers in auto-T003.
 - `tests/test_deck.gd` `test_props_at_real_size` logs a string-format error (`%` with an array) while passing.
-- Sight leaks: the floor aim cone stops at unseen walls, tracers and prompts draw over the mask, hidden targets pop in with no fade.
+- Sight leaks: tracers and prompts draw over the mask, hidden targets pop in with no fade.
 - T005 limits: the cover shield can show a stalker you can't see; 1.2 m crate physics boxes may stop 1.2 m rounds; a tipped bed can land on a stalker; 13 `invalid UID` import warnings for `operator.glb`.
 - Quiet-machine frame-time baseline for the asset viewer (T001 runs had other load on the Mac).
 - `src/study` deck dressing and the deck copy in `stalker_deck` want a real level module.
 - Stalker: a hit interrupting a wind-up.
 - A roll move: the hauler has the clip (`anim.play_state("roll")`), but no key or rule uses it yet.
 - `stalker_deck` stagger doesn't call `operator.play_hit` (`src/enemies` was outside T009); its death does play the clip.
+- Door state lights tell states apart by colour alone; a pattern per state would help colourblind players.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T010 (263/263 reproduced); queued T011 (polish). A009/A010 merged; A010 approved.
-2026-10-31 (code, unattended): T010: kit built in-engine from `data/kit.json`, generated PBR textures, per-room practicals, fog/SSAO/glow, door dent blend shape. Pirate deck 7.81 ms avg (budget 8.3).
+2026-10-30 (code, unattended): T011: A010 decals from data, edge-worn panels, floor wear map, one reflection probe per room, aim cone and faded walls under the mask, door floor strips, muzzle reveal, hit arcs, ambush tell, flaky test fixed. Pirate deck 7.07 / 9.1 ms quiet, 7.7 / 10.4 busy (T010 8.2 / 10.5 busy). Nobody has played it.

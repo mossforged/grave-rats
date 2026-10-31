@@ -10,7 +10,7 @@ The stalker, its spit, the bulkhead ambush, and the scene that closes the grey-b
 - `stalker.gd`, `stalker_body.gd`: one CharacterBody3D and its grey-box body.
 - `spit_system.gd`: globs and puddles in the world, in opaque materials so the sight mask hides them.
 - `stalker_pack.gd`: the stalkers and what they share: builds senses, carries noise, turns events into spits and hits.
-- `bulkhead.gd`: the sealed panel: wall-coloured, stops bodies and sight, bursts into debris.
+- `bulkhead.gd`: the sealed panel: wall-coloured, stops bodies and sight, bursts into debris. A hairline beacon along its foot is the tell (T011, `ambush.tell`), a look and not a rule.
 - `placeholder_sound.gd`: generated bangs and spits, until real sound.
 - `stalker_deck.gd`: root of `scenes/enemies/stalker_deck.tscn`. Extends `src/sight/sight_deck.gd`; wires cover, suit, pack, ambush, run log. Dresses a copy of the deck: adds the closet and breach, moves the spawn south of the panel, removes dummies, makes the `tippable` props TipBeds.
 
@@ -40,7 +40,7 @@ The stalker, its spit, the bulkhead ambush, and the scene that closes the grey-b
 - `AmbushTrigger.new(cfg, panel)`: `check(player, aim_dir) -> bool` (true once), `would_fire`, `reset()`, `fired`.
 - `StalkerPack`: `setup(layout, cover, blocked, dps)`, `tick(delta)`, `reset()`, `noise(kind, at)`, `shot_at(from, to)`, `door_towards(s)`, `next_dodge_point(s)`, `shooter_lines()`, `play_sound(key, at)`; fields `stalkers`, `nav`, `spits`, `light_on` (Callable, set by the scene), `target` {`pos`, `height`, `alive`}.
 - `Stalker`: `setup`, `reset`, `simulate(delta, pack)`, `place_hunting(from, at)`, `take_hit`, `shot_disc`, `mouth`, `floor_position`; fields `brain`, `label`, `door`.
-- `Bulkhead`: `setup(breach, cfg, height)`, `blow()`, `reset()`, `tick(delta)`, `blocks_sight()`, `sight_rect()`, `panel_center()`, `debris_count()`, `sealed`.
+- `Bulkhead`: `setup(breach, cfg, height)`, `blow()`, `reset()`, `tick(delta)`, `blocks_sight()`, `sight_rect()`, `panel_center()`, `debris_count()`, `use_mask(bind)`, `tell_visible()`, `sealed`.
 - `stalker_deck.gd`: `simulate_world(delta)`, `interact()`, `fire_ambush()`, `body_height()`, `in_cover_now()`, `bed_in_reach(p)`, plus `weight_deck`'s and `sight_deck`'s. Keys: E tips a bed in reach, otherwise works a door; 6 goes back to the default camera; Backspace resets everything, starts a new life and writes the old one's log.
 
 ## Signals

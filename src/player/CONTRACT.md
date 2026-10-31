@@ -9,7 +9,7 @@ The weighty operator (T003). The rule: the intent responds the same step, the co
 - `operator_body.gd`: which body an operator wears, by data, and builds it: "Model" and "Anim" with the same face either way. `forced` overrides the data for tools and tests.
 - `hauler_anim.gd`: the same face as `operator_anim.gd` over John's hauler: legs by direction, sprint, turn in place, crouch; upper body aim, low or reload; roll, hit and death over everything.
 - `hauler_clips.gd`: builds one shared AnimationLibrary, one clip per state, from `data/hauler_anim.json`. `hauler_retarget.gd`: scene-free retarget, hip strip, forward kinematics, foot measures.
-- `aim_visuals.gd`: floor cone, turn arc, ring under the aim point.
+- `aim_visuals.gd`: floor cone, turn arc, ring under the aim point. `use_mask(bind)` puts the cone and arc under the sight mask (T011).
 - `weight_deck.gd`: root of `scenes/player/weight_deck.tscn`: deck, targets, camera, the suit OS and noise ring (`src/hud`), panel, camera kick, capture shots. `_noise_senses()` says whose ears the ring shows. H toggles the key help.
 
 ## Does not own
@@ -42,7 +42,7 @@ The weighty operator (T003). The rule: the intent responds the same step, the co
 None. (The rifle has its own.)
 
 ## Data keys (`data/player.json`)
-`radius_m`, `height_m`, `aim_height_m`; `move` {`walk_speed_m_s`, `crouch_speed_m_s`, `sprint_speed_m_s`, `accel_s`, `decel_s`, `moving_threshold_m_s`}; `turn` {`standing_deg_s`, `firing_deg_s`, `crouched_deg_s`, `firing_hold_s`, `torso_lead_deg`, `hip_settle_deg_s`, `aim_deadzone_m`}; `crouch` {`down_s`, `stand_up_s`}; `anim` {`clip_speed_forward_m_s`, `clip_speed_back_m_s`, `clip_speed_strafe_m_s`, `clip_speed_crouch_m_s`, `max_time_scale`, `upper_xfade_s`, `reload_clip_s`, `spine1_twist_share`}; `aim_visuals` {`floor_y_m`, `cone_length_m`, `cone_segments`, `cone_edge_width_m`, `cone_fill_color`, `cone_edge_color`, `arc_radius_m`, `arc_width_m`, `arc_min_deg`, `arc_step_deg`, `arc_color`, `marker_radius_m`, `marker_width_m`, `marker_segments`, `marker_color`}.
+`radius_m`, `height_m`, `aim_height_m`; `move` {`walk_speed_m_s`, `crouch_speed_m_s`, `sprint_speed_m_s`, `accel_s`, `decel_s`, `moving_threshold_m_s`}; `turn` {`standing_deg_s`, `firing_deg_s`, `crouched_deg_s`, `firing_hold_s`, `torso_lead_deg`, `hip_settle_deg_s`, `aim_deadzone_m`}; `crouch` {`down_s`, `stand_up_s`}; `anim` {`clip_speed_forward_m_s`, `clip_speed_back_m_s`, `clip_speed_strafe_m_s`, `clip_speed_crouch_m_s`, `max_time_scale`, `upper_xfade_s`, `reload_clip_s`, `spine1_twist_share`}; `aim_visuals` {`remembered_share`, `floor_y_m`, `cone_length_m`, `cone_segments`, `cone_edge_width_m`, `cone_fill_color`, `cone_edge_color`, `arc_radius_m`, `arc_width_m`, `arc_min_deg`, `arc_step_deg`, `arc_color`, `marker_radius_m`, `marker_width_m`, `marker_segments`, `marker_color`}.
 
 `data/player.json` also has `body` ("hauler" or "legacy").
 

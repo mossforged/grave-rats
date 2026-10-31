@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 starting. Stage 2 passed (tag `stage-2`, pushed by John). T007 merged: pirates, lock-to-cover, the 0.85/1.15/fade defaults. T008 queued: flicker fix, door-noise rule, suit-OS HUD with the noise ring. A007 (Meshy input images) queued. John is modelling from the Meshy shortlist.
+**Stage:** 3 in progress. Stage 2 passed (tag `stage-2`, pushed by John). T009 done on `auto/t009-mac`, waiting on John: his hauler is now the player and the pirates' body. T010 is next once it merges.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,12 @@
 Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T008 merged → T009 (hauler swap) running → T010 (slice kit, held until T009 merges).
-- Code: T007 merged (lead reviewed, 210/210 reproduced). T008 queued.
-- Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. John's hauler (30.8k tris, 1.80 m, unrigged) waits for a Meshy rig.
+- Queue order (lead): T009 awaiting review and John's gate → T010 (slice kit, held until T009 merges).
+- Code: T008 merged. T009 on `auto/t009-mac`: 247/247 tests; see `docs/handoffs/auto-T009.md`.
+- Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
 - T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)
 - T007 play (`scenes/pirates/pirate_deck.tscn`, now the main scene): does cover matter? Is lock-to-cover (Space, RMB) better than plain crouch (F1 toggle)? Too lethal (3.4 s in the open)? Do the crew read as rivals? Do the barks give too much away? Bots: cover doubles survival; lock is no better than crouch when fighting from one spot.
 - Meshy models from John (`docs/handoffs/meshy-shortlist.md`): hauler, stalker, bed, console, rifle.
@@ -37,8 +38,10 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - T005 limits: the cover shield can show a stalker you can't see; 1.2 m crate physics boxes may stop 1.2 m rounds; a tipped bed can land on a stalker; 13 `invalid UID` import warnings for `operator.glb`.
 - Quiet-machine frame-time baseline for the asset viewer (T001 runs had other load on the Mac).
 - `src/study` deck dressing and the deck copy in `stalker_deck` want a real level module.
-- Stalker: a hit interrupting a wind-up; a player death animation.
+- Stalker: a hit interrupting a wind-up.
+- A roll move: the hauler has the clip (`anim.play_state("roll")`), but no key or rule uses it yet.
+- `stalker_deck` stagger doesn't call `operator.play_hit` (`src/enemies` was outside T009); its death does play the clip.
+- Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-30 (lead): merged T008 (231/231 reproduced); queued T009. Comparable-games study in `docs/studies/2026-10-30-comparable-games.md`.
-2026-10-30 (code, unattended): T008: the beam was the flicker's second shape, now a fixed fan clipped at walls; noise through a shut door brings stalkers to the door but never to bash it; suit-OS HUD with a noise ring drawn from the AI's own hearing.
+2026-10-30 (code, unattended): T009: John's hauler replaces the grey operator and the pirates' body, switchable back by data (`body`, `body.model`). 18 states mapped in `data/hauler_anim.json`, Mixamo clips retargeted, hips pinned, rifle on the hand, pirates repainted navy and off-white by shader. Foot slide at or below legacy on average, still high on strafes; `pirate_deck` about +0.2 ms. Motion unjudged: stills only.

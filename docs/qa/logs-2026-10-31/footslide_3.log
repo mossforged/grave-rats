@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+walk forward     body 3.40 m/s  planted foot slides 3.23 m/s (95% of the body speed), planted 14% of the time
+walk back        body 3.40 m/s  planted foot slides 2.37 m/s (70% of the body speed), planted 54% of the time
+strafe right     body 3.40 m/s  planted foot slides 3.20 m/s (94% of the body speed), planted 48% of the time
+strafe left      body 3.40 m/s  planted foot slides 3.55 m/s (104% of the body speed), planted 66% of the time
+crouch forward   body 1.50 m/s  planted foot slides 1.47 m/s (98% of the body speed), planted 25% of the time
+sprint forward   body 5.40 m/s  planted foot slides 3.99 m/s (74% of the body speed), planted 20% of the time

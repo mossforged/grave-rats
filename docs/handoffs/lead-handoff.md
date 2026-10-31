@@ -45,9 +45,9 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T013 | code | merged 2026-10-31; lead then reworked the locker bank and added console_1600 |
 | T014 | code | merged 2026-10-31; waits for John's play (balance flags in STATUS) |
 | T015 | code | merged 2026-10-31; waits for John's play |
-| Q002 | qa | queued 2026-10-31: health rerun after T012–T015 |
+| Q002 | qa | merged: health rerun; no unexplained regressions; frame time needs a quiet-Mac re-measure; greedy dies 34 of 36 with CUSTODIAN |
 | (pause) | code | no new gameplay/balance until John plays T012–T015; non-balance work continues |
-| T016 | code | queued: bed, medbay dressing, salvage models in; live AA toggle |
+| T016 | code | merged: bed, medbay dressing, salvage models; AA toggle (John picks by eye) |
 | T017 | code | queued: placeholder sound pass |
 | T018 | code | queued: co-op groundwork (no networking) |
 | T019 | code | queued: corridor wall dressing from the hallway prop set (visual only; needs T016 merged) |

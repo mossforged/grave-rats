@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T014 merged, waiting on John's gates. T015 (CUSTODIAN: cutter and drone) done on `auto/t015-mac`, waiting on review and John's gate. **Next:** John plays T015 past tier 2 and takes the black box.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T016 merged, waiting on John's gates. Q002 health check merged (no unexplained regressions; frame time needs a quiet-Mac re-measure). **Next:** John plays (T015 past tier 2 with the black box; pick an AA mode in F1 → Display). Code lane: T017 sound, T018 co-op groundwork, T019 corridors, T020 gun feel.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -64,5 +64,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T015 (383/383 reproduced); queued Q002; paused new gameplay pending John's play. Prop library 104 scripted props (`assets/source/props/`, `catalogue.json`): hallway wall-depth set of 20 and a second batch per room; queued T019 (corridor dressing, visual only, needs T016). VFX texture set (`assets/source/vfx/`, generator `tools/vfx/`), gun meshes, `docs/design/gun-feel.md`; queued T020 (gun feel and effects).
-2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json` (cutter: line, ring, 1.2 s warm-up, tall cover cancels; drone: spotlight, 3 bars, 2.4 s call wakes a cutter or alerts a stalker); wakes at tier 2 or on the prize; new causes and payslip line.
+2026-10-31 (lead): merged Q002 and T016 (410/410 reproduced). Prop library 104 props; VFX textures and `docs/design/gun-feel.md`; queued T019, T020. Free sound shortlist in `docs/handoffs/sound-shortlist.md`.
+2026-10-31 (code, unattended): T016: `bed.glb` on deck and tipping (tip motion changed so the plate faces away), `dressing` in `data/deck.json`, gurney as low cover, nine salvage models, AA modes in F1 → Display saved to `data/display.json`. Bots: cautious ignoring tells 11 of 12 (was 12), deterministic, unattributed.

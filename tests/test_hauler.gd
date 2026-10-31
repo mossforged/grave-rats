@@ -250,11 +250,16 @@ func test_a_step_crouch_does_not_swing_the_feet_around_the_body() -> void:
 
 
 func test_a_turn_in_place_plays_only_when_the_hips_are_dragged() -> void:
+	# Steps by hand at exact deltas: a slow frame runs extra physics ticks, and by then the turn is over.
 	var op := _spawn()
-	await _frames(5)
+	op.set_physics_process(false)
+	var dt := 1.0 / float(Engine.physics_ticks_per_second)
+	for i in 5:
+		op.simulate(dt)
 	check_eq(op.anim.tree.get("parameters/turn/blend_amount"), 0.0, "still: no turn clip")
 	op.aim_point = Vector3(0, 1.2, 100)
-	await _frames(36)
+	for i in 36:
+		op.simulate(dt)
 	check(float(op.anim.tree.get("parameters/turn/blend_amount")) > 0.5, "dragged round: the turn clip")
 
 

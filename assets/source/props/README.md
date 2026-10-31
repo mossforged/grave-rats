@@ -36,3 +36,8 @@ Medbay: `bed`, `surgical_lamp`, `iv_stand`, `gurney`, `trolley`, `med_station` (
 - New mount kind **`wall_high`**: the origin is on the floor under the prop and the mounting height is baked in, against walls of 2.6 m (`data/deck.json`). Plain `wall` props still sit at a height the game picks.
 - `props.py`'s `Builder.box`/`cyl` take an optional `rot=(rx, ry, rz)` in degrees, used for debris, ajar doors and knocked-over stools.
 - Previews: `docs/screens/props/hall_*.jpg` and `<room>_b_*.jpg`.
+
+## Weapons (`tools/blender/props_weapons.py`)
+A016's designs, modelled by script because the art tool refused the images: `weapon_issue_rifle`, `weapon_budget_shotgun`, `weapon_flare_gun`, `weapon_plasma_cutter`, `weapon_rivet_driver`, `weapon_frag_charge`, `weapon_decoy_beacon`. About 4,300 triangles for all seven.
+- **Held convention:** origin at the right-hand grip, forward +Z, up +Y (glTF). `catalogue.json` gives each weapon's `hold` (long gun, sidearm or thrown, matching the Mixamo holds) and `muzzle_m`, the muzzle point from the origin.
+- Kit material slots as the other props. Sheet: `docs/screens/props/weapons_sheet.jpg`.

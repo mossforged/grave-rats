@@ -239,8 +239,26 @@ func within_reach(p: Vector2, radius: float) -> bool:
 ## E pressed by someone. Returns the door's answer (see DoorState.interact).
 func interact(actors: Array) -> String:
 	var answer := door_state.interact(doorway_clear(actors))
+	if answer == "locked" or answer == "blocked":
+		Audio.play("door_locked", door_point())
 	_apply()
 	return answer
+
+
+## Where its sounds come from.
+func door_point() -> Vector3:
+	var c := opening.get_center()
+	return Vector3(c.x, _height * 0.5, c.y)
+
+
+func _state_sound(s: int) -> void:
+	match s:
+		DoorState.State.OPENING:
+			Audio.play("door_open", door_point())
+		DoorState.State.CLOSING:
+			Audio.play("door_close", door_point())
+		DoorState.State.BROKEN:
+			Audio.play("door_break", door_point())
 
 
 ## `actors` are {position: Vector2, radius: float}.
@@ -284,6 +302,8 @@ func _apply() -> void:
 	var s := int(door_state.state)
 	if s == _last_state:
 		return
+	if _last_state >= 0:
+		_state_sound(s)
 	_last_state = s
 	state_changed.emit(self)
 

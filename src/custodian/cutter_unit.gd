@@ -4,7 +4,7 @@ extends Node3D
 
 const CutterBrain := preload("res://src/custodian/cutter_brain.gd")
 const Fx := preload("res://src/custodian/custodian_fx.gd")
-const PlaceholderSiren := preload("res://src/shift/placeholder_siren.gd")
+const SoundRules := preload("res://src/audio/sound_rules.gd")
 
 var brain: CutterBrain
 var cfg: Dictionary
@@ -24,11 +24,9 @@ var _knows: Callable
 var _line: ImmediateMesh
 var _beam: ImmediateMesh
 var _line_mat: ShaderMaterial
-var _warm_sound: AudioStreamPlayer3D
-var _burn_sound: AudioStreamPlayer3D
 
 
-func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, knows: Callable, mix_rate: int) -> void:
+func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, knows: Callable) -> void:
 	cfg = all.cutter
 	_knows = func(p: Vector3) -> bool: return knows.call(Vector2(p.x, p.z))
 	_lens_cfg = all.lens
@@ -53,8 +51,6 @@ func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, knows
 	mount_ring = Fx.ring(self, r, float(r.mount_radius_m))
 	mount_ring.global_position = Vector3(at.x, up, at.y)
 	target_ring = Fx.ring(self, r, float(r.target_radius_m))
-	_warm_sound = _sound(cfg.warm_sound, mix_rate, all.drone)
-	_burn_sound = _sound(cfg.burn_sound, mix_rate, all.drone)
 
 
 ## A small bright square where something stopped the line: this is what's saving you.
@@ -77,19 +73,19 @@ func _make_stop_mark(ln: Dictionary) -> MeshInstance3D:
 	return mi
 
 
-func _sound(spec: Dictionary, mix_rate: int, drone_cfg: Dictionary) -> AudioStreamPlayer3D:
-	var p := AudioStreamPlayer3D.new()
-	p.stream = PlaceholderSiren.make(spec, mix_rate, false)
-	p.volume_db = float(spec.volume_db)
-	p.unit_size = float(drone_cfg.unit_size_m)
-	add_child(p)
-	return p
+## The hum's name in the audio module, one per cutter.
+func warm_key() -> String:
+	return "cutter_warm:%d" % get_instance_id()
 
 
 func reset() -> void:
 	brain.reset()
-	_warm_sound.stop()
+	Audio.stop_loop(warm_key())
 	_show()
+
+
+func _exit_tree() -> void:
+	Audio.stop_loop(warm_key())
 
 
 func wake() -> bool:
@@ -109,13 +105,14 @@ func tick(delta: float, players: Array, trace: Callable) -> Array:
 	for ev: Dictionary in events:
 		match String(ev.type):
 			CutterBrain.EV_AIM:
-				_warm_sound.pitch_scale = 1.0
-				_warm_sound.play()
+				Audio.loop(warm_key(), "cutter_warm", brain.mount)
 			CutterBrain.EV_CANCEL:
-				_warm_sound.stop()
+				Audio.stop_loop(warm_key())
 			CutterBrain.EV_BURN:
-				_warm_sound.stop()
-				_burn_sound.play()
+				Audio.stop_loop(warm_key())
+				Audio.play("cutter_burn", brain.mount)
+	if brain.aiming():
+		Audio.set_loop_pitch(warm_key(), SoundRules.warm_pitch(Data.value("audio", "cutter_warm"), brain.warm_share()))
 	if brain.line_on():
 		var seen: Dictionary = trace.call(brain.mount, brain.far_point(brain.line_reach(players)))
 		line_end = seen.point

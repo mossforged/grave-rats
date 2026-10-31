@@ -56,6 +56,8 @@ func _ready() -> void:
 	add_child(noise_ring)
 	noise_ring.setup(hud.cfg.ring, _noise_senses())
 	operator.rifle.fired.connect(_on_noise_shot)
+	operator.space_at = layout.space_at
+	Audio.follow(operator)
 	if OS.is_debug_build():
 		panel = TuningPanel.new()
 		panel.name = "TuningPanel"
@@ -66,6 +68,10 @@ func _ready() -> void:
 			aim_from_mouse = false
 			operator.input_enabled = false
 	respawn()
+
+
+func _exit_tree() -> void:
+	Audio.stop_all()
 
 
 ## Back to data "spawn", full gun.

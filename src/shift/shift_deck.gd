@@ -8,7 +8,6 @@ const ShiftState := preload("res://src/shift/shift_state.gd")
 const SectionLights := preload("res://src/shift/section_lights.gd")
 const AlarmMarker := preload("res://src/shift/alarm_marker.gd")
 const Airlock := preload("res://src/shift/airlock.gd")
-const PlaceholderSiren := preload("res://src/shift/placeholder_siren.gd")
 const SalvageField := preload("res://src/salvage/salvage_field.gd")
 const CarryState := preload("res://src/salvage/carry_state.gd")
 const QuotaState := preload("res://src/shift/quota_state.gd")
@@ -48,8 +47,6 @@ var _threat_wait := 0.0
 var _cfg: Dictionary
 var _salvage_cfg: Dictionary
 var _prompt: Label3D
-var _siren: AudioStreamPlayer
-var _chirp: AudioStreamPlayer
 var _spawns_owed := 0
 var _spawn_wait := 0.0
 var _alarm_refresh := 0.0
@@ -82,8 +79,6 @@ func _ready() -> void:
 	marker.name = "AlarmMarker"
 	add_child(marker)
 	marker.setup(_cfg.alarm.marker)
-	_siren = _sound_player("Siren", _cfg.alarm.siren, true)
-	_chirp = _sound_player("TierChirp", _cfg.tier_chirp, false)
 	_make_prompt()
 	run_log.shift_report = func() -> Dictionary: return shift.report()
 	hud.hold_estimate = 0
@@ -109,7 +104,7 @@ func _make_custodian() -> void:
 	custodian.name = "Custodian"
 	add_child(custodian)
 	custodian.setup(_custodian_cfg, layout, _custodian_trace.line, sight.visibility, mask.bind, _player_knows,
-			mask.visible_texture(), sight.bounds, int(_cfg.mix_rate))
+			mask.visible_texture(), sight.bounds)
 	custodian.player_hit.connect(_on_custodian_hit)
 	custodian.spoke.connect(func(line: String) -> void: hud.os_state.custodian_say(line))
 	custodian.woke.connect(func(_reason: String) -> void: run_log.note_threat("custodian", "ship"))
@@ -165,15 +160,6 @@ func _on_custodian_called(_id: int, how: String) -> void:
 	hud.os_state.announce(String(w.called_cutter if how == Custodian.CALLED_CUTTER else w.called_stalker))
 
 
-func _sound_player(node_name: String, spec: Dictionary, looped: bool) -> AudioStreamPlayer:
-	var p := AudioStreamPlayer.new()
-	p.name = node_name
-	p.stream = PlaceholderSiren.make(spec, int(_cfg.mix_rate), looped)
-	p.volume_db = float(spec.volume_db)
-	add_child(p)
-	return p
-
-
 func _make_prompt() -> void:
 	var c: Dictionary = _cfg.prompt
 	_prompt = Label3D.new()
@@ -210,7 +196,9 @@ func _start_shift() -> void:
 	shift.begin()
 	field.reset(rng)
 	marker.hide_now()
-	_siren.stop()
+	_stop_siren()
+	Audio.start_ambience()
+	_step_sounds()
 	_spawns_owed = 0
 	_spawn_wait = 0.0
 	_alarm_refresh = 0.0
@@ -243,7 +231,25 @@ func _physics_process(delta: float) -> void:
 	super(delta)
 
 
+## The siren, by name, in the audio module.
+func _stop_siren() -> void:
+	Audio.stop_loop("alarm")
+
+
+## Which room tone, how hard the suit breathes, and the air warning repeating once it's gone. Only a
+## living player on a running shift breathes.
+func _step_sounds() -> void:
+	Audio.set_room(layout.space_at(_eye()))
+	if shift.ended() or suit.dead:
+		Audio.stop_loop("breath")
+		return
+	Audio.breathe(suit.fraction(), shift.oxygen_left / float(_cfg.oxygen_s))
+	if shift.oxygen_out():
+		Audio.play("oxygen_warning")
+
+
 func _step_shift(delta: float) -> void:
+	_step_sounds()
 	section.tick(delta)
 	marker.tick(delta, _eye())
 	for ev: Dictionary in shift.step(delta):
@@ -253,7 +259,7 @@ func _step_shift(delta: float) -> void:
 			ShiftState.EV_OXYGEN_OUT:
 				hud.os_state.announce(String(_cfg.words.oxygen_out))
 			ShiftState.EV_ALARM_OVER:
-				_siren.stop()
+				_stop_siren()
 	if shift.ended():
 		return
 	_note_threats(delta)
@@ -301,7 +307,7 @@ func _deposit() -> void:
 
 func _leave() -> void:
 	operator.hold_control(float(_cfg.leave.hold_after_s))
-	_siren.stop()
+	_stop_siren()
 	marker.hide_now()
 	var w: Dictionary = _cfg.words
 	run_log.write("left")
@@ -321,10 +327,12 @@ func _on_tier(index: int, spec: Dictionary) -> void:
 		var options: Array = spec.lights
 		var space := String(options[rng.randi_range(0, options.size() - 1)])
 		section.fail(space)
+		var room := layout.point_in(space, [0.5, 0.5])
+		Audio.play("lights_fail", Vector3(room.x, float(deck_data.wall_height_m), room.y))
 		run_log.note_threat("power_loss", space)
 		line = line.replace("%s", String(_cfg.section_words[space]))
 	hud.os_state.announce(line)
-	_chirp.play()
+	Audio.play("oxygen_warning")
 	for name_key: String in spec.get("wake", []):
 		if wake_hooks.has(name_key):
 			(wake_hooks[name_key] as Callable).call(index)
@@ -358,7 +366,10 @@ func _player_sees(p: Vector2) -> bool:
 
 func _on_carry_event(ev: Dictionary) -> void:
 	var item: RefCounted = ev.item
-	if String(ev.type) == CarryState.EV_TAKEN:
+	var taken := String(ev.type) == CarryState.EV_TAKEN
+	var sounds: Dictionary = Data.value("audio", "carry")
+	Audio.play(String(sounds["pickup" if taken else "drop"][item.klass]), operator.global_position)
+	if taken:
 		shift.note_taken(item)
 		field.put_away(item)
 		if item.prize:
@@ -369,9 +380,6 @@ func _on_carry_event(ev: Dictionary) -> void:
 		if noise != "":
 			pack.noise(noise, _eye())
 			noise_ring.state.fire(noise)
-			var sounds: Dictionary = _cfg.drop_sound
-			if sounds.has(noise):
-				pack.play_sound(String(sounds[noise]), operator.global_position)
 	operator.set_carry(shift.carry(player_id).penalties())
 
 
@@ -384,7 +392,7 @@ func _trip_alarm() -> void:
 	run_log.note_threat("alarm", layout.space_at(_eye()))
 	hud.os_state.announce(String(a.announce))
 	marker.show_for(float(a.reveal_s))
-	_siren.play()
+	Audio.loop("alarm", "alarm_siren")
 	_alarm_refresh = float(a.refresh_s)
 	pack.alert(_eye())
 	custodian.wake("prize")
@@ -447,7 +455,7 @@ func _die(who: String, how: String) -> void:
 	for i in items.size():
 		var around := Vector2.from_angle(TAU * float(i) / float(items.size())) * spread
 		field.lay_down(items[i], _eye() + around)
-	_siren.stop()
+	_stop_siren()
 	marker.hide_now()
 	super(who, how)
 	if session_live:
@@ -569,6 +577,7 @@ func _brief() -> void:
 
 func _open_form(screen: String, doc: Dictionary) -> void:
 	operator.process_mode = Node.PROCESS_MODE_DISABLED
+	Audio.stop_loop("breath")
 	paper.open(screen, doc)
 
 
@@ -578,6 +587,9 @@ func _close_form() -> void:
 
 
 func _on_paper_pressed(button: String) -> void:
+	var stamps: Dictionary = Data.value("audio", "paper_stamps")
+	if stamps.has(button):
+		Audio.play(String(stamps[button]))
 	match button:
 		"accept":
 			_close_form()
@@ -609,6 +621,14 @@ func _file_payslip(log: Dictionary, how: String) -> void:
 	quota.close_shift(int(doc.net_cr), how)
 	doc.merge(paperwork.quota_fields(quota.facts()), true)
 	_open_form("payslip", doc)
+	_tick_ledger(doc.ledger.size())
+
+
+## One tick per line of the ledger, run off quickly as the payslip lands.
+func _tick_ledger(rows: int) -> void:
+	var l: Dictionary = Data.value("audio", "ledger")
+	for i in mini(rows, int(l.max_ticks)):
+		Audio.play(String(l.cue), Vector3.ZERO, {"delay": float(l.gap_s) * float(i + 1)})
 
 
 ## The death screen has had its moment; the bill comes after, as the release.

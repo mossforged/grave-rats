@@ -668,7 +668,7 @@ func test_the_prize_trips_the_alarm_and_stalkers_converge() -> void:
 	check_eq(scene.hud.os_state.announcement(), String(cfg.alarm.announce), "the suit says so")
 	check(scene.hud.urgent_alerts.has("alarm"), "and the strip")
 	check(scene.ambush.fired, "the panel blew")
-	check(scene._siren.playing or DisplayServer.get_name() == "headless", "the siren")
+	check(Audio.looping("alarm"), "the siren")
 	var carrier: Vector2 = scene._eye()
 	var awake: Node = scene.pack.stalkers[0]
 	check(awake.brain.hunting(), "the prowler's hunting")

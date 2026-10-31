@@ -7,6 +7,7 @@ const OperatorModel := preload("res://src/player/operator_model.gd")
 const OperatorBody := preload("res://src/player/operator_body.gd")
 const AimVisuals := preload("res://src/player/aim_visuals.gd")
 const Rifle := preload("res://src/weapons/rifle.gd")
+const SoundRules := preload("res://src/audio/sound_rules.gd")
 
 var model: OperatorModel
 var rifle: Rifle
@@ -19,6 +20,8 @@ var input_enabled := true
 var scripted := {}
 var anim_speed := 0.0          # speed the animation got this step
 var crouch_shown := 1.0        # share of the crouch the body shows (a braced shot rises out of it)
+## (p: Vector2) -> String: the name of the space underfoot, for which footstep. The deck sets it.
+var space_at := Callable()
 
 var _cfg: Dictionary
 var _rifle_cfg: Dictionary
@@ -30,6 +33,8 @@ var _hold_left := 0.0
 var _can_fire := true
 var _cone_extra := 0.0
 var _cone_next := 0.0
+var _steps := SoundRules.StepClock.new()
+var _was_crouched := false
 
 
 func _ready() -> void:
@@ -184,6 +189,7 @@ func simulate(delta: float) -> void:
 		rifle.trigger_held = false
 	var wish := OperatorModel.wish_from_keys(keys, move_yaw_deg)
 	model.step(delta, wish, to_yaw, crouch, sprint)
+	_foot_sounds(delta, crouch)
 	# Everything the animation reads is fixed here, before the body moves.
 	anim_speed = model.speed
 	var walk := float(_cfg.move.walk_speed_m_s)
@@ -209,6 +215,23 @@ func simulate(delta: float) -> void:
 	global_position.y = 0.0
 	_apply_facing()
 	visuals.draw(global_position, gun_yaw(), rifle.cone.spread_deg, model.aim_yaw, aim_point, shot_reach)
+
+
+## Footfalls by what's underfoot, and the rustle of going down or coming up. Hearing only: what the
+## stalkers hear of this is the noise ring's.
+func _foot_sounds(delta: float, crouch: bool) -> void:
+	if crouch != _was_crouched:
+		_was_crouched = crouch
+		Audio.play("crouch_rustle", global_position)
+	var f: Dictionary = Data.value("audio", "footsteps")
+	if model.speed < float(f.min_speed_m_s):
+		return
+	var g: Dictionary = f.gaits[SoundRules.gait(crouch, model.sprinting)]
+	if not _steps.advance(model.speed * delta, float(g.stride_m)):
+		return
+	var space := String(space_at.call(Vector2(global_position.x, global_position.z))) if space_at.is_valid() else ""
+	var surface := String((f.surfaces as Dictionary).get(space, f.default_surface))
+	Audio.play(String(f.cues[surface]), global_position, {"volume_db": float(g.volume_db)})
 
 
 func _apply_facing() -> void:

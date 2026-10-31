@@ -12,6 +12,7 @@ signal reload_cancelled
 const RifleState := preload("res://src/weapons/rifle_state.gd")
 const AimCone := preload("res://src/weapons/aim_cone.gd")
 const RifleFx := preload("res://src/weapons/rifle_fx.gd")
+const SoundRules := preload("res://src/audio/sound_rules.gd")
 
 var state: RifleState
 var cone: AimCone
@@ -37,15 +38,21 @@ func _ready() -> void:
 ## One physics step. `origin` is the ray start (centre of the body at gun height), `center_yaw`
 ## the gun's facing with recoil, `muzzle` where the tracer starts. Returns true if a shot went off.
 func tick(delta: float, sprinting: bool, origin: Vector3, center_yaw: float, muzzle: Vector3) -> bool:
+	var reload_was := state.reload_progress()
 	match state.step(delta, sprinting):
 		"finished":
+			_reload_sounds(reload_was, 1.0)
 			reload_finished.emit()
 		"cancelled":
 			reload_cancelled.emit()
+		_:
+			_reload_sounds(reload_was, state.reload_progress())
 	if not trigger_held:
 		return false
 	var result := state.try_fire(sprinting)
 	if result != RifleState.FIRED:
+		if result == RifleState.BLOCKED_EMPTY:
+			Audio.play("rifle_dry", global_position)
 		if result != RifleState.BLOCKED_COOLDOWN:
 			blocked.emit(result)
 		return false
@@ -56,8 +63,15 @@ func tick(delta: float, sprinting: bool, origin: Vector3, center_yaw: float, muz
 func request_reload(sprinting: bool) -> bool:
 	var ok := state.start_reload(sprinting)
 	if ok:
+		Audio.play("rifle_mag_out", global_position)
 		reload_started.emit()
 	return ok
+
+
+## The mag going in and the charge, where data says they fall in the reload.
+func _reload_sounds(before: float, after: float) -> void:
+	for s: Dictionary in SoundRules.stages_crossed(Data.value("audio", "reload_stages"), before, after):
+		Audio.play(String(s.cue), global_position)
 
 
 func _shoot(origin: Vector3, yaw: float, muzzle: Vector3) -> void:
@@ -78,4 +92,6 @@ func _shoot(origin: Vector3, yaw: float, muzzle: Vector3) -> void:
 			target.take_hit({"point": to, "direction": dir, "damage": float(_cfg.damage), "origin": origin})
 		fx.impact(to)
 	fx.shot(muzzle, to)
+	Audio.play("rifle_shot", muzzle)
+	Audio.play("rifle_casing", global_position)
 	fired.emit(muzzle, to, dir, target)

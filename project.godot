@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 [autoload]
 
 Data="*res://src/core/data.gd"
+Audio="*res://src/audio/audio.gd"
 DebugOverlay="*res://src/debug/fps_overlay.gd"
 Capture="*res://src/debug/capture.gd"
 

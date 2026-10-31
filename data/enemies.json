@@ -203,14 +203,6 @@
       "hot_share": 0.25
     }
   },
-  "sound": {
-    "mix_rate": 22050,
-    "unit_size_m": 12.0,
-    "bang": {"length_s": 0.7, "decay_per_s": 6.0, "low_hz": 70.0, "low_share": 0.6, "volume_db": 6.0},
-    "spit": {"length_s": 0.22, "decay_per_s": 18.0, "low_hz": 340.0, "low_share": 0.3, "volume_db": -4.0},
-    "lunge": {"length_s": 0.3, "decay_per_s": 10.0, "low_hz": 130.0, "low_share": 0.5, "volume_db": -2.0},
-    "bash": {"length_s": 0.5, "decay_per_s": 8.0, "low_hz": 55.0, "low_share": 0.7, "volume_db": 9.0}
-  },
   "help": {"text": "F flashlight   E door / tip bed   F2 sight debug   6 default camera"},
   "spawn_points": [
     {"name": "junction vent", "kind": "vent", "space": "junction", "at": [0.12, 0.3], "patrol": [[0.12, 0.3], [0.8, 0.25], [0.3, 0.7], [0.75, 0.55]]},

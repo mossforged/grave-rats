@@ -10,7 +10,7 @@ const BeamFan := preload("res://src/sight/beam_fan.gd")
 const Visibility := preload("res://src/sight/visibility.gd")
 const BEAM_SHADER := preload("res://src/sight/beam.gdshader")
 const SightTarget := preload("res://src/sight/sight_target.gd")
-const PlaceholderSiren := preload("res://src/shift/placeholder_siren.gd")
+const SoundRules := preload("res://src/audio/sound_rules.gd")
 
 var brain: DroneBrain
 var cfg: Dictionary
@@ -26,7 +26,6 @@ var tell_bars: Array = []
 var _lens_cfg: Dictionary
 var _mesh: ImmediateMesh
 var _beam_mat: ShaderMaterial
-var _chirp: AudioStreamPlayer3D
 var _visible_mask: Texture2D
 var _since_cast := INF
 var _bar_lit: StandardMaterial3D
@@ -34,7 +33,7 @@ var _bar_dim: StandardMaterial3D
 var _tell_plate: MeshInstance3D
 
 
-func setup(all: Dictionary, spec: Dictionary, at: Vector2, route: Array, bind: Callable, mix_rate: int) -> void:
+func setup(all: Dictionary, spec: Dictionary, at: Vector2, route: Array, bind: Callable) -> void:
 	cfg = all.drone
 	_lens_cfg = all.lens
 	label = "%s %s" % [String(cfg.label), String(spec.name).to_upper()]
@@ -63,11 +62,6 @@ func setup(all: Dictionary, spec: Dictionary, at: Vector2, route: Array, bind: C
 		bars.append(b)
 	_make_tell(count)
 	_make_spot()
-	_chirp = AudioStreamPlayer3D.new()
-	_chirp.stream = PlaceholderSiren.make(cfg.chirp, mix_rate, false)
-	_chirp.volume_db = float(cfg.chirp.volume_db)
-	_chirp.unit_size = float(cfg.unit_size_m)
-	add_child(_chirp)
 	_show()
 
 
@@ -183,8 +177,8 @@ func tick(delta: float, players: Array, trace: Callable, visibility: RefCounted)
 	var events: Array = brain.step(delta, players, trace)
 	for ev: Dictionary in events:
 		if String(ev.type) == DroneBrain.EV_BAR:
-			_chirp.pitch_scale = 1.0 + float(cfg.chirp.pitch_step) * float(int(ev.bar) - 1)
-			_chirp.play()
+			var pitch := SoundRules.chirp_pitch(Data.value("audio", "drone_chirp"), int(ev.bar))
+			Audio.play("drone_chirp", global_position, {"pitch": pitch})
 	_place()
 	_show()
 	if brain.awake():

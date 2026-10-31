@@ -93,7 +93,8 @@ static func _door_zones(layout: RefCounted, cfg: Dictionary) -> Array:
 
 
 ## Every prop's body, and the line along a low prop's long sides where you brace (a tippable bed's: where
-## it lands). A square one can be braced from any side. Tall cover only has to be kept off.
+## it lands). A square one can be braced from any side. A side too near the room's edge for anyone to
+## stand there has no line. Tall cover only has to be kept off.
 static func _keep_off_props(ctx: Dictionary) -> void:
 	var layout: RefCounted = ctx.layout
 	var gap := float(ctx.cfg.prop_gap_m)
@@ -106,12 +107,19 @@ static func _keep_off_props(ctx: Dictionary) -> void:
 			reach = (p.size as Vector3).y
 		elif p.cover == LOW_COVER:
 			reach = float(ctx.cfg.low_cover_line_m)
-		if r.size.x == r.size.y:
-			ctx.keep_low.append(r.grow(reach))
-		elif r.size.y > r.size.x:
-			ctx.keep_low.append(r.grow_individual(reach, 0.0, reach, 0.0))
-		else:
-			ctx.keep_low.append(r.grow_individual(0.0, reach, 0.0, reach))
+		if reach <= 0.0:
+			continue
+		var room: Rect2 = layout.space_rect(String(p.space))
+		if r.size.y >= r.size.x:
+			if r.position.x - room.position.x >= reach:
+				ctx.keep_low.append(r.grow_individual(reach, 0.0, 0.0, 0.0))
+			if room.end.x - r.end.x >= reach:
+				ctx.keep_low.append(r.grow_individual(0.0, 0.0, reach, 0.0))
+		if r.size.x >= r.size.y:
+			if r.position.y - room.position.y >= reach:
+				ctx.keep_low.append(r.grow_individual(0.0, reach, 0.0, 0.0))
+			if room.end.y - r.end.y >= reach:
+				ctx.keep_low.append(r.grow_individual(0.0, 0.0, 0.0, reach))
 
 
 ## Spans of a wall something else lives on (a CUSTODIAN terminal).

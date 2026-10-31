@@ -74,10 +74,9 @@
         "ribs": {"type": "wall_rib", "every_m": 2.7, "start_m": {"west": 1.2, "east": 2.55}},
         "runs": [{"type": "pipe_run_high", "wall": "west"}, {"type": "pipe_run_low", "wall": "east"}],
         "singles": [
-          {"type": "maintenance_hatch", "wall": "east", "at": 0.2},
           {"type": "fire_hose_reel", "wall": "east", "at": 0.71},
           {"type": "wall_sign_arrow", "wall": "west", "at": 0.17},
-          {"type": "handrail", "wall": "east", "at": 0.9},
+          {"type": "handrail", "wall": "east", "at": 0.83},
           {"type": "maintenance_hatch", "wall": "west", "at": 0.8}
         ],
         "floor": [
@@ -89,19 +88,18 @@
         "pillars": ["ne", "se"],
         "ribs": {"type": "wall_rib", "every_m": 2.7, "start_m": {"north": 1.2, "south": 2.55}},
         "landmarks": [
-          {"type": "wall_panel_breached", "wall": "north", "at": 0.5017},
-          {"type": "hanging_cables", "wall": "north", "at": 0.54, "over": true}
+          {"type": "wall_panel_breached", "wall": "north", "at": 0.1958},
+          {"type": "hanging_cables", "wall": "north", "at": 0.235, "over": true}
         ],
         "runs": [{"type": "pipe_run_low", "wall": "north"}, {"type": "air_duct", "wall": "south"}],
         "singles": [
-          {"type": "fire_hose_reel", "wall": "north", "at": 0.39},
-          {"type": "wall_sign_arrow", "wall": "north", "at": 0.11},
+          {"type": "fire_hose_reel", "wall": "north", "at": 0.433},
           {"type": "handrail", "wall": "south", "at": 0.3},
           {"type": "maintenance_hatch", "wall": "south", "at": 0.7},
           {"type": "wall_sign_arrow", "wall": "south", "at": 0.9}
         ],
         "floor": [
-          {"type": "debris_pile", "at": [0.5117, 0.145], "scale_x": 0.95}
+          {"type": "debris_pile", "at": [0.1875, 0.145], "scale_x": 0.95}
         ]
       }
     }

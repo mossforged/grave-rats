@@ -360,8 +360,16 @@ func test_one_of_each_grim_piece_on_each_deck() -> void:
 			check_eq(_of(pieces, type).size(), 1, "%s has one %s" % [row[0], type])
 
 
-func test_the_singles_are_on_the_deck() -> void:
+## A single slides to the nearest free spot; on the shift deck none may be squeezed out altogether.
+func test_every_single_in_the_data_lands_on_the_shift_deck() -> void:
 	var pieces := CorridorDressing.placed(_shift_layout())
+	for space: String in _cfg().corridors:
+		var spec: Dictionary = _cfg().corridors[space]
+		var want := {}
+		for e: Dictionary in spec.get("singles", []) + spec.get("landmarks", []) + spec.get("floor", []):
+			want[e.type] = int(want.get(e.type, 0)) + 1
+		for type: String in want:
+			check_eq(_of(pieces, type).filter(func(p: Dictionary) -> bool: return p.space == space).size(), want[type], "%s in %s" % [type, space])
 	for type: String in ["maintenance_hatch", "fire_hose_reel", "wall_sign_arrow", "handrail", "floor_grate"]:
 		check(_of(pieces, type).size() >= 1, "%s placed" % type)
 

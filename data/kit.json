@@ -127,7 +127,7 @@
     "corner_pillar": {"mount_y_m": 0.0},
     "handrail": {"mount_y_m": 0.0},
     "kick_plate": {"mount_y_m": 0.0},
-    "wall_sign_arrow": {"mount_y_m": 1.55},
+    "wall_sign_arrow": {"mount_y_m": 1.05},
     "maintenance_hatch": {"mount_y_m": 0.25},
     "fire_hose_reel": {"mount_y_m": 0.95},
     "hanging_cables": {"mount_y_m": 0.0}
@@ -311,9 +311,9 @@
       {"image": "rem_terms", "space": "junction", "wall": "east", "at": 0.62, "y_m": 1.3, "width_m": 0.72},
       {"image": "arrow_right", "space": "junction", "wall": "east", "at": 0.62, "y_m": 1.95, "width_m": 0.42},
 
-      {"image": "plate_engineering", "space": "side_corridor", "wall": "north", "at": 0.13, "y_m": 2.0, "width_m": 1.5},
-      {"image": "arrow_right", "space": "side_corridor", "wall": "north", "at": 0.13, "y_m": 1.4, "width_m": 0.45},
-      {"image": "owner_safety", "space": "side_corridor", "wall": "north", "at": 0.62, "y_m": 1.35, "width_m": 1.1},
+      {"image": "plate_engineering", "space": "side_corridor", "wall": "north", "at": 0.065, "y_m": 2.0, "width_m": 1.5},
+      {"image": "arrow_right", "space": "side_corridor", "wall": "north", "at": 0.065, "y_m": 1.4, "width_m": 0.45},
+      {"image": "owner_safety", "space": "side_corridor", "wall": "north", "at": 0.55, "y_m": 1.35, "width_m": 1.1},
       {"image": "rem_notice", "space": "side_corridor", "wall": "north", "at": 0.33, "y_m": 1.3, "width_m": 0.8}
     ],
     "floors": [

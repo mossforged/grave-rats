@@ -12,8 +12,8 @@ const STANDS := [
 	{"name": "door_jambs_lintel", "space": "side_corridor", "at": [0.8, 0.7], "aim": [0.8, 0.0], "view": "off"},
 	{"name": "door_side", "space": "junction", "at": [0.55, 0.27], "aim": [1.0, 0.27], "view": "off"},
 	{"name": "inner_corner", "space": "side_corridor", "at": [0.88, 0.6], "aim": [1.0, 0.0], "view": "off"},
-	{"name": "grimmest", "space": "side_corridor", "at": [0.52, 0.75], "aim": [0.52, 0.0], "view": "off"},
-	{"name": "grimmest_play", "space": "side_corridor", "at": [0.52, 0.75], "aim": [0.52, 0.0], "view": "play"},
+	{"name": "grimmest", "space": "side_corridor", "at": [0.2, 0.75], "aim": [0.2, 0.0], "view": "off"},
+	{"name": "grimmest_play", "space": "side_corridor", "at": [0.2, 0.75], "aim": [0.2, 0.0], "view": "play"},
 	{"name": "long_corridor_play", "space": "junction", "at": [0.5, 0.45], "aim": [0.5, 0.1], "view": "play"},
 ]
 

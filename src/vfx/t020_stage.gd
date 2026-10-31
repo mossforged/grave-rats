@@ -8,7 +8,8 @@ const DUMP_MAGS := 3
 const WINDOW_S := 6.0
 const WALL_BACK_M := 2.6
 const SETTLE_S := 0.3
-const EFFECT_S := {"explosion": 0.32, "fire": 2.4, "smoke_plume": 4.5, "steam_jet": 1.3, "sparking_console": 2.0, "acid_pool": 2.0, "dust_motes": 8.0}
+const BRASS_BACK_M := 1.8
+const EFFECT_S := {"explosion": 0.42, "fire": 2.4, "smoke_plume": 4.5, "steam_jet": 1.3, "sparking_console": 2.0, "acid_pool": 2.0, "dust_motes": 8.0}
 
 var deck: Node
 var results := {}
@@ -59,8 +60,8 @@ func apply(shot: Dictionary) -> void:
 					await w.frame(deck)
 				deck.operator.scripted = {}
 				await deck._sim(SETTLE_S)
+				w.pause()
 				deck.operator.scripted = {"fire": true}
-			w.mark_peaks()
 			results["mag_dump"] = w.report()
 			results["mag_dump"]["decals"] = Vfx.visible_decals()
 			results["mag_dump"]["casings"] = Vfx.casings.count
@@ -83,11 +84,12 @@ func apply(shot: Dictionary) -> void:
 		"brass":
 			await _brass()
 		"sequence":
-			await _to_wall("junction", "metal")
-			await deck.panel.gallery.run_sequence()
-		"gallery":
 			var c: Vector2 = _open_spot()
 			await deck._stand_at(c, c + Vector2(0.0, -AIM_FRONT))
+			await deck.panel.gallery.run_sequence()
+		"gallery":
+			var c2: Vector2 = _open_spot()
+			await deck._stand_at(c2, c2 + Vector2(0.0, -AIM_FRONT))
 			var at: Vector3 = deck.operator.global_position + Vector3(0.0, 0.0, -AIM_FRONT)
 			deck.panel.gallery.spawn(String(shot.recipe), at)
 			await deck._sim(float(EFFECT_S.get(String(shot.recipe), 1.5)))
@@ -109,9 +111,14 @@ func _to_wall(space: String, want: String) -> Dictionary:
 	var r: Rect2 = deck.layout.space_rect(space)
 	var h := float(Data.value("player", "aim_height_m"))
 	var world: PhysicsDirectSpaceState3D = deck.get_world_3d().direct_space_state
-	for i in range(1, 20):
-		var x := r.position.x + r.size.x * float(i) / 20.0
-		var from := Vector3(x, h, r.position.y + minf(r.size.y * 0.5, WALL_BACK_M * 2.0))
+	var tries: Array[float] = []
+	for i in range(0, 10):
+		tries.append_array([0.5 + float(i) / 20.0, 0.5 - float(i) / 20.0])
+	for share: float in tries:
+		var x := r.position.x + r.size.x * share
+		var from := Vector3(x, h, r.position.y + WALL_BACK_M + 0.2)
+		if not _clear_lane(world, from, Vector3(x, h, r.position.y - 1.0)):
+			continue
 		var hit: Dictionary = world.intersect_ray(PhysicsRayQueryParameters3D.create(from, Vector3(x, h, r.position.y - 1.0)))
 		if hit.is_empty() or not hit.collider is StaticBody3D or absf(hit.position.z - r.position.y) > 0.5:
 			continue
@@ -125,6 +132,15 @@ func _to_wall(space: String, want: String) -> Dictionary:
 		return {"wall_at": [hit.position.x, hit.position.z], "surface": surface, "material": Vfx.surfaces.material_at(hit.collider, hit.position, hit.normal)}
 	push_error("T020: no %s wall in %s" % [want, space])
 	return {"surface": "none"}
+
+
+## Nothing but the far wall for a shot with some spread: three rays must all reach it.
+func _clear_lane(world: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3) -> bool:
+	for off: float in [-0.7, 0.0, 0.7]:
+		var hit: Dictionary = world.intersect_ray(PhysicsRayQueryParameters3D.create(from + Vector3(off, 0.0, 0.0), to + Vector3(off, 0.0, 0.0)))
+		if hit.is_empty() or absf(float(hit.position.z) - to.z) > 1.5:
+			return false
+	return true
 
 
 func _burst(seconds: float) -> void:
@@ -161,7 +177,19 @@ func _brass() -> void:
 	deck.operator.scripted = {}
 	await deck._sim(0.5)
 	deck.operator.request_reload()
-	await deck._sim(1.0)
+	await deck._sim(1.4)
+	# Step back and light what fell, clear of the RELOADING tag.
+	var op: Node3D = deck.operator
+	var mag: Vector3 = Vfx.magazines.slots[0].pos
+	var mid := mag
+	for i in Vfx.casings.count:
+		mid += Vfx.casings.slots[i].pos
+	mid /= float(Vfx.casings.count + 1)
+	var back := Vector2(op.global_position.x, op.global_position.z + BRASS_BACK_M)
+	await deck._stand_at(back, Vector2(mid.x, mid.z))
+	results["brass"] = {"casings": Vfx.casings.count, "magazines": Vfx.magazines.count, "magazine_at": [mag.x, mag.y, mag.z]}
+	_write()
+	await deck._sim(0.2)
 
 
 func _measure(key: String) -> void:
@@ -195,8 +223,9 @@ class Window_:
 		if frames.size() % 30 == 0:
 			peak = maxi(peak, Vfx.live_particles())
 
-	func mark_peaks() -> void:
-		pass
+	## The next frame starts a new stretch: time between measured stretches isn't a frame.
+	func pause() -> void:
+		_last = 0
 
 	func report() -> Dictionary:
 		var s := frames.duplicate()

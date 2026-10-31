@@ -155,7 +155,8 @@ func test_pools_never_allocate_after_warm_up() -> void:
 	_hammer(500, fx)
 	check_eq(Vfx.pool_counts(), pools, "the pools hold what they held")
 	check_eq(Performance.get_monitor(Performance.OBJECT_NODE_COUNT), nodes, "no new nodes after 500 shots")
-	check_eq(Performance.get_monitor(Performance.OBJECT_COUNT), objects, "no new objects after 500 shots")
+	# One-offs aside: this counts every object in the engine, and a shot's physics query lives for a moment.
+	check(Performance.get_monitor(Performance.OBJECT_COUNT) - objects <= 2.0, "no new objects per shot after 500 (%d more)" % (Performance.get_monitor(Performance.OBJECT_COUNT) - objects))
 	for sheet: String in Vfx.fields:
 		check_eq(Vfx.fields[sheet].buffer.size(), buffers[sheet], "%s's ring stayed its size" % sheet)
 
@@ -712,6 +713,27 @@ func test_the_gallery_lists_and_spawns_everything() -> void:
 	g.clear()
 	g.spawn_environment()
 	check(Vfx.running_count() >= (Data.value("vfx", "gallery").environment as Array).size(), "the environment row")
+	g.clear()
+
+
+func test_the_gallery_keys_work_only_with_the_panel_open() -> void:
+	var scene: Node = await _scene()
+	var g: Node = scene.panel.gallery
+	g.picker.select(0)
+	var seen: Array[String] = []
+	var on_played := func(r: String, _a: Vector3) -> void: seen.append(r)
+	Vfx.played.connect(on_played)
+	var key := InputEventKey.new()
+	key.pressed = true
+	key.physical_keycode = KEY_P
+	scene.panel.visible = false
+	g._unhandled_key_input(key)
+	check(seen.is_empty(), "shut, P is nothing")
+	scene.panel.visible = true
+	g._unhandled_key_input(key)
+	check_eq(seen.size(), 1, "open, P spawns the pick")
+	Vfx.played.disconnect(on_played)
+	scene.panel.visible = false
 	g.clear()
 
 

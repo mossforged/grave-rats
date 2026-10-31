@@ -62,7 +62,8 @@
     "flash_cone_width_m": 0.42,
     "flash_star_size_m": 0.42,
     "flash_scale_jitter": 0.2,
-    "flash_frames": 2.0
+    "flash_frames": 2.0,
+    "flash_warm_depth_m": 50.0
   },
   "targets": {
     "health": 100.0,

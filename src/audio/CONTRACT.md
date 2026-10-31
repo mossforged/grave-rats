@@ -11,13 +11,13 @@ Everything the player hears (T017). Every sound is a labelled placeholder: `ph_<
 ## Does not own
 - **The AI's hearing.** `StalkerPack.noise` and the noise ring (`src/hud`) never read this module, and this module never tells them anything. Playing a cue changes nothing in the game. A test holds this.
 - When anything happens: the modules below call `Audio` at their own events.
-- Pirate gunfire: `src/pirates` still makes its own placeholder (`src/enemies/placeholder_sound.gd`), on the master bus.
 
 ## Replacing a placeholder
 Drop the real file in `assets/game/`, point the cue's `file` at it, clear `placeholder` and import. A `.ogg` works; `loop` applies to either format. A real `stalker_spit_windup` should run for the wind-up in `data/enemies.json`. `suit_breath`, `cutter_warm` and `drone_chirp` get their urgency from pitch, so they should sound right at the pitches in `breathing`, `cutter_warm` and `drone_chirp`. `tests/test_audio.gd` checks the `ph_` name, so loosen that test as real files land.
 
 ## Public API (`Audio`)
-- `play(cue, at := Vector3.ZERO, opts := {}) -> bool`: false if resting or not in the bank (an error). `at` is ignored by flat cues. opts: `pitch`, `volume_db`, `delay`.
+- `play(cue, at := Vector3.ZERO, opts := {}) -> bool`: false if resting or not in the bank (an error). `cue` may name a group: the next variant, round-robin, never the same twice running. `at` is ignored by flat cues. opts: `pitch`, `volume_db`, `delay`, `muffle` (filtered by range and walls from the listener), `gun` (an id: its voices are capped), `tail` (carries further with range).
+- `following()`, `listener_position()`, `listener_distance(at)`, `room_tail(space)`, `note_gunfire(at)` (heavy fire ducks the ambience), `ambience_duck_db()`, `gun_voices(gun)`; field `occluded_by` ((Vector2, Vector2) -> bool, the deck sets it: `Visibility.blocked`).
 - `loop(key, cue, at, pitch)`, `stop_loop(key)`, `looping(key)`, `loop_pitch(key)`, `set_loop_pitch(key, pitch)`, `set_loop_volume(key, extra_db)`. Keys in use: `alarm`, `breath`, `room:<cue>`, `CutterUnit.warm_key()`.
 - `follow(node)`: the listener stands at this node (`listener.height_m` up), turned with the camera. Without one the camera hears. For co-op, each client follows its own player.
 - `start_ambience()`, `set_room(space)`, `current_room_tone()`, `room_share(cue)`.
@@ -29,7 +29,8 @@ Drop the real file in `assets/game/`, point the cue's `file` at it, clear `place
 `played(cue, at, pitch)`: each one-shot as it starts (after any delay). `loop_started(key, cue)`, `loop_stopped(key)`.
 
 ## Who calls what
-- `src/weapons`: `rifle_shot`, `rifle_casing` (delayed), `rifle_dry`, `rifle_mag_out`, and `reload_stages`.
+- `src/weapons`: the layers in `gun` (mechanical, body group, thump and last rounds for the local gun), `room_tail`, `rifle_dry` and its tail, `rifle_mag_out`, and `reload_stages`. `src/pirates` plays the same layers, as someone else's gun.
+- `src/vfx`: casing tinks and magazine clatter by surface (`tinks`, `clatter`) as they land, impacts, ricochets, grunts, effect loops and explosions, named by its recipes.
 - `src/player`: footsteps by `footsteps.surfaces` and gait, `crouch_rustle`. `weight_deck` calls `follow` and, as it leaves, `stop_all`.
 - `src/enemies`: `stalker_click`, `stalker_chirp`, `stalker_spit_windup`, `stalker_spit`, `stalker_lunge`, `stalker_hit`, `stalker_death`, `stalker_scuttle`, `stalker_bash`, `bulkhead_burst`.
 - `src/custodian`: `cutter_warm` (a loop rising with the ring), `cutter_burn`, `drone_chirp` (rising per bar), `custodian_chime`.
@@ -37,6 +38,6 @@ Drop the real file in `assets/game/`, point the cue's `file` at it, clear `place
 - `src/shift`: room tones, breathing, `alarm_siren`, `lights_fail`, `oxygen_warning` (each tier, and repeating once the air's gone), carry cues, stamps, `ledger_tick`.
 
 ## Data keys (`data/audio.json`)
-`buses` {name: {`volume_db`}}, `master` {`volume_db`, `limiter` {`ceiling_db`, `pre_gain_db`, `release_s`}}: F1 sliders in `data/debug.json` move these live. `voices` {`positional`, `flat`}; `positional` {`unit_size_m`, `max_db`}; `listener` {`height_m`}; `footsteps` {`gaits` {walk, sprint, crouch: {`stride_m`, `volume_db`}}, `min_speed_m_s`, `surfaces` {space: surface}, `default_surface`, `cues` {surface: cue}}; `breathing` {`cue`, `low_suit`, `low_oxygen`, `max_rate`, `max_extra_db`}; `reload_stages` [{`at`, `cue`}]; `stalker_idle` {`gap_min_s`, `gap_max_s`, `chirp_share`}; `cutter_warm` {`pitch_from`, `pitch_to`}; `drone_chirp` {`pitch_step`}; `ambience` {`fade_s`, `silent_db`, `rooms` {space: cue}}; `carry` {`pickup`, `drop` {class: cue}}; `paper_stamps` {button: cue}; `ledger` {`cue`, `gap_s`, `max_ticks`}.
+`buses` {name: {`volume_db`, optional `send`, `lowpass_hz`}} (SFX_Far, SFX_Distant, SFX_Muffled follow the SFX slider and have none of their own), `master` {`volume_db`, `limiter` {`ceiling_db`, `pre_gain_db`, `release_s`}}: F1 sliders in `data/debug.json` move these live. `voices` {`positional`, `flat`}; `positional` {`unit_size_m`, `max_db`, `attenuation_filter_db`, `attenuation_filter_hz`}; `listener` {`height_m`}; `footsteps` {`gaits` {walk, sprint, crouch: {`stride_m`, `volume_db`}}, `min_speed_m_s`, `surfaces` {space: surface}, `default_surface`, `cues` {surface: cue}}; `breathing` {`cue`, `low_suit`, `low_oxygen`, `max_rate`, `max_extra_db`}; `reload_stages` [{`at`, `cue`, optional `only_empty`}]; `groups` {name: {`cues`, optional `cooldown_s`}}; `gun` {`body`, `mechanical`, `last_rounds_cue`, `last_rounds`, `thump`, `dry`, `dry_tail`, `others_mechanical_db`, `voices_per_gun`, `default_tail`}; `room_tail` {space: cue}; `tinks`, `clatter` {surface: cue or group}; `distance_mix` {`bands` [{`from_m`, `bus`, `tail_db`}], `occluded` {`bus`, `extra_db`, `tail_db`}}; `ambience_duck` {`db`, `recover_s`, `heavy_shots`, `heat_decay_per_s`, `reach_m`}; `stalker_idle` {`gap_min_s`, `gap_max_s`, `chirp_share`}; `cutter_warm` {`pitch_from`, `pitch_to`}; `drone_chirp` {`pitch_step`}; `ambience` {`fade_s`, `silent_db`, `rooms` {space: cue}}; `carry` {`pickup`, `drop` {class: cue}}; `paper_stamps` {button: cue}; `ledger` {`cue`, `gap_s`, `max_ticks`}.
 
-`cues` {name: {`file`, `volume_db`, `pitch_variance` (± share), `max_distance_m` (0 is flat; above 0 is positional, fading out to there), `cooldown_s`, `bus`, `placeholder`, and optionally `loop`, `delay_s`}}.
+`cues` {name: {`file`, `volume_db`, `pitch_variance` (± share), `max_distance_m` (0 is flat; above 0 is positional, fading out to there), `cooldown_s`, `bus`, `placeholder`, and optionally `loop`, `delay_s`, `volume_jitter_db`}}.

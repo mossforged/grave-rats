@@ -527,7 +527,7 @@
     },
     "rifle_body_1": {
       "file": "res://assets/game/audio/weapons/ph_rifle_body_1.wav",
-      "volume_db": -3,
+      "volume_db": -6,
       "pitch_variance": 0.03,
       "max_distance_m": 60,
       "cooldown_s": 0,
@@ -537,7 +537,7 @@
     },
     "rifle_body_2": {
       "file": "res://assets/game/audio/weapons/ph_rifle_body_2.wav",
-      "volume_db": -3,
+      "volume_db": -6,
       "pitch_variance": 0.03,
       "max_distance_m": 60,
       "cooldown_s": 0,
@@ -547,7 +547,7 @@
     },
     "rifle_body_3": {
       "file": "res://assets/game/audio/weapons/ph_rifle_body_3.wav",
-      "volume_db": -3,
+      "volume_db": -6,
       "pitch_variance": 0.03,
       "max_distance_m": 60,
       "cooldown_s": 0,
@@ -557,7 +557,7 @@
     },
     "rifle_body_4": {
       "file": "res://assets/game/audio/weapons/ph_rifle_body_4.wav",
-      "volume_db": -3,
+      "volume_db": -6,
       "pitch_variance": 0.03,
       "max_distance_m": 60,
       "cooldown_s": 0,
@@ -567,7 +567,7 @@
     },
     "rifle_body_5": {
       "file": "res://assets/game/audio/weapons/ph_rifle_body_5.wav",
-      "volume_db": -3,
+      "volume_db": -6,
       "pitch_variance": 0.03,
       "max_distance_m": 60,
       "cooldown_s": 0,
@@ -595,7 +595,7 @@
     },
     "rifle_thump": {
       "file": "res://assets/game/audio/weapons/ph_rifle_thump.wav",
-      "volume_db": -6,
+      "volume_db": -10,
       "pitch_variance": 0.02,
       "max_distance_m": 10,
       "cooldown_s": 0,

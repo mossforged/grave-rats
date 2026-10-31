@@ -1,0 +1,22 @@
+{
+  "adapter": "Apple M2 Pro (Apple8)",
+  "date": "2026-10-31T12:35:49",
+  "fps_avg": 163.390854908921,
+  "frame_ms_avg": 6.12029357798165,
+  "frame_ms_max": 6.822,
+  "frame_ms_p95": 6.637,
+  "frame_ms_p99": 6.756,
+  "frames": 327,
+  "godot": "4.7.2-stable (official)",
+  "msaa_3d": "2x",
+  "renderer": "forward_plus",
+  "rendering_driver": "metal",
+  "resolution": "1920x953",
+  "scene": "t020_stand_shift",
+  "screen_scale": 1.0,
+  "screen_space_aa": "off",
+  "seconds": 2.0,
+  "vsync": "disabled",
+  "warmup_seconds": 2.0,
+  "window_size": "1920x953"
+}

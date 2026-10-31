@@ -53,6 +53,12 @@ func _ready() -> void:
 		t.visible = false
 		add_child(t)
 		_tracers.append({"node": t, "mat": tm, "left": 0.0})
+	# Drawn once out of sight, so the first real shot doesn't compile them.
+	_flash.visible = true
+	_star.visible = true
+	_sprite_frames = int(_cfg.flash_frames)
+	_flash.global_position = Vector3.DOWN * float(_cfg.flash_warm_depth_m)
+	_star.global_position = _flash.global_position
 
 
 ## A material that can only add light. `tex` is multiplied in, so its black adds nothing.

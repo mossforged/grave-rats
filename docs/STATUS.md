@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T018 merged, waiting on John's gates (T017 is sound: his ear decides). Q002 health check merged. **Next:** John plays a shift: T015 past tier 2 with the black box, pick an AA mode (F1 → Display), listen (T017), and check solo feels unchanged (T018 routes input through commands). Code lane: T019 corridors, then T020 gun feel.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T018 merged, waiting on John's gates (T017 is sound: his ear decides). Q002 health check merged. T020 gun feel on `auto/t020-mac`: 540/540, see `docs/handoffs/auto-T020.md`. **Next:** John plays a shift: T015 past tier 2 with the black box, pick an AA mode (F1 → Display), listen (T017), check solo feels unchanged (T018), and fire the rifle in a dark room (T020).
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T020 play (sheet `docs/screens/T020/sheet.jpg`, `mag_dump.mp4`, F1 → Effects): does the rifle feel heavy and real in a dark room? Nobody has heard it. A mag dump touches the limiter (-1.0 dBFS). Most of a cargo wall counts as glass, by the kit: chips, not sparks; keep it?
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
 - T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
 - T015 balance: the prize route may now be too lethal. Greedy bot survives 1 of 12 (was 6 of 12), even reading the cutter's ring; cautious stays 12 of 12 because it leaves before CUSTODIAN wakes. First lever: move the cargo cutter off the prize's route.
@@ -63,8 +64,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
 - T018: lock to cover through the `LOCK` command (`src/cover`, `src/pirates`); E through commands on the older dev decks; `src/pirates` randomness on the session's seed.
 - T018: per-stalker targets (the pack hunts one player at a time, and the cover-shield lines follow it); a death bill for a player left behind; spectating when you're down with the crew alive; a second input device in the two-player scene.
+- T020: smoke thinning sight (`draft` is in, the sight rule isn't); a hole in doors and beds (decals skip moving things); recipes for a pirate on the shift deck; drawing the old flashlight motes (`data/sight.json` "motes") and the new `dust_motes` as one set; tracers and the flash still ignore the sight mask.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T017 and T018 (492/492 after resolving T018's listed conflicts in `shift_deck.gd`, `weight_deck.gd`, `operator.gd`, shift contract). Earlier: Q002, T016, prop library (104), VFX textures, gun-feel spec, sound shortlist.
-2026-10-31 (code, unattended): T017 placeholder sound (`src/audio`, 44 cues, limiter; nobody has heard it). T018 `src/session` (players, commands, seeded RNG, authority), two-player debug scene; solo about 0.17 ms slower, cause not found.
+2026-10-31 (code, unattended): T020 gun feel. `src/vfx` (recipes, pooled particles, decals, brass, gallery), the shot timeline, layered gun sound (88 placeholder files), effects placed on both decks. Mag dump 5.50 ms avg, 6.25 p95 on the shift deck, with the AI stopped. Nobody has heard it; nobody has clicked the gallery.

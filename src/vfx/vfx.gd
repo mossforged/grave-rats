@@ -47,6 +47,7 @@ var _shake_m := 0.0
 var _shake_full := 0.0
 var _shake_recover := 1.0
 var _bind := Callable()
+var _warm_frames := 0
 
 
 func _ready() -> void:
@@ -66,6 +67,7 @@ func _warm_up() -> void:
 	for sheet: String in cfg.sheets:
 		_make_sheet(sheet, int(float(b.max_particles) * float(cfg.sheets[sheet].share)))
 	_load_decal_textures()
+	_hold_decal_atlas()
 	var d: Dictionary = cfg.decals
 	decal_ring = DecalRing.new(int(b.max_decals), int(d.fade_band), float(d.fade_s))
 	var decal_root := Node3D.new()
@@ -121,6 +123,7 @@ func _make_sheet(sheet: String, capacity: int) -> void:
 	mat.set_shader_parameter("fade_in", float(c.fade_in))
 	mat.set_shader_parameter("soft_m", float(c.soft_m))
 	mat.set_shader_parameter("emit_share", float(c.get("emit_share", 0.0)))
+	mat.set_shader_parameter("scatter", float(c.get("scatter", 0.0)))
 	mat.set_shader_parameter("alpha_from_luma", bool(c.get("alpha_from_luma", false)))
 	mat.set_shader_parameter("cone_only", bool(c.get("cone_only", false)))
 	var quad := QuadMesh.new()
@@ -153,6 +156,26 @@ func _load_decal_textures() -> void:
 		if name.begins_with("decal_"):
 			for f in int(manifest[name].frames):
 				_decal_tex["%s_%d" % [name, f]] = load("%s/%s_%d.png" % [cfg.texture_dir, name, f])
+
+
+## The engine packs every texture a Decal holds into one atlas and rebuilds it when the set changes, a long frame
+## on a first shot. A hidden Decal per texture keeps the set the same for good.
+func _hold_decal_atlas() -> void:
+	var root := Node3D.new()
+	root.name = "DecalAtlasHolders"
+	add_child(root)
+	for key: String in _decal_tex:
+		var n := Decal.new()
+		n.texture_albedo = _decal_tex[key]
+		n.visible = false
+		root.add_child(n)
+
+
+## Draws everything once, the frame a deck comes up, so no pipeline is first compiled on the first shot.
+func warm_pipelines() -> void:
+	_warm_frames = int(cfg.warm_frames)
+	_casing_mm.visible_instance_count = maxi(_casing_mm.visible_instance_count, 1)
+	_magazine_mm.visible_instance_count = maxi(_magazine_mm.visible_instance_count, 1)
 
 
 func _make_pool(i: int) -> void:
@@ -209,6 +232,7 @@ func texture_path(name: String) -> String:
 ## Where walls and rooms are, for the surfaces and the casings' floor.
 func set_layout(layout: RefCounted) -> void:
 	surfaces.layout = layout
+	warm_pipelines()
 
 
 ## Everything drawn here obeys the sight mask from now on. `bind` is SightMask.bind.
@@ -752,12 +776,17 @@ func advance(delta: float) -> void:
 			(p.mat as ShaderMaterial).set_shader_parameter("now", now)
 	for sheet: String in fields:
 		_draw_sheet(sheet)
+	if _warm_frames > 0:
+		_warm_frames -= 1
+		if _warm_frames == 0:
+			_casing_mm.visible_instance_count = casings.count
+			_magazine_mm.visible_instance_count = magazines.count
 
 
 func _draw_sheet(sheet: String) -> void:
 	var f: ParticleField = fields[sheet]
 	var mi: MultiMeshInstance3D = _meshes[sheet]
-	var live := f.active(now)
+	var live := f.active(now) or _warm_frames > 0
 	if mi.visible != live:
 		mi.visible = live
 	if not live:

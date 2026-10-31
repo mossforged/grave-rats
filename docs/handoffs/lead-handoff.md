@@ -53,9 +53,10 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T019 | code | merged: corridor dressing; John judges depth and darkness |
 | T020 | code | merged: gun feel and effects; John fires a mag in the dark |
 | T021 | code | merged: bed stripe, wall-top z-fight fix, lock commands |
-| A013 | art | merged; waits for John's copy approval |
-| A014 | art | merged; recommends B, biological survey vessel; waits for John's pick, then a code build task |
+| A013 | art | merged and approved 2026-10-31 |
+| A014 | art | merged; John picked B, biological survey vessel; mining tug likely ship 3 |
 | Q003 | qa | written, NOT queued: queue once T022 merges and the code lane is idle |
+| T023 | code | queued after T022: build the survey vessel as a second ship (A014 plan, room props, A013 decals, effects); default ship unchanged |
 | T022 | code | queued: John's 88 Mixamo clips on the hauler (8-way locomotion, fire, reloads, hits, deaths, actions, heavy carry) |
 
 ## Lesson

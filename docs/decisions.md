@@ -36,3 +36,4 @@
 - 2026-10-31: CUSTODIAN (A011) is the second threat; build the cutter turret and patrol drone first, the loader after its charge timing is playtested. A012 end-of-shift layouts and copy approved for building. MSAA 2x (T011) stands until John has played it.
 
 - 2026-10-31: John said yes to a second derelict built around the new room sets (A014 concept first, a code task after his approval), to company graphics for those rooms (A013), and to a polish pass (T021) and a health check (Q003).
+- 2026-10-31: John approved A013's room graphics ("the signs are great") and A014 pitch B, the biological survey vessel ("i agree on biological survey"); T023 builds it as a second ship, default ship unchanged until he has played both. The mining tug (pitch C) is a likely third ship. Playtest expected tomorrow night.

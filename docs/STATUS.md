@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 room graphics and A014 second-derelict concept merged, waiting on his approval (A014 recommends the biological survey vessel). **Next:** John plays a shift; approves A013 copy and an A014 pitch. Code lane: T022 (his 88 Mixamo clips on the hauler). QA: Q003 after T022.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. **Next:** John plays a shift (expected tomorrow night). Code lane: T022 (his 88 Mixamo clips on the hauler), then T023 (build the survey vessel). QA: Q003 after T022.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**

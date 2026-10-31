@@ -1,0 +1,1 @@
+Deterministic 2024 × 1316 review sheet. Four complete 1920 × 1080 originals at exactly 50%, labelled in a two-by-two grid. Built by assets/source/A012-screens/build.py. Review full-size originals for spec labels.

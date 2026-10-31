@@ -17,8 +17,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T010 play (stage 3, first pass): walk medbay → junction → cargo. Does it match the concept? Are the room lights too bright for "fear the corner"? Does fog shimmer? Can you read a side door's state?
 - A009: approve the rival crew **Prior Claim** (white/navy, sponsor Lien Capital)? Its Meshy A-pose inputs are in `assets/source/meshy/input/rival-apose-*.png`.
-- A010: approve the company graphics and copy (Vesper Reach Freight, the dead owner; Remnant overlays; room plates; floor stencils; medbay). T010 uses them if merged before it starts; John can veto any line.
 - T009 play: does the hauler look and move right from the game camera? Known: the head bows forward when aiming, the left hand sits below the foregrip, feet slide on strafes, and firing has no clip yet. Next clips worth fetching from Mixamo: strafe run left/right, run backward, rifle firing, crouch backward/strafes, low-ready walk.
 - T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
 - T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)
@@ -47,5 +47,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T009 (247/247 reproduced); queued T010. Open Tender decided as the competitive mode. A009 and A010 queued for the art lane.
-2026-10-31 (code, unattended): T009: hauler imported at 1.80 m; Meshy and Mixamo clips retargeted per state in `data/hauler_anim.json`; root motion pinned; rifle on the right hand; pirates repainted navy by shader; `body` switch keeps the legacy model.
+2026-10-31 (lead): merged T010 (263/263 reproduced); queued T011 (polish). A009/A010 merged; A010 approved.
+2026-10-31 (code, unattended): T010: kit built in-engine from `data/kit.json`, generated PBR textures, per-room practicals, fog/SSAO/glow, door dent blend shape. Pirate deck 7.81 ms avg (budget 8.3).

@@ -81,6 +81,26 @@
     "iv_stand": "res://assets/game/props/iv_stand.glb",
     "trolley": "res://assets/game/props/trolley.glb",
     "med_station": "res://assets/game/props/med_station.glb",
+    "wall_rib": "res://assets/game/props/wall_rib.glb",
+    "wall_panel_recessed": "res://assets/game/props/wall_panel_recessed.glb",
+    "wall_panel_breached": "res://assets/game/props/wall_panel_breached.glb",
+    "pipe_run_low": "res://assets/game/props/pipe_run_low.glb",
+    "pipe_run_high": "res://assets/game/props/pipe_run_high.glb",
+    "conduit_tray": "res://assets/game/props/conduit_tray.glb",
+    "air_duct": "res://assets/game/props/air_duct.glb",
+    "wall_light_strip": "res://assets/game/props/wall_light_strip.glb",
+    "emergency_lamp": "res://assets/game/props/emergency_lamp.glb",
+    "door_jamb": "res://assets/game/props/door_jamb.glb",
+    "door_lintel": "res://assets/game/props/door_lintel.glb",
+    "corner_pillar": "res://assets/game/props/corner_pillar.glb",
+    "handrail": "res://assets/game/props/handrail.glb",
+    "floor_grate": "res://assets/game/props/floor_grate.glb",
+    "kick_plate": "res://assets/game/props/kick_plate.glb",
+    "wall_sign_arrow": "res://assets/game/props/wall_sign_arrow.glb",
+    "maintenance_hatch": "res://assets/game/props/maintenance_hatch.glb",
+    "fire_hose_reel": "res://assets/game/props/fire_hose_reel.glb",
+    "debris_pile": "res://assets/game/props/debris_pile.glb",
+    "hanging_cables": "res://assets/game/props/hanging_cables.glb",
     "console": {
       "1.0": "res://assets/game/props/console_1000.glb",
       "1.2": "res://assets/game/props/console_1200.glb",
@@ -91,7 +111,27 @@
     "locker_bank": "res://assets/game/props/locker_bank.glb"
   },
   "slot_mat": "hull",
-  "wall_mounts": {"med_station": {"mount_y_m": 1.0}},
+  "wall_mounts": {
+    "med_station": {"mount_y_m": 1.0},
+    "wall_rib": {"mount_y_m": 0.0},
+    "wall_panel_recessed": {"mount_y_m": 0.0},
+    "wall_panel_breached": {"mount_y_m": 0.0},
+    "pipe_run_low": {"mount_y_m": 0.0},
+    "pipe_run_high": {"mount_y_m": 0.0},
+    "conduit_tray": {"mount_y_m": 0.0},
+    "air_duct": {"mount_y_m": 0.0},
+    "wall_light_strip": {"mount_y_m": 2.1},
+    "emergency_lamp": {"mount_y_m": 2.25},
+    "door_jamb": {"mount_y_m": 0.0, "sink_m": 0.02},
+    "door_lintel": {"mount_y_m": 0.0},
+    "corner_pillar": {"mount_y_m": 0.0},
+    "handrail": {"mount_y_m": 0.0},
+    "kick_plate": {"mount_y_m": 0.0},
+    "wall_sign_arrow": {"mount_y_m": 1.55},
+    "maintenance_hatch": {"mount_y_m": 0.25},
+    "fire_hose_reel": {"mount_y_m": 0.95},
+    "hanging_cables": {"mount_y_m": 0.0}
+  },
   "slot_fit": {"tolerance_m": 0.01, "front_clear_m": 0.5},
   "floors": {
     "plate_m": 2.0,
@@ -273,7 +313,7 @@
 
       {"image": "plate_engineering", "space": "side_corridor", "wall": "north", "at": 0.13, "y_m": 2.0, "width_m": 1.5},
       {"image": "arrow_right", "space": "side_corridor", "wall": "north", "at": 0.13, "y_m": 1.4, "width_m": 0.45},
-      {"image": "owner_safety", "space": "side_corridor", "wall": "north", "at": 0.55, "y_m": 1.35, "width_m": 1.1},
+      {"image": "owner_safety", "space": "side_corridor", "wall": "north", "at": 0.62, "y_m": 1.35, "width_m": 1.1},
       {"image": "rem_notice", "space": "side_corridor", "wall": "north", "at": 0.33, "y_m": 1.3, "width_m": 0.8}
     ],
     "floors": [
@@ -363,14 +403,14 @@
           {"look": "amber", "wall": "east", "at": 0.72, "vertical": true}
         ],
         "junction": [
-          {"look": "cool_low", "wall": "north", "at": 0.5},
-          {"look": "amber_low", "wall": "east", "at": 0.4, "vertical": true},
-          {"look": "cool_low", "wall": "west", "at": 0.45, "vertical": true},
-          {"look": "amber_low", "wall": "east", "at": 0.8, "vertical": true}
+          {"look": "cool_low", "wall": "north", "at": 0.5, "prop": "wall_light_strip"},
+          {"look": "amber_low", "wall": "east", "at": 0.4, "vertical": true, "prop": "emergency_lamp"},
+          {"look": "cool_low", "wall": "west", "at": 0.45, "vertical": true, "prop": "wall_light_strip", "prop_at": 0.48},
+          {"look": "amber_low", "wall": "east", "at": 0.8, "vertical": true, "prop": "emergency_lamp"}
         ],
         "side_corridor": [
-          {"look": "amber_low", "wall": "north", "at": 0.3},
-          {"look": "cool_low", "wall": "east", "at": 0.5, "vertical": true}
+          {"look": "amber_low", "wall": "north", "at": 0.3, "prop": "emergency_lamp"},
+          {"look": "cool_low", "wall": "east", "at": 0.5, "vertical": true, "prop": "wall_light_strip"}
         ]
       }
     }

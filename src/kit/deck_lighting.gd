@@ -6,6 +6,7 @@ extends Node3D
 ## probe, ssr or off overrides how the floors get their wet sheen.
 
 const KitPieces := preload("res://src/kit/kit_pieces.gd")
+const Dressing := preload("res://src/kit/dressing.gd")
 const KitMaterials := preload("res://src/kit/kit_materials.gd")
 const DeckBuilder := preload("res://src/study/deck_builder.gd")
 
@@ -163,13 +164,17 @@ func _place_fixture(layout: RefCounted, walls: Node3D, space: String, e: Diction
 	if host != null:
 		var mi := MeshInstance3D.new()
 		mi.name = "Fixture"
-		mi.mesh = KitPieces.fixture(String(look.mat), vertical)
 		mi.set_meta("kit_piece", "fixture")
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mi.layers = layer
-		var y := float(fx.vertical_y_m if vertical else fx.default_y_m)
-		mi.position = Vector3(face.x - host.position.x, y, face.y - host.position.z)
-		mi.rotation.y = atan2(inward.x, inward.y)
+		if e.has("prop"):
+			_wear_prop(mi, r, wall, float(e.get("prop_at", at)), String(e.prop), String(look.mat))
+			mi.position -= Vector3(host.position.x, 0.0, host.position.z)
+		else:
+			mi.mesh = KitPieces.fixture(String(look.mat), vertical)
+			var y := float(fx.vertical_y_m if vertical else fx.default_y_m)
+			mi.position = Vector3(face.x - host.position.x, y, face.y - host.position.z)
+			mi.rotation.y = atan2(inward.x, inward.y)
 		host.add_child(mi)
 	var light := OmniLight3D.new()
 	light.name = "Practical_%s_%s" % [space, wall]
@@ -187,3 +192,16 @@ func _place_fixture(layout: RefCounted, walls: Node3D, space: String, e: Diction
 	light.position = Vector3(face.x + inward.x * out, float(fx.light_y_m), face.y + inward.y * out)
 	add_child(light)
 	lights.append(light)
+
+
+## A fixture from the hallway set instead of the plain strip (T019). Its lit parts glow in the colour of
+## the light it explains, whatever colour the file's slot is.
+func _wear_prop(mi: MeshInstance3D, r: Rect2, wall: String, at: float, type: String, emit_mat: String) -> void:
+	var mesh := KitPieces.slot_mesh(KitPieces.slot_file(type, Vector3.ZERO))
+	var pose := Dressing.wall_pose(r, wall, float(Dressing.wall_face(r, wall).length) * at, mesh, type)
+	mi.mesh = mesh
+	mi.position = pose.at
+	mi.rotation.y = pose.yaw
+	for i in mesh.get_surface_count():
+		if mesh.surface_get_name(i).begins_with("emit_"):
+			mi.set_surface_override_material(i, KitMaterials.material(emit_mat))

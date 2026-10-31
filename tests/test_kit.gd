@@ -147,7 +147,7 @@ func _deck_slot_props() -> Array:
 
 
 func test_each_slot_loads_its_file() -> void:
-	check_eq(_slot_files().size(), 12, "four consoles, a cabinet, a locker bank, a bed, a gurney, three clutter, a wall station")
+	check_eq(_slot_files().size(), 32, "four consoles, a cabinet, a locker bank, a bed, a gurney, three clutter, a wall station, twenty hallway pieces")
 	for path: String in _slot_files():
 		check(path.begins_with("res://assets/game/props/"), "%s is a game copy" % path)
 		var mesh := KitPieces.slot_mesh(path)

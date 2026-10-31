@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T009 play: does the hauler look and move right from the game camera? Known: the head bows forward when aiming, the left hand sits below the foregrip, feet slide on strafes, and firing has no clip yet. Next clips worth fetching from Mixamo: strafe run left/right, run backward, rifle firing, crouch backward/strafes, low-ready walk.
 - T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
 - T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)
 - T007 play (`scenes/pirates/pirate_deck.tscn`, now the main scene): does cover matter? Is lock-to-cover (Space, RMB) better than plain crouch (F1 toggle)? Too lethal (3.4 s in the open)? Do the crew read as rivals? Do the barks give too much away? Bots: cover doubles survival; lock is no better than crouch when fighting from one spot.
@@ -44,4 +45,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-30 (code, unattended): T009: John's hauler replaces the grey operator and the pirates' body, switchable back by data (`body`, `body.model`). 19 states mapped in `data/hauler_anim.json`, Mixamo clips retargeted, hips pinned, rifle on the hand, pirates repainted navy and off-white by shader. Foot slide at or below legacy on average, still high on strafes; `pirate_deck` about +0.2 ms. Motion unjudged: stills only.
+2026-10-31 (lead): merged T009 (247/247 reproduced); queued T010. Open Tender decided as the competitive mode. A009 and A010 queued for the art lane.
+2026-10-31 (code, unattended): T009: hauler imported at 1.80 m; Meshy and Mixamo clips retargeted per state in `data/hauler_anim.json`; root motion pinned; rifle on the right hand; pirates repainted navy by shader; `body` switch keeps the legacy model.

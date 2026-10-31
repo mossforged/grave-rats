@@ -18,7 +18,7 @@ John approved A006 as the stage 3 target: paint-overs of our real frames at conc
    - **atmosphere:** volumetric fog with dust in the flashlight cone;
    - **mood:** dark ambient, with the sight mask still the authority on what you know.
    Match `A006-01b`, `02b`, `03c` and `04b` from the same camera positions.
-4. **Signage decals** from A002-08b: MEDBAY, CARGO 02, JUNCTION 01, one deadpan warning per room, floor stencils.
+4. **Signage decals** from A002-08b, or from A010 (`assets/source/A010-graphics/`, `docs/handoffs/auto-A010.md`) if it has been merged by the time you start; it is the newer company-graphics pass: MEDBAY, CARGO 02, JUNCTION 01, one deadpan warning per room, floor stencils.
 5. **Performance:** keep `pirate_deck` and `stalker_deck` under 8.3 ms average (120 fps) on the Mac. Report the cost of fog and lights separately.
 
 ## Acceptance

@@ -30,8 +30,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T006 | code | merged 2026-10-30; waits for John's play |
 | T007 | code | merged 2026-10-30; waits for John's play |
 | T008 | code | merged 2026-10-30; waits for John's play (flicker gone? HUD? ring?) |
-| T009 | code | queued 2026-10-30: John's Meshy hauler replaces the operator |
-| T010 | code | written: scripted slice kit, materials, lighting (stage 3). **Queue when T009 merges.** |
+| T009 | code | merged 2026-10-31; waits for John's play |
+| T010 | code | written: scripted slice kit, materials, lighting (stage 3). queued 2026-10-31 |
 | A005 | art | merged and approved 2026-10-30 |
 | A006 | art | merged and approved 2026-10-30 |
 | A007 | art | merged 2026-10-30 (rifle refused by the image tool) |

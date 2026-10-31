@@ -38,6 +38,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A008 | art | merged 2026-10-30: hauler A-pose inputs |
 | A009 | art | merged 2026-10-31; waits for John's pick (Prior Claim recommended) |
 | A010 | art | merged and approved 2026-10-31 |
+| Q001 | qa | written: repeatable health check. **Queue when T011 merges** (the GPU is shared) |
 | A011 | art | queued: rogue ship AI threat design and Meshy inputs |
 | A012 | art | queued: buildable briefing, payslip and death bill layouts with field spec |
 

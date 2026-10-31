@@ -8,7 +8,7 @@ Branch `auto/t010-mac`. Play it: `godot --path .` (`pirate_deck`), or open `scen
 1. **Kit (`src/kit/`, `data/kit.json`):** walls (corridor plain, pipe/vent, cargo reinforced, medbay clinical, plus a plain outer hull face), corner posts, cap stubs, jambs, header, leaf, plated floors with grates, drains, hazard edging, thresholds and rivets, and the crates. `deck_builder.gd` puts them where it put boxes.
 2. **Built in the engine, not Blender.** Pieces take exact lengths from the layout, so closing pieces need no export step and keep their trim sizes. Tests measure them headless, and everything reads one data file.
 3. **Materials:** A006-08's families. `tools/t010_textures.py` generates albedo, normal and ORM from `data/kit.json`. Grime is vertex colour, low and in corners. Signs are cut from A002-08b; A010 isn't merged.
-4. **Lighting (`deck_lighting.gd`):** cool strips in the medbay, sodium in cargo, a mix in the junction, 13 practicals on the full deck, 2 of them shadowed. Dark ambient, AgX, glow, low SSAO, fog in a ship-sized box. Each space's lights only touch that space's render layer, so nothing shines through a wall.
+4. **Lighting (`deck_lighting.gd`):** cool strips in the medbay, sodium in cargo, a mix in the junction, 14 practicals on the full deck, 2 of them shadowed. Dark ambient, AgX, glow, low SSAO, fog in a ship-sized box. Each space's lights only touch that space's render layer, so nothing shines through a wall.
 5. **Doors:** one leaf mesh. The T006 damage value drives its blend shape directly, bulging away from the blows, with a warm seam and spill. It lies flat when broken. A state strip on the header repeats the lamp colour.
 
 ## Checks
@@ -35,7 +35,7 @@ Budget: under 8.3 average. **Both decks pass.** `mediaanalysisd` was using about
 | Glow off | 7.30 / 9.30 | 6.62 / 8.67 |
 | Kit only (all four off) | 4.52 / 6.07 | 4.43 / 6.15 |
 
-- **Approximate cost of each, from the off-switch runs:** fog 0.6–0.7, practicals 1.2–1.5, SSAO 0.8–1.0, glow 0.5.
+- **Approximate cost of each, from the off-switch runs:** fog 0.6–0.8, practicals 1.2–1.6, SSAO 0.8–1.1, glow 0.4–0.6 (against that matrix's own full runs, 7.89 and 7.06).
 - **Kit alone:** about 0.2 over the grey box.
 - **Headroom:** the pirate deck has only 0.5 ms left, and its p95 is about 10 ms, so spikes pass 8.3.
 - **How the matrix was run:** the off-switch rows predate the last paint-colour change, which only changed albedo. The full rows were re-measured after it. Env `KIT_FOG`, `KIT_PRACTICALS`, `KIT_SSAO`, `KIT_GLOW` = `off` reproduce them.

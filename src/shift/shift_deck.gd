@@ -11,6 +11,9 @@ const Airlock := preload("res://src/shift/airlock.gd")
 const PlaceholderSiren := preload("res://src/shift/placeholder_siren.gd")
 const SalvageField := preload("res://src/salvage/salvage_field.gd")
 const CarryState := preload("res://src/salvage/carry_state.gd")
+const QuotaState := preload("res://src/shift/quota_state.gd")
+const Paperwork := preload("res://src/paperwork/paperwork.gd")
+const PaperworkScreen := preload("res://src/paperwork/paperwork_screen.gd")
 
 ## Fired as each tier lands: (index from 1, its data). The ship's next threat hangs off this.
 signal tier_fired(index: int, spec: Dictionary)
@@ -26,7 +29,19 @@ var rng := RandomNumberGenerator.new()
 var wake_hooks := {}
 ## The seed the next shift starts from; 0 rolls a new one. Bots and tests set it.
 var next_seed := 0
+## The session around the shifts. It runs when this is the game's main scene, or when something calls
+## `start_session`; without one the deck plays single shifts as it did in T012.
+var quota: QuotaState
+var paperwork: Paperwork
+var paper: PaperworkScreen
+var session_live := false
+## This session's run logs, oldest first: all the briefing may know.
+var past_logs: Array = []
+var contract: Dictionary = {}
 
+var _bill_wait := -1.0
+var _contracts := 0
+var _threat_wait := 0.0
 var _cfg: Dictionary
 var _salvage_cfg: Dictionary
 var _prompt: Label3D
@@ -66,8 +81,16 @@ func _ready() -> void:
 	_make_prompt()
 	run_log.shift_report = func() -> Dictionary: return shift.report()
 	hud.hold_estimate = 0
+	quota = QuotaState.new(_cfg.quota)
+	paper = PaperworkScreen.new()
+	paper.name = "Paperwork"
+	add_child(paper)
+	paper.pressed.connect(_on_paper_pressed)
+	paperwork = Paperwork.new(paper.cfg)
 	_shift_ready = true
 	_start_shift()
+	if get_tree().current_scene == self and not _capture:
+		start_session()
 
 
 func _sound_player(node_name: String, spec: Dictionary, looped: bool) -> AudioStreamPlayer:
@@ -119,6 +142,8 @@ func _start_shift() -> void:
 	_spawns_owed = 0
 	_spawn_wait = 0.0
 	_alarm_refresh = 0.0
+	_bill_wait = -1.0
+	_threat_wait = 0.0
 	operator.set_carry(shift.carry(player_id).penalties())
 	_sync_hud()
 
@@ -132,6 +157,17 @@ func simulate_world(delta: float) -> void:
 		super(delta)
 	_show_carried()
 	_sync_hud()
+	if _bill_wait >= 0.0:
+		_bill_wait -= delta
+		if _bill_wait < 0.0:
+			file_death_bill()
+
+
+## The forms stop the ship: nothing runs behind one.
+func _physics_process(delta: float) -> void:
+	if _shift_ready and paper.is_open():
+		return
+	super(delta)
 
 
 func _step_shift(delta: float) -> void:
@@ -147,6 +183,7 @@ func _step_shift(delta: float) -> void:
 				_siren.stop()
 	if shift.ended():
 		return
+	_note_threats(delta)
 	_step_spawns(delta)
 	if shift.alarm_left > 0.0:
 		_alarm_refresh -= delta
@@ -187,18 +224,24 @@ func _leave() -> void:
 	_siren.stop()
 	marker.hide_now()
 	var w: Dictionary = _cfg.words
-	hud.banner = [String(w.closed), String(w.hold_line) % hud.os_state.hold_text(shift.hold.estimate()), String(w.next)]
 	run_log.write("left")
+	if session_live:
+		_file_payslip(run_log.to_dict("left"), QuotaState.LEFT)
+		return
+	hud.banner = [String(w.closed), String(w.hold_line) % hud.os_state.hold_text(shift.hold.estimate()), String(w.next)]
 
 
 func _on_tier(index: int, spec: Dictionary) -> void:
 	_spawns_owed += int(spec.get("stalkers", 0))
 	_spawn_wait = 0.0
+	if int(spec.get("stalkers", 0)) > 0:
+		run_log.note_threat("vents", "ship")
 	var line := String(spec.announce)
 	if spec.has("lights"):
 		var options: Array = spec.lights
 		var space := String(options[rng.randi_range(0, options.size() - 1)])
 		section.fail(space)
+		run_log.note_threat("power_loss", space)
 		line = line.replace("%s", String(_cfg.section_words[space]))
 	hud.os_state.announce(line)
 	_chirp.play()
@@ -258,6 +301,7 @@ func _trip_alarm() -> void:
 	if not shift.trip_alarm(player_id):
 		return
 	var a: Dictionary = _cfg.alarm
+	run_log.note_threat("alarm", layout.space_at(_eye()))
 	hud.os_state.announce(String(a.announce))
 	marker.show_for(float(a.reveal_s))
 	_siren.play()
@@ -298,11 +342,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		drop_item()
 		get_viewport().set_input_as_handled()
 		return
+	if session_live and event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_BACKSPACE:
+		if _bill_wait >= 0.0:
+			file_death_bill()
+		else:
+			abandon_shift()
+		get_viewport().set_input_as_handled()
+		return
 	super(event)
+
+
+## Every hit goes on file under where it found you, for later briefings.
+func _hurt(source: String, amount: float, who: String, in_cover: bool) -> void:
+	run_log.note_threat(source, layout.space_at(_eye()))
+	super(source, amount, who, in_cover)
 
 
 ## You're down: what you carried falls around you, and the shift's log gets written by the deck under this.
 func _die(who: String, how: String) -> void:
+	run_log.note_death_location(layout.space_at(_eye()))
 	var items := shift.player_died(player_id)
 	var spread := float(_salvage_cfg.drop_scatter_m)
 	for i in items.size():
@@ -311,6 +369,8 @@ func _die(who: String, how: String) -> void:
 	_siren.stop()
 	marker.hide_now()
 	super(who, how)
+	if session_live:
+		_bill_wait = float(_cfg.session.death_hold_s)
 
 
 func _killer_kind(how: String) -> String:
@@ -347,6 +407,7 @@ func _sync_hud() -> void:
 		urgent.append("o2_out")
 	hud.urgent_alerts = urgent
 	hud.action = _action_now(c)
+	hud.quota = quota.facts() if session_live else {}
 
 
 func _action_now(c: CarryState) -> Dictionary:
@@ -395,7 +456,112 @@ func _show_prompt(text: String, at: Vector2, hex: Variant) -> void:
 	_prompt.visible = true
 
 
+# --- the session: quota, briefing, payslip, death bill, notice ---
+
+## A full reset, then the first briefing.
+func start_session() -> void:
+	session_live = true
+	quota.begin()
+	past_logs = []
+	_contracts = 0
+	paperwork.book.forget()
+	paperwork.reseed(int(Time.get_ticks_usec()) if next_seed == 0 else next_seed)
+	_brief()
+
+
+## A fresh ship, rolled now so the estimate is about this ship, frozen behind the form until it's signed.
+func _brief() -> void:
+	respawn()
+	_contracts += 1
+	var total := 0
+	for item: RefCounted in field.items:
+		total += int(item.value)
+	contract = paperwork.contract(_contracts, total, past_logs, quota.facts())
+	_open_form("briefing", contract)
+
+
+func _open_form(screen: String, doc: Dictionary) -> void:
+	operator.process_mode = Node.PROCESS_MODE_DISABLED
+	paper.open(screen, doc)
+
+
+func _close_form() -> void:
+	paper.close()
+	operator.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _on_paper_pressed(button: String) -> void:
+	match button:
+		"accept":
+			_close_form()
+		"decline":
+			contract["confirming"] = true
+			contract["decline_line"] = paperwork.decline_line()
+			paper.update(contract)
+		"confirm_decline":
+			quota.close_shift(0, QuotaState.DECLINED)
+			_after_form()
+		"acknowledge":
+			if paper.screen_name == "termination":
+				start_session()
+			else:
+				_after_form()
+
+
+## What the last close decided: the notice on a miss, else the next briefing.
+func _after_form() -> void:
+	if quota.verdict == QuotaState.MISSED:
+		_open_form("termination", paperwork.termination(contract, quota.facts()))
+	else:
+		_brief()
+
+
+func _file_payslip(log: Dictionary, how: String) -> void:
+	past_logs.append(log)
+	var doc := paperwork.payslip(log, contract)
+	quota.close_shift(int(doc.net_cr), how)
+	doc.merge(paperwork.quota_fields(quota.facts()), true)
+	_open_form("payslip", doc)
+
+
+## The death screen has had its moment; the bill comes after, as the release.
+func file_death_bill() -> void:
+	_bill_wait = -1.0
+	var log := run_log.to_dict("death")
+	past_logs.append(log)
+	quota.close_shift(0, QuotaState.DIED)
+	_open_form("death_bill", paperwork.death_bill(log, contract, quota.facts()))
+
+
+## Backspace in a session: the shift's written off and billed, nothing banked, and it counts.
+func abandon_shift() -> void:
+	if not session_live or paper.is_open() or shift.ended():
+		return
+	shift.abandon()
+	var log := run_log.to_dict("respawn")
+	run_log.write("respawn")
+	_file_payslip(log, QuotaState.ABANDONED)
+
+
+## Which threats this life has really met, for later briefings. Sight is checked now and then, and only
+## until one's been seen.
+func _note_threats(delta: float) -> void:
+	if run_log.threats_seen.has("stalker"):
+		return
+	_threat_wait -= delta
+	if _threat_wait > 0.0:
+		return
+	_threat_wait = float(_cfg.session.threat_check_s)
+	for s: Node in pack.stalkers:
+		if s.brain.alive() and s.brain.state != s.brain.State.DORMANT and _player_sees(s.floor_position()):
+			run_log.note_threat("stalker", layout.space_at(s.floor_position()))
+			return
+
+
 # --- capture hooks (src/debug/capture.gd) ---
+
+const CAPTURE_SEED := 4100
+
 
 func capture_shots() -> Array[Dictionary]:
 	return [
@@ -414,6 +580,14 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "oxygen_zero", "do": "oxygen_zero"},
 		{"name": "leaving", "do": "leaving"},
 		{"name": "left", "do": "left"},
+		{"name": "t014_quota_hud", "do": "quota_hud"},
+		{"name": "t014_briefing", "do": "form", "form": "briefing"},
+		{"name": "t014_decline_confirm", "do": "form", "form": "decline"},
+		{"name": "t014_payslip_good", "do": "form", "form": "good"},
+		{"name": "t014_payslip_bad", "do": "form", "form": "bad"},
+		{"name": "t014_payslip_long", "do": "form", "form": "long"},
+		{"name": "t014_death_bill", "do": "form", "form": "death"},
+		{"name": "t014_termination", "do": "form", "form": "termination"},
 	]
 
 
@@ -423,11 +597,17 @@ func apply_shot(shot: Dictionary) -> void:
 	if panel:
 		panel.visible = false
 	sight_debug.visible = false
+	_close_form()
+	session_live = false
 	respawn()
 	rig.set_preset(int(Data.value("camera", "default_preset")))
 	flashlight.set_on(true)
 	ambush.fired = true
 	match String(shot.do):
+		"quota_hud":
+			await _quota_hud_shot()
+		"form":
+			await _form_shot(String(shot.form))
 		"carry":
 			await _carry_shot(String(shot["class"]))
 		"dark":
@@ -463,6 +643,86 @@ func apply_shot(shot: Dictionary) -> void:
 			operator.scripted = {"leave": true}
 			await _sim(float(_cfg.leave.hold_s) + 0.2)
 	Engine.time_scale = 0.0
+
+
+func _quota_hud_shot() -> void:
+	next_seed = CAPTURE_SEED
+	start_session()
+	paper.press("accept")
+	quota.banked = 1840
+	quota.shifts_left = 2
+	shift.hold.deposit(field.items[0])
+	await _stand_at(layout.point_in("junction", [0.5, 0.6]), layout.point_in("junction", [0.5, 0.1]))
+	await _sim(0.3)
+
+
+## The forms, reached through the real flow with the run's numbers set by hand.
+func _form_shot(form: String) -> void:
+	next_seed = CAPTURE_SEED
+	start_session()
+	match form:
+		"briefing", "decline":
+			paper.press("accept")
+			run_log.note_threat("stalker", "medbay")
+			run_log.note_threat("power_loss", "cargo")
+			_shot_home(17, 12, 4, 262.0)
+			next_seed = CAPTURE_SEED + 1
+			paper.press("acknowledge")
+			if form == "decline":
+				paper.press("decline")
+		"good":
+			paper.press("accept")
+			_shot_home(19, 14, 5, 312.0)
+		"bad":
+			paper.press("accept")
+			run_log.note_damage("spit", 31.0, false)
+			run_log.note_damage("puddle", 12.0, false)
+			run_log.note_damage("lunge", 22.0, true)
+			_shot_home(2, 61, 2, 455.0)
+		"long":
+			paper.press("accept")
+			run_log.note_damage("spit", 31.0, false)
+			run_log.note_damage("puddle", 12.0, false)
+			run_log.note_damage("lunge", 22.0, true)
+			run_log.note_protected()
+			_shot_home(field.items.size(), 44, 9, 455.0)
+		"death":
+			paper.press("accept")
+			var at: Vector2 = layout.space_rect("medbay").get_center()
+			operator.global_position = Vector3(at.x, 0, at.y)
+			shift.carry(player_id).pockets.append(field.items[0])
+			shift.carry(player_id).pockets.append(field.items[1])
+			run_log.note_time(263.0)
+			run_log.note_damage("puddle", 12.0, false)
+			_hurt("spit", 1000.0, String(pack.stalkers[0].label), false)
+			file_death_bill()
+		"termination":
+			quota.shifts_left = 1
+			quota.deaths = 1
+			quota.declined = 1
+			quota.cycle = 2
+			quota.cycles_met = 1
+			quota.shifts_billed = 5
+			quota.quota = 4125
+			quota.banked = 1960
+			paper.press("accept")
+			_shot_home(6, 22, 3, 240.0)
+			paper.press("acknowledge")
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+
+## A shift brought home with these numbers.
+func _shot_home(items: int, shots: int, cycles: int, alive_s: float) -> void:
+	for item: RefCounted in field.items.slice(0, items):
+		shift.hold.deposit(item)
+		field.put_away(item)
+	shift.airlock_cycles = cycles
+	for i in shots:
+		run_log.note_shot(i % 2 == 0)
+	run_log.note_time(alive_s)
+	shift.step_leave(player_id, float(_cfg.leave.hold_s) + 1.0, true, true)
+	_leave()
 
 
 ## Runs the clock to `fraction` of the oxygen left at once; the tiers land as they would.

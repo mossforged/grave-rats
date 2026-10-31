@@ -10,7 +10,8 @@ const NOT_HITS := ["puddle", "oxygen"]
 const NO_SHIFT := {
 	"shift_outcome": null, "oxygen_at_exit_s": null, "deposited_by_class": {}, "deposited_items": 0,
 	"deposited_value": 0, "banked_value": 0, "items_lost": 0, "items_lost_value": 0, "prize_taken": false,
-	"tier_reached": 0, "survivors": [],
+	"tier_reached": 0, "survivors": [], "airlock_cycles": 0, "salvage": [], "carried_at_death": 0,
+	"carried_at_death_value": 0,
 }
 
 var dir := DEFAULT_DIR
@@ -27,6 +28,10 @@ var time_locked_s := 0.0
 var shots_blocked_for_you := 0
 var your_shots_blocked := 0
 var started_at := ""
+## Where you went down, a deck space's name ("" a doorway); null if nobody said.
+var death_location: Variant = null
+## Threat kind -> the space it was first met in this life.
+var threats_seen := {}
 var last_path := ""
 ## () -> Dictionary: this shift's fields (ShiftState.report), when the scene has a shift.
 var shift_report := Callable()
@@ -55,6 +60,8 @@ func begin() -> void:
 	shots_blocked_for_you = 0
 	your_shots_blocked = 0
 	started_at = Time.get_datetime_string_from_system()
+	death_location = null
+	threats_seen = {}
 	_written = false
 
 
@@ -89,6 +96,17 @@ func note_death(who: String, how: String, kind := "stalker") -> void:
 	killed_by = {kind: who, "how": how}
 
 
+## Where the fatal hit found you. Call before `note_death`'s write.
+func note_death_location(space: String) -> void:
+	death_location = space
+
+
+## Somebody met this threat, here. The first place stands.
+func note_threat(kind: String, space: String) -> void:
+	if not threats_seen.has(kind):
+		threats_seen[kind] = space
+
+
 func note_locked(delta: float) -> void:
 	time_locked_s += delta
 
@@ -119,6 +137,8 @@ func to_dict(ended: String) -> Dictionary:
 		"shots_blocked_for_you": shots_blocked_for_you,
 		"your_shots_blocked": your_shots_blocked,
 		"cause_of_death": killed_by.how if killed_by != null else null,
+		"death_location": death_location,
+		"threats_seen": threats_seen,
 	}
 	out.merge(shift_report.call() if shift_report.is_valid() else NO_SHIFT, true)
 	return out

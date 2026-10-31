@@ -169,6 +169,7 @@
     "hot_color": "e0a23c",
     "alpha": {"walk": 0.22, "sprint": 0.5, "gunfire": 0.8, "ripple": 0.55}
   },
+  "quota": {"word": "QUOTA / BANKED", "shifts": "SHIFTS LEFT %d", "of": " / %s CR", "minus": "-", "from_right_px": 42.0, "y_px": 42.0, "w_px": 300.0, "h_px": 104.0, "pad_px": 12.0, "label_px": 15.0, "value_px": 34.0, "value_gap_px": 2.0, "small_px": 22.0, "bar_h_px": 8.0},
   "carry": {
     "word": "CARRY", "x_px": 46.0, "from_bottom_px": 286.0, "w_px": 386.0, "h_px": 88.0, "label_px": 15.0,
     "slot_px": 18.0, "slot_gap_px": 5.0, "slots_x_px": 70.0, "line_gap_px": 6.0, "font_px": 24.0,

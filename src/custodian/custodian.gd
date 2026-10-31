@@ -54,7 +54,7 @@ func setup(config: Dictionary, layout: RefCounted, trace: Callable, visibility: 
 		var c := CutterUnit.new()
 		c.name = "Cutter%d" % (cutters.size() + 1)
 		add_child(c)
-		c.setup(cfg, spec, layout.point_in(String(spec.space), spec.at), bind, mix_rate)
+		c.setup(cfg, spec, layout.point_in(String(spec.space), spec.at), bind, knows, mix_rate)
 		c.set_meta("on_wake", bool(spec.on_wake))
 		cutters.append(c)
 	for spec: Dictionary in cfg.drones:

@@ -553,7 +553,7 @@ func test_payslip_line_appears_only_with_a_custodian_hit() -> void:
 	check(ids.call(doc).has("custodian_charge"), "a hit, and there it is")
 	var line: Dictionary = doc.deductions.filter(func(d: Dictionary) -> bool: return d.id == "custodian_charge")[0]
 	check_eq(int(line.quantity), 1, "one hit")
-	check_eq(line.note, "Unauthorised salvage detected. Your account has been charged.", "A011's words")
+	check_eq(line.note, "Your account has been charged.", "A011's words, short enough for the form")
 
 
 func test_threats_seen_reaches_the_next_briefing() -> void:

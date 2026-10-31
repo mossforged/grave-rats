@@ -375,7 +375,7 @@
   {
    "id": "custodian_charge",
    "label": "Property protection charge",
-   "note": "Unauthorised salvage detected. Your account has been charged.",
+   "note": "Your account has been charged.",
    "qty": "custodian_hits",
    "unit": "hit",
    "units": "hits",
@@ -497,7 +497,7 @@
    {
     "id": "custodian",
     "text": "Property protection enforcement",
-    "line": "Property protection enforcement. The property was protected.",
+    "line": "The property was protected.",
     "requires": [
      "by_custodian"
     ]

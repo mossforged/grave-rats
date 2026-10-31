@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011, T012 and T013 merged, waiting on John's gates. T014 (quota over three shifts, company paperwork) done on `auto/t014-mac`, waiting on review and John's gate. **Next:** John plays T014 (it includes T012's loop); then T015 (CUSTODIAN).
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T014 merged, waiting on John's gates. T015 (CUSTODIAN: cutter and drone) done on `auto/t015-mac`, waiting on review and John's gate. **Next:** John plays T015 past tier 2 and takes the black box.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,13 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T014 awaiting review; T012 and T013 merged, T012 awaiting John's gate; T011 awaiting John's gate.
-- Code: T014 on `auto/t014-mac`: 360/360, see `docs/handoffs/auto-T014.md`. The main scene is `scenes/shift/shift_deck.tscn`, and it now opens on the briefing.
+- Queue order (lead): T015 awaiting review; T011, T012 and T014 awaiting John's gates.
+- Code: T015 on `auto/t015-mac`: 383/383, see `docs/handoffs/auto-T015.md`. The main scene is `scenes/shift/shift_deck.tscn`, and it opens on the briefing.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
+- T015 balance: the prize route may now be too lethal. Greedy bot survives 1 of 12 (was 6 of 12), even reading the cutter's ring; cautious stays 12 of 12 because it leaves before CUSTODIAN wakes. First lever: move the cargo cutter off the prize's route.
 - T014 play (the game now opens on the briefing): does the quota make you take risks? Do the payslip and death bill land? Balance flags from the bots: greedy met 42 of 44 quotas while dying in 45% of shifts (the black box is about 69% of the first quota, the design says a third); fees are small next to a good shift; dying costs nothing on the quota while leaving empty-handed costs about 120. Approve the new copy (termination notice, decline confirms, vessel names) in auto-T014.
 - T014 play (`godot --path .`, sheet `docs/screens/T014/sheet.png`): does the quota make you take risks? Do the payslip and death bill land? New copy for your approval is in the handoff (termination notice, decline lines, vessels).
 - T014 balance: the cautious bot meets quota 1 (10 of 12), then mostly misses (2 of 10), as asked. Greedy meets 42 of 44 while dying in 45% of shifts, so dying barely threatens it. Levers: `quota.growth`, the prize's value, charging deaths to the quota. Dying also costs less than leaving empty-handed; keep it?
@@ -57,8 +59,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T012: a carry pose; drawn vents and closets at spawn points; the airlock as a real room; stale `p_size` engine errors from headless HUD text.
 - T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
 - T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
+- T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T014 (360/360 reproduced); queued T015 (CUSTODIAN).
-2026-10-31 (code, unattended): T014: `src/paperwork` and `data/paperwork.json` (briefing, payslip, death bill, termination notice from the run log, copy with conditions and cooldowns); quota 2,400 over 3 shifts, ×1.5; net pay counts toward quota; quota plate on the HUD.
+2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json`: cutter (line, ring, burn; tall cover breaks it, low doesn't), patrol drone (cone, bars, chirp; a completed call wakes a cutter or alerts a stalker), wake on tier 2 or prize, its own HUD line, killer, causes, payslip line. 6.88 / 10.15 ms with three stalkers.

@@ -7,6 +7,7 @@ extends Node3D
 const DroneBrain := preload("res://src/custodian/drone_brain.gd")
 const Fx := preload("res://src/custodian/custodian_fx.gd")
 const BeamFan := preload("res://src/sight/beam_fan.gd")
+const Visibility := preload("res://src/sight/visibility.gd")
 const BEAM_SHADER := preload("res://src/sight/beam.gdshader")
 const SightTarget := preload("res://src/sight/sight_target.gd")
 const PlaceholderSiren := preload("res://src/shift/placeholder_siren.gd")
@@ -30,6 +31,7 @@ var _visible_mask: Texture2D
 var _since_cast := INF
 var _bar_lit: StandardMaterial3D
 var _bar_dim: StandardMaterial3D
+var _tell_plate: MeshInstance3D
 
 
 func setup(all: Dictionary, spec: Dictionary, at: Vector2, route: Array, bind: Callable, mix_rate: int) -> void:
@@ -78,27 +80,37 @@ func _bar_material(energy: float, color: Color) -> StandardMaterial3D:
 	return mat
 
 
-## The same three bars, floating, over everything: the call is never only audible, and never hidden.
+## The same three bars, floating on a dark plate, over everything: the call is never only audible, and
+## never hidden. All three show from the start, so you can read how far it's got.
 func _make_tell(count: int) -> void:
 	var size: Array = cfg.tell_size_m
 	var pitch := float(size[0]) + float(cfg.tell_gap_m)
+	var pad := float(cfg.tell_pad_m) * 2.0
+	_tell_plate = _tell_quad(Vector2(pitch * float(count) - float(cfg.tell_gap_m) + pad, float(size[1]) + pad), 0.0, String(cfg.tell_plate), 0)
 	for i in count:
-		var mat := StandardMaterial3D.new()
-		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		mat.no_depth_test = true
-		mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-		mat.albedo_color = Color(String(_lens_cfg.color))
-		var quad := QuadMesh.new()
-		quad.size = Vector2(float(size[0]), float(size[1]))
-		quad.center_offset = Vector3((float(i) - float(count - 1) * 0.5) * pitch, 0.0, 0.0)
-		var mi := MeshInstance3D.new()
-		mi.mesh = quad
-		mi.material_override = mat
-		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		mi.position = Vector3(0.0, float(cfg.tell_up_m), 0.0)
-		mi.visible = false
-		add_child(mi)
-		tell_bars.append(mi)
+		var x := (float(i) - float(count - 1) * 0.5) * pitch
+		tell_bars.append(_tell_quad(Vector2(float(size[0]), float(size[1])), x, String(cfg.tell_dim), 1))
+
+
+func _tell_quad(size: Vector2, x: float, hex: String, priority: int) -> MeshInstance3D:
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.no_depth_test = true
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	mat.render_priority = priority
+	mat.albedo_color = Color(hex)
+	var quad := QuadMesh.new()
+	quad.size = size
+	quad.center_offset = Vector3(x, 0.0, 0.0)
+	var mi := MeshInstance3D.new()
+	mi.mesh = quad
+	mi.material_override = mat
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.position = Vector3(0.0, float(cfg.tell_up_m), 0.0)
+	mi.visible = false
+	add_child(mi)
+	return mi
 
 
 func _make_spot() -> void:
@@ -195,7 +207,9 @@ func _draw_cone(delta: float, visibility: RefCounted) -> void:
 		fan.cast(visibility, at, at, brain.yaw)
 	fan.step(delta, at, brain.yaw)
 	fan.fill(_mesh, eye, deg_to_rad(float(c.pitch_deg)), float(c.floor_m))
-	spot.global_transform = Transform3D(Basis.from_euler(Vector3(deg_to_rad(float(c.pitch_deg)), brain.yaw, 0.0)), eye)
+	# Out in front: from inside the shell it would only light the shell.
+	var front := Visibility.yaw_dir2(brain.yaw) * float(c.ahead_m)
+	spot.global_transform = Transform3D(Basis.from_euler(Vector3(deg_to_rad(float(c.pitch_deg)), brain.yaw, 0.0)), eye + Vector3(front.x, 0.0, front.y))
 
 
 func _show() -> void:
@@ -208,6 +222,9 @@ func _show() -> void:
 	var lit := brain.bars_lit()
 	for i in bars.size():
 		(bars[i] as MeshInstance3D).material_override = _bar_lit if i < lit else _bar_dim
-		(tell_bars[i] as MeshInstance3D).visible = calling and i < lit
+		var tell: MeshInstance3D = tell_bars[i]
+		tell.visible = calling
+		(tell.material_override as StandardMaterial3D).albedo_color = Color(String(_lens_cfg.color if i < lit else cfg.tell_dim))
+	_tell_plate.visible = calling
 	Fx.lens_set_bright(lens, _lens_cfg, on)
 	body.rotation.z = 0.0 if brain.alive() else deg_to_rad(float(cfg.wreck_tilt_deg))

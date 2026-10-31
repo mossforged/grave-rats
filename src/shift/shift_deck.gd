@@ -977,8 +977,8 @@ func _t015_shot(shot: Dictionary) -> void:
 			for c: Node3D in custodian.cutters:
 				c.brain.state = c.brain.State.COOL
 				c.brain._cool = INF
-			await _stand_at(drone.floor_position() + Vector2(0.0, 5.0), drone.floor_position())
 			drone.brain._reacquire = INF
+			await _stand_at(drone.floor_position() + Vector2(0.0, -5.0), drone.floor_position())
 			await _sim(0.5)
 		"bars", "called":
 			custodian.wake("tier")

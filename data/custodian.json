@@ -10,7 +10,7 @@
     }
   },
   "lens": {
-    "color": "a6e7c4", "dim_energy": 0.3, "bright_energy": 3.2, "unknown_share": 0.0, "size_m": 0.55
+    "color": "a6e7c4", "dim_energy": 0.25, "bright_energy": 1.3, "unknown_share": 0.0, "size_m": 0.55
   },
   "shell": {"ivory": "cfc9b4", "teal": "3f6c6e", "dark": "23282a", "roughness": 0.75},
   "terminals": {
@@ -35,17 +35,16 @@
     "aligned_deg": 2.5,
     "warmup_s": 1.2,
     "burn_s": 0.35,
-    "damage": 40.0,
+    "damage": 30.0,
     "hit_radius_m": 0.55,
-    "cool_s": 3.0,
-    "cancel_hold_s": 0.7,
+    "cool_s": 4.5,
+    "cancel_hold_s": 2.0,
     "body_size_m": [0.8, 0.55, 0.8],
-    "body_height_m": 0.35,
     "lens_up_m": 0.5,
-    "line": {"color": "a6e7c4", "width_m": 0.045, "aim_width_m": 0.07, "energy": 2.2, "aim_energy": 4.5, "dash_m": 0.34, "gap_m": 0.16, "unknown_share": 0.0, "cull_margin_m": 20.0},
+    "line": {"color": "a6e7c4", "width_m": 0.045, "aim_width_m": 0.07, "energy": 1.0, "aim_energy": 1.5, "dash_m": 0.34, "gap_m": 0.16, "unknown_share": 0.0, "cull_margin_m": 20.0, "stop_mark_m": 0.26},
     "beam": {"color": "ffb46a", "width_m": 0.2, "energy": 7.0},
     "ring": {
-      "color": "a6e7c4", "segments": 8, "gap": 0.14, "inner": 0.72, "track_alpha": 0.2, "energy": 3.5,
+      "color": "a6e7c4", "segments": 8, "gap": 0.14, "inner": 0.72, "track_alpha": 0.2, "energy": 1.5,
       "mount_radius_m": 0.85, "target_radius_m": 0.95, "floor_m": 0.04
     },
     "reveal": {"radius_m": 2.2, "hold_s": 0.2, "fade_s": 0.5, "rays": 24},
@@ -82,15 +81,18 @@
     "bar_up_m": 0.47,
     "bar_lit_energy": 4.0,
     "bar_dim_energy": 0.2,
-    "tell_up_m": 1.15,
-    "tell_size_m": [0.2, 0.11],
-    "tell_gap_m": 0.04,
+    "tell_up_m": 1.5,
+    "tell_size_m": [0.34, 0.17],
+    "tell_gap_m": 0.07,
+    "tell_pad_m": 0.08,
+    "tell_dim": "2d4a42",
+    "tell_plate": "0a0d10",
     "lens_up_m": 0.7,
     "wreck_tilt_deg": 14.0,
     "spot": {
-      "color": "ffe9b8", "energy": 5.0, "attenuation": 0.8, "angle_attenuation": 1.0, "pitch_deg": -4.0,
+      "color": "ffe9b8", "energy": 2.6, "ahead_m": 0.45, "attenuation": 0.8, "angle_attenuation": 1.0, "pitch_deg": -4.0,
       "rays": 13, "hz": 15.0, "reach_rate_m_s": 18.0, "snap_m": 2.0, "floor_m": 0.03,
-      "beam_strength": 0.22, "call_strength": 0.42, "fade_power": 0.9, "edge_power": 1.2
+      "beam_strength": 0.1, "call_strength": 0.2, "fade_power": 1.1, "edge_power": 1.2
     },
     "chirp": {"low_hz": 700.0, "high_hz": 1050.0, "sweep_s": 0.16, "length_s": 0.16, "volume_db": -9.0, "pitch_step": 0.35},
     "unit_size_m": 6.0
@@ -99,6 +101,6 @@
   "words": {"called_cutter": "DRONE CALL COMPLETE. CUTTER ONLINE.", "called_stalker": "DRONE CALL COMPLETE. POSITION SHARED."},
   "drones": [
     {"name": "junction", "space": "junction", "at": [0.5, 0.55], "route": [[0.5, 0.55], [0.75, 0.3], [0.3, 0.14], [0.25, 0.42]]},
-    {"name": "cargo", "space": "cargo", "at": [0.7, 0.8], "route": [[0.7, 0.8], [0.12, 0.88], [0.12, 0.3], [0.6, 0.12], [0.59, 0.7]]}
+    {"name": "cargo", "space": "cargo", "at": [0.7, 0.8], "route": [[0.7, 0.8], [0.12, 0.88], [0.12, 0.3], [0.6, 0.12], [0.12, 0.3], [0.12, 0.88]]}
   ]
 }

@@ -14,10 +14,13 @@ var beam_mesh: MeshInstance3D
 var mount_ring: MeshInstance3D
 var target_ring: MeshInstance3D
 var lens: MeshInstance3D
-## Where the line stopped on the last step.
+## Where the line stopped on the last step, and whether something stopped it.
 var line_end := Vector3.ZERO
+var line_stopped := false
+var stop_mark: MeshInstance3D
 
 var _lens_cfg: Dictionary
+var _knows: Callable
 var _line: ImmediateMesh
 var _beam: ImmediateMesh
 var _line_mat: ShaderMaterial
@@ -25,8 +28,9 @@ var _warm_sound: AudioStreamPlayer3D
 var _burn_sound: AudioStreamPlayer3D
 
 
-func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, mix_rate: int) -> void:
+func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, knows: Callable, mix_rate: int) -> void:
 	cfg = all.cutter
+	_knows = func(p: Vector3) -> bool: return knows.call(Vector2(p.x, p.z))
 	_lens_cfg = all.lens
 	var shell: Dictionary = all.shell
 	label = "%s %s" % [String(cfg.label), String(spec.name).to_upper()]
@@ -39,6 +43,7 @@ func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, mix_r
 	_line = ImmediateMesh.new()
 	_line_mat = Fx.line_material(String(ln.color), float(ln.energy), float(ln.dash_m), float(ln.gap_m), float(ln.unknown_share), bind)
 	line_mesh = Fx.ribbon(self, "Line", _line, _line_mat, float(ln.cull_margin_m))
+	stop_mark = _make_stop_mark(ln)
 	var bm: Dictionary = cfg.beam
 	_beam = ImmediateMesh.new()
 	var beam_mat := Fx.line_material(String(bm.color), float(bm.energy), 0.0, 0.0, 0.0, bind)
@@ -50,6 +55,26 @@ func setup(all: Dictionary, spec: Dictionary, at: Vector2, bind: Callable, mix_r
 	target_ring = Fx.ring(self, r, float(r.target_radius_m))
 	_warm_sound = _sound(cfg.warm_sound, mix_rate, all.drone)
 	_burn_sound = _sound(cfg.burn_sound, mix_rate, all.drone)
+
+
+## A small bright square where something stopped the line: this is what's saving you.
+func _make_stop_mark(ln: Dictionary) -> MeshInstance3D:
+	var quad := QuadMesh.new()
+	quad.size = Vector2.ONE * float(ln.stop_mark_m)
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	mat.albedo_color = Color(String(ln.color))
+	var mi := MeshInstance3D.new()
+	mi.name = "StopMark"
+	mi.mesh = quad
+	mi.material_override = mat
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.top_level = true
+	mi.visible = false
+	add_child(mi)
+	return mi
 
 
 func _sound(spec: Dictionary, mix_rate: int, drone_cfg: Dictionary) -> AudioStreamPlayer3D:
@@ -92,7 +117,9 @@ func tick(delta: float, players: Array, trace: Callable) -> Array:
 				_warm_sound.stop()
 				_burn_sound.play()
 	if brain.line_on():
-		line_end = trace.call(brain.mount, brain.far_point(brain.line_reach(players))).point
+		var seen: Dictionary = trace.call(brain.mount, brain.far_point(brain.line_reach(players)))
+		line_end = seen.point
+		line_stopped = not bool(seen.clear)
 	_show(players)
 	return events
 
@@ -100,6 +127,9 @@ func tick(delta: float, players: Array, trace: Callable) -> Array:
 func _show(players := []) -> void:
 	line_mesh.visible = brain.line_on() and not brain.burning()
 	beam_mesh.visible = brain.burning()
+	stop_mark.visible = line_mesh.visible and line_stopped and _knows.call(line_end)
+	if stop_mark.visible:
+		stop_mark.global_position = line_end
 	var aiming := brain.aiming()
 	mount_ring.visible = aiming
 	target_ring.visible = aiming

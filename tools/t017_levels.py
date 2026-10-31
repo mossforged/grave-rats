@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """T017: peak and RMS by segment of the recorded sequence, with and without the master limiter.
-    t017_levels.py limited.wav open.wav segments.json out.json
+    t017_levels.py limited.wav open.wav hot.wav segments.json out.json
 """
 import json
 import sys
@@ -29,14 +29,15 @@ def measure(x):
 def main():
     limited, rate = load(sys.argv[1])
     opened, _ = load(sys.argv[2])
+    hot, _ = load(sys.argv[3])
     rows = []
-    for s in json.load(open(sys.argv[3])):
+    for s in json.load(open(sys.argv[4])):
         a, b = int(s["from"] * rate), int(s["to"] * rate)
         rows.append({"segment": s["name"], "from_s": s["from"], "to_s": s["to"], "with_limiter": measure(limited[a:b]),
-                "without_limiter": measure(opened[a:b])})
+                "without_limiter": measure(opened[a:b]), "limiter_12db_hot": measure(hot[a:b])})
     out = {"sample_rate": rate, "seconds": round(len(limited) / rate, 2), "segments": rows,
-            "whole_with_limiter": measure(limited), "whole_without_limiter": measure(opened)}
-    json.dump(out, open(sys.argv[4], "w"), indent=2)
+            "whole_with_limiter": measure(limited), "whole_without_limiter": measure(opened), "whole_limiter_12db_hot": measure(hot)}
+    json.dump(out, open(sys.argv[5], "w"), indent=2)
     print(json.dumps(out, indent=1))
 
 

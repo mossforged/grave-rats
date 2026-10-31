@@ -161,7 +161,7 @@
     },
     "suit_breath": {
       "file": "res://assets/game/audio/player/ph_suit_breath.wav",
-      "volume_db": -30,
+      "volume_db": -28,
       "pitch_variance": 0,
       "max_distance_m": 0.0,
       "cooldown_s": 0,
@@ -407,7 +407,7 @@
     },
     "amb_medbay": {
       "file": "res://assets/game/audio/ship/ph_amb_medbay.wav",
-      "volume_db": -27,
+      "volume_db": -24,
       "pitch_variance": 0,
       "max_distance_m": 0.0,
       "cooldown_s": 0,
@@ -417,7 +417,7 @@
     },
     "amb_cargo": {
       "file": "res://assets/game/audio/ship/ph_amb_cargo.wav",
-      "volume_db": -22,
+      "volume_db": -20,
       "pitch_variance": 0,
       "max_distance_m": 0.0,
       "cooldown_s": 0,
@@ -427,7 +427,7 @@
     },
     "amb_junction": {
       "file": "res://assets/game/audio/ship/ph_amb_junction.wav",
-      "volume_db": -27,
+      "volume_db": -24,
       "pitch_variance": 0,
       "max_distance_m": 0.0,
       "cooldown_s": 0,

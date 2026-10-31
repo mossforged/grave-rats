@@ -19,15 +19,18 @@ Vesper Reach's maintenance AI, protecting company property from you (T015). Syst
 - **Fairness:** aiming at you, its line and rings show anywhere, through the mask, and it flashes itself into your sight (`reveal`). Sweeping, its line reads only where you've seen. The line stops at what stops it, with a mark there.
 - **Arc:** a cutter reaches `arc_half_deg` either side of `home_yaw_deg`, within `range_m`. Out of its arc is safe.
 - **Drone rule:** break its spotlight's line before the call completes. Out of the cone, out of range or behind cover cancels it, back to nothing, and it can't re-acquire for `reacquire_s`. After a completed call it rests `call_cooldown_s`. It uses the same trace to your torso from `eye_height_m` (low), so unlike the cutter, crouching behind low cover can hide you from it.
-- **Drone tell:** the cone, three roof bars filling in order, a chirp rising per bar (`pitch_step`). While calling, the bars float on a plate over everything and the cone ignores the mask.
+- **Drone tell:** the cone, three roof bars filling in order, a chirp rising per bar (`data/audio.json` `drone_chirp`). While calling, the bars float on a plate over everything and the cone ignores the mask.
 - **Completed call:** the nearest sleeping cutter within `call.wake_cutter_m` of the drone wakes. With none, the deck alerts the nearest stalker that's up. `on_wake` false keeps a cutter back for this.
 - **Fragile:** `drone.health` is 3 rifle rounds. It stays as a dark wreck. It has no collider. It never does damage.
 - **Waking:** once a shift, from tier 2 or the prize. The prize's line is said even if it's already up. Dormant lenses are dim, awake bright.
 - **Voice:** only at state changes (waking, a warm-up or call starting, a hit, a completed call), on `cooldown_s` and `global_cooldown_s`.
 - **Multiplayer:** players come in as a list by ID, and every event carries one. Solo for now.
 
+## Sounds (T017)
+Through `src/audio`. The cutter's hum runs exactly while it aims, its pitch rising with `warm_share()`; a broken line stops it. The burn comes with the beam, a chirp with each bar, a chime with each voice line that's actually said.
+
 ## Public API
-- `Custodian`: `setup(cfg, layout, trace, visibility, bind, knows, mask_texture, bounds, mix_rate)`, `reset()`, `wake(reason) -> bool` (`reason`: key of `wake`), `tick(delta, players)`, `cutter_on(id)`, `drone_on(id)`; fields `cutters`, `drones`, `voice`, `awake`, `calls_done`, `calls_broken`. `players`: [{`id`, `pos`: Vector2, `body`: Vector3, `alive`}]. `trace`: (from, to) -> {`clear`, `point`}.
+- `Custodian`: `setup(cfg, layout, trace, visibility, bind, knows, mask_texture, bounds)`, `reset()`, `wake(reason) -> bool` (`reason`: key of `wake`), `tick(delta, players)`, `cutter_on(id)`, `drone_on(id)`; fields `cutters`, `drones`, `voice`, `awake`, `calls_done`, `calls_broken`. `players`: [{`id`, `pos`: Vector2, `body`: Vector3, `alive`}]. `trace`: (from, to) -> {`clear`, `point`}.
 - `CutterUnit`: `tick`, `wake()`, `reset()`, `floor_position()`; fields `brain`, `label`, `line_mesh`, `beam_mesh`, `mount_ring`, `target_ring`, `lens`, `stop_mark`, `line_end`, `line_stopped`.
 - `DroneUnit`: as above, plus `shot_disc()`, `take_hit(hit)` (rifle body contract), `set_mask(texture, bounds)`; fields `spot`, `fan`, `beam`, `bars`, `tell_bars`.
 - `CutterBrain.new(cfg, at, home_yaw_deg, arc_half_deg)`: `step(delta, players, trace) -> events`, `wake()`, `reset()`, `awake()`, `aiming()`, `burning()`, `line_on()`, `warm_share()`, `can_see(player, trace)`, `aim_point(player)`, `far_point(reach)`, `line_reach(players)`; fields `state`, `yaw`, `warm`, `target_id`, `mount`. Events `EV_AIM`, `EV_CANCEL`, `EV_BURN`, `EV_HIT` (with `amount`), all with `player_id`.

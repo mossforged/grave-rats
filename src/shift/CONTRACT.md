@@ -9,7 +9,6 @@ One shift, solo, end to end (T012): oxygen, tiers, the alarm, the hold, LEAVE. T
 - `section_lights.gd`: one section's practicals and strips flicker, then go out. Reads `DeckLighting.lights` by name and the fixtures by render layer, without editing `src/kit`. Lights fail in looks only: no sight or AI rule reads them.
 - `alarm_marker.gd`: the pulsing ring and column over a revealed player. Unmasked, so it reads through the dark.
 - `airlock.gd`: where the airlock is, its outline and sign. A marked stretch of the junction's south end (the spawn end), not a room: no door, no walls, grey box.
-- `placeholder_siren.gd`: a swept sine, until real sound.
 
 ## Does not own
 - Salvage rules (`src/salvage`), spawning and alert (`StalkerPack`, `SpawnPicker`, `StalkerBrain.alert`), CUSTODIAN's rules (`src/custodian`), drawing the HUD (`src/hud`), carry penalties in motion (`src/player`), the log file (`src/run_log`).
@@ -30,6 +29,9 @@ One shift, solo, end to end (T012): oxygen, tiers, the alarm, the hold, LEAVE. T
 - **What goes in the log for later briefings:** each hit's source and space, the first stalker actually seen (checked every `session.threat_check_s`), the alarm, tier vents, the failed section.
 - E order: salvage in reach, then a bed, then a door.
 
+## Sounds (T017)
+Through `src/audio`, whose data holds the numbers: room tones and breathing while a shift runs (no breathing behind a form or once dead), the siren for as long as the alarm, the oxygen tone at each tier and repeating once the air's gone, the lights' clunk in the failing room, pick-up and drop by class, a stamp on `accept`, `confirm_decline` and `acknowledge`, a ledger tick per payslip row.
+
 ## Public API
 - `ShiftState.new(cfg, salvage_rules)`: `begin()`, `add_player(id)`, `carry(id)`, `alive(id)`, `step(delta)` -> events, `suit_loss(delta)`, `note_taken(item)`, `trip_alarm(id)`, `deposit(id)`, `step_leave(id, delta, in_airlock, held)`, `leave_share(id)`, `player_died(id)`, `abandon()`, `banked()`, `lost_items()`, `report()`, `ended()`, `oxygen_fraction()`, `oxygen_out()`; fields `oxygen_left`, `hold`, `tier_reached`, `prize_taken`, `alarm_left`, `outcome`, `survivors`, `airlock_cycles` (deposits that put something in), `carried_at_death`. Events {`type`: `EV_TIER` (with `index`, `spec`), `EV_OXYGEN_OUT`, `EV_ALARM_OVER`}. Outcomes `EXTRACTED`, `WIPED`, `ABANDONED`.
 - `SectionLights`: `setup(cfg, layout, lights, walls)`, `fail(space)`, `tick(delta)`, `reset()`, `state_of(space)`, `lit_lights(space)`, `light_count(space)`, `fixture_count(space)`; field `rng`.
@@ -44,6 +46,6 @@ One shift, solo, end to end (T012): oxygen, tiers, the alarm, the hold, LEAVE. T
 `shift_deck.tier_fired(index, spec)`.
 
 ## Data keys (`data/shift.json`)
-`player_id`, `quota` {`shifts_per_cycle`, `start_cr`, `growth`, `round_to`}, `session` {`death_hold_s`, `threat_check_s`}, `oxygen_s`; `out_of_air` {`suit_fraction_per_s`, `who`}; `tiers` [{`at_oxygen`, `stalkers`, `lights`, `wake`, `announce` (`%s` is the section)}]; `section_words`; `lights` {`flicker_s`, `gap_min_s`, `gap_max_s`, `flicker_energy`}; `airlock` {`space`, `from`, `to`, `strip_m`, `strip_height_m`, `color`, `energy`, `unknown_share`, `sign`, `sign_height_m`, `sign_pixel_size`, `sign_font_size`, `sign_color`}; `leave` {`hold_s`, `hold_after_s`}; `alarm` {`reveal_s`, `refresh_s`, `announce`, `marker` {...}, `siren` {...}}; `tier_chirp`, `mix_rate`; `drop_sound` {noise: pack sound}; `prompt`, `words`, `demo`, `help`.
+`player_id`, `quota` {`shifts_per_cycle`, `start_cr`, `growth`, `round_to`}, `session` {`death_hold_s`, `threat_check_s`}, `oxygen_s`; `out_of_air` {`suit_fraction_per_s`, `who`}; `tiers` [{`at_oxygen`, `stalkers`, `lights`, `wake`, `announce` (`%s` is the section)}]; `section_words`; `lights` {`flicker_s`, `gap_min_s`, `gap_max_s`, `flicker_energy`}; `airlock` {`space`, `from`, `to`, `strip_m`, `strip_height_m`, `color`, `energy`, `unknown_share`, `sign`, `sign_height_m`, `sign_pixel_size`, `sign_font_size`, `sign_color`}; `leave` {`hold_s`, `hold_after_s`}; `alarm` {`reveal_s`, `refresh_s`, `announce`, `marker` {...}}; `prompt`, `words`, `demo`, `help`.
 
 Tests: `tests/test_shift.gd`, `tests/test_paperwork.gd`, `tests/test_custodian.gd`. Bots: `tools/t012_bots.gd`, `tools/t014_bots.gd`, `tools/t015_bots.gd`.

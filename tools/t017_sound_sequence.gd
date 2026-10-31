@@ -18,12 +18,21 @@ var t := 0.0
 var _done := {}
 var _stalker: Node
 var _cutter: Node
+var _cues: Array = []
 
 
 func _ready() -> void:
 	if OS.get_environment("T017_NO_LIMITER") == "1":
 		for i in range(AudioServer.get_bus_effect_count(0) - 1, -1, -1):
 			AudioServer.remove_bus_effect(0, i)
+	# How much the limiter holds back: every bus driven this much over its mix.
+	var hot := float(OS.get_environment("T017_HOT_DB")) if OS.has_environment("T017_HOT_DB") else 0.0
+	if hot != 0.0:
+		for bus: String in Audio.cfg.buses:
+			Audio.cfg.buses[bus].volume_db = float(Audio.cfg.buses[bus].volume_db) + hot
+	Audio.played.connect(func(cue: String, _at: Vector3, _pitch: float) -> void: _cues.append([snappedf(t, 0.01), cue]))
+	Audio.loop_started.connect(func(key: String, cue: String) -> void: _cues.append([snappedf(t, 0.01), "loop on: %s (%s)" % [cue, key]]))
+	Audio.loop_stopped.connect(func(key: String) -> void: _cues.append([snappedf(t, 0.01), "loop off: %s" % key]))
 	deck = (load("res://scenes/shift/shift_deck.tscn") as PackedScene).instantiate()
 	add_child(deck)
 	deck.operator.input_enabled = false
@@ -90,4 +99,9 @@ func _physics_process(delta: float) -> void:
 	if t >= 12.0:
 		deck.operator.rifle.state.mag = maxi(deck.operator.rifle.state.mag, 5)
 	if t >= END_S:
+		var out := OS.get_environment("T017_CUES")
+		if out != "":
+			var f := FileAccess.open(out, FileAccess.WRITE)
+			f.store_string(JSON.stringify(_cues))
+			f.close()
 		get_tree().quit()

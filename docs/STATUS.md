@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T014 merged, waiting on John's gates. T015 (CUSTODIAN: cutter and drone) done on `auto/t015-mac`, waiting on review and John's gate. **Next:** John plays T015 past tier 2 and takes the black box.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T014 merged, waiting on John's gates. T015 merged, waiting on John's gate. T016 done on `auto/t016-mac`, T017 (placeholder sound) done on `auto/t017-mac`, both waiting on review. **Next:** merge T016 and T017, then John plays and listens.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -13,10 +13,11 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 
 ## What builders need now
 - Queue order (lead): T015 awaiting review; T011, T012 and T014 awaiting John's gates.
-- Code: T015 on `auto/t015-mac`: 383/383, see `docs/handoffs/auto-T015.md`. The main scene is `scenes/shift/shift_deck.tscn`, and it opens on the briefing.
+- Code: T017 on `auto/t017-mac`: 423/423, see `docs/handoffs/auto-T017.md`; branched from `main` without T016, and a trial merge is clean in code and data. The main scene is `scenes/shift/shift_deck.tscn`, and it opens on the briefing.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T017 listen (nobody has heard it; `docs/screens/T017/sequence.mp4`, or `godot --path .`): does it sound like a place, and do the warnings warn? Is the alarm too loud over the cutter and drone? Are the room tones too quiet (F1 → Audio buses)? Calls to check: tier chirp became the oxygen tone, stalkers audible through walls, side corridor footsteps are wet.
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
 - T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
 - T015 balance: the prize route may now be too lethal. Greedy bot survives 1 of 12 (was 6 of 12), even reading the cutter's ring; cautious stays 12 of 12 because it leaves before CUSTODIAN wakes. First lever: move the cargo cutter off the prize's route.
@@ -61,8 +62,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
 - T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
+- T017: walls and shut doors muffling sound; a sound for the player being hit; a failed room's hum dying with its lights; pirate gunfire through `src/audio` and the SFX bus.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T015 (383/383 reproduced); queued Q002; paused new gameplay pending John's play.
-2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json` (cutter: line, ring, 1.2 s warm-up, tall cover cancels; drone: spotlight, 3 bars, 2.4 s call wakes a cutter or alerts a stalker); wakes at tier 2 or on the prize; new causes and payslip line.
+2026-10-31 (code, unattended): T017: `src/audio` (autoload `Audio`) and `data/audio.json`, 44 generated placeholder cues from `tools/audio/`, buses in F1, master limiter, all call sites; noise ring and AI hearing untouched. Scripted pile-up peaks at -1.6 dBFS with no clipping; not yet heard by anyone.

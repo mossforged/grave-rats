@@ -1,0 +1,166 @@
+{
+  "threats": [
+    {
+      "id": "A015-01",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-02",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-03",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-04",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-05",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-06",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-07",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-08",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-09",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-10",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-11",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-12",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-13",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-14",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-15",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-16",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-17",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    },
+    {
+      "id": "A015-18",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt_present": true
+    }
+  ],
+  "count": 18,
+  "top_five": [
+    "A015-02",
+    "A015-04",
+    "A015-07",
+    "A015-08",
+    "A015-15"
+  ],
+  "matrix_size": [
+    2200,
+    4490
+  ],
+  "contact_size": [
+    2220,
+    3510
+  ],
+  "refusals": 0,
+  "review": "Concept visual review; no engine scale or behavior validation claimed."
+}

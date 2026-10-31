@@ -27,6 +27,8 @@ var _body: StaticBody3D
 var _lamp_mat: ShaderMaterial
 var _state_hex := ""
 var _height := 0.0
+## () -> bool: may this machine change this door? Empty: yes.
+var authority := Callable()
 var _last_state := -1
 var _panel_mat: StandardMaterial3D
 var _seam: MeshInstance3D
@@ -211,6 +213,8 @@ func reset(start: String) -> void:
 
 ## A stalker worked on it for `delta`, from where it stands.
 func bash(delta: float, from: Vector2) -> void:
+	if authority.is_valid() and not authority.call():
+		return
 	var c := opening.get_center()
 	_fall_sign = -signf((from - c).y if along_x else (from - c).x)
 	if door_state.bash(delta):
@@ -238,6 +242,8 @@ func within_reach(p: Vector2, radius: float) -> bool:
 
 ## E pressed by someone. Returns the door's answer (see DoorState.interact).
 func interact(actors: Array) -> String:
+	if authority.is_valid() and not authority.call():
+		return ""
 	var answer := door_state.interact(doorway_clear(actors))
 	_apply()
 	return answer

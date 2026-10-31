@@ -14,10 +14,14 @@ const SuitOsHud := preload("res://src/hud/suit_os_hud.gd")
 const NoiseRing := preload("res://src/hud/noise_ring.gd")
 const TargetDummy := preload("res://src/weapons/target_dummy.gd")
 const TuningPanel := preload("res://src/debug/tuning_panel.gd")
+const Session := preload("res://src/session/session.gd")
+const Commands := preload("res://src/session/commands.gd")
 
 var deck_data: Dictionary
 var layout: DeckLayout
 var rig: Node3D
+var session: Session
+## The local player's operator: the one the camera, the HUD and the fog follow.
 var operator: Operator
 var hud: SuitOsHud
 var noise_ring: NoiseRing
@@ -39,9 +43,8 @@ func _ready() -> void:
 	layout = DeckLayout.new(deck_data, float(deck_data.room_scale))
 	add_child(DeckBuilder.build(layout))
 	_make_targets()
-	operator = Operator.new()
-	operator.name = "Operator"
-	add_child(operator)
+	session = Session.new(Data.load_data("session"))
+	operator = spawn_player(session.local_id, String(session.cfg.crew), Session.SOURCE_LOCAL)
 	rig = CameraRig.new()
 	rig.name = "CameraRig"
 	add_child(rig)
@@ -68,17 +71,41 @@ func _ready() -> void:
 	respawn()
 
 
-## Back to data "spawn", full gun.
-func respawn() -> void:
+## The one way onto a deck. Null if the session won't have them (a taken ID, a full crew).
+func spawn_player(id: int, crew: String, source: String) -> Operator:
+	var p: Session.SessionPlayer = session.add_player(id, crew, source)
+	if p == null:
+		return null
+	var op := Operator.new()
+	op.name = "Operator" if p.index == 0 else "Operator%d" % id
+	op.player_id = id
+	op.remote = source != Session.SOURCE_LOCAL
+	op.input_enabled = source == Session.SOURCE_LOCAL
+	op.send_command = session.send
+	add_child(op)
+	p.operator = op
+	_place_player(p)
+	return op
+
+
+## Data "spawn" (each player a step along from the last), full gun.
+func _place_player(player: Session.SessionPlayer) -> void:
 	var sp: Dictionary = deck_data.spawn
-	var p := layout.point_in(String(sp.space), sp.at)
-	operator.global_position = Vector3(p.x, 0, p.y)
-	operator.model.reset_motion()
-	operator.rifle.state.refill()
+	var p := layout.point_in(String(sp.space), sp.at) + session.spawn_offset(player)
+	var op: Operator = player.operator
+	op.global_position = Vector3(p.x, 0, p.y)
+	op.model.reset_motion()
+	op.rifle.state.refill()
+	var a := deg_to_rad(float(sp.aim_deg))
+	op.face_now(Vector3(p.x + sin(a) * 5.0, _aim_height, p.y - cos(a) * 5.0))
+
+
+## Everyone back to the spawn.
+func respawn() -> void:
+	for p: Session.SessionPlayer in session.players:
+		_place_player(p)
 	hud.reset()
 	noise_ring.state.reset()
-	var a := deg_to_rad(float(sp.aim_deg))
-	operator.face_now(Vector3(p.x + sin(a) * 5.0, _aim_height, p.y - cos(a) * 5.0))
 	rig.aim_dir = operator.aim_dir()
 	rig.snap()
 
@@ -90,7 +117,7 @@ func _process(delta: float) -> void:
 		var hit: Variant = Plane(Vector3.UP, _aim_height).intersects_ray(
 				cam.project_ray_origin(mp), cam.project_ray_normal(mp))
 		if hit != null:
-			operator.aim_point = hit
+			session.send(Commands.aim(operator.player_id, hit))
 	elif _capture and _demo_t >= 0.0:
 		_demo_step(delta)
 	operator.move_yaw_deg = float(rig.preset().yaw_deg)

@@ -1,0 +1,31 @@
+[
+ {
+  "name": "rival",
+  "kind": "multi-image-to-3d",
+  "task_id": "01a193e9-55d8-74e5-a24e-cf44d767fabb",
+  "status": "SUCCEEDED",
+  "consumed_credits": 30,
+  "files": {
+   "glb": 13417668,
+   "base_color": 6092789,
+   "metallic": 34222,
+   "roughness": 1688190,
+   "normal": 6258674,
+   "thumbnail": 123085
+  },
+  "finished_at": 1793483083269
+ },
+ {
+  "name": "rival_rig",
+  "kind": "rigging",
+  "task_id": "01a193ec-893c-718a-85e3-b51001e1fab1",
+  "status": "SUCCEEDED",
+  "consumed_credits": 5,
+  "files": {
+   "rival_rigged.glb": 14585844,
+   "rival_rigged.fbx": 14841740,
+   "walking_glb_url": 14566860,
+   "running_glb_url": 14556260
+  }
+ }
+]

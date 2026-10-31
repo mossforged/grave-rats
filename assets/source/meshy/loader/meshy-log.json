@@ -1,0 +1,18 @@
+[
+ {
+  "name": "loader",
+  "kind": "multi-image-to-3d",
+  "task_id": "01a193e9-32bb-74c9-8459-65f5395a5789",
+  "status": "SUCCEEDED",
+  "consumed_credits": 30,
+  "files": {
+   "glb": 13977456,
+   "base_color": 5858797,
+   "metallic": 50256,
+   "roughness": 1877000,
+   "normal": 6412797,
+   "thumbnail": 165801
+  },
+  "finished_at": 1793483050996
+ }
+]

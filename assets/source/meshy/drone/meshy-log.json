@@ -1,0 +1,18 @@
+[
+ {
+  "name": "drone",
+  "kind": "multi-image-to-3d",
+  "task_id": "01a193e9-1872-7694-aea7-3a87b0435b80",
+  "status": "SUCCEEDED",
+  "consumed_credits": 30,
+  "files": {
+   "glb": 11677632,
+   "base_color": 5584733,
+   "metallic": 29713,
+   "roughness": 1643024,
+   "normal": 5608356,
+   "thumbnail": 206855
+  },
+  "finished_at": 1793483017162
+ }
+]

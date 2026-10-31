@@ -19,3 +19,7 @@ Built by `tools/blender/props.py` (run `python3 tools/blender/props.py assets/so
 
 ## Set 1 and 2 (`tools/blender/props_set_medbay_salvage.py`)
 Medbay: `bed`, `surgical_lamp`, `iv_stand`, `gurney`, `trolley`, `med_station` (wall). Salvage: `salvage_<kind>.glb` for all nine kinds in `data/salvage.json`. Roles and sizes in `catalogue.json`; previews `docs/screens/props/medbay_*.jpg`, `salvage_*.jpg`.
+
+## Set 3–4 and room sets
+: cargo (pallet, barrel, gas_rack, shelving_rack, strapped_stack, cargo_lift) and corridor/engineering wall props (junction_box, fuse_panel, wall_terminal, pipe_valve, emergency_locker, cable_spool, vent_cover).
+: engineering (reactor_core, power_cell_rack, control_desk, toolbox_cart), bio lab (specimen_tank, lab_bench, centrifuge, sample_freezer), bridge (captain_chair, helm_console, nav_table, wall_screen_bank), crew quarters (bunk_bed, footlocker, desk_chair), mess (mess_table, food_dispenser, galley_counter). Previews:  (). These rooms don't exist in the deck yet; they're ready for when level layouts add them.

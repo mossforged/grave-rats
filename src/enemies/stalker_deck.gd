@@ -252,7 +252,7 @@ func _step_emerge(delta: float) -> void:
 func fire_ambush() -> void:
 	bulkhead.blow()
 	var c := bulkhead.panel_center()
-	pack.play_sound("bang", Vector3(c.x, float(deck_data.wall_height_m) * 0.5, c.y))
+	Audio.play("bulkhead_burst", Vector3(c.x, float(deck_data.wall_height_m) * 0.5, c.y))
 	_emerge_left = float(_ambush_cfg.emerge_delay_s)
 	_start_kick(float(_ambush_cfg.camera_kick_m), float(_ambush_cfg.camera_kick_recover_s))
 

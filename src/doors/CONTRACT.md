@@ -7,6 +7,9 @@ Sliding bulkhead doors (T004), which stalkers break (T006).
 - `door.gd`: one door. A006's leaf (2.0 × 2.2 × 0.12 m, `src/kit`), its collision and sight rect all follow the panel, so a half-open door leaves a real half-size gap. Collision and sight keep T006's 0.2 m thick, full-height panel; only what you see is thinner. Lamp on the frame post, the same state light on the header top and in a strip on the floor each side of the threshold (T011), all one `src/sight` beacon: seen once, a door's state reads from outside the cone.
 - `door_system.gd`: places the deck's doors, steps them, answers E, shows one prompt over the door in reach.
 
+## Sounds (T017)
+`door_point()` is where they come from: open and close as the state changes, a buzz when E gets `locked` or `blocked`, the break. A reset is silent. Through `src/audio`.
+
 ## Does not own
 - The opening and frame posts (`src/study/deck_layout.gd`), the E key (the scene calls `interact`), what sight does with a door (`src/sight`).
 

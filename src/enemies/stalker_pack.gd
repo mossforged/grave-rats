@@ -7,7 +7,6 @@ const StalkerBrain := preload("res://src/enemies/stalker_brain.gd")
 const StalkerNav := preload("res://src/enemies/stalker_nav.gd")
 const SpitSystem := preload("res://src/enemies/spit_system.gd")
 const SpitArc := preload("res://src/enemies/spit_arc.gd")
-const PlaceholderSound := preload("res://src/enemies/placeholder_sound.gd")
 const SpawnPicker := preload("res://src/enemies/spawn_picker.gd")
 
 ## Something reached the player. `in_cover`: cover stood on the straight line from the thrower.
@@ -27,7 +26,6 @@ var plan_blocked := Callable()
 ## (p: Vector2) -> bool: the player's light is on this point. The scene sets it.
 var light_on := func(_p: Vector2) -> bool: return false
 
-var _sounds := {}
 var _layout: RefCounted
 var _spawn_points: Array = []
 var _spawn_specs: Array = []
@@ -64,21 +62,6 @@ func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, acid_
 		side = -side
 		stalkers.append(s)
 	_base_count = stalkers.size()
-	var mix := int(all.sound.mix_rate)
-	for key: String in ["bang", "spit", "lunge", "bash"]:
-		var p := AudioStreamPlayer3D.new()
-		p.name = key.capitalize()
-		p.stream = PlaceholderSound.make(all.sound[key], mix)
-		p.volume_db = float(all.sound[key].volume_db)
-		p.unit_size = float(all.sound.unit_size_m)
-		add_child(p)
-		_sounds[key] = p
-
-
-func play_sound(key: String, at: Vector3) -> void:
-	var p: AudioStreamPlayer3D = _sounds[key]
-	p.global_position = at
-	p.play()
 
 
 func reset() -> void:
@@ -111,6 +94,7 @@ func spawn_out_of_view(viewers: Array, players: Array, rng: RandomNumberGenerato
 	s.setup(cfg, entry, _spawn_points[i], patrol, 1.0 if stalkers.size() % 2 == 0 else -1.0)
 	s.brain.rng.seed = rng.randi()
 	stalkers.append(s)
+	Audio.play("stalker_scuttle", s.global_position)
 	return s
 
 
@@ -218,13 +202,13 @@ func _handle(ev: String, s: Node, body: Vector3) -> void:
 			var at: Vector2 = s.brain.last_known
 			var height := body.y if at.distance_to(target.pos) <= float(cfg.spit.hit_radius_m) else float(cfg.torso_m)
 			spits.spit(s, Vector3(at.x, height, at.y))
-			play_sound("spit", s.mouth())
+			Audio.play("stalker_spit", s.mouth())
 		StalkerBrain.EV_LUNGE_START:
-			play_sound("lunge", s.global_position)
+			Audio.play("stalker_lunge", s.global_position)
 		StalkerBrain.EV_BANG:
 			if s.door != null:
 				s.door.bang()
-				play_sound("bash", s.door.global_position)
+				Audio.play("stalker_bash", s.door.door_point())
 		StalkerBrain.EV_LUNGE_HIT:
 			player_hit.emit("lunge", float(cfg.lunge.damage), s, in_cover_from(s))
 

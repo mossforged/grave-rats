@@ -24,6 +24,9 @@ var _door_left := 0.0
 var _repath_left := 0.0
 var _replan_left := 0.0
 var _cs: CollisionShape3D
+var _hissing := false
+var _idle_left := 0.0
+var _voice_rng := RandomNumberGenerator.new()
 
 
 func setup(config: Dictionary, entry: Dictionary, at: Vector2, patrol_points: Array, side_sign: float) -> void:
@@ -54,6 +57,9 @@ func setup(config: Dictionary, entry: Dictionary, at: Vector2, patrol_points: Ar
 func reset() -> void:
 	brain = StalkerBrain.new(cfg, patrol, bool(spec.get("dormant", false)), deg_to_rad(float(spec.get("yaw_deg", 0.0))))
 	brain.rng.randomize()
+	_voice_rng.randomize()
+	_hissing = false
+	_idle_left = _voice_rng.randf_range(0.0, float(Data.value("audio", "stalker_idle").gap_max_s))
 	door = null
 	_door_left = 0.0
 	global_position = Vector3(home.x, 0.0, home.y)
@@ -90,6 +96,7 @@ func take_hit(hit: Dictionary) -> void:
 		from = Vector2(o.x, o.z)
 	var dealt := brain.take_hit(float(hit.damage), from)
 	if dealt > 0.0:
+		Audio.play("stalker_hit" if brain.alive() else "stalker_death", global_position)
 		was_shot.emit(self, dealt, from)
 	if not brain.alive():
 		_cs.disabled = true
@@ -138,7 +145,25 @@ func simulate(delta: float, pack: Node) -> Array:
 	global_position.y = 0.0
 	body.rotation.y = brain.yaw
 	body.show_state(delta, brain)
+	_voice(delta)
 	return events
+
+
+## The spit's hiss as the wind-up starts, whatever started it; a click or a chirp now and then otherwise.
+## A sound only: it may come through a wall, and that's how you know it's there.
+func _voice(delta: float) -> void:
+	if brain.state == StalkerBrain.State.SPIT:
+		if not _hissing:
+			_hissing = true
+			Audio.play("stalker_spit_windup", mouth())
+		return
+	_hissing = false
+	_idle_left -= delta
+	if _idle_left > 0.0:
+		return
+	var idle: Dictionary = Data.value("audio", "stalker_idle")
+	_idle_left = _voice_rng.randf_range(float(idle.gap_min_s), float(idle.gap_max_s))
+	Audio.play("stalker_chirp" if _voice_rng.randf() < float(idle.chirp_share) else "stalker_click", mouth())
 
 
 ## Every so often: is a shut door all that's between it and where it thinks you are? Hunting, it

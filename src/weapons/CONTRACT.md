@@ -9,6 +9,9 @@ The rifle and the things it shoots (T003).
 - `rifle_fx.gd`: muzzle flash, tracer, impact. All unshaded additive, so nothing can draw a black box.
 - `target_dummy.gd`: grey-box target. Takes hits, flinches, falls, resets.
 
+## Sounds (T017)
+Shot and casing, dry fire on an empty magazine, mag out, then `reload_stages` in `data/audio.json`, through `src/audio`. A cancelled reload stops there.
+
 ## Does not own
 - Input, facing, where the gun points (the owner passes those in; see `src/player`). Camera movement: the owner reads `camera_kick_m`.
 

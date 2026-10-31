@@ -47,9 +47,7 @@
       "color": "a6e7c4", "segments": 8, "gap": 0.14, "inner": 0.72, "track_alpha": 0.2, "energy": 1.5,
       "mount_radius_m": 0.85, "target_radius_m": 0.95, "floor_m": 0.04
     },
-    "reveal": {"radius_m": 2.2, "hold_s": 0.2, "fade_s": 0.5, "rays": 24},
-    "warm_sound": {"low_hz": 300.0, "high_hz": 1300.0, "sweep_s": 1.2, "length_s": 1.2, "volume_db": -8.0},
-    "burn_sound": {"low_hz": 90.0, "high_hz": 150.0, "sweep_s": 0.05, "length_s": 0.35, "volume_db": -3.0}
+    "reveal": {"radius_m": 2.2, "hold_s": 0.2, "fade_s": 0.5, "rays": 24}
   },
   "cutters": [
     {"name": "cargo north", "space": "cargo", "at": [0.5, 0.03], "home_yaw_deg": 180.0, "arc_half_deg": 75.0, "on_wake": true},
@@ -93,9 +91,7 @@
       "color": "ffe9b8", "energy": 2.6, "ahead_m": 0.45, "attenuation": 0.8, "angle_attenuation": 1.0, "pitch_deg": -4.0,
       "rays": 13, "hz": 15.0, "reach_rate_m_s": 18.0, "snap_m": 2.0, "floor_m": 0.03,
       "beam_strength": 0.1, "call_strength": 0.2, "fade_power": 1.1, "edge_power": 1.2
-    },
-    "chirp": {"low_hz": 700.0, "high_hz": 1050.0, "sweep_s": 0.16, "length_s": 0.16, "volume_db": -9.0, "pitch_step": 0.35},
-    "unit_size_m": 6.0
+    }
   },
   "call": {"wake_cutter_m": 22.0},
   "words": {"called_cutter": "DRONE CALL COMPLETE. CUTTER ONLINE.", "called_stalker": "DRONE CALL COMPLETE. POSITION SHARED."},

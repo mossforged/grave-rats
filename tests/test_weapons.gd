@@ -23,7 +23,8 @@ const NUMBER_FREE := ["res://src/player/operator_model.gd", "res://src/player/op
 	"res://src/paperwork/line_book.gd", "res://src/paperwork/paperwork_screen.gd",
 	"res://src/custodian/cutter_brain.gd", "res://src/custodian/drone_brain.gd", "res://src/custodian/custodian_voice.gd",
 	"res://src/custodian/custodian_trace.gd", "res://src/custodian/custodian_fx.gd", "res://src/custodian/cutter_unit.gd",
-	"res://src/custodian/drone_unit.gd", "res://src/custodian/custodian.gd"]
+	"res://src/custodian/drone_unit.gd", "res://src/custodian/custodian.gd",
+	"res://src/audio/audio.gd", "res://src/audio/audio_bank.gd", "res://src/audio/sound_rules.gd"]
 
 var _nodes: Array[Node] = []
 

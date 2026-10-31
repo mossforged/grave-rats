@@ -12,6 +12,9 @@ The weighty operator (T003). The rule: the intent responds the same step, the co
 - `aim_visuals.gd`: floor cone, turn arc, ring under the aim point. `use_mask(bind)` puts the cone and arc under the sight mask (T011).
 - `weight_deck.gd`: root of `scenes/player/weight_deck.tscn`: deck, targets, camera, the suit OS and noise ring (`src/hud`), panel, camera kick, capture shots. `_noise_senses()` says whose ears the ring shows. H toggles the key help.
 
+## Sounds (T017)
+`operator.space_at` (the deck sets it) picks the footstep; `footsteps` in `data/audio.json` says which, and the stride and level per gait. Footfalls go by distance covered. Crouching rustles. These are for the player's ears: what stalkers hear is still the noise ring's. `weight_deck` points the listener at the operator.
+
 ## Does not own
 - The gun's rules, FX, targets (`src/weapons`); camera behaviour (`src/camera`); deck (`src/study`); the panel (`src/debug`).
 

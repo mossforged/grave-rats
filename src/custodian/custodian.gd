@@ -44,7 +44,7 @@ var _terminals: Array = []
 ## `trace`: (from, to) -> {clear, point}. `visibility`: the walls, for the cone. `bind`: SightMask.bind.
 ## `knows`: (p) -> has the player seen this spot?
 func setup(config: Dictionary, layout: RefCounted, trace: Callable, visibility: RefCounted, bind: Callable,
-		knows: Callable, mask_texture: Texture2D, bounds: Rect2, mix_rate: int) -> void:
+		knows: Callable, mask_texture: Texture2D, bounds: Rect2) -> void:
 	cfg = config
 	_trace = trace
 	_visibility = visibility
@@ -54,7 +54,7 @@ func setup(config: Dictionary, layout: RefCounted, trace: Callable, visibility: 
 		var c := CutterUnit.new()
 		c.name = "Cutter%d" % (cutters.size() + 1)
 		add_child(c)
-		c.setup(cfg, spec, layout.point_in(String(spec.space), spec.at), bind, knows, mix_rate)
+		c.setup(cfg, spec, layout.point_in(String(spec.space), spec.at), bind, knows)
 		c.set_meta("on_wake", bool(spec.on_wake))
 		cutters.append(c)
 	for spec: Dictionary in cfg.drones:
@@ -64,7 +64,7 @@ func setup(config: Dictionary, layout: RefCounted, trace: Callable, visibility: 
 		var d := DroneUnit.new()
 		d.name = "Drone%d" % (drones.size() + 1)
 		add_child(d)
-		d.setup(cfg, spec, layout.point_in(String(spec.space), spec.at), route, bind, mix_rate)
+		d.setup(cfg, spec, layout.point_in(String(spec.space), spec.at), route, bind)
 		d.set_mask(mask_texture, bounds)
 		drones.append(d)
 	_make_terminals(layout, bind)
@@ -197,6 +197,7 @@ func _reinforce(d: Node3D, player_id: int, at: Vector2) -> void:
 func _say(event: String) -> void:
 	var line := voice.say(event)
 	if line != "":
+		Audio.play("custodian_chime")
 		spoke.emit(line)
 
 

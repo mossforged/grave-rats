@@ -1,0 +1,530 @@
+{
+  "buses": {
+    "SFX": {
+      "volume_db": 0.0
+    },
+    "Ambience": {
+      "volume_db": 0.0
+    },
+    "UI": {
+      "volume_db": 0.0
+    },
+    "VoicePlaceholder": {
+      "volume_db": 0.0
+    }
+  },
+  "master": {
+    "volume_db": 0.0,
+    "limiter": {
+      "ceiling_db": -1.0,
+      "pre_gain_db": 0.0,
+      "release_s": 0.1
+    }
+  },
+  "voices": {
+    "positional": 24,
+    "flat": 12
+  },
+  "positional": {
+    "unit_size_m": 5.0,
+    "max_db": 0.0
+  },
+  "listener": {
+    "height_m": 1.5
+  },
+  "footsteps": {
+    "gaits": {
+      "walk": {
+        "stride_m": 0.95,
+        "volume_db": 0.0
+      },
+      "sprint": {
+        "stride_m": 1.45,
+        "volume_db": 4.0
+      },
+      "crouch": {
+        "stride_m": 0.7,
+        "volume_db": -9.0
+      }
+    },
+    "min_speed_m_s": 0.2,
+    "surfaces": {
+      "medbay": "deck",
+      "cargo": "deck",
+      "junction": "grate",
+      "side_corridor": "wet"
+    },
+    "default_surface": "deck",
+    "cues": {
+      "deck": "step_deck",
+      "grate": "step_grate",
+      "wet": "step_wet"
+    }
+  },
+  "breathing": {
+    "cue": "suit_breath",
+    "low_suit": 0.35,
+    "low_oxygen": 0.3,
+    "max_rate": 1.7,
+    "max_extra_db": 7.0
+  },
+  "reload_stages": [
+    {
+      "at": 0.45,
+      "cue": "rifle_mag_in"
+    },
+    {
+      "at": 0.8,
+      "cue": "rifle_charge"
+    }
+  ],
+  "stalker_idle": {
+    "gap_min_s": 2.5,
+    "gap_max_s": 7.0,
+    "chirp_share": 0.35
+  },
+  "cutter_warm": {
+    "pitch_from": 0.8,
+    "pitch_to": 2.4
+  },
+  "drone_chirp": {
+    "pitch_step": 0.3
+  },
+  "ambience": {
+    "fade_s": 1.5,
+    "silent_db": -80.0,
+    "rooms": {
+      "medbay": "amb_medbay",
+      "cargo": "amb_cargo",
+      "junction": "amb_junction",
+      "side_corridor": "amb_junction"
+    }
+  },
+  "carry": {
+    "pickup": {
+      "small": "pickup_small",
+      "medium": "pickup_medium",
+      "heavy": "pickup_heavy"
+    },
+    "drop": {
+      "small": "drop_small",
+      "medium": "drop_medium",
+      "heavy": "drop_heavy"
+    }
+  },
+  "paper_stamps": {
+    "accept": "stamp_accept",
+    "confirm_decline": "stamp_acknowledge",
+    "acknowledge": "stamp_acknowledge"
+  },
+  "ledger": {
+    "cue": "ledger_tick",
+    "gap_s": 0.07,
+    "max_ticks": 14
+  },
+  "cues": {
+    "step_deck": {
+      "file": "res://assets/game/audio/player/ph_step_deck.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.08,
+      "max_distance_m": 18,
+      "cooldown_s": 0.05,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "step_grate": {
+      "file": "res://assets/game/audio/player/ph_step_grate.wav",
+      "volume_db": -14,
+      "pitch_variance": 0.08,
+      "max_distance_m": 18,
+      "cooldown_s": 0.05,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "step_wet": {
+      "file": "res://assets/game/audio/player/ph_step_wet.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.08,
+      "max_distance_m": 18,
+      "cooldown_s": 0.05,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "crouch_rustle": {
+      "file": "res://assets/game/audio/player/ph_crouch_rustle.wav",
+      "volume_db": -20,
+      "pitch_variance": 0.06,
+      "max_distance_m": 12,
+      "cooldown_s": 0.2,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "suit_breath": {
+      "file": "res://assets/game/audio/player/ph_suit_breath.wav",
+      "volume_db": -28,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "pickup_small": {
+      "file": "res://assets/game/audio/player/ph_pickup_small.wav",
+      "volume_db": -12,
+      "pitch_variance": 0.05,
+      "max_distance_m": 14,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "pickup_medium": {
+      "file": "res://assets/game/audio/player/ph_pickup_medium.wav",
+      "volume_db": -10,
+      "pitch_variance": 0.05,
+      "max_distance_m": 18,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "pickup_heavy": {
+      "file": "res://assets/game/audio/player/ph_pickup_heavy.wav",
+      "volume_db": -7,
+      "pitch_variance": 0.03,
+      "max_distance_m": 24,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "drop_small": {
+      "file": "res://assets/game/audio/player/ph_drop_small.wav",
+      "volume_db": -12,
+      "pitch_variance": 0.05,
+      "max_distance_m": 14,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "drop_medium": {
+      "file": "res://assets/game/audio/player/ph_drop_medium.wav",
+      "volume_db": -8,
+      "pitch_variance": 0.05,
+      "max_distance_m": 20,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "drop_heavy": {
+      "file": "res://assets/game/audio/player/ph_drop_heavy.wav",
+      "volume_db": -1,
+      "pitch_variance": 0.03,
+      "max_distance_m": 32,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_shot": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_shot.wav",
+      "volume_db": -2,
+      "pitch_variance": 0.03,
+      "max_distance_m": 45,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_dry": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_dry.wav",
+      "volume_db": -10,
+      "pitch_variance": 0.03,
+      "max_distance_m": 12,
+      "cooldown_s": 0.22,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_mag_out": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_mag_out.wav",
+      "volume_db": -10,
+      "pitch_variance": 0.03,
+      "max_distance_m": 14,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_mag_in": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_mag_in.wav",
+      "volume_db": -9,
+      "pitch_variance": 0.03,
+      "max_distance_m": 14,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_charge": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_charge.wav",
+      "volume_db": -8,
+      "pitch_variance": 0.03,
+      "max_distance_m": 14,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "rifle_casing": {
+      "file": "res://assets/game/audio/weapons/ph_rifle_casing.wav",
+      "volume_db": -24,
+      "pitch_variance": 0.1,
+      "max_distance_m": 10,
+      "cooldown_s": 0.2,
+      "bus": "SFX",
+      "placeholder": true,
+      "delay_s": 0.32
+    },
+    "stalker_click": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_click.wav",
+      "volume_db": -14,
+      "pitch_variance": 0.1,
+      "max_distance_m": 16,
+      "cooldown_s": 0.35,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_chirp": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_chirp.wav",
+      "volume_db": -15,
+      "pitch_variance": 0.12,
+      "max_distance_m": 16,
+      "cooldown_s": 0.35,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_spit_windup": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_spit_windup.wav",
+      "volume_db": -6,
+      "pitch_variance": 0.03,
+      "max_distance_m": 20,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_spit": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_spit.wav",
+      "volume_db": -6,
+      "pitch_variance": 0.06,
+      "max_distance_m": 20,
+      "cooldown_s": 0.05,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_lunge": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_lunge.wav",
+      "volume_db": -4,
+      "pitch_variance": 0.05,
+      "max_distance_m": 24,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_hit": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_hit.wav",
+      "volume_db": -11,
+      "pitch_variance": 0.1,
+      "max_distance_m": 20,
+      "cooldown_s": 0.08,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_death": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_death.wav",
+      "volume_db": -5,
+      "pitch_variance": 0.05,
+      "max_distance_m": 28,
+      "cooldown_s": 0.15,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_scuttle": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_scuttle.wav",
+      "volume_db": -8,
+      "pitch_variance": 0.08,
+      "max_distance_m": 30,
+      "cooldown_s": 0.5,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stalker_bash": {
+      "file": "res://assets/game/audio/stalker/ph_stalker_bash.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.06,
+      "max_distance_m": 34,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "bulkhead_burst": {
+      "file": "res://assets/game/audio/stalker/ph_bulkhead_burst.wav",
+      "volume_db": 0,
+      "pitch_variance": 0,
+      "max_distance_m": 45,
+      "cooldown_s": 0.5,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "cutter_warm": {
+      "file": "res://assets/game/audio/custodian/ph_cutter_warm.wav",
+      "volume_db": -7,
+      "pitch_variance": 0,
+      "max_distance_m": 30,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "cutter_burn": {
+      "file": "res://assets/game/audio/custodian/ph_cutter_burn.wav",
+      "volume_db": -3,
+      "pitch_variance": 0.02,
+      "max_distance_m": 34,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "drone_chirp": {
+      "file": "res://assets/game/audio/custodian/ph_drone_chirp.wav",
+      "volume_db": -9,
+      "pitch_variance": 0,
+      "max_distance_m": 24,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "custodian_chime": {
+      "file": "res://assets/game/audio/custodian/ph_custodian_chime.wav",
+      "volume_db": -13,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0.5,
+      "bus": "VoicePlaceholder",
+      "placeholder": true
+    },
+    "amb_medbay": {
+      "file": "res://assets/game/audio/ship/ph_amb_medbay.wav",
+      "volume_db": -24,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0,
+      "bus": "Ambience",
+      "placeholder": true,
+      "loop": true
+    },
+    "amb_cargo": {
+      "file": "res://assets/game/audio/ship/ph_amb_cargo.wav",
+      "volume_db": -20,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0,
+      "bus": "Ambience",
+      "placeholder": true,
+      "loop": true
+    },
+    "amb_junction": {
+      "file": "res://assets/game/audio/ship/ph_amb_junction.wav",
+      "volume_db": -24,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0,
+      "bus": "Ambience",
+      "placeholder": true,
+      "loop": true
+    },
+    "door_open": {
+      "file": "res://assets/game/audio/ship/ph_door_open.wav",
+      "volume_db": -12,
+      "pitch_variance": 0.03,
+      "max_distance_m": 20,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "door_close": {
+      "file": "res://assets/game/audio/ship/ph_door_close.wav",
+      "volume_db": -12,
+      "pitch_variance": 0.03,
+      "max_distance_m": 20,
+      "cooldown_s": 0.1,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "door_locked": {
+      "file": "res://assets/game/audio/ship/ph_door_locked.wav",
+      "volume_db": -12,
+      "pitch_variance": 0,
+      "max_distance_m": 14,
+      "cooldown_s": 0.4,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "door_break": {
+      "file": "res://assets/game/audio/ship/ph_door_break.wav",
+      "volume_db": -2,
+      "pitch_variance": 0.03,
+      "max_distance_m": 38,
+      "cooldown_s": 0.2,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "lights_fail": {
+      "file": "res://assets/game/audio/ship/ph_lights_fail.wav",
+      "volume_db": -6,
+      "pitch_variance": 0,
+      "max_distance_m": 50,
+      "cooldown_s": 0.5,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "alarm_siren": {
+      "file": "res://assets/game/audio/ship/ph_alarm_siren.wav",
+      "volume_db": -5,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0,
+      "bus": "SFX",
+      "placeholder": true,
+      "loop": true
+    },
+    "oxygen_warning": {
+      "file": "res://assets/game/audio/ship/ph_oxygen_warning.wav",
+      "volume_db": -8,
+      "pitch_variance": 0,
+      "max_distance_m": 0.0,
+      "cooldown_s": 2.5,
+      "bus": "SFX",
+      "placeholder": true
+    },
+    "stamp_accept": {
+      "file": "res://assets/game/audio/ui/ph_stamp_accept.wav",
+      "volume_db": -8,
+      "pitch_variance": 0.03,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0.1,
+      "bus": "UI",
+      "placeholder": true
+    },
+    "stamp_acknowledge": {
+      "file": "res://assets/game/audio/ui/ph_stamp_acknowledge.wav",
+      "volume_db": -8,
+      "pitch_variance": 0.03,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0.1,
+      "bus": "UI",
+      "placeholder": true
+    },
+    "ledger_tick": {
+      "file": "res://assets/game/audio/ui/ph_ledger_tick.wav",
+      "volume_db": -18,
+      "pitch_variance": 0.04,
+      "max_distance_m": 0.0,
+      "cooldown_s": 0,
+      "bus": "UI",
+      "placeholder": true
+    }
+  }
+}

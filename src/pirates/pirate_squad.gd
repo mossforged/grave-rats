@@ -10,7 +10,6 @@ const PlayerTarget := preload("res://src/pirates/player_target.gd")
 const StalkerNav := preload("res://src/enemies/stalker_nav.gd")
 const StalkerBrain := preload("res://src/enemies/stalker_brain.gd")
 const ShotTracer := preload("res://src/cover/shot_tracer.gd")
-const PlaceholderSound := preload("res://src/enemies/placeholder_sound.gd")
 
 ## Someone in the squad said something. Tests and the log listen; the labels are its own.
 signal barked(pirate: Node3D, key: String, line: String)
@@ -46,7 +45,6 @@ var _bark_ready := {}
 var _labels := {}
 var _bark_left := {}
 var _rng := RandomNumberGenerator.new()
-var _shot_sound: AudioStreamPlayer3D
 var _reflank_left := {}
 var _covering_fire := false    # the suppressor has opened up; the flanker goes on that
 var _flank_wait_left := 0.0
@@ -97,13 +95,6 @@ func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, sight
 				p.add_collision_exception_with(q)
 	tracer = ShotTracer.new(cover, world)
 	tracer.bodies = [player_body]
-	_shot_sound = AudioStreamPlayer3D.new()
-	_shot_sound.name = "ShotSound"
-	_shot_sound.stream = PlaceholderSound.make(cfg.sound.shot, int(cfg.sound.mix_rate))
-	_shot_sound.volume_db = float(cfg.sound.shot.volume_db)
-	_shot_sound.unit_size = float(cfg.sound.unit_size_m)
-	_shot_sound.max_polyphony = pirates.size() * 2
-	add_child(_shot_sound)
 
 
 func reset() -> void:
@@ -409,8 +400,7 @@ func _fire(p: Node) -> void:
 	p.fx.shot(p.muzzle_position(), to)
 	if not _sees(p, p.floor_position(), target.pos):
 		shots_fired_at_cover += 1
-	_shot_sound.global_position = origin
-	_shot_sound.play()
+	Audio.play("rifle_shot", p.muzzle_position())
 
 
 ## Humans use doors. A shut, unlocked one on the way gets opened.

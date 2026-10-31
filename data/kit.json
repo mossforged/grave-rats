@@ -133,6 +133,7 @@
     "hanging_cables": {"mount_y_m": 0.0}
   },
   "slot_fit": {"tolerance_m": 0.01, "front_clear_m": 0.5},
+  "bed_edge_stripe": {"material": "hazard", "y_from_m": 0.36, "y_to_m": 0.6, "depth_m": 0.03, "proud_m": 0.004, "length_share": 0.94},
   "floors": {
     "plate_m": 2.0,
     "seam_m": 0.018,

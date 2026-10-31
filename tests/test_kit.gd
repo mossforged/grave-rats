@@ -399,6 +399,48 @@ func test_a_dent_pushes_away_from_the_blows() -> void:
 
 # --- from the builder, from data ---
 
+## Up-facing triangles of one surface as {y: [Rect2 in XZ]}.
+func _tops(mesh: Mesh, surface: int) -> Dictionary:
+	var a := mesh.surface_get_arrays(surface)
+	var verts: PackedVector3Array = a[Mesh.ARRAY_VERTEX]
+	var normals: PackedVector3Array = a[Mesh.ARRAY_NORMAL]
+	var index: PackedInt32Array = a[Mesh.ARRAY_INDEX]
+	var out := {}
+	for i in range(0, index.size(), 3):
+		var p: Array = [verts[index[i]], verts[index[i + 1]], verts[index[i + 2]]]
+		if normals[index[i]].y < 0.999 or not (is_equal_approx(p[0].y, p[1].y) and is_equal_approx(p[0].y, p[2].y)):
+			continue
+		var r := Rect2(Vector2(p[0].x, p[0].z), Vector2.ZERO).expand(Vector2(p[1].x, p[1].z)).expand(Vector2(p[2].x, p[2].z))
+		var y := snappedf(p[0].y, 0.0001)
+		if not out.has(y):
+			out[y] = []
+		out[y].append(r)
+	return out
+
+
+## T021: the wall top that changed between identical frames. Two surfaces flat on one plane and overlapping
+## depth-fight, and a millimetre of camera flips which one the whole band shows.
+func test_no_two_surfaces_of_a_wall_share_a_flat_plane() -> void:
+	var meshes: Array = [KitPieces.wall_cap(0.6, 0.5, 2.6, 0)]
+	for family: String in ["corridor", "pipe", "reinforced", "clinical", "outer"]:
+		for variant in 2:
+			meshes.append(KitPieces.wall(2.0, 0.5, 2.6, family, "outer", 0.2, 0.2, variant))
+			meshes.append(KitPieces.wall(1.1, 0.5, 2.6, "outer", family, 0.5, 0.2, variant))
+	for mesh: Mesh in meshes:
+		for i in mesh.get_surface_count():
+			var mine := _tops(mesh, i)
+			for j in range(i + 1, mesh.get_surface_count()):
+				var theirs := _tops(mesh, j)
+				for y: float in mine:
+					if not theirs.has(y):
+						continue
+					for ra: Rect2 in mine[y]:
+						for rb: Rect2 in theirs[y]:
+							var over := ra.intersection(rb)
+							check(over.size.x < 0.001 or over.size.y < 0.001,
+									"%s: surfaces %d and %d overlap flat at y %.3f" % [mesh.resource_name, i, j, y])
+
+
 func test_every_mesh_on_the_deck_comes_from_the_builder() -> void:
 	var deck := _main_deck()
 	var root := DeckBuilder.build(DeckLayout.new(deck, float(deck.room_scale)))

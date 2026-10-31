@@ -81,7 +81,8 @@ static func _wall_body(m: KitMesh, length: float, depth: float, height: float, e
 	var x0 := -length * 0.5
 	var x1 := length * 0.5
 	var inset := float(d.core_inset_m)
-	m.box(Vector3(x0 + end_a, 0.0, -half + inset), Vector3(x1 - end_b, height, half - inset), "steel")
+	# The core's top is buried in the cap: at `height` it was coplanar with the painted insert and z-fought.
+	m.box(Vector3(x0 + end_a, 0.0, -half + inset), Vector3(x1 - end_b, height - float(d.cap_h_m) * 0.5, half - inset), "steel")
 	_post(m, x0, x0 + end_a, depth, height)
 	_post(m, x1 - end_b, x1, depth, height)
 	var kick_z := half - float(d.proud_m)
@@ -347,6 +348,23 @@ static func door_seam(width: float, height: float) -> ArrayMesh:
 		var hw := width * 0.5
 		m.box(Vector3(-hw, -hh, -w), Vector3(-hw + w, hh, w), "leak")
 		m.box(Vector3(hw - w, -hh, -w), Vector3(hw, hh, w), "leak")
+		return m.build())
+
+
+## The bed's long rims, across and long as `prop` gets them, in the file's frame: whichever one ends up
+## on top when it's overturned is the silhouette the steep camera reads as low cover (T021).
+static func bed_edge_stripe(across: float, long: float) -> ArrayMesh:
+	var key := "bed_edge_stripe_%.3f_%.3f" % [across, long]
+	return _cached(key, func() -> ArrayMesh:
+		var s: Dictionary = _cfg().bed_edge_stripe
+		var m := KitMesh.new()
+		var out := across * 0.5 + float(s.proud_m)
+		var half := long * 0.5 * float(s.length_share)
+		var y0 := float(s.y_from_m)
+		var y1 := float(s.y_to_m)
+		var mat := String(s.material)
+		m.box(Vector3(out - float(s.depth_m), y0, -half), Vector3(out, y1, half), mat)
+		m.box(Vector3(-out, y0, -half), Vector3(-out + float(s.depth_m), y1, half), mat)
 		return m.build())
 
 

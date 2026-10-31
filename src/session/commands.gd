@@ -14,9 +14,10 @@ const DOOR := "door"
 const TIP := "tip"
 const LEAVE := "leave"
 const LOCK := "lock"
+const LOCK_CONTROLS := "lock_controls"
 ## The operator consumes these; the deck consumes the rest.
 const BODY := [MOVE, AIM, FIRE, RELOAD, CROUCH]
-const ALL := [MOVE, AIM, FIRE, RELOAD, CROUCH, INTERACT, TAKE, DROP, DOOR, TIP, LEAVE, LOCK]
+const ALL := [MOVE, AIM, FIRE, RELOAD, CROUCH, INTERACT, TAKE, DROP, DOOR, TIP, LEAVE, LOCK, LOCK_CONTROLS]
 
 
 static func is_body(type: String) -> bool:
@@ -69,5 +70,12 @@ static func leave(id: int, held: bool) -> Dictionary:
 	return {"type": LEAVE, "player_id": id, "held": held}
 
 
+## The lock key: locks if it can, lets go if locked.
 static func lock(id: int) -> Dictionary:
 	return {"type": LOCK, "player_id": id}
+
+
+## While locked, what the player holds. `keys` and `yaw_deg` as in move; `aim` raises over the cover,
+## `tap` is a click that fires as soon as it can, however short.
+static func lock_controls(id: int, keys: Vector2, aim_held: bool, fire_held: bool, tap: bool, yaw_deg: float) -> Dictionary:
+	return {"type": LOCK_CONTROLS, "player_id": id, "keys": keys, "aim": aim_held, "fire": fire_held, "tap": tap, "yaw_deg": yaw_deg}

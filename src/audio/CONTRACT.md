@@ -11,7 +11,6 @@ Everything the player hears (T017). Every sound is a labelled placeholder: `ph_<
 ## Does not own
 - **The AI's hearing.** `StalkerPack.noise` and the noise ring (`src/hud`) never read this module, and this module never tells them anything. Playing a cue changes nothing in the game. A test holds this.
 - When anything happens: the modules below call `Audio` at their own events.
-- Pirate gunfire: `src/pirates` still makes its own placeholder (`src/enemies/placeholder_sound.gd`), on the master bus.
 
 ## Replacing a placeholder
 Drop the real file in `assets/game/`, point the cue's `file` at it, clear `placeholder` and import. A `.ogg` works; `loop` applies to either format. A real `stalker_spit_windup` should run for the wind-up in `data/enemies.json`. `suit_breath`, `cutter_warm` and `drone_chirp` get their urgency from pitch, so they should sound right at the pitches in `breathing`, `cutter_warm` and `drone_chirp`. `tests/test_audio.gd` checks the `ph_` name, so loosen that test as real files land.
@@ -30,6 +29,7 @@ Drop the real file in `assets/game/`, point the cue's `file` at it, clear `place
 
 ## Who calls what
 - `src/weapons`: `rifle_shot`, `rifle_casing` (delayed), `rifle_dry`, `rifle_mag_out`, and `reload_stages`.
+- `src/pirates`: `rifle_shot`, at each pirate's muzzle (T021).
 - `src/player`: footsteps by `footsteps.surfaces` and gait, `crouch_rustle`. `weight_deck` calls `follow` and, as it leaves, `stop_all`.
 - `src/enemies`: `stalker_click`, `stalker_chirp`, `stalker_spit_windup`, `stalker_spit`, `stalker_lunge`, `stalker_hit`, `stalker_death`, `stalker_scuttle`, `stalker_bash`, `bulkhead_burst`.
 - `src/custodian`: `cutter_warm` (a loop rising with the ring), `cutter_burn`, `drone_chirp` (rising per bar), `custodian_chime`.

@@ -11,7 +11,6 @@ The stalker, its spit, the bulkhead ambush, and the scene that closes the grey-b
 - `spit_system.gd`: globs and puddles in the world, in opaque materials so the sight mask hides them.
 - `stalker_pack.gd`: the stalkers and what they share: builds senses, carries noise, turns events into spits and hits.
 - `bulkhead.gd`: the sealed panel: wall-coloured, stops bodies and sight, bursts into debris. A hairline beacon along its foot is the tell (T011, `ambush.tell`), a look and not a rule.
-- `placeholder_sound.gd`: a generated bang. Only `src/pirates` still uses it; everything else plays through `src/audio`.
 - `spawn_picker.gd`: scene-free. Where a new stalker may come in: not in any viewer's sight, not within `spawning.min_player_m` of a player, not a point already used (T012).
 - `stalker_deck.gd`: root of `scenes/enemies/stalker_deck.tscn`. Extends `src/sight/sight_deck.gd`; wires cover, suit, pack, ambush, run log. Dresses a copy of the deck: adds the closet and breach, moves the spawn south of the panel, removes dummies, makes the `tippable` props TipBeds.
 

@@ -75,10 +75,15 @@ Every locomotion clip on the exact clock (`docs/screens/T022/foot_slide_all.txt`
 - **The dead body slides up to about 1.1 m from the collision,** which with the loot point stays put, as asked. It can reach into a wall; I didn't test that against one.
 - **Cover idle is upper body only.** The clip stands taller than low cover, and the crouch must show you're protected.
 - **`knocked_down` and `get_up` are parked:** the packet mentions knockdowns, but no rule knocks anyone down.
-- **Mag-out sound and drop now come at 20% and 30% of the reload,** not at the key press. The ammo rule hasn't moved: the rounds still leave at once. Two old tests changed to match (`test_audio`, `test_vfx`).
+- **Mag-out sound and drop now come at 20% and 30% of the reload,** not at the key press. The ammo rule hasn't moved: the rounds still leave at once.
 - **Reload marks are estimates:** frames in `states.reload*.marks`, read from how far apart the hands are, plus strips too small to see a magazine. The clips are bent to `reload_stages`' shares. The crouched clip plays about 3.4× fast.
 - **Firing kick frames for walking and crouched are read from hand motion** (`fire.*.shot_frames`), also estimates.
 - **Sprinting backward uses the run clips** sped up, since no backward sprint clip exists.
+
+## Old tests I changed
+- `test_hauler.gd`: state names updated to the new ones; the "new file takes over a state" test now uses `hauler-rigged.glb`, since `hauler-reload.fbx` is gone; deaths exempted from the no-hip-travel test (`keep_travel`); the crouch stray limit, 10 cm to 15 cm (above).
+- `test_player.gd`: the leg check reads the gait blend, because the old `legs` node no longer exists.
+- `test_audio.gd`, `test_vfx.gd`: mag out and the falling magazine are checked at their new moments, not at the key press.
 
 ## Not checked
 - Hearing any of it: reload sounds against the clips by ear.

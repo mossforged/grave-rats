@@ -75,4 +75,6 @@ The real problem was the wall *face*. A 0.5 m duct would hide about 1.4 m of wal
 Real play or motion; a quiet Mac; 1080p or above; clipping when a player or stalker hugs a wall (the 0.3 m limit is meant to prevent it, but I only tested footprints); pirate bots, T015 shift bots and T014 session bots (no collision or nav changed, so I expect no change); room scales other than 0.85. On the pirate deck I saw one overview shot only, in passing; the stands are shift deck only.
 
 ## Screenshots (`docs/screens/T019/`)
+**The "before" shots aren't the old build.** They are this branch with `KIT_CORRIDORS=off`, so they already have the new light fixtures and the moved ENGINEERING plate. They show only what the dressing adds.
+
 `sheet.png`, plus `t019_<stand>_before.png` and `_after.png` for: `long_corridor_north`, `long_corridor_south`, `long_corridor_play`, `side_corridor`, `door_jambs_lintel`, `door_side`, `inner_corner`, `grimmest`, `grimmest_play`. To reproduce: `tools/capture.sh scenes/dev/t019_stand.tscn docs/screens/T019 2`, the same with `KIT_CORRIDORS=off`, then `python3 tools/t019_sheet.py`.

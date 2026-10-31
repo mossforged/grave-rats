@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T014 play (the game now opens on the briefing): does the quota make you take risks? Do the payslip and death bill land? Balance flags from the bots: greedy met 42 of 44 quotas while dying in 45% of shifts (the black box is about 69% of the first quota, the design says a third); fees are small next to a good shift; dying costs nothing on the quota while leaving empty-handed costs about 120. Approve the new copy (termination notice, decline confirms, vessel names) in auto-T014.
 - T014 play (`godot --path .`, sheet `docs/screens/T014/sheet.png`): does the quota make you take risks? Do the payslip and death bill land? New copy for your approval is in the handoff (termination notice, decline lines, vessels).
 - T014 balance: the cautious bot meets quota 1 (10 of 12), then mostly misses (2 of 10), as asked. Greedy meets 42 of 44 while dying in 45% of shifts, so dying barely threatens it. Levers: `quota.growth`, the prize's value, charging deaths to the quota. Dying also costs less than leaving empty-handed; keep it?
 - T012 play (`scenes/shift/shift_deck.tscn`, now the main scene): does "one more room?" happen? Is grabbing the black box scary? Tier stalkers can reach a still player in about 2 s (`spawning.min_player_m`). Are failed lights dark enough? Bots: greedy banks about 1.8× cautious but survives 50% against 100%; cautious may be too safe until the quota (T014).
@@ -59,4 +60,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (code, unattended): T014: quota over 3 shifts, briefing, payslip, death bill and termination notice as real forms from data and the run log, quota on the HUD. 360/360, frame time 6.62 / 9.54 ms. Bots: cautious meets quota 1, then mostly misses; greedy dies in 45% of shifts and still meets nearly all.
+2026-10-31 (lead): merged T014 (360/360 reproduced); queued T015 (CUSTODIAN).
+2026-10-31 (code, unattended): T014: `src/paperwork` and `data/paperwork.json` (briefing, payslip, death bill, termination notice from the run log, copy with conditions and cooldowns); quota 2,400 over 3 shifts, ×1.5; net pay counts toward quota; quota plate on the HUD.

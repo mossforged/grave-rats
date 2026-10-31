@@ -43,8 +43,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A012 | art | merged and approved 2026-10-31 |
 | T012 | code | merged 2026-10-31; waits for John's play (one more room? black box scary?) |
 | T013 | code | merged 2026-10-31; lead then reworked the locker bank and added console_1600 |
-| T014 | code | queued 2026-10-31: quota over 3 shifts, A012 paperwork screens, termination notice |
-| T015 | code | planned: CUSTODIAN cutter turret + patrol drone |
+| T014 | code | merged 2026-10-31; waits for John's play (balance flags in STATUS) |
+| T015 | code | queued 2026-10-31: CUSTODIAN cutter turret + patrol drone |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. A015 bestiary and A016 arsenal merged, waiting on his picks (A016 has 2 images of 18: the art tool refused weapons). Meshy API live: stalker, drone, loader, Prior Claim leader (rigged; Meshy bone names, not Mixamo) in `assets/source/meshy/`, 125 credits. **Next:** John plays a shift (expected tomorrow night). Code lane: T022 (his 88 Mixamo clips on the hauler), then T023 (build the survey vessel). QA: Q003 after T022.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T022 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. A015 bestiary and A016 arsenal merged, waiting on his picks (A016 has 2 images of 18: the art tool refused weapons). Meshy API live: stalker, drone, loader, Prior Claim leader (rigged; Meshy bone names, not Mixamo) in `assets/source/meshy/`, 125 credits. **Next:** John plays a shift (expected tomorrow night). Code lane: T023 (build the survey vessel). QA: Q003 after T023 (code lane must be idle). QA: Q003 after T022.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -71,5 +71,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T020 (559/559 with T019), T021 (566/566; T020 and T021 conflicts resolved as T021's handoff said: T020's layered shot for pirates), A014. Filed John's 88 Mixamo clips in `assets/source/mixamo-shooter/` with a manifest; queued T022.
-2026-10-31 (code, unattended): T020 `src/vfx` (16 recipes, pooled), shot timeline, 88 placeholder sound files, F1 → Effects gallery; mag dump +0.4 ms; a mag dump touches the limiter. T021: bed hazard stripe, wall-top z-fight fixed (in since T010), lock as commands.
+2026-10-31 (lead): merged T022 (587/587 reproduced), A015, A016. Meshy API: stalker, drone, loader, Prior Claim leader (rigged, Meshy bone names), 125 credits.
+2026-10-31 (code, unattended): T022 Mixamo set on the hauler: 54 clips, 8-way walk/run, sprint, crouch, fire, reloads, hits, deaths, pick up, press, cover, heavy carry; foot slide much better except forward run/sprint slightly worse; no measurable frame cost.

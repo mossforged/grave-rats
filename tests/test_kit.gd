@@ -149,7 +149,7 @@ func _deck_slot_props() -> Array:
 
 
 func test_each_slot_loads_its_file() -> void:
-	check_eq(_slot_files().size(), 5, "three consoles, a cabinet, a locker bank")
+	check_eq(_slot_files().size(), 6, "four consoles, a cabinet, a locker bank")
 	for path: String in _slot_files():
 		check(path.begins_with("res://assets/game/props/"), "%s is a game copy" % path)
 		var mesh := KitPieces.slot_mesh(path)
@@ -168,8 +168,8 @@ func test_the_console_variant_matches_its_deck_width() -> void:
 			continue
 		var long := maxf(p.size.x, p.size.z)
 		var width := KitPieces.prop("console", p.size).get_aabb().size.x
-		# The pirate deck's 1.6 m console has no file of its own: the widest that fits, centred.
-		var want := minf(long, 1.4)
+		# Every deck console width now has its own file (1.0, 1.2, 1.4 and the pirate deck's 1.6).
+		var want := long
 		check(absf(width - want) <= TOLERANCE, "a %.1f m console gets %.2f m" % [long, width])
 		seen[roundi(long * 10.0)] = true
 	for tenths: int in [14, 12, 10, 16]:

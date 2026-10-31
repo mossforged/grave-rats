@@ -167,26 +167,38 @@ def cabinet(width=0.6, height=1.9, depth=0.5):
 
 
 def locker_bank(length=2.4, height=2.0, depth=0.6, count=4):
-    """A bank of crew lockers: dark frame, painted (owner teal) doors with vent slots, handles,
-    name plates; a plinth with a hazard band. Length runs along X."""
+    """A freestanding, back-to-back bank of crew lockers (an island in the room, seen mostly
+    from above): painted (owner teal) doors with vent slots, handles and name plates on BOTH long
+    faces; a light clinical top cap with a raised vent grille and a stencil-plate inset, so the top
+    reads from the steep camera; a plinth with hazard bands. Length runs along X."""
     b = Builder("locker_bank")
     L, h, d = length, height, depth
-    hy = -d / 2 + 0.035  # doors and handles use the front 0.035 m
-    b.box(0, 0.0175, 0.05, L, d - 0.035, 0.1, "rubber", 0.01)
-    b.box(0, hy + 0.004, 0.055, L * 0.98, 0.012, 0.03, "hazard", 0.0)
-    b.box(0, 0.02, 0.1 + (h - 0.1) / 2, L, d - 0.04, h - 0.1, "steel", 0.012)  # carcass
+    inset = 0.035  # doors and handles use the outer 0.035 m on each face
+    core = d - 2 * inset
+    b.box(0, 0, 0.05, L, core, 0.1, "rubber", 0.01)
+    b.box(0, 0, 0.1 + (h - 0.2) / 2, L, core, h - 0.2, "steel", 0.012)  # carcass, stops under the top cap
     door_w = (L - 0.05) / count
-    for i in range(count):
-        x = -L / 2 + 0.025 + door_w * (i + 0.5)
-        dh = h - 0.22
-        b.box(x, hy - 0.004, 0.12 + dh / 2, door_w - 0.03, 0.02, dh, "hull", 0.008)
-        for s in range(4):  # vent slots, top
-            b.box(x, hy - 0.016, h - 0.32 + s * 0.04, door_w * 0.5, 0.006, 0.014, "steel", 0.002)
-        for s in range(3):  # vent slots, bottom
-            b.box(x, hy - 0.016, 0.3 + s * 0.04, door_w * 0.5, 0.006, 0.014, "steel", 0.002)
-        b.box(x + door_w * 0.3, hy - 0.022, 1.0, 0.03, 0.02, 0.16, "steel", 0.006)  # handle
-        b.box(x, hy - 0.016, h - 0.48, door_w * 0.4, 0.006, 0.05, "clinical", 0.003)  # name plate
-    b.box(0, 0.0175, h - 0.05, L, d - 0.035, 0.1, "steel", 0.01)  # top cap
+    for side in (-1, 1):  # -1 = front (-y), 1 = back (+y)
+        fy = side * (core / 2)  # carcass face
+        b.box(0, fy + side * 0.004, 0.055, L * 0.98, 0.012, 0.03, "hazard", 0.0)
+        for i in range(count):
+            x = -L / 2 + 0.025 + door_w * (i + 0.5)
+            dh = h - 0.26
+            b.box(x, fy + side * 0.012, 0.12 + dh / 2, door_w - 0.03, 0.02, dh, "hull", 0.008)
+            for s_ in range(4):  # vent slots, top
+                b.box(x, fy + side * 0.024, h - 0.36 + s_ * 0.04, door_w * 0.5, 0.006, 0.014, "steel", 0.002)
+            for s_ in range(3):  # vent slots, bottom
+                b.box(x, fy + side * 0.024, 0.3 + s_ * 0.04, door_w * 0.5, 0.006, 0.014, "steel", 0.002)
+            hx = x + side * door_w * 0.3
+            b.box(hx, fy + side * 0.027, 1.0, 0.03, 0.012, 0.16, "steel", 0.004)  # handle
+            b.box(x, fy + side * 0.024, h - 0.52, door_w * 0.4, 0.006, 0.05, "clinical", 0.003)  # name plate
+            b.box(x, fy + side * 0.024, 0.2, door_w * 0.12, 0.006, 0.02, "emit_red" if i == 1 else "steel", 0.0)  # lock lamp
+    # light top cap: reads from above
+    b.box(0, 0, h - 0.075, L, core + 0.04, 0.06, "clinical", 0.012)
+    b.box(0, 0, h - 0.028, L, core + 0.04, 0.032, "clinical", 0.008)  # top panel, light
+    for i in range(8):  # vent grille across the middle
+        b.box(-L * 0.18 + i * 0.05, 0, h - 0.006, 0.028, core * 0.5, 0.012, "steel", 0.002)
+    b.box(L * 0.3, 0, h - 0.009, 0.36, core * 0.45, 0.006, "hazard", 0.0)  # stencil plate
     return b.build()
 
 
@@ -248,7 +260,7 @@ def preview(objs, path):
 def main():
     os.makedirs(OUT, exist_ok=True)
     reset()
-    built = [console(1.4), console(1.2), console(1.0), cabinet(), locker_bank()]
+    built = [console(1.6), console(1.4), console(1.2), console(1.0), cabinet(), locker_bank()]
     total = 0
     for ob in built:
         total += export(ob, OUT)

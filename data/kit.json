@@ -79,7 +79,8 @@
     "console": {
       "1.0": "res://assets/game/props/console_1000.glb",
       "1.2": "res://assets/game/props/console_1200.glb",
-      "1.4": "res://assets/game/props/console_1400.glb"
+      "1.4": "res://assets/game/props/console_1400.glb",
+      "1.6": "res://assets/game/props/console_1600.glb"
     },
     "cabinet": "res://assets/game/props/cabinet.glb",
     "locker_bank": "res://assets/game/props/locker_bank.glb"

@@ -20,7 +20,7 @@ func _length(path: PackedVector2Array) -> float:
 
 func _line(data: Node, what: String, nav: StalkerNav, a: Vector2, b: Vector2) -> void:
 	var m := _length(nav.path(a, b))
-	var run := float(data.value("player", "walk_speed_m_s"))
+	var run := float(data.load_data("player").move.walk_speed_m_s)
 	var heavy := float(data.value("salvage", "classes").heavy.speed_mult)
 	print("ROUTE %-34s %5.1f m  out %4.1f s  home heavy %4.1f s" % [what, m, m / run, m / (run * heavy)])
 

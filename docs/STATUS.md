@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. **Next:** John plays a shift (expected tomorrow night). Code lane: T022 (his 88 Mixamo clips on the hauler), then T023 (build the survey vessel). QA: Q003 after T022.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged; T022 on `auto/t022-mac`; T023 (the survey vessel) on `auto/t023-mac`, built without T022, both waiting on review and John's gates. A013 approved; A014 pitch B approved. **Next:** clear the CoreAudio hang on this Mac (Godot won't start with sound: `auto-T023`), then John plays both ships (`godot --path . --ship survey`). Lead: merge T022 and T023. QA: Q003 after T022.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -17,6 +17,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T023 play (`docs/screens/T023/sheet.png`, `--ship survey`): a different ship? Is the black-box run tense? The plan's 10 salvage spots against 33 here: bots empty it by 2.5 min and bank about 16% of the current ship. Should the drone open doors? It clips through them now. Calls in `auto-T023`.
+- T023 bot bug: T012's bot held doors shut, so every bot number since T012 understates what bots reach (cautious banks about double when fixed). Old balance flags want rereading.
 - T021 look (`docs/screens/T021/sheet.png`): the wall tops now always show their paint (a z-fight used to hide it), so there's more yellow up there; beds carry a hazard stripe on their long rims. Enough to read the overturned bed with your light off? Calls in `auto-T021`.
 - T019 look (`docs/screens/T019/sheet.png`, then walk the junction and the side corridor): is it realistic enough? North-facing walls gain the most; the long junction's side walls mostly show their tops from the steep camera. Lever if the junction stays flat: floor-level pieces and more light there, not more wall pieces. Calls in `auto-T019`.
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
@@ -69,7 +71,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T019: `hanging_cables` spark flicker. T008's "flicker" was a bug fix, not an effect, and T012's flickers whole sections from `src/shift`; the tip glows steadily for now.
 - T019: door surrounds on doors' room faces; a generated `floor_grate` rule that exempts flush grates from route keep-outs.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
+- T023: giving this ship an ambush; prop stickers that fade; a second light colour for the east spine's "fault red"; vessel names per ship.
 
 ## Last session
-2026-10-31 (lead): merged T020 (559/559 with T019), T021 (566/566; T020 and T021 conflicts resolved as T021's handoff said: T020's layered shot for pirates), A014. Filed John's 88 Mixamo clips in `assets/source/mixamo-shooter/` with a manifest; queued T022.
-2026-10-31 (code, unattended): T020 `src/vfx` (16 recipes, pooled), shot timeline, 88 placeholder sound files, F1 → Effects gallery; mag dump +0.4 ms; a mag dump touches the limiter. T021: bed hazard stripe, wall-top z-fight fixed (in since T010), lock as commands.
+2026-10-31 (code, unattended): T023 survey vessel, `data/deck_survey.json`, `Data.use_ship`, 37 A013 decals, ship pick; 599/599, current ship's bots identical on all 48 runs with the old bot. Fixed T012's door-press bug. Frame time +0.4 to +0.8 ms. Nobody has played it.

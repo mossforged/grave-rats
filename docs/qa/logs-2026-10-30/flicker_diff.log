@@ -1,0 +1,6 @@
+flicker/pirate_still: moved 0.142% (max 0.410%), twinkle 0.0307% (max 0.0681%) of the screen
+flicker/pirate_turn: moved 0.022% (max 0.092%), twinkle 0.0039% (max 0.0384%) of the screen
+flicker/still_beam_off: moved 0.006% (max 0.025%), twinkle 0.0003% (max 0.0008%) of the screen
+flicker/still_beam_on: moved 0.014% (max 0.086%), twinkle 0.0003% (max 0.0010%) of the screen
+flicker/turn_beam_off: moved 1.137% (max 2.080%), twinkle 0.1239% (max 0.2089%) of the screen
+flicker/turn_beam_on: moved 1.099% (max 2.090%), twinkle 0.1193% (max 0.2042%) of the screen

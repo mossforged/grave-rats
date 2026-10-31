@@ -1,0 +1,7 @@
+ %CPU COMM
+ 56.4 WindowServer
+ 32.3 Camera Hub
+ 11.1 coreaudiod
+  6.2 sysmond
+  5.7 ContextStoreAgent
+  5.4 BambuStudio

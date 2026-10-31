@@ -1,0 +1,113 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:116)
+       [1] _draw_oxygen (res://src/hud/suit_os_hud.gd:206)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:96)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:116)
+       [1] _cell (res://src/hud/suit_os_hud.gd:256)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:230)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:98)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:116)
+       [1] _cell (res://src/hud/suit_os_hud.gd:256)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:238)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:98)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:116)
+       [1] _cell (res://src/hud/suit_os_hud.gd:256)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:240)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:98)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:120)
+       [1] _draw_help (res://src/hud/suit_os_hud.gd:380)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:104)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:120)
+       [1] _draw_help (res://src/hud/suit_os_hud.gd:380)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:104)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:120)
+       [1] _draw_shields (res://src/hud/suit_os_hud.gd:299)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:100)
+OUT stands in the open, never fires
+OUT    died_s                 mean   3.39  median   3.28  min   2.80  max   3.98  (12 of 12 runs)
+OUT    first_hit_s            mean   1.02  median   1.02  min   1.02  max   1.02  (12 of 12 runs)
+OUT    cleared_squad_s        never in 12 runs
+OUT    survived_60s           never in 12 runs
+OUT    pirates_killed         mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    rounds_blocked_for_you mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    your_rounds_blocked    mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    hits_taken             mean  13.00  median  13.00  min  13.00  max  13.00  (12 of 12 runs)
+OUT    your_hit_percent       mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:120)
+       [1] _draw_shields (res://src/hud/suit_os_hud.gd:299)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:100)
+OUT crouches behind low cover, never fires
+OUT    died_s                 mean   8.20  median   8.22  min   7.32  max   9.98  (12 of 12 runs)
+OUT    first_hit_s            mean   4.42  median   4.42  min   4.42  max   4.42  (12 of 12 runs)
+OUT    cleared_squad_s        never in 12 runs
+OUT    survived_60s           never in 12 runs
+OUT    pirates_killed         mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    rounds_blocked_for_you mean  21.83  median  22.00  min  18.00  max  26.00  (12 of 12 runs)
+OUT    your_rounds_blocked    mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    hits_taken             mean  13.00  median  13.00  min  13.00  max  13.00  (12 of 12 runs)
+OUT    your_hit_percent       mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT locked to the same cover, never fires
+OUT    died_s                 mean   7.70  median   7.57  min   7.18  max   8.62  (12 of 12 runs)
+OUT    first_hit_s            mean   4.43  median   4.43  min   4.43  max   4.43  (12 of 12 runs)
+OUT    cleared_squad_s        never in 12 runs
+OUT    survived_60s           never in 12 runs
+OUT    pirates_killed         mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    rounds_blocked_for_you mean  20.92  median  22.00  min  16.00  max  25.00  (12 of 12 runs)
+OUT    your_rounds_blocked    mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    hits_taken             mean  13.00  median  13.00  min  13.00  max  13.00  (12 of 12 runs)
+OUT    your_hit_percent       mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT stands in the open, fights like a person
+OUT    died_s                 mean   3.34  median   2.88  min   2.53  max   5.25  (12 of 12 runs)
+OUT    first_hit_s            mean   1.02  median   1.02  min   1.02  max   1.02  (12 of 12 runs)
+OUT    cleared_squad_s        never in 12 runs
+OUT    survived_60s           never in 12 runs
+OUT    pirates_killed         mean   0.08  median   0.00  min   0.00  max   1.00  (12 of 12 runs)
+OUT    rounds_blocked_for_you mean   0.00  median   0.00  min   0.00  max   0.00  (12 of 12 runs)
+OUT    your_rounds_blocked    mean   1.33  median   1.00  min   0.00  max   5.00  (12 of 12 runs)
+OUT    hits_taken             mean  13.00  median  13.00  min  13.00  max  13.00  (12 of 12 runs)
+OUT    your_hit_percent       mean  20.95  median  33.33  min   0.00  max  62.50  (12 of 12 runs)
+OUT crouches behind low cover, fights like a person (rises as it shoots)
+OUT    died_s                 mean   5.57  median   5.33  min   4.98  max   6.67  (10 of 12 runs)
+OUT    first_hit_s            mean   1.74  median   1.75  min   1.60  max   1.75  (12 of 12 runs)
+OUT    cleared_squad_s        never in 12 runs
+OUT    survived_60s           mean   1.00  median   1.00  min   1.00  max   1.00  (2 of 12 runs)
+OUT    pirates_killed         mean   1.17  median   1.00  min   0.00  max   2.00  (12 of 12 runs)
+OUT    rounds_blocked_for_you mean   1.92  median   2.00  min   0.00  max   5.00  (12 of 12 runs)
+OUT    your_rounds_blocked    mean   3.67  median   4.00  min   2.00  max   6.00  (12 of 12 runs)
+OUT    hits_taken             mean  12.42  median  13.00  min   8.00  max  13.00  (12 of 12 runs)
+OUT    your_hit_percent       mean  67.73  median  69.23  min  41.67  max  83.33  (12 of 12 runs)
+OUT locked to the same cover, fights like a person (up to fire, down between bursts)
+OUT    died_s                 mean   5.65  median   5.70  min   5.20  max   6.22  (12 of 12 runs)
+OUT    first_hit_s            mean   1.75  median   1.72  min   1.72  max   1.87  (12 of 12 runs)
+OUT    cleared_squad_s        never in 12 runs
+OUT    survived_60s           never in 12 runs
+OUT    pirates_killed         mean   0.33  median   0.00  min   0.00  max   1.00  (12 of 12 runs)
+OUT    rounds_blocked_for_you mean   7.25  median   8.00  min   3.00  max  19.00  (12 of 12 runs)
+OUT    your_rounds_blocked    mean   2.92  median   3.00  min   1.00  max   6.00  (12 of 12 runs)
+OUT    hits_taken             mean  13.00  median  13.00  min  13.00  max  13.00  (12 of 12 runs)
+OUT    your_hit_percent       mean  52.06  median  50.00  min  22.22  max  75.00  (12 of 12 runs)

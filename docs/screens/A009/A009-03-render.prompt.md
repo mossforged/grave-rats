@@ -1,0 +1,9 @@
+# A009 — overhead render
+
+Tool: built-in image_gen; opaque background.
+References in order: assets/source/A009-rivals/A009-02.png; assets/source/meshy/input/hauler-apose-front.png.
+
+## Exact prompt
+
+Use case: stylized-concept. Asset ID A009-03. Generate one wide landscape industrial PBR character readability render for Grave Rats. Exactly FIVE full-body characters, spaced apart in one horizontal row on a plain dark neutral charcoal deck with no lines or clutter. Camera steep overhead three-quarter, 60 degree downward pitch from horizontal; look down strongly onto helmet crowns, shoulders and backpacks; every figure same camera projection, orientation and world scale. First FOUR figures are the EXACT white/navy PRIOR CLAIM crew in reference image 1, left to right squad leader, heavy, scout, tech. Fifth figure on right is our orange HAULER from reference image 2: battered orange helmet and shoulder plates, dirty ivory fabric, rectangular rental chest pouch and backpack, dark boots. Keep the rivals clean white hard armour with broad navy helmet stripe and shoulder caps, black slit visor, compact white/navy packs; retain their silhouette differences. Hauler crown and shoulder orange must stay visibly orange. Rivals' white crowns and navy shoulders must remain clear from this high camera. Everyone upright in relaxed neutral stance, arms down and hands EMPTY, visible full boots, no overlap, no weapons or props. Even neutral practical illumination, soft restrained ground shadows, dark deck. Match character materials and chunky industrial grounded realistic proportions. No in-image text, no labels, no borders, no separate panels. This render will be downsampled to game-size and the SAME pixels enlarged exactly 4x in a labelled review sheet, so preserve clear large colour blocks. No cinematic fog, no spotlights, no real brands or copyrighted characters.
+

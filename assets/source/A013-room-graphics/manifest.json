@@ -1,0 +1,64 @@
+{
+  "packet": "A013",
+  "generator": "built-in image_gen",
+  "approval": "pending John copy and look gate",
+  "format": "opaque front-on PNG atlas; plain gray cutout background",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "selected_graphic_count": 37,
+  "images": [
+    {
+      "id": "A013-01",
+      "file": "A013-01.png",
+      "prompt": "A013-01.prompt.md",
+      "selected": true,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-358b6047-6ee1-4ed4-9021-b13a51816e48.png"
+    },
+    {
+      "id": "A013-02",
+      "file": "A013-02.png",
+      "prompt": "A013-02.prompt.md",
+      "selected": true,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-c62747fd-05ce-4a0f-9e8e-accadf4ef292.png"
+    },
+    {
+      "id": "A013-03",
+      "file": "A013-03.png",
+      "prompt": "A013-03.prompt.md",
+      "selected": true,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-449c39d8-bcae-42a3-a49c-c8944365ab92.png"
+    },
+    {
+      "id": "A013-04",
+      "file": "A013-04.png",
+      "prompt": "A013-04.prompt.md",
+      "selected": true,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-1298555a-b6d2-48e7-bd6c-88dfac3bbc3e.png"
+    },
+    {
+      "id": "A013-05",
+      "file": "A013-05.png",
+      "prompt": "A013-05.prompt.md",
+      "selected": true,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-62973afe-1158-4bae-b436-9fb36cf66b95.png"
+    },
+    {
+      "id": "A013-06",
+      "file": "A013-06.png",
+      "prompt": "A013-06.prompt.md",
+      "selected": false,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-eba7f175-4d66-48c2-8f30-45d9f119d77e.png"
+    },
+    {
+      "id": "A013-06b",
+      "file": "A013-06b.png",
+      "prompt": "A013-06b.prompt.md",
+      "selected": true,
+      "generated_path": "/Users/johniadarola/.codex/generated_images/01a19366-a758-7ca1-a81a-fb1a14522c39/exec-6f2e36c9-1dcd-4c73-875c-5d3ed97f19b5.png",
+      "edit_target": "A013-06.png",
+      "style_reference": "../A010-graphics/A010-02.png"
+    }
+  ]
+}

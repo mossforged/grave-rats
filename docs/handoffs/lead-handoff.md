@@ -38,9 +38,9 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A008 | art | merged 2026-10-30: hauler A-pose inputs |
 | A009 | art | merged 2026-10-31; waits for John's pick (Prior Claim recommended) |
 | A010 | art | merged and approved 2026-10-31 |
-| Q001 | qa | written: repeatable health check. **Queue when T011 merges** (the GPU is shared) |
-| A011 | art | queued: rogue ship AI threat design and Meshy inputs |
-| A012 | art | queued: buildable briefing, payslip and death bill layouts with field spec |
+| Q001 | qa | written: repeatable health check. queued 2026-10-31 |
+| A011 | art | merged 2026-10-31; waits for John (CUSTODIAN; build cutter + drone first) |
+| A012 | art | merged 2026-10-31; waits for John's layout/copy approval |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

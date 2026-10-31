@@ -17,6 +17,9 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T011: MSAA dropped from 4x to 2x to meet the frame budget (reverses the 2026-10-30 decision); turning shimmer rose (0.09 → 0.12% twinkle), possibly from that. Accept 2x, or go back to 4x and find the time elsewhere?
+- A011: is CUSTODIAN (Vesper Reach's maintenance AI, mint lens) the second threat? Build the cutter turret and patrol drone first?
+- A012: approve the briefing, payslip and death bill layouts and copy for a build task?
 - T011 play (stage 3): sheet `docs/screens/T011/sheet.png`, then medbay to junction to cargo. Does it match or beat the concept?
 - T011 calls: MSAA 4x to 2x (biggest frame win; rougher edges?), dimmer rooms with no shadowed practicals, the ambush panel's new tell, door strips in a fight, shimmer when turning (twinkle up 30% on T010).
 - T011 frame time: pirate deck met the target in one window (7.07 / 9.1) and missed in a busier one (7.7 / 10.4; T010 8.2 / 10.5). Re-measure T010 against T011 on a quiet Mac.
@@ -50,4 +53,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-30 (code, unattended): T011: A010 decals from data, edge-worn panels, floor wear map, one reflection probe per room, aim cone and faded walls under the mask, door floor strips, muzzle reveal, hit arcs, ambush tell, flaky test fixed. Pirate deck 7.07 / 9.1 ms quiet, 7.7 / 10.4 busy (T010 8.2 / 10.5 busy). Nobody has played it.
+2026-10-31 (lead): merged T011 (282/282 reproduced), A011 and A012; queued Q001.
+2026-10-31 (code, unattended): T011: A010 decals placed from data, edge-concentrated wear, floor wear and damp maps, probe sheen, masked aim cone and faded walls, side-door strips, muzzle-flash reveal, hit arcs; MSAA 4x→2x; pirate deck 7.07/9.1 ms on a quiet Mac.

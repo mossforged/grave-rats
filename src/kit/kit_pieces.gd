@@ -353,7 +353,8 @@ static func door_seam(width: float, height: float) -> ArrayMesh:
 # --- box props (A006-07b) ---
 
 ## The piece for `type` at `size`: the file its slot in data "slots" names, in the file's own frame
-## (width along X, front +Z; prop_yaw turns it), or the box if it has none or that file won't fit.
+## (origin at the base; a bed or gurney is long in Z; prop_yaw turns it), or the box if it has none or
+## that file won't fit.
 ## Otherwise the crate at exactly `size`.
 static func prop(type: String, size: Vector3) -> ArrayMesh:
 	if _cfg().slots.has(type):
@@ -451,23 +452,27 @@ static func _fitted_slot(type: String, size: Vector3) -> ArrayMesh:
 	if mesh == null:
 		return null
 	var tol := float(_cfg().slot_fit.tolerance_m)
-	var want := Vector3(maxf(size.x, size.z), size.y, minf(size.x, size.z))
 	var got := mesh.get_aabb().size
-	return mesh if got.x <= want.x + tol and got.y <= want.y + tol and got.z <= want.z + tol else null
+	var fits_long := maxf(got.x, got.z) <= maxf(size.x, size.z) + tol
+	var fits_short := minf(got.x, got.z) <= minf(size.x, size.z) + tol
+	return mesh if fits_long and fits_short and got.y <= size.y + tol else null
 
 
-## The yaw for a deck prop's piece. A file's front turns to the room's centre, across the prop's short
-## side, unless that floor is blocked and the other side is open. Boxes and crates stay at 0.
+## The yaw for a deck prop's piece. A file's front turns to the room's centre, unless that floor is
+## blocked and the other side is open. Its long side lies along the prop's: a file wide in X fronts
+## across the prop, a file long in Z (a bed's foot) fronts along it. Boxes and crates stay at 0.
 static func prop_yaw(layout: RefCounted, p: Dictionary) -> float:
 	var size: Vector3 = p.size
-	if _fitted_slot(String(p.type), size) == null:
+	var mesh := _fitted_slot(String(p.type), size)
+	if mesh == null:
 		return 0.0
 	var along_z := size.x < size.z
-	var axis := Vector2.RIGHT if along_z else Vector2.DOWN
+	var long_in_z := mesh.get_aabb().size.z > mesh.get_aabb().size.x
+	var axis := Vector2.RIGHT if along_z != long_in_z else Vector2.DOWN
 	var to_centre: Vector2 = layout.space_rect(String(p.space)).get_center() - (p.center as Vector2)
 	var front := axis if to_centre.dot(axis) >= 0.0 else -axis
 	var radius := float(_cfg().slot_fit.front_clear_m)
-	var reach := minf(size.x, size.z) * 0.5 + radius
+	var reach := absf(axis.x) * size.x * 0.5 + absf(axis.y) * size.z * 0.5 + radius
 	if not layout.is_free(p.center + front * reach, radius) and layout.is_free(p.center - front * reach, radius):
 		front = -front
 	return atan2(front.x, front.y)

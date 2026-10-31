@@ -34,6 +34,7 @@
     {"type": "cabinet", "space": "medbay", "at": [0.12, 0.08], "size_m": [0.6, 1.9, 0.5], "cover": "tall"},
     {"type": "console", "space": "medbay", "at": [0.9, 0.35], "size_m": [0.6, 1.1, 1.2], "cover": "low"},
     {"type": "locker_bank", "space": "medbay", "at": [0.55, 0.5], "size_m": [0.6, 2.0, 2.4], "cover": "tall"},
+    {"type": "gurney", "space": "medbay", "at": [0.883, 0.141], "size_m": [0.6, 0.89, 1.9], "cover": "low"},
     {"type": "crate_low", "space": "junction", "at": [0.8, 0.06], "size_m": [0.8, 0.8, 0.8], "cover": "low"},
     {"type": "console", "space": "junction", "at": [0.08, 0.04], "size_m": [0.6, 1.1, 1.0], "cover": "low"},
     {"type": "crate_high", "space": "cargo", "at": [0.4, 0.45], "size_m": [1.2, 1.2, 1.2], "cover": "tall"},
@@ -46,6 +47,12 @@
     {"type": "crate_low", "space": "cargo", "at": [0.2, 0.1], "size_m": [0.8, 0.8, 0.8], "cover": "low"},
     {"type": "crate_stack", "space": "cargo", "at": [0.24, 0.72], "size_m": [1.2, 2.1, 1.2], "cover": "tall"},
     {"type": "crate_low", "space": "side_corridor", "at": [0.35, 0.25], "size_m": [0.8, 0.8, 0.8], "cover": "low"}
+  ],
+  "dressing": [
+    {"type": "surgical_lamp", "space": "medbay", "at": [0.2, 0.555]},
+    {"type": "iv_stand", "space": "medbay", "at": [0.425, 0.559]},
+    {"type": "trolley", "space": "medbay", "at": [0.05, 0.159]},
+    {"type": "med_station", "space": "medbay", "wall": "north", "at": 0.235}
   ],
   "spawn": {"space": "junction", "at": [0.45, 0.5], "aim_deg": 30.0},
   "path_check": {"from": "medbay", "to": "cargo", "cell_m": 0.1, "margin_m": 0.05},

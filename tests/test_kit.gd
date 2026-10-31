@@ -118,11 +118,9 @@ func test_crates_match_a006() -> void:
 			check((got - (p.size as Vector3)).length() <= TOLERANCE, "%s from data is %s" % [p.type, got])
 
 
-func test_the_bed_stays_the_box() -> void:
-	check_eq(String(KitMaterials.cfg().slots.bed), "", "no bed file yet")
+func test_a_file_that_wont_fit_is_the_box() -> void:
 	var size := Vector3(0.9, 0.75, 2.0)
-	check_eq(KitPieces.prop("bed", size), KitPieces.slot_box(size), "the bed is still the box")
-	for type: String in ["console", "cabinet", "locker_bank"]:
+	for type: String in ["console", "cabinet", "locker_bank", "gurney"]:
 		check_eq(KitPieces.prop(type, size), KitPieces.slot_box(size), "a %s whose file won't fit is the box" % type)
 
 
@@ -149,7 +147,7 @@ func _deck_slot_props() -> Array:
 
 
 func test_each_slot_loads_its_file() -> void:
-	check_eq(_slot_files().size(), 6, "four consoles, a cabinet, a locker bank")
+	check_eq(_slot_files().size(), 12, "four consoles, a cabinet, a locker bank, a bed, a gurney, three clutter, a wall station")
 	for path: String in _slot_files():
 		check(path.begins_with("res://assets/game/props/"), "%s is a game copy" % path)
 		var mesh := KitPieces.slot_mesh(path)
@@ -199,7 +197,10 @@ func test_prop_textures_are_as_dense_as_the_walls_and_grimed() -> void:
 			for t in range(0, idx.size(), 3):
 				# Triangles square to an axis keep their length: a metre is 1 / uv_m of the tile.
 				var e := v[idx[t + 1]] - v[idx[t]]
-				var along_axis: bool = maxf(absf(n[idx[t]].x), maxf(absf(n[idx[t]].y), absf(n[idx[t]].z))) > 0.999
+				var along_axis := true
+				for k in 3:
+					var nk: Vector3 = n[idx[t + k]]
+					along_axis = along_axis and maxf(absf(nk.x), maxf(absf(nk.y), absf(nk.z))) > 0.999
 				if e.length() < 0.05 or not along_axis:
 					continue
 				var du := (uv[idx[t + 1]] - uv[idx[t]]).length()
@@ -229,8 +230,12 @@ func test_props_face_the_room_and_stay_inside_their_footprints() -> void:
 		check(absf(box.position.x) <= p.size.x * 0.5 + tol and absf(box.end.x) <= p.size.x * 0.5 + tol, "%s in x: %s" % [p.type, box])
 		check(absf(box.position.z) <= p.size.z * 0.5 + tol and absf(box.end.z) <= p.size.z * 0.5 + tol, "%s in z: %s" % [p.type, box])
 		check(box.end.y <= p.size.y + tol, "%s height" % p.type)
-		check(absf(front.dot(Vector2.RIGHT if p.size.x < p.size.z else Vector2.DOWN)) > 0.99, "%s fronts its long side" % p.type)
-		var reach: float = minf(p.size.x, p.size.z) * 0.5 + float(cfg.front_clear_m)
+		var mesh_box: AABB = KitPieces.prop(p.type, p.size).get_aabb()
+		var fronts_its_end: bool = mesh_box.size.z > mesh_box.size.x
+		var long_way := Vector2.DOWN if p.size.x < p.size.z else Vector2.RIGHT
+		var across := Vector2(long_way.y, long_way.x)
+		check(absf(front.dot(long_way if fronts_its_end else across)) > 0.99, "%s fronts the right way" % p.type)
+		var reach: float = (maxf(p.size.x, p.size.z) if fronts_its_end else minf(p.size.x, p.size.z)) * 0.5 + float(cfg.front_clear_m)
 		var r := float(cfg.front_clear_m)
 		var ahead: bool = layout.is_free(p.center + front * reach, r)
 		var behind: bool = layout.is_free(p.center - front * reach, r)
@@ -294,6 +299,8 @@ func test_collision_occluders_and_cover_are_t009s() -> void:
 	var want: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(SNAPSHOT))
 	for key: String in ["main", "pirates"]:
 		var deck: Dictionary = _main_deck() if key == "main" else _pirate_deck()
+		# T016 added one prop on purpose, the gurney; everything else stays T009's.
+		deck.props = (deck.props as Array).filter(func(p: Dictionary) -> bool: return p.type != "gurney")
 		var layout := DeckLayout.new(deck, float(deck.room_scale))
 		var built := DeckBuilder.build(layout)
 		(Engine.get_main_loop() as SceneTree).root.add_child(built)

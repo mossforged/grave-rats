@@ -1,0 +1,18 @@
+[
+ {
+  "name": "stalker",
+  "kind": "multi-image-to-3d",
+  "task_id": "01a193db-b19b-716b-a45a-0eba2dc6ddd8",
+  "status": "SUCCEEDED",
+  "consumed_credits": 30,
+  "files": {
+   "glb": 13647204,
+   "base_color": 6956039,
+   "metallic": 75781,
+   "roughness": 1586957,
+   "normal": 6626896,
+   "thumbnail": 62362
+  },
+  "finished_at": 1793482113211
+ }
+]

@@ -21,6 +21,7 @@ Don't read `docs/reference/` unless the packet says so. It holds the old prototy
 ## Rules
 - One task per session. Stay inside the modules the packet names.
 - Pure logic (damage, sight, inventory rules) stays scene-free so it runs headless.
+- Multiplayer-ready habits (co-op and the Open Tender mode come later): every player action carries a player ID; sight and fog are computed per player, never global; AI crews use the same interface a human player would.
 - Don't add systems the packet doesn't ask for. Ideas go in STATUS "Parked", one line each.
 - Performance is a feature: report frame time on this Mac for anything visual (the packet says where to measure).
 

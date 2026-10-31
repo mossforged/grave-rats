@@ -9,7 +9,7 @@
 3. **Vertical slice art.** Medbay, corridor and cargo at concept quality: kit, materials, lighting, crew model and animation. Gate: *"Does it match or beat the concept?"*
 4. **Systems.** Cover with height, loot and carry decisions, extraction, threat variety, sound. Gate per system.
 5. **Co-op.** 2–4 players over the network. Gate: a real session with the Monday crew.
-Later (parked): competitive modes, ship generation, contracts and meta, the threat roster.
+Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
 - Queue order (lead): T008 merged → T009 (hauler swap) running → T010 (slice kit, held until T009 merges).

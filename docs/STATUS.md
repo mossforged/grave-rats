@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. **Next:** John plays a shift (expected tomorrow night). Code lane: T022 (his 88 Mixamo clips on the hauler), then T023 (build the survey vessel). QA: Q003 after T022.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. A015 bestiary and A016 arsenal merged, waiting on his picks (A016 has 2 images of 18: the art tool refused weapons). Meshy API live: stalker, drone, loader, Prior Claim leader (rigged; Meshy bone names, not Mixamo) in `assets/source/meshy/`, 125 credits. **Next:** John plays a shift (expected tomorrow night). Code lane: T022 (his 88 Mixamo clips on the hauler), then T023 (build the survey vessel). QA: Q003 after T022.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**

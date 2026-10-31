@@ -55,8 +55,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T021 | code | merged: bed stripe, wall-top z-fight fix, lock commands |
 | A013 | art | merged and approved 2026-10-31 |
 | A014 | art | merged; John picked B, biological survey vessel; mining tug likely ship 3 |
-| A015 | art | queued: threat bestiary across enemy types (specimens, machines, horrors, people, bosses) with a matrix and top five |
-| A016 | art | queued: weapons arsenal (salvage tools, company issue, pirate kit, throwables) designed to the Mixamo holds; top six |
+| A015 | art | merged: 18 threats + matrix; top five Loader, Suit Hitch, Pool Bell, PC Surveyor, Seam Spiders; waits for John's picks |
+| A016 | art | merged: 18 written designs + matrix, only 2 images (image tool refused 16 as violence); top six rifle, shotgun, flare gun, cutter, frag, decoy; offer: lead models weapons in Blender |
 | Q003 | qa | written, NOT queued: queue once T022 merges and the code lane is idle |
 | T023 | code | queued after T022: build the survey vessel as a second ship (A014 plan, room props, A013 decals, effects); default ship unchanged |
 | T022 | code | queued: John's 88 Mixamo clips on the hauler (8-way locomotion, fire, reloads, hits, deaths, actions, heavy carry) |

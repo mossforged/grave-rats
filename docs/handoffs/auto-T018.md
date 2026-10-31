@@ -23,7 +23,7 @@ Branch `auto/t018-mac`. The game now has the structure for 1–4 players, with o
   - no global shortcut to the player, and the shift rules keyed on a player (grep checks);
   - all randomness from the session (a grep, with a named exemption list);
   - two runs with one seed match on items, stalker paths, shots and positions, across 240 steps including a tier.
-- **Solo bots:** `tools/t012_bots.gd` with 2 seeds ran to the end with no script errors. That's a smoke run, not a balance comparison.
+- **Solo bots:** `tools/t012_bots.gd` with 2 seeds ran to the end, before the last small commit. I only read the end of its output, so this is a smoke run, not a check for script errors or balance.
 - **Windowed, two-player run:** both operators are on screen in `two_operators_spawned.png` and `two_player_deck.png`. The run printed:
   - mate down, you extract: outcome `extracted`, banked 583;
   - both down: outcome `wiped`, banked 0, with 59 still in the hold.

@@ -47,7 +47,7 @@ The tests still log the non-script `p_size` engine error from drawing with no wi
 | Survivors' gross / deductions / net | 4,438 / 592 / 3,847 | 1,268 / 361 / 907 |
 | Negative payslips | 0 of 72 | 0 of 69 |
 
-Cautious matches the packet: it makes the first quota, then usually misses. **Greedy dies a lot and it barely matters.** One good shift pays for two deaths, so it isn't fired until quota 5 or later (I capped the bots). "Sometimes die" is true, but so far the quota doesn't punish it. Limits: the same bots as T012 (no cover, no sneaking, 0.2 s aim lag), and they never decline or abandon, so no bot ever saw a negative payslip. Only the captures show one.
+Cautious matches the packet: it makes the first quota, then usually misses. **Greedy dies a lot and it barely matters.** One good shift pays for two deaths, so 10 of 12 sessions were still employed at the cap of 4 quotas met; I don't know how far past it they'd go. "Sometimes die" is true, but so far the quota doesn't punish it. Limits: the same bots as T012 (no cover, no sneaking, 0.2 s aim lag), and they never decline or abandon, so no bot ever saw a negative payslip. Only the captures show one.
 
 After the run I changed the hazards' data order, the scroll hint's place and when the capture shows the plate. No bot reads any of these. I didn't re-run them.
 
@@ -59,10 +59,10 @@ Shift deck, three stalkers hunting, quota plate on, three 15 s windows: **6.63 /
 
 ## Decisions I made (all data unless noted)
 - **Net pay goes on the quota, not gross.** The packet says the payslip must still leave a cautious crew able to make quota, which only matters if deductions count. A balance due takes it down.
-- **Quota 2,400, not 2,750.** That's about 66% of the cautious bot's three-shift gross on these seeds (3,804). At 2,750 with the first rates it made quota 1 only 3 of 12 times.
+- **Quota 2,400, not 2,750.** That's about 63% of the cautious bot's three-shift gross on these seeds (3,803), under the packet's "about 70%". At 2,750 with the first rates it made quota 1 only 3 of 12 times.
 - **A012's rates cut hard.** A012 called them illustrative and left the rest unset. Suit 640 to 80, morale 280 to 20, round 20 to 4, cycle 50 to 15; oxygen stays 20. At A012's rates a cautious shift loses more than it earns. Run-specific rates are mine: 2 CR per point of damage, 10 to 20 per incident.
 - **Six of A012's twenty lines are off** (`enabled: false`), by A012's own "don't stack": missed rounds, impact reconciliation, obstruction, open-position review, salvage handling, and early closure (no screen follows closing the window).
-- **Deaths add nothing to the quota.** The bill goes to next of kin, as the copy says, and the shift is used up. So leaving empty-handed (about -160) costs more than dying (0). A funny fact, and maybe a wrong incentive.
+- **Deaths add nothing to the quota.** The bill goes to next of kin, as the copy says, and the shift is used up. So leaving empty-handed (-120 at the first minute, more with time) costs more than dying (0). A funny fact, and maybe a wrong incentive.
 - **Backspace in a session writes the shift off:** nothing credited, a 150 CR replacement fee, and it counts. Otherwise it's a free retry. Outside a session it's still a new shift.
 - **Several of a kind print "3 × assessed"** with their true sum: each item has its own value, so qty × unit wouldn't add up.
 - **The death screen holds 2.5 s,** then the bill, with an ACKNOWLEDGE button A012 left to this packet.

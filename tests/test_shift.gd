@@ -147,6 +147,9 @@ func test_every_item_lies_on_open_floor_you_can_walk_to() -> void:
 		for other: Vector2 in seen:
 			check(other.distance_to(item.at) > 0.5, "%s at %s isn't on top of another" % [item.word, str(item.at)])
 		seen.append(item.at)
+	var start: Vector2 = scene.airlock.rect.get_center()
+	for item: RefCounted in scene.field.items:
+		check(layout.path_cells(start, item.at, r, float(layout.data.grid_m)) >= 0, "you can walk to %s at %s" % [item.word, str(item.at)])
 	check_eq(layout.space_at(scene.airlock.rect.get_center()), "junction", "the airlock is on the deck")
 	check(scene.airlock.has_point(scene._eye()), "and you start in it: the spawn end")
 
@@ -186,6 +189,25 @@ func test_a_new_shift_seeds_and_resets_the_salvage() -> void:
 	check_eq(scene.field.on_floor().size(), (scene.field.items as Array).size(), "everything's back on the floor")
 	check(scene.shift.carry(P).in_hand == null, "and your hands are empty")
 	check_eq(scene.operator.model.speed_mult, 1.0, "and the weight's off")
+
+
+## E takes the nearest thing, so nobody lifts the black box by accident.
+func test_the_prize_is_far_from_home_and_nothing_shares_its_reach() -> void:
+	var scene: Node = await _scene()
+	var prize := _prize(scene)
+	var reach := float(_salvage().reach_m)
+	for item: RefCounted in scene.field.items:
+		if item != prize:
+			check(item.at.distance_to(prize.at) > reach * 2.0, "%s is well clear of the prize" % item.word)
+	var layout: DeckLayout = scene.layout
+	var r := float(Data.value("player", "radius_m"))
+	var cell := float(layout.data.grid_m)
+	var to_prize: int = layout.path_cells(scene.airlock.rect.get_center(), prize.at, r, cell)
+	var farther := 0
+	for item: RefCounted in scene.field.items:
+		if layout.path_cells(scene.airlock.rect.get_center(), item.at, r, cell) > to_prize:
+			farther += 1
+	check(farther <= 3, "it's among the furthest things from the airlock (%d further, %d cells)" % [farther, to_prize])
 
 
 # --- carry rules ---
@@ -651,17 +673,26 @@ func test_the_prize_trips_the_alarm_and_stalkers_converge() -> void:
 	var awake: Node = scene.pack.stalkers[0]
 	check(awake.brain.hunting(), "the prowler's hunting")
 	check(awake.brain.last_known.distance_to(carrier) < 0.5, "and it knows where")
-	var far0: float = awake.floor_position().distance_to(carrier)
 	var a0: float = scene.marker.alpha()
 	await _run(scene, 0.25)
 	check(scene.marker.alpha() != a0, "the marker pulses")
 	check(absf(scene.marker.global_position.x - carrier.x) < 0.01, "on the carrier")
+	# From the far end of the ship, so closing in is a real journey and not a stalker circling at 7 m.
+	var far: Vector2 = scene.layout.point_in("junction", [0.5, 0.8])
+	awake.global_position = Vector3(far.x, 0, far.y)
+	var far0: float = far.distance_to(carrier)
+	var closest: float = far0
+	var panel_closest := INF
+	for i in 8:
+		scene.suit.reset()
+		await _run(scene, 1.0)
+		closest = minf(closest, awake.floor_position().distance_to(carrier))
+		panel_closest = minf(panel_closest, scene.pack.stalkers[1].floor_position().distance_to(carrier))
+		check(awake.brain.hunting(), "it's still hunting at %d s" % i)
 	scene.suit.reset()
-	await _run(scene, 3.0)
-	scene.suit.reset()
-	for s: Node in scene.pack.stalkers:
-		check(s.brain.hunting(), "%s hunts" % s.label)
-	check(awake.floor_position().distance_to(carrier) < far0, "the prowler closed in (%.1f to %.1f)" % [far0, awake.floor_position().distance_to(carrier)])
+	check(scene.pack.stalkers[1].brain.state != StalkerBrain.State.DORMANT, "the panel stalker's out")
+	check(closest < far0 * 0.5, "the far stalker crossed the ship (%.1f to %.1f m)" % [far0, closest])
+	check(panel_closest < INF, "and the panel stalker's on its way (%.1f m)" % panel_closest)
 	await _run(scene, float(cfg.alarm.reveal_s))
 	check(not scene.marker.on, "the marker's done")
 	check_eq(scene.shift.alarm_left, 0.0, "and so's the alarm")

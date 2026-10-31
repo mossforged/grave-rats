@@ -2,7 +2,7 @@ extends SceneTree
 ## T012: a greedy bot against a cautious one on the real shift_deck, no window. Not a test: numbers
 ## for the handoff. Greedy grabs everything, prize included, and stays until nothing's left or the air
 ## is nearly gone. Cautious takes small and medium, and goes home the moment tier 1 lands.
-## usage: godot --headless --path . --fixed-fps 60 -s tools/t012_bots.gd [seeds] [out.json]
+## usage: godot --headless --path . --fixed-fps 60 -s tools/t012_bots.gd -- [seeds] [out.json] [--trace]
 
 const DT := 1.0 / 30.0
 const AIM_LAG_S := 0.2
@@ -13,6 +13,11 @@ const HOME_MARGIN_S := 35.0
 const STUCK_S := 12.0
 const GREEDY := "greedy"
 const CAUTIOUS := "cautious"
+const TRACE_S := 10.0
+const STUCK_CHECK_S := 0.6
+const STUCK_MOVE_M := 0.25
+const NUDGE_S := 0.7
+const NUDGE_STRENGTH := 1.5
 
 var scene: Node
 var op: Node3D
@@ -20,6 +25,11 @@ var _seen := {}
 var _skipped := {}
 var _stuck_left := 0.0
 var _last_goal := Vector2.INF
+var _trace_left := -1.0
+var _nudge := Vector2.ZERO
+var _nudge_left := 0.0
+var _check_left := 0.0
+var _check_at := Vector2.INF
 
 
 func _init() -> void:
@@ -29,6 +39,8 @@ func _init() -> void:
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	var seeds := int(args[0]) if args.size() > 0 else 12
+	if args.has("--trace"):
+		_trace_left = 0.0
 	scene = (load("res://scenes/shift/shift_deck.tscn") as PackedScene).instantiate()
 	root.add_child(scene)
 	await process_frame
@@ -46,7 +58,7 @@ func _run() -> void:
 			print("OUT %s seed %d: %s" % [bot, 1000 + i, JSON.stringify(rows[-1])])
 		all[bot] = rows
 		_report(bot, rows)
-	if args.size() > 1:
+	if args.size() > 1 and args[1].ends_with(".json"):
 		var f := FileAccess.open(args[1], FileAccess.WRITE)
 		f.store_string(JSON.stringify(all, "  ") + "\n")
 		f.close()
@@ -84,6 +96,8 @@ func _shift(bot: String, seed_value: int) -> Dictionary:
 	_skipped = {}
 	_stuck_left = STUCK_S
 	_last_goal = Vector2.INF
+	_nudge_left = 0.0
+	_check_at = Vector2.INF
 	var t := 0.0
 	var cap := float(scene.shift.cfg.oxygen_s) + 60.0
 	while not scene.shift.ended() and t < cap:
@@ -116,7 +130,7 @@ func _decide(bot: String) -> void:
 			goal = item.at
 		else:
 			going_home = true
-	var keys := _steer(pos, goal)
+	var keys := _unstick(pos, _steer(pos, goal))
 	var fire := false
 	if threat != null and op.can_fire():
 		var at: Vector2 = _lagged(threat)
@@ -130,10 +144,15 @@ func _decide(bot: String) -> void:
 	else:
 		op.aim_point = op.global_position + Vector3(keys.x, 0.0, keys.y) * 5.0 + Vector3.UP * 1.2
 	var in_air: bool = scene.airlock.has_point(pos)
-	op.scripted = {"keys": keys, "fire": fire, "leave": going_home and in_air}
-	if item != null and pos.distance_to(item.at) <= float(scene._salvage_cfg.reach_m) * 0.7 and threat == null:
+	# Keys are screen-relative; the paths are the world's.
+	var screen: Vector2 = keys.rotated(deg_to_rad(float(op.move_yaw_deg)))
+	op.scripted = {"keys": screen, "fire": fire, "leave": going_home and in_air}
+	# E takes whatever's nearest, so walk on until that's the thing this bot wants.
+	if item != null and threat == null and scene.field.nearest(pos) == item:
 		op.scripted = {}
 		scene.interact()
+	if _trace_left >= 0.0:
+		_trace(item, threat, going_home, goal, keys)
 
 
 func _should_go_home(bot: String, carry: RefCounted) -> bool:
@@ -143,6 +162,19 @@ func _should_go_home(bot: String, carry: RefCounted) -> bool:
 		return true
 	var full: bool = carry.pockets.size() >= int(scene._salvage_cfg.pocket_limit)
 	return carry.in_hand != null or full
+
+
+## One line every few seconds of what it's doing, to see why a run went the way it did.
+func _trace(item: RefCounted, threat: Node, home: bool, goal: Vector2, keys: Vector2) -> void:
+	_trace_left -= DT
+	if _trace_left > 0.0:
+		return
+	_trace_left = TRACE_S
+	var s: RefCounted = op.rifle.state
+	print("OUT t=%5.0f at=%s %s goal=%s item=%s threat=%s home=%s keys=%s mag=%d/%d suit=%.0f hold=%d pocket=%d" % [
+		float(scene.shift.cfg.oxygen_s) - float(scene.shift.oxygen_left), str(scene._eye().round()), scene.layout.space_at(scene._eye()), str(goal.round()),
+		item.word if item != null else "-", "%s:%s" % [threat.label, threat.brain.state_name()] if threat != null else "-", str(home), str(keys.round()),
+		int(s.mag), int(s.reserve), float(scene.suit.integrity), scene.shift.hold.items.size(), scene.shift.carry(scene.player_id).pockets.size()])
 
 
 ## The nearest thing this bot wants that it can carry, leaving out what it couldn't get to.
@@ -188,6 +220,21 @@ func _steer(pos: Vector2, goal: Vector2) -> Vector2:
 	var next: Vector2 = path[mini(int(scene.pack.cfg.nav.lookahead_cells), path.size() - 1)]
 	var d := next - pos
 	return d.normalized() if d.length() > 0.05 else (goal - pos).normalized()
+
+
+## Its capsule is wider than the paths' radius, so a corner can catch it: a person would sidestep.
+func _unstick(pos: Vector2, keys: Vector2) -> Vector2:
+	_nudge_left -= DT
+	if _nudge_left > 0.0:
+		return (keys + _nudge).normalized()
+	_check_left -= DT
+	if _check_left <= 0.0:
+		_check_left = STUCK_CHECK_S
+		if keys != Vector2.ZERO and pos.distance_to(_check_at) < STUCK_MOVE_M:
+			_nudge = keys.orthogonal() * (1.0 if randf() < 0.5 else -1.0) * NUDGE_STRENGTH
+			_nudge_left = NUDGE_S
+		_check_at = pos
+	return keys
 
 
 ## The closest live stalker this player can really see, within fighting range.

@@ -313,6 +313,7 @@ func _make_lighting() -> void:
 	sun.directional_shadow_max_distance = float(l.sun_shadow_max_distance_m)
 	sun.shadow_blur = float(l.sun_shadow_blur)
 	sun.rotation_degrees = Vector3(float(l.sun_pitch_deg), float(l.sun_yaw_deg), 0)
+	sun.visible = sun.light_energy > 0.0
 	add_child(sun)
 
 

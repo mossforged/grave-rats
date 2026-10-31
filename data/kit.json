@@ -1,0 +1,265 @@
+{
+  "dims": {
+    "door_aperture_h_m": 2.2,
+    "door_header_h_m": 0.4,
+    "door_leaf_t_m": 0.12,
+    "corner_leg_m": 2.0,
+    "header_rail_m": 0.15,
+    "header_rib_m": 0.1,
+    "post_m": 0.2,
+    "cap_h_m": 0.26,
+    "kick_h_m": 0.22,
+    "cap_stub_max_m": 0.8,
+    "chamfer_m": 0.018,
+    "core_inset_m": 0.07,
+    "bulkhead_post_m": 0.2,
+    "face_recess_m": 0.03,
+    "face_plate_t_m": 0.03,
+    "proud_m": 0.008,
+    "cap_insert_inset_m": 0.09,
+    "cap_insert_drop_m": 0.008,
+    "hazard_kick_frac": 0.4,
+    "hazard_cap_m": 0.42,
+    "min_panel_m": 0.7,
+    "rail_m": 0.06
+  },
+  "grime": {"height_m": 0.9, "floor_shade": 0.48, "floor_corner_shade": 0.55, "plate_tone": 0.16},
+  "uv_variants": 4,
+  "bay_variants": 4,
+  "wall_families": {
+    "by_space": {"medbay": "clinical", "cargo": "reinforced", "junction": "corridor", "side_corridor": "corridor", "closet": "outer"},
+    "outside": "outer",
+    "corridor_pipe_every": 3,
+    "corridor_pipe_min_m": 1.3,
+    "clinical": {"panel": "clinical", "cap_insert": "clinical", "kick_band": "hazard"},
+    "plain": {"panel": "hull", "cap_insert": "hull", "kick_band": "hazard"},
+    "reinforced": {"panel": "hull", "cap_insert": "steel", "kick_band": "hazard", "window": "glass", "window_inset_m": 0.2, "side_band_m": 0.14},
+    "pipe": {"panel": "hull", "cap_insert": "steel", "kick_band": "rubber", "pipe_mats": ["steel", "brass", "steel"], "pipe_r_m": 0.05, "pipe_gap_m": 0.14, "clamps": 3, "clamp_h_m": 0.05, "slat_h_m": 0.05, "slat_gap_m": 0.11, "slat_t_m": 0.035},
+    "outer": {"panel": "steel", "cap_insert": "steel", "kick_band": "steel"}
+  },
+  "door_look": {
+    "jamb_inset_m": 0.05,
+    "jamb_band_m": 0.06,
+    "leaf_grid": [18, 20],
+    "bulge_m": 0.34,
+    "bulge_power": 0.8,
+    "lump_count": 7,
+    "lump_m": 0.09,
+    "lump_radius": 0.36,
+    "crease_m": 0.035,
+    "crease_freq": 7.0,
+    "seed": 11,
+    "seam_w_m": 0.035,
+    "seam_h_frac": 0.82,
+    "seam_energy": 6.0,
+    "leak_color": "ff9a3a",
+    "leak_light_energy": 2.4,
+    "leak_light_range_m": 4.5,
+    "leak_light_y_m": 1.1,
+    "leak_light_out_m": 0.8,
+    "strip_size_m": [0.8, 0.012, 0.05]
+  },
+  "crate": {
+    "rail_m": 0.075,
+    "post_m": 0.1,
+    "panel_inset_m": 0.035,
+    "lid_inset_m": 0.06,
+    "bracket_m": 0.17,
+    "bracket_h_m": 0.012,
+    "rib_every_m": 0.16,
+    "rib_w_m": 0.05,
+    "tall_min_h_m": 1.0,
+    "stack_min_h_m": 1.8,
+    "ammo_strap_m": 0.09
+  },
+  "slots": {
+    "bed": "", "console": "", "cabinet": "", "locker_bank": ""
+  },
+  "slot_mat": "hull",
+  "floors": {
+    "plate_m": 2.0,
+    "seam_m": 0.018,
+    "plate_h_m": 0.02,
+    "rivet_inset_m": 0.09,
+    "rivet_m": 0.035,
+    "rivet_h_m": 0.004,
+    "slab_m": 0.2,
+    "hazard": {"width_m": 0.09, "inset_m": 0.42, "dash_m": 1.15, "gap_m": 0.45, "h_m": 0.004},
+    "threshold": {"strip_m": 0.14, "h_m": 0.006},
+    "grate_frame_m": 0.05,
+    "grate_frame_h_m": 0.006,
+    "drain_m": 0.5,
+    "spaces": {
+      "default": {"grates": [], "drains": []},
+      "medbay": {
+        "grates": [{"at": [0.055, 0.56], "size_m": [0.7, 3.4]}, {"at": [0.55, 0.88], "size_m": [0.9, 1.6]}, {"at": [0.86, 0.27], "size_m": [0.7, 1.4]}],
+        "drains": [[0.3, 0.8]]
+      },
+      "cargo": {
+        "grates": [{"at": [0.55, 0.13], "size_m": [4.0, 0.9]}, {"at": [0.95, 0.56], "size_m": [0.7, 3.0]}],
+        "drains": [[0.2, 0.3], [0.72, 0.8]]
+      },
+      "junction": {
+        "grates": [{"at": [0.5, 0.17], "size_m": [1.4, 5.5]}, {"at": [0.5, 0.45], "size_m": [1.4, 3.5]}, {"at": [0.5, 0.82], "size_m": [1.4, 5.5]}],
+        "drains": [[0.14, 0.58]]
+      },
+      "side_corridor": {
+        "grates": [{"at": [0.5, 0.5], "size_m": [5.0, 0.8]}],
+        "drains": []
+      }
+    }
+  },
+  "materials": {
+    "hull": {"texture": "hull", "uv_m": 2.0, "tint": "ffffff"},
+    "steel": {"texture": "steel", "uv_m": 1.5, "tint": "ffffff"},
+    "deck": {"texture": "deck", "uv_m": 2.0, "tint": "ffffff"},
+    "grate": {"texture": "grate", "uv_m": 0.6, "tint": "ffffff"},
+    "clinical": {"texture": "clinical", "uv_m": 2.0, "tint": "ffffff"},
+    "hazard": {"texture": "hazard", "uv_m": 1.0, "tint": "ffffff"},
+    "rubber": {"texture": "rubber", "uv_m": 0.5, "tint": "ffffff"},
+    "leaf": {"texture": "leaf", "uv_m": 1.0, "tint": "ffffff"},
+    "floor_slab": {"color": "060708", "roughness": 0.9, "metallic": 0.0, "uv_m": 1.0},
+    "glass": {"color": "0c1012", "roughness": 0.12, "metallic": 0.0, "specular": 0.7, "uv_m": 1.0},
+    "brass": {"color": "b08a2e", "roughness": 0.42, "metallic": 0.85, "uv_m": 1.0},
+    "ammo": {"color": "c8981a", "roughness": 0.68, "metallic": 0.1, "uv_m": 1.0},
+    "line": {"texture": "hazard_line", "uv_m": 1.0, "tint": "ffffff"},
+    "housing": {"color": "23262a", "roughness": 0.4, "metallic": 0.7, "uv_m": 1.0},
+    "emit_cool": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "cfe4ff", "energy": 7.0},
+    "emit_amber": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "ffa030", "energy": 7.0},
+    "emit_blue": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "38b8ff", "energy": 6.0},
+    "emit_red": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "ff2c20", "energy": 6.0},
+    "leak": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "ff9a3a", "energy": 0.0}
+  },
+  "material_shared": {"normal_scale": 1.0, "ao_light_affect": 0.5, "vertex_grime": true},
+  "textures": {
+    "hull": {"px": 1024, "paint": "b5ae9c", "steel": "33363a", "cover": 0.985, "rough_paint": [0.65, 0.85], "rough_steel": [0.4, 0.55], "rust": "5a3a20", "seed": 21},
+    "steel": {"px": 1024, "paint": "26292d", "steel": "74787e", "cover": 0.975, "rough_paint": [0.55, 0.72], "rough_steel": [0.35, 0.5], "rust": "4a3220", "seed": 22},
+    "clinical": {"px": 1024, "paint": "c4bfaf", "steel": "3c3f44", "cover": 0.993, "rough_paint": [0.45, 0.65], "rough_steel": [0.4, 0.5], "rust": "6a4a2a", "seed": 23},
+    "deck": {"px": 1024, "base": "5e6166", "dark": "242527", "stain_cover": 0.22, "stain_strength": 0.6, "rough": [0.48, 0.8], "polish_rough": [0.22, 0.36], "polish_cover": 0.2, "metal": 0.35, "seed": 24},
+    "grate": {"px": 512, "bar": "3a3d41", "hole": "050506", "rows": 6, "cols": 3, "rough": [0.6, 0.8], "metal": 0.8, "seed": 25},
+    "hazard": {"px": 512, "yellow": "d6a31c", "dark": "17181a", "stripes": 2, "rough": [0.65, 0.85], "seed": 26},
+    "hazard_line": {"px": 256, "yellow": "c9981c", "dark": "26282b", "rough": [0.6, 0.85], "seed": 27},
+    "rubber": {"px": 256, "base": "101113", "dimples": 12, "rough": [0.8, 0.95], "seed": 28},
+    "leaf": {"size": [1024, 1126], "band": [0.76, 0.9], "seed": 29}
+  },
+  "decals": {
+    "source": "assets/source/A002-slice-env/A002-08b.png",
+    "background": "dcdee0",
+    "wear": 0.09,
+    "items": {
+      "medbay": {"box": [27, 85, 512, 243], "mode": "outline"},
+      "cargo": {"box": [540, 85, 995, 243], "mode": "outline"},
+      "junction": {"box": [1022, 85, 1508, 243], "mode": "outline"},
+      "fee": {"box": [29, 268, 751, 468], "mode": "outline"},
+      "safety": {"box": [790, 270, 1507, 468], "mode": "outline"},
+      "pressure": {"box": [38, 500, 280, 748], "mode": "outline"},
+      "electrical": {"box": [317, 500, 549, 748], "mode": "outline"},
+      "corrosive": {"box": [581, 500, 815, 748], "mode": "outline"},
+      "crush": {"box": [848, 500, 1090, 748], "mode": "outline"},
+      "keep_clear": {"box": [40, 785, 480, 975], "mode": "key", "ink": "cfc9b6"},
+      "exit": {"box": [522, 785, 798, 975], "mode": "key", "ink": "cfc9b6"},
+      "load_limit": {"box": [836, 785, 1084, 968], "mode": "key", "ink": "cfc9b6"},
+      "cross": {"box": [34, 97, 160, 230], "mode": "outline"}
+    }
+  },
+  "signage": {
+    "alpha_scissor": 0.5,
+    "roughness": 0.8,
+    "wall_out_m": 0.012,
+    "floor_y_m": 0.008,
+    "walls": [
+      {"image": "medbay", "space": "medbay", "wall": "north", "at": 0.5, "y_m": 2.05, "width_m": 1.6},
+      {"image": "safety", "space": "medbay", "wall": "north", "at": 0.22, "y_m": 1.45, "width_m": 1.5},
+      {"image": "cross", "space": "medbay", "wall": "north", "at": 0.86, "y_m": 1.4, "width_m": 0.8},
+      {"image": "cargo", "space": "cargo", "wall": "north", "at": 0.5, "y_m": 2.05, "width_m": 1.6},
+      {"image": "crush", "space": "cargo", "wall": "north", "at": 0.78, "y_m": 1.3, "width_m": 0.8},
+      {"image": "junction", "space": "junction", "wall": "north", "at": 0.5, "y_m": 2.05, "width_m": 1.6},
+      {"image": "fee", "space": "junction", "wall": "north", "at": 0.5, "y_m": 1.25, "width_m": 1.6},
+      {"image": "electrical", "space": "side_corridor", "wall": "north", "at": 0.3, "y_m": 1.3, "width_m": 0.6}
+    ],
+    "floors": [
+      {"image": "keep_clear", "space": "junction", "at": [0.18, 0.46], "width_m": 1.5, "turn_deg": 90.0},
+      {"image": "exit", "space": "medbay", "at": [0.89, 0.86], "width_m": 1.0, "turn_deg": 0.0},
+      {"image": "load_limit", "space": "cargo", "at": [0.3, 0.44], "width_m": 1.3, "turn_deg": 0.0},
+      {"image": "keep_clear", "space": "cargo", "at": [0.09, 0.6], "width_m": 1.5, "turn_deg": 90.0},
+      {"image": "exit", "space": "side_corridor", "at": [0.86, 0.3], "width_m": 0.9, "turn_deg": 0.0}
+    ]
+  },
+  "lighting": {
+    "environment": {
+      "background_color": "030405",
+      "ambient_color": "7f8fa8",
+      "ambient_energy": 0.09,
+      "tonemap": "agx",
+      "exposure": 1.25,
+      "glow": true,
+      "glow_intensity": 0.55,
+      "glow_bloom": 0.0,
+      "glow_hdr_threshold": 1.4,
+      "ssao": true,
+      "ssao_radius": 1.0,
+      "ssao_intensity": 2.2,
+      "ssao_power": 1.5,
+      "ssao_light_affect": 0.25,
+      "ssao_quality": "low"
+    },
+    "fog": {
+      "enabled": true,
+      "volume_size": 48,
+      "volume_depth": 32,
+      "length_m": 32.0,
+      "detail_spread": 2.0,
+      "temporal_reprojection": 0.9,
+      "density": 0.07,
+      "albedo": "c8ccd2",
+      "emission": "000000",
+      "emission_energy": 0.0,
+      "anisotropy": 0.45,
+      "height_m": 2.6,
+      "margin_m": 1.0,
+      "practical_energy": 0.5,
+      "flashlight_energy": 2.2
+    },
+    "fixtures": {
+      "length_m": 1.3,
+      "vertical_length_m": 1.1,
+      "housing": {"w_m": 0.16, "t_m": 0.05},
+      "strip": {"w_m": 0.05, "t_m": 0.02},
+      "default_y_m": 2.1,
+      "vertical_y_m": 1.55,
+      "light_out_m": 0.65,
+      "light_y_m": 2.75,
+      "looks": {
+        "cool": {"mat": "emit_cool", "color": "e2ebf8", "energy": 5.0, "range_m": 8.0, "attenuation": 1.8, "specular": 0.9},
+        "amber": {"mat": "emit_amber", "color": "ff9a38", "energy": 4.2, "range_m": 8.0, "attenuation": 1.8, "specular": 0.9},
+        "cool_low": {"mat": "emit_cool", "color": "cdd8ea", "energy": 2.4, "range_m": 6.0, "attenuation": 1.8, "specular": 0.8},
+        "amber_low": {"mat": "emit_amber", "color": "f09038", "energy": 2.6, "range_m": 6.0, "attenuation": 1.8, "specular": 0.8}
+      },
+      "shadow_blur": 1.2,
+      "spaces": {
+        "medbay": [
+          {"look": "cool", "wall": "north", "at": 0.25},
+          {"look": "cool", "wall": "north", "at": 0.68},
+          {"look": "cool", "wall": "west", "at": 0.5, "vertical": true, "shadow": true},
+          {"look": "cool_low", "wall": "east", "at": 0.25, "vertical": true}
+        ],
+        "cargo": [
+          {"look": "amber", "wall": "north", "at": 0.25},
+          {"look": "amber", "wall": "north", "at": 0.72},
+          {"look": "amber", "wall": "east", "at": 0.25, "vertical": true},
+          {"look": "amber", "wall": "east", "at": 0.72, "vertical": true, "shadow": true}
+        ],
+        "junction": [
+          {"look": "cool_low", "wall": "north", "at": 0.5},
+          {"look": "amber_low", "wall": "east", "at": 0.4, "vertical": true},
+          {"look": "cool_low", "wall": "west", "at": 0.45, "vertical": true},
+          {"look": "amber_low", "wall": "east", "at": 0.8, "vertical": true}
+        ],
+        "side_corridor": [
+          {"look": "amber_low", "wall": "north", "at": 0.3},
+          {"look": "cool_low", "wall": "east", "at": 0.5, "vertical": true}
+        ]
+      }
+    }
+  }
+}

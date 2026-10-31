@@ -3,6 +3,8 @@ extends Node3D
 ## it bursts, then it's gone and debris (plain cubes) flies out. Numbers: data/enemies.json "ambush".
 ## Sight contract (src/sight): group "sight_occluder", sight_rect(), blocks_sight().
 
+const KitPieces := preload("res://src/kit/kit_pieces.gd")
+const KitMaterials := preload("res://src/kit/kit_materials.gd")
 const CUTAWAY_GROUP := &"camera_cutaway"
 const OCCLUDER_GROUP := &"sight_occluder"
 
@@ -40,20 +42,20 @@ func setup(breach: Dictionary, config: Dictionary, wall_height: float) -> void:
 	_pivot.add_to_group(CUTAWAY_GROUP)
 	add_child(_pivot)
 	_pivot.global_position = Vector3(c.x, 0.0, c.y)
+	# The kit's own wall, so nothing gives the ambush away.
+	var long_x := rect.size.x >= rect.size.y
+	var length := rect.size.x if long_x else rect.size.y
+	var depth := rect.size.y if long_x else rect.size.x
+	var post := float(KitMaterials.cfg().dims.bulkhead_post_m)
 	var mi := MeshInstance3D.new()
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(rect.size.x, wall_height, rect.size.y)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(String(cfg.panel_color))
-	mat.roughness = float(cfg.panel_roughness)
-	mesh.material = mat
-	mi.mesh = mesh
-	mi.position.y = wall_height * 0.5
+	mi.mesh = KitPieces.wall(length, depth, wall_height, "corridor", "corridor", post, post, 0)
+	if not long_x:
+		mi.rotation.y = -PI * 0.5
 	_pivot.add_child(mi)
 	_body = StaticBody3D.new()
 	_shape = CollisionShape3D.new()
 	var box := BoxShape3D.new()
-	box.size = mesh.size
+	box.size = Vector3(rect.size.x, wall_height, rect.size.y)
 	_shape.shape = box
 	_body.add_child(_shape)
 	add_child(_body)

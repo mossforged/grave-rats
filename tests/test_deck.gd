@@ -139,7 +139,7 @@ func test_builder_makes_cutaway_walls_and_collision() -> void:
 	var bodies := root.find_children("*", "StaticBody3D", true, false)
 	check(bodies.size() >= lay.walls.size() + lay.props.size(), "walls and props collide (%d bodies)" % bodies.size())
 	var mesh := (pivots[0] as Node3D).get_child(0) as MeshInstance3D
-	check(is_equal_approx((mesh.mesh as BoxMesh).size.y, float(deck.wall_height_m)), "wall height from data")
+	check(absf(mesh.mesh.get_aabb().size.y - float(deck.wall_height_m)) < 0.01, "wall height from data")
 	root.free()
 
 

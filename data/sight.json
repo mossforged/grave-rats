@@ -12,9 +12,9 @@
     "dilate_m": 0.22,
     "edge_low": 0.25,
     "edge_high": 0.75,
-    "remembered_brightness": 0.3,
-    "remembered_saturation": 0.25,
-    "remembered_tint": "b8c6d8",
+    "remembered_brightness": 0.4,
+    "remembered_saturation": 0.6,
+    "remembered_tint": "d4dbe6",
     "unknown_brightness": 0.035,
     "unknown_saturation": 0.0,
     "bounds_margin_m": 1.0
@@ -22,7 +22,7 @@
   "flashlight": {
     "start_on": true,
     "color": "f4f1e4",
-    "energy": 7.0,
+    "energy": 10.0,
     "attenuation": 0.8,
     "angle_attenuation": 0.6,
     "pitch_deg": -5.0,
@@ -52,8 +52,9 @@
     "strength": 1.6
   },
   "lighting": {
-    "ambient_energy": 0.32,
-    "sun_energy": 0.32
+    "ambient_energy": 0.12,
+    "sun_energy": 0.0,
+    "sun_shadows": false
   },
   "debug": {
     "polygon_color": "ffe14a",

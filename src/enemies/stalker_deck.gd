@@ -374,7 +374,7 @@ func _die(who: String, how: String) -> void:
 # --- capture hooks (src/debug/capture.gd) ---
 
 func capture_shots() -> Array[Dictionary]:
-	return [
+	var shots: Array[Dictionary] = [
 		{"name": "camera_default", "do": "camera", "preset": int(Data.value("camera", "default_preset"))},
 		{"name": "camera_preset_1", "do": "camera", "preset": 0},
 		{"name": "junction_default", "do": "junction"},
@@ -401,7 +401,27 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "hud_fire_bloom", "do": "fire", "wait": 0.1},
 		{"name": "hud_fire_shrinking", "do": "fire", "wait": 1.2},
 		{"name": "hud_tense", "do": "tense"},
+		{"name": "t010_cutaway_fade", "do": "kit_cutaway", "mode": "fade"},
+		{"name": "t010_cutaway_off", "do": "kit_cutaway", "mode": "off"},
+		{"name": "t010_rooms_junction", "do": "kit_room", "space": "junction", "at": [0.5, 0.25]},
+		{"name": "t010_rooms_cargo", "do": "kit_room", "space": "cargo", "at": [0.55, 0.55]},
+		{"name": "t010_rooms_corridor", "do": "kit_room", "space": "side_corridor", "at": [0.4, 0.5]},
 	]
+	shots.append_array(_kit_shots())
+	return shots
+
+
+## T010: the four A006 paint-over frames, each with no mask, with everything known, and in play;
+## a door in each state, seen from the front and from the side.
+func _kit_shots() -> Array[Dictionary]:
+	var shots: Array[Dictionary] = []
+	for frame: String in ["01b", "02b", "03c", "04b"]:
+		for view: String in ["off", "known", "play"]:
+			shots.append({"name": "t010_%s_%s" % [frame, view], "do": "kit_frame", "frame": frame, "view": view})
+	for state: String in ["closed", "open", "locked", "bashed", "broken"]:
+		shots.append({"name": "t010_door_%s_front" % state, "do": "kit_door", "state": state, "space": "side_corridor", "at": 0.8})
+		shots.append({"name": "t010_door_%s_side" % state, "do": "kit_door", "state": state, "space": "medbay", "at": 0.7})
+	return shots
 
 
 func apply_shot(shot: Dictionary) -> void:
@@ -410,6 +430,8 @@ func apply_shot(shot: Dictionary) -> void:
 	if panel:
 		panel.visible = false
 	sight_debug.visible = false
+	mask.visible = true
+	rig.set_cutaway_mode(String(rig.cutaway.mode))
 	respawn()
 	rig.set_preset(int(Data.value("camera", "default_preset")))
 	flashlight.set_on(true)
@@ -519,7 +541,66 @@ func apply_shot(shot: Dictionary) -> void:
 			await _sim(float(shot.wait))
 		"tense":
 			await _tense_shot(hunter, bed)
+		"kit_frame":
+			await _kit_frame(String(shot.frame), hunter, behind, infront)
+			set_kit_view(String(shot.view))
+			await _sim(0.25)
+		"kit_door":
+			await _kit_door(shot)
+		"kit_cutaway":
+			ambush.fired = true
+			rig.set_cutaway_mode(String(shot.mode))
+			set_kit_view("off")
+			var r2: Rect2 = layout.space_rect("cargo")
+			await _stand_at(Vector2(r2.get_center().x, r2.end.y - 1.2), r2.get_center())
+			rig.snap()
+			await _sim(0.3)
+		"kit_room":
+			ambush.fired = true
+			set_kit_view("off")
+			await _stand_at(layout.point_in(String(shot.space), shot.at), layout.point_in(String(shot.space), [0.5, 0.1]))
+			await _sim(0.3)
 	Engine.time_scale = 0.0
+
+
+## The same stands the T006 frames A006 painted over were taken from.
+func _kit_frame(frame: String, hunter: Node, behind: Vector2, infront: Vector2) -> void:
+	match frame:
+		"01b":
+			await _open_medbay_door()
+			await _stand_at(behind, behind + Vector2(-float(pack.cfg.lunge.range_m), 0))
+		"02b":
+			await _crouch_at(behind, infront)
+		"03c":
+			await _bash_shot(hunter, 0.6)
+		"04b":
+			var d := _door("medbay", 0.7)
+			await _open_medbay_door()
+			var p := _door_side(d, -1.0, 2.0)
+			await _stand_at(p, p + Vector2(0, -6.0))
+
+
+func _kit_door(shot: Dictionary) -> void:
+	ambush.fired = true
+	var d := _door(String(shot.space), float(shot.at))
+	set_kit_view("off")
+	var from: Vector2 = _door_side(d, 1.0, 2.2)
+	var along := Vector2(1.5, 0.0) if d.along_x else Vector2(0.0, 1.5)
+	var stand: Vector2 = _door_side(d, 1.0, 1.6) + along
+	await _stand_at(stand, stand + along * 2.0)
+	match String(shot.state):
+		"open":
+			d.door_state.progress = 1.0
+			d.door_state.state = d.door_state.State.OPEN
+			d.tick(0.0, [])
+		"locked":
+			d.reset("locked")
+		"bashed":
+			d.bash(float(d.cfg.bash.break_s) * 0.6, _door_side(d, -1.0, 2.2))
+		"broken":
+			d.bash(float(d.cfg.bash.break_s) + 1.0, from)
+	sight.refresh_occluders()
+	await _sim(0.25)
 
 
 ## A005-06b: low suit, standing in acid, low on rounds, tucked in behind the overturned bed with a

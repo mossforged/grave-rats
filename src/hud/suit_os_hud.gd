@@ -26,7 +26,7 @@ var action := {}           # {word, share}: a lift, a drop, LEAVE, over the oper
 var urgent_alerts: Array = []
 var hands_full := false
 var quota := {}            # {quota, banked, shifts_left, share}; empty: no session, no plate
-var banner: Array = []     # [big line, lines...]: the shift's over, until T013's screens
+var banner: Array = []     # [big line, lines...]: the shift's over, on a deck with no session
 var help_on := true
 
 var _canvas: Control

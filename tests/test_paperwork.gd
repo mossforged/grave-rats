@@ -152,8 +152,20 @@ func test_hazards_come_only_from_past_logs() -> void:
 			check_eq(h.location, String(cfg.space_words.cargo), "the newest place")
 	check_eq(doc.hazards[-1].text, String(cfg.words.hazard_rest), "the rest stays unverified")
 	# A threat nobody met can't print, whatever data knows about it.
+	var rival: Dictionary = cfg.hazards.filter(func(h: Dictionary) -> bool: return h.kind == "rifle")[0]
 	for row: Dictionary in doc.hazards:
-		check(not String(row.text).contains(String(cfg.hazards[4].text)), "no rival crew on a log with none")
+		check(not String(row.text).contains(String(rival.text)), "no rival crew on a log with none")
+
+
+func test_too_many_hazards_keep_to_the_rows_on_the_form() -> void:
+	var cfg := _cfg()
+	var p := _paper(cfg)
+	var threats := {}
+	for h: Dictionary in cfg.hazards:
+		threats[h.kind] = "cargo"
+	var doc := _contract(p, [_log({"threats_seen": threats})])
+	check_eq((doc.known_hazards as Array).size(), (cfg.hazards as Array).size(), "all on file")
+	check_eq((doc.hazards as Array).size(), int(cfg.contract.hazard_rows) + 1, "the rows, and the rest unverified")
 
 
 func test_vessel_names_and_decline_lines_dont_repeat_back_to_back() -> void:
@@ -698,3 +710,48 @@ func test_a_long_ledger_scrolls_and_the_total_stays_pinned() -> void:
 	scene.paper._scroll_by(1000)
 	await tree.process_frame
 	check(scene.paper.is_open(), "drew")
+
+
+# --- real input: what a player's keys and clicks reach ---
+
+func _key(code: Key) -> void:
+	var e := InputEventKey.new()
+	e.physical_keycode = code
+	e.keycode = code
+	e.pressed = true
+	(Engine.get_main_loop() as SceneTree).root.push_input(e)
+
+
+func _click(scene: Node, button: String) -> void:
+	for b: Dictionary in scene.paper.buttons():
+		if b.name == button:
+			var e := InputEventMouseButton.new()
+			e.button_index = MOUSE_BUTTON_LEFT
+			e.pressed = true
+			e.position = scene.paper._origin + (b.rect as Rect2).get_center() * scene.paper._scale
+			(Engine.get_main_loop() as SceneTree).root.push_input(e)
+
+
+func test_keys_and_clicks_work_the_forms_and_stop_at_them() -> void:
+	var scene: Node = await _scene()
+	var tree := Engine.get_main_loop() as SceneTree
+	scene.start_session()
+	await tree.process_frame
+	await tree.process_frame
+	_key(KEY_ENTER)
+	check(scene.paper.is_open(), "a key held over from the shift can't sign: the lock")
+	scene.paper._lock_left = 0.0
+	var left: int = scene.quota.shifts_left
+	_key(KEY_BACKSPACE)
+	check_eq(scene.quota.shifts_left, left, "the deck's keys stop at the form")
+	check(scene.paper.is_open(), "still up")
+	_click(scene, "decline")
+	check(scene.paper.doc.get("confirming", false), "the click declined")
+	_key(KEY_ENTER)
+	check(not scene.paper.is_open(), "Enter signs")
+	_key(KEY_BACKSPACE)
+	check_eq(scene.paper.screen_name, "payslip", "Backspace in a shift abandons it, billed")
+	check_eq(scene.quota.shifts_left, left - 1, "and it counts")
+	scene.paper._lock_left = 0.0
+	_key(KEY_ENTER)
+	check_eq(scene.paper.screen_name, "briefing", "Enter acknowledges")

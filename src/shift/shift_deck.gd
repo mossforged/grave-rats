@@ -407,7 +407,7 @@ func _sync_hud() -> void:
 		urgent.append("o2_out")
 	hud.urgent_alerts = urgent
 	hud.action = _action_now(c)
-	hud.quota = quota.facts() if session_live else {}
+	hud.quota = quota.facts() if session_live or (_capture and _demo_t >= 0.0) else {}
 
 
 func _action_now(c: CarryState) -> Dictionary:

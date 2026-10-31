@@ -150,32 +150,32 @@
    "text": "Corrosive organism sighted"
   },
   {
-   "kind": "spit",
-   "text": "Corrosive discharge recorded"
+   "kind": "alarm",
+   "text": "Asset tamper alarm"
   },
   {
-   "kind": "puddle",
-   "text": "Corrosive residue on deck"
+   "kind": "spit",
+   "text": "Corrosive discharge recorded"
   },
   {
    "kind": "lunge",
    "text": "Close-contact incident"
   },
   {
+   "kind": "puddle",
+   "text": "Corrosive residue on deck"
+  },
+  {
    "kind": "rifle",
    "text": "Armed rival crew reported"
   },
   {
-   "kind": "alarm",
-   "text": "Asset tamper alarm"
+   "kind": "power_loss",
+   "text": "Section power failure"
   },
   {
    "kind": "vents",
    "text": "Movement in the vents"
-  },
-  {
-   "kind": "power_loss",
-   "text": "Section power failure"
   }
  ],
  "decline_lines": [

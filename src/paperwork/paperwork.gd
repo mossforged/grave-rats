@@ -54,7 +54,8 @@ func _crew_name() -> String:
 
 # --- the briefing ---
 
-## What the briefing shows of past logs: threats somebody really met, newest place for each. Data order.
+## What the briefing knows from past logs: threats somebody really met, the latest place for each, in
+## data order, which is also which ones make the form when there are too many.
 func known_hazards(past_logs: Array) -> Array:
 	var seen := {}
 	for log: Dictionary in past_logs:
@@ -83,7 +84,7 @@ func contract(number: int, ship_total: int, past_logs: Array, quota_facts: Dicti
 	var id := String(c.id_format) % (int(c.id_base) + number)
 	var estimate_cr := estimate(ship_total)
 	var known := known_hazards(past_logs)
-	var shown := known.slice(maxi(known.size() - int(c.hazard_rows), 0))
+	var shown := known.slice(0, int(c.hazard_rows))
 	var rows: Array = []
 	for h: Dictionary in shown:
 		rows.append({"n": str(rows.size() + 1).pad_zeros(2), "text": _words("hazard_row", h)})

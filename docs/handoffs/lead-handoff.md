@@ -42,8 +42,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A011 | art | merged and approved 2026-10-31 (cutter + drone first) |
 | A012 | art | merged and approved 2026-10-31 |
 | T012 | code | merged 2026-10-31; waits for John's play (one more room? black box scary?) |
-| T013 | code | written: lead's scripted props (console, cabinet, locker bank) into the kit slots. queued 2026-10-31 |
-| T014 | code | planned: quota over 3 shifts, briefing/payslip/death bill from A012, termination notice |
+| T013 | code | merged 2026-10-31; lead then reworked the locker bank and added console_1600 |
+| T014 | code | queued 2026-10-31: quota over 3 shifts, A012 paperwork screens, termination notice |
 | T015 | code | planned: CUSTODIAN cutter turret + patrol drone |
 
 ## Lesson

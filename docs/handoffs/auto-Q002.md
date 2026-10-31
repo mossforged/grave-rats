@@ -8,7 +8,7 @@ Branch `auto/q002-mac`. Report: `docs/qa/health-2026-10-31.md` (summary first, t
 **Needs a re-measure:** run `tools/qa/frame_recheck.sh <commit> <out-dir> <HH:MM>` with the code lane idle, ideally at John's normal display (see below).
 
 ## Needs John's decision
-**Is the prize route too lethal?** First T014 session rerun with CUSTODIAN: greedy met 0 of 12 first quotas and died in 34 of 36 shifts, 28 by cutter (T014: 42 of 44 quotas met, 45% deaths). This is T015's open question with a bigger number. Bots leave no room for judgment calls and read no tells, so play first. First lever, from T015: move the cargo cutter off the prize route.
+**Is the prize route too lethal?** First T014 session rerun with CUSTODIAN: greedy met 0 of 12 first quotas and died in 34 of 36 shifts, 28 by cutter (T014: 42 of 44 quotas met, 45% deaths). This is T015's open question with a bigger number. These bots never leave early and mostly read no tells, so play first. First lever, from T015: move the cargo cutter off the prize route.
 
 ## What changed in the script
 - **`tools/qa/health_check.sh`:**
@@ -18,7 +18,7 @@ Branch `auto/q002-mac`. Report: `docs/qa/health-2026-10-31.md` (summary first, t
   - Falls back to a borderless window, through an `override.cfg` in the clone only, when a titled one can't reach 1080. Records whether a remote desktop host is running.
 - **`tools/qa/health_report.py`:** the new scene and bot sets, deaths by cause, display conditions, `--add-baseline`.
 - **`tools/qa/frame_recheck.sh` (new):** frame windows alone. It watches during each window and rejects any the code lane touched.
-- **`docs/qa/baseline.json`:** added `frame_time.shift_deck`, `bots.t012`, `t014`, `t015`, `t015_shift`. Existing numbers are unchanged (the diff removes no line). Nothing in the game changed.
+- **`docs/qa/baseline.json`:** added `frame_time.shift_deck`, `bots.t012`, `t014`, `t015`, `t015_shift`. Existing numbers, thresholds and commit are unchanged, checked value by value against `42930d6`; the new entries carry two explanatory notes. Nothing in the game changed.
 
 **A full run now takes about 31 min when idle** (41 min today with a 10 min wait).
 

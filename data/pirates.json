@@ -154,6 +154,19 @@
     "beam_hz": 20.0
   },
   "body": {
+    "model": "hauler",
+    "hauler_paint": {
+      "plate_color": "1a2c5e",
+      "fabric_color": "eef1f5",
+      "plate_hue_center": 0.06,
+      "plate_hue_width": 0.07,
+      "plate_saturation_min": 0.45,
+      "plate_value_min": 0.4,
+      "plate_gain": 0.75,
+      "fabric_saturation_max": 0.45,
+      "fabric_value_min": 0.3,
+      "fabric_gain": 0.8
+    },
     "materials": {
       "paint_orange": {"color": "1a2c5e", "drop_texture": true, "roughness": 0.45},
       "paint_white": {"color": "eef1f5", "drop_texture": true, "roughness": 0.4},

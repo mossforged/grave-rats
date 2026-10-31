@@ -5,10 +5,9 @@ extends CharacterBody3D
 const PirateBrain := preload("res://src/pirates/pirate_brain.gd")
 const PirateLight := preload("res://src/pirates/pirate_light.gd")
 const PirateRecolour := preload("res://src/pirates/pirate_recolour.gd")
-const OperatorAnim := preload("res://src/player/operator_anim.gd")
+const OperatorBody := preload("res://src/player/operator_body.gd")
 const RifleFx := preload("res://src/weapons/rifle_fx.gd")
 const SightTarget := preload("res://src/sight/sight_target.gd")
-const MODEL := preload("res://assets/game/legacy/operator.glb")
 
 signal was_shot(pirate: Node3D, damage: float, from: Vector2)
 
@@ -19,7 +18,7 @@ var spec: Dictionary
 var label := ""
 var home := Vector2.ZERO
 var loot: Array = []
-var anim: OperatorAnim
+var anim: Node
 var fx: RifleFx
 var light: PirateLight
 var path := PackedVector2Array()
@@ -30,10 +29,14 @@ var _muzzle_offset := Vector3.ZERO
 var _repath_left := 0.0
 var _lean := 0.0
 var _tilt := 0.0
+var _was_staggered := false
 
 
 func setup(config: Dictionary, entry: Dictionary, at: Vector2, loot_points: Array, character_scale: float) -> void:
 	cfg = config
+	if OperatorBody.kind(String(config.body.model)) == "hauler":
+		cfg = config.duplicate()
+		cfg.weight = OperatorBody.weight_for(String(config.body.model), config.weight)
 	spec = entry
 	label = String(entry.name)
 	home = at
@@ -47,19 +50,12 @@ func setup(config: Dictionary, entry: Dictionary, at: Vector2, loot_points: Arra
 	_cs.shape = shape
 	_cs.position.y = shape.height * 0.5
 	add_child(_cs)
-	_visual = MODEL.instantiate()
-	_visual.name = "Model"
-	add_child(_visual)
+	var body := OperatorBody.build(self, String(cfg.body.model), cfg.weight.anim, String(cfg.rifle.muzzle_bone))
+	_visual = body.visual
+	anim = body.anim
 	_visual.scale = Vector3.ONE * character_scale
-	var shotgun := _visual.find_child("Shotgun", true, false) as Node3D
-	if shotgun:
-		shotgun.visible = false
 	PirateRecolour.apply(_visual, cfg.body.materials)
-	anim = OperatorAnim.new()
-	anim.name = "Anim"
-	add_child(anim)
-	anim.setup(_visual, cfg.weight.anim, String(cfg.rifle.muzzle_bone))
-	anim.start()
+	PirateRecolour.apply_hauler(_visual, cfg.body.hauler_paint)
 	var o: Array = cfg.rifle.muzzle_bone_offset
 	_muzzle_offset = Vector3(float(o[0]), float(o[1]), float(o[2]))
 	fx = RifleFx.new()
@@ -85,6 +81,7 @@ func reset() -> void:
 	_lean = 0.0
 	_tilt = 0.0
 	_visual.rotation = Vector3(0.0, brain.model.hips_yaw, 0.0)
+	anim.clear_states()
 	light.set_on(bool(cfg.flashlight.start_on))
 
 
@@ -122,6 +119,7 @@ func take_hit(hit: Dictionary) -> void:
 	if not brain.alive():
 		_cs.disabled = true
 		light.set_on(false)
+		anim.play_state("death")
 
 
 ## One step, given the squad's senses builder. Returns the brain's events.
@@ -154,11 +152,18 @@ func _show(delta: float) -> void:
 		upper = "reload"
 	elif m.sprinting or brain.state == brain.State.LOOT:
 		upper = "low"
+	anim.set_motion(m.sprinting, m.speed, m.hip_turn_deg_s)
+	anim.set_recoil(m.firing_share())
 	anim.update(m.leg_blend(), m.leg_time_scale(), m.crouch_time_scale(), m.crouch_amount * shown,
 			m.torso_lead(), upper, brain.gun.reload_total)
+	var staggered: bool = brain.suit.staggered()
+	if staggered and not _was_staggered:
+		anim.play_state("hit", float(cfg.stagger.control_loss_s))
+	_was_staggered = staggered
 	_visual.rotation.y = m.hips_yaw
 	_lean = move_toward(_lean, 0.0, float(cfg.body.hit_lean_recover_deg_s) * delta)
-	if not brain.alive():
+	# A body with a death clip falls by itself.
+	if not brain.alive() and anim.over_state() != "death":
 		_tilt = move_toward(_tilt, float(cfg.body.dead_tilt_deg), float(cfg.body.dead_tilt_deg_s) * delta)
 	_visual.rotation.x = deg_to_rad(_lean + _tilt)
 

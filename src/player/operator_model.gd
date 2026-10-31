@@ -17,6 +17,7 @@ var aim_yaw := 0.0             # where the cursor is
 var crouch_amount := 0.0       # 0 standing, 1 fully down
 var sprinting := false
 var turned_deg := 0.0          # how far the torso turned this step
+var hip_turn_deg_s := 0.0      # how fast the hips turned this step (signed)
 
 var _firing_left := 0.0
 
@@ -72,6 +73,12 @@ func note_shot() -> void:
 
 func firing() -> bool:
 	return _firing_left > 0.0
+
+
+## 1 the moment a shot goes off, down to 0 as the firing hold runs out.
+func firing_share() -> float:
+	var hold := float(cfg.turn.firing_hold_s)
+	return _firing_left / hold if hold > 0.0 else 0.0
 
 
 func moving() -> bool:
@@ -143,6 +150,7 @@ func _step_turn(delta: float, to_yaw: float) -> void:
 	var turn := minf(absf(err), deg_to_rad(current_turn_rate_deg()) * delta)
 	torso_yaw = wrapf(torso_yaw + signf(err) * turn, -PI, PI)
 	turned_deg = rad_to_deg(turn)
+	var hips_before := hips_yaw
 	# Planted feet stay until the torso runs out of lead; walking brings the hips back under it.
 	if moving():
 		hips_yaw = rotate_toward(hips_yaw, torso_yaw, deg_to_rad(float(t.hip_settle_deg_s)) * delta)
@@ -150,6 +158,7 @@ func _step_turn(delta: float, to_yaw: float) -> void:
 	var lead := wrapf(torso_yaw - hips_yaw, -PI, PI)
 	if absf(lead) > limit:
 		hips_yaw = wrapf(torso_yaw - signf(lead) * limit, -PI, PI)
+	hip_turn_deg_s = rad_to_deg(wrapf(hips_yaw - hips_before, -PI, PI)) / delta if delta > 0.0 else 0.0
 
 
 ## Signed torso lead over the hips (rad).

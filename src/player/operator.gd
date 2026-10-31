@@ -4,14 +4,13 @@ extends CharacterBody3D
 ## Order inside a step matters: speed and direction come from the model BEFORE move_and_slide.
 
 const OperatorModel := preload("res://src/player/operator_model.gd")
-const OperatorAnim := preload("res://src/player/operator_anim.gd")
+const OperatorBody := preload("res://src/player/operator_body.gd")
 const AimVisuals := preload("res://src/player/aim_visuals.gd")
 const Rifle := preload("res://src/weapons/rifle.gd")
-const MODEL := preload("res://assets/game/legacy/operator.glb")
 
 var model: OperatorModel
 var rifle: Rifle
-var anim: OperatorAnim
+var anim: Node                 # operator_anim.gd or hauler_anim.gd, by the "body" key
 var visuals: AimVisuals
 var aim_point := Vector3.ZERO
 var move_yaw_deg := 0.0        # camera yaw, so W is always screen-up
@@ -32,6 +31,7 @@ var _hold_left := 0.0
 
 func _ready() -> void:
 	_cfg = Data.load_data("player")
+	_cfg = OperatorBody.weight_for(String(_cfg.body), _cfg)
 	_rifle_cfg = Data.value("weapons", "rifle", {})
 	motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
 	model = OperatorModel.new(_cfg)
@@ -40,17 +40,9 @@ func _ready() -> void:
 	cs.name = "Collision"
 	cs.shape = _shape
 	add_child(cs)
-	_visual = MODEL.instantiate()
-	_visual.name = "Model"
-	add_child(_visual)
-	var shotgun := _visual.find_child("Shotgun", true, false) as Node3D
-	if shotgun:
-		shotgun.visible = false
-	anim = OperatorAnim.new()
-	anim.name = "Anim"
-	add_child(anim)
-	anim.setup(_visual, _cfg.anim, String(_rifle_cfg.muzzle_bone))
-	anim.start()
+	var body := OperatorBody.build(self, String(_cfg.body), _cfg.anim, String(_rifle_cfg.muzzle_bone))
+	_visual = body.visual
+	anim = body.anim
 	var o: Array = _rifle_cfg.muzzle_bone_offset
 	_muzzle_offset = Vector3(float(o[0]), float(o[1]), float(o[2]))
 	rifle = Rifle.new()
@@ -110,10 +102,18 @@ func face_now(point: Vector3) -> void:
 ## Takes control away for `seconds` (a stagger, tipping a bed, death): no moving, turning or firing.
 func hold_control(seconds: float) -> void:
 	_hold_left = maxf(_hold_left, seconds)
+	if is_inf(seconds):
+		anim.play_state("death")
 
 
 func release_control() -> void:
 	_hold_left = 0.0
+	anim.clear_states()
+
+
+## A big hit shows in the body, for as long as control is gone.
+func play_hit(seconds: float) -> void:
+	anim.play_state("hit", seconds)
 
 
 func control_held() -> bool:
@@ -178,6 +178,8 @@ func simulate(delta: float) -> void:
 		upper = "reload"
 	elif model.sprinting:
 		upper = "low"
+	anim.set_motion(model.sprinting, model.speed, model.hip_turn_deg_s)
+	anim.set_recoil(model.firing_share())
 	anim.update(model.leg_blend(), model.leg_time_scale(), model.crouch_time_scale(),
 			model.crouch_amount * crouch_shown, model.torso_lead(), upper, rifle.state.reload_total)
 	velocity = model.velocity

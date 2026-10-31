@@ -77,6 +77,27 @@ func update(leg_blend: Vector2, leg_scale: float, crouch_scale: float, crouch_am
 		tree.set("parameters/upper/transition_request", upper)
 
 
+## The hauler's sprint, turn, recoil and full-body states. The legacy body has none of them.
+func set_motion(_sprinting: bool, _speed: float, _hip_turn_deg_s: float) -> void:
+	pass
+
+
+func set_recoil(_share: float) -> void:
+	pass
+
+
+func play_state(_state: String, _seconds := -1.0) -> bool:
+	return false
+
+
+func clear_states() -> void:
+	pass
+
+
+func over_state() -> String:
+	return ""
+
+
 func _build_tree(xfade: float) -> AnimationNodeBlendTree:
 	var legs := AnimationNodeBlendSpace2D.new()
 	legs.sync = true
@@ -134,6 +155,16 @@ func start() -> void:
 
 func clip_length(clip_name: String) -> float:
 	return tree.get_animation(clip_name).length
+
+
+## The clip whose length sets the walk's beat.
+func cycle_length() -> float:
+	return clip_length("L_Run_F")
+
+
+## Each foot bone, left then right.
+func foot_bones() -> Array:
+	return ["foot_L", "foot_R"]
 
 
 func _clip(clip_name: String) -> AnimationNodeAnimation:

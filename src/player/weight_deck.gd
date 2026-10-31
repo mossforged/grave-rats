@@ -229,7 +229,7 @@ func release_shot() -> void:
 
 
 func _walk_cycle_s() -> float:
-	return operator.anim.clip_length("L_Run_F") / operator.model.leg_time_scale()
+	return operator.anim.cycle_length() / operator.model.leg_time_scale()
 
 
 func _ahead(deg: float) -> Vector3:

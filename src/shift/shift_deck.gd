@@ -199,7 +199,7 @@ func _on_tier(index: int, spec: Dictionary) -> void:
 		var options: Array = spec.lights
 		var space := String(options[rng.randi_range(0, options.size() - 1)])
 		section.fail(space)
-		line = line % String(_cfg.section_words[space])
+		line = line.replace("%s", String(_cfg.section_words[space]))
 	hud.os_state.announce(line)
 	_chirp.play()
 	for name_key: String in spec.get("wake", []):
@@ -538,7 +538,7 @@ func _lights_shot(phase: String) -> void:
 		return
 	shift.tier_reached = (_cfg.tiers as Array).size() - 1
 	shift.oxygen_left = float(_cfg.oxygen_s) * float(_cfg.tiers[-1].at_oxygen)
-	hud.os_state.announce(String(_cfg.tiers[-1].announce) % String(_cfg.section_words[space]))
+	hud.os_state.announce(String(_cfg.tiers[-1].announce).replace("%s", String(_cfg.section_words[space])))
 	section.fail(space)
 	await _sim(float(_cfg.lights.flicker_s) * 0.4 if phase == "flicker" else float(_cfg.lights.flicker_s) + 0.5)
 

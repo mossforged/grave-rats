@@ -3,7 +3,9 @@ extends RefCounted
 ## The lead reads these beside John's comments. See src/run_log/CONTRACT.md.
 
 const DEFAULT_DIR := "user://runs"
-const SOURCES := ["spit", "puddle", "lunge", "rifle"]
+const SOURCES := ["spit", "puddle", "lunge", "rifle", "cutter"]
+## The ship did this: what the payslip charges for.
+const CUSTODIAN_SOURCES := ["cutter"]
 ## Damage from no one: neither a hit in cover nor one in the open.
 const NOT_HITS := ["puddle", "oxygen"]
 ## A shift's fields, as they read on a deck with no shift.
@@ -27,6 +29,9 @@ var killed_by: Variant = null
 var time_locked_s := 0.0
 var shots_blocked_for_you := 0
 var your_shots_blocked := 0
+## CUSTODIAN hits taken, and its drones' calls that went through.
+var custodian_hits := 0
+var custodian_calls := 0
 var started_at := ""
 ## Where you went down, a deck space's name ("" a doorway); null if nobody said.
 var death_location: Variant = null
@@ -59,6 +64,8 @@ func begin() -> void:
 	time_locked_s = 0.0
 	shots_blocked_for_you = 0
 	your_shots_blocked = 0
+	custodian_hits = 0
+	custodian_calls = 0
 	started_at = Time.get_datetime_string_from_system()
 	death_location = null
 	threats_seen = {}
@@ -78,6 +85,8 @@ func note_shot(hit: bool) -> void:
 ## `in_cover`: a piece of cover stood on the straight line from the source to you.
 func note_damage(source: String, amount: float, in_cover: bool) -> void:
 	damage_by_source[source] = float(damage_by_source.get(source, 0.0)) + amount
+	if CUSTODIAN_SOURCES.has(source):
+		custodian_hits += 1
 	if NOT_HITS.has(source):
 		return
 	if in_cover:
@@ -91,7 +100,12 @@ func note_protected() -> void:
 	times_protected += 1
 
 
-## `kind` is what killed you: "stalker", "pirate" or "suit" (out of air).
+## A drone's call went through.
+func note_custodian_call() -> void:
+	custodian_calls += 1
+
+
+## `kind` is what killed you: "stalker", "pirate", "custodian_cutter" or "suit" (out of air).
 func note_death(who: String, how: String, kind := "stalker") -> void:
 	killed_by = {kind: who, "how": how}
 
@@ -136,6 +150,8 @@ func to_dict(ended: String) -> Dictionary:
 		"time_locked_s": time_locked_s,
 		"shots_blocked_for_you": shots_blocked_for_you,
 		"your_shots_blocked": your_shots_blocked,
+		"custodian_hits": custodian_hits,
+		"custodian_calls": custodian_calls,
 		"cause_of_death": killed_by.how if killed_by != null else null,
 		"death_location": death_location,
 		"threats_seen": threats_seen,

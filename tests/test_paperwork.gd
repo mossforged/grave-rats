@@ -202,6 +202,7 @@ func test_each_deduction_appears_only_with_its_cause() -> void:
 		"floor_residue": {"damage_by_source": {"puddle": 3.0}},
 		"impact_seal": {"damage_by_source": {"lunge": 20.0}},
 		"ballistic_seal": {"damage_by_source": {"rifle": 8.0}},
+		"custodian_charge": {"custodian_hits": 1},
 		"replacement_shift": {"ended": "respawn"},
 	}
 	var cfg := _cfg()

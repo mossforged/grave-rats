@@ -74,6 +74,7 @@
  "killer_keys": [
   "stalker",
   "pirate",
+  "custodian_cutter",
   "suit"
  ],
  "salvage_labels": {
@@ -152,6 +153,10 @@
   {
    "kind": "alarm",
    "text": "Asset tamper alarm"
+  },
+  {
+   "kind": "custodian",
+   "text": "Property protection active"
   },
   {
    "kind": "spit",
@@ -368,6 +373,16 @@
    "rate": 2
   },
   {
+   "id": "custodian_charge",
+   "label": "Property protection charge",
+   "note": "Unauthorised salvage detected. Your account has been charged.",
+   "qty": "custodian_hits",
+   "unit": "hit",
+   "units": "hits",
+   "enabled": true,
+   "rate": 100
+  },
+  {
    "id": "early_closure",
    "label": "Early closure administration",
    "note": "Departure does not cancel the account.",
@@ -441,6 +456,14 @@
     ]
    },
    {
+    "id": "cutter",
+    "text": "Thermal cutting incident",
+    "line": "Cut complete. Invoice to follow.",
+    "requires": [
+     "method_cutter"
+    ]
+   },
+   {
     "id": "oxygen",
     "text": "Oxygen exhausted",
     "line": "Supply ended. Billing did not.",
@@ -469,6 +492,14 @@
     "line": "Competing claim acknowledged.",
     "requires": [
      "by_pirate"
+    ]
+   },
+   {
+    "id": "custodian",
+    "text": "Property protection enforcement",
+    "line": "Property protection enforcement. The property was protected.",
+    "requires": [
+     "by_custodian"
     ]
    }
   ],
@@ -524,6 +555,15 @@
     "line": "Inspection excludes projectile recovery.",
     "requires": [
      "rifle_on_file"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "thermal",
+    "text": "Thermal damage on file",
+    "line": "Prior cuts remain on the account.",
+    "requires": [
+     "cutter_on_file"
     ],
     "cooldown": 1
    },

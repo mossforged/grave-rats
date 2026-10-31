@@ -151,6 +151,7 @@ func quantities(log: Dictionary) -> Dictionary:
 		"puddle_damage": ceili(float(dmg.get("puddle", 0.0))),
 		"lunge_damage": ceili(float(dmg.get("lunge", 0.0))),
 		"rifle_damage": ceili(float(dmg.get("rifle", 0.0))),
+		"custodian_hits": int(log.get("custodian_hits", 0)),
 		"ended_quit": 1 if ended == "quit" else 0,
 		"ended_respawn": 1 if ended == "respawn" else 0,
 		"items": (log.get("salvage", []) as Array).size(),
@@ -247,11 +248,13 @@ func death_facts(log: Dictionary) -> Dictionary:
 		"no_killer": by == null,
 		"method_spit": how == "spit", "method_puddle": how == "puddle", "method_lunge": how == "lunge",
 		"method_rifle": how == "rifle", "method_oxygen": how == "oxygen",
+		"method_cutter": how == "cutter",
 		"by_stalker": by is Dictionary and by.has("stalker"), "by_pirate": by is Dictionary and by.has("pirate"),
+		"by_custodian": by is Dictionary and by.has("custodian_cutter"),
 		"many_classes": classes >= 2,
 		"hits_in_cover": int(log.get("hits_in_cover", 0)) > 0, "hits_in_open": int(log.get("hits_in_open", 0)) > 0,
 		"puddle_on_file": float(dmg.get("puddle", 0.0)) > 0.0, "lunge_on_file": float(dmg.get("lunge", 0.0)) > 0.0,
-		"rifle_on_file": float(dmg.get("rifle", 0.0)) > 0.0,
+		"rifle_on_file": float(dmg.get("rifle", 0.0)) > 0.0, "cutter_on_file": float(dmg.get("cutter", 0.0)) > 0.0,
 		"sheltered": int(log.get("shots_blocked_for_you", 0)) + int(log.get("times_protected", 0)) > 0,
 	}
 

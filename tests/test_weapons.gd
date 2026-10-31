@@ -20,7 +20,10 @@ const NUMBER_FREE := ["res://src/player/operator_model.gd", "res://src/player/op
 	"res://src/salvage/hold.gd", "res://src/salvage/salvage_field.gd", "res://src/enemies/spawn_picker.gd",
 	"res://src/shift/shift_state.gd", "res://src/shift/section_lights.gd", "res://src/shift/alarm_marker.gd",
 	"res://src/shift/airlock.gd", "res://src/shift/quota_state.gd", "res://src/paperwork/paperwork.gd",
-	"res://src/paperwork/line_book.gd", "res://src/paperwork/paperwork_screen.gd"]
+	"res://src/paperwork/line_book.gd", "res://src/paperwork/paperwork_screen.gd",
+	"res://src/custodian/cutter_brain.gd", "res://src/custodian/drone_brain.gd", "res://src/custodian/custodian_voice.gd",
+	"res://src/custodian/custodian_trace.gd", "res://src/custodian/custodian_fx.gd", "res://src/custodian/cutter_unit.gd",
+	"res://src/custodian/drone_unit.gd", "res://src/custodian/custodian.gd"]
 
 var _nodes: Array[Node] = []
 

@@ -1,0 +1,104 @@
+{
+  "wake": {"tier": "wake_tier", "prize": "wake_prize"},
+  "voice": {
+    "global_cooldown_s": 12.0,
+    "lines": {
+      "wake_tier": {"text": "Crew authority expired. Asset protection continues.", "cooldown_s": 0.0, "urgent": true},
+      "wake_prize": {"text": "Asset tamper confirmed.", "cooldown_s": 0.0, "urgent": true},
+      "detect": {"text": "Please remain clear of company property.", "cooldown_s": 40.0},
+      "charged": {"text": "Unauthorised salvage detected. Your account has been charged.", "cooldown_s": 40.0}
+    }
+  },
+  "lens": {
+    "color": "a6e7c4", "dim_energy": 0.3, "bright_energy": 3.2, "unknown_share": 0.0, "size_m": 0.55
+  },
+  "shell": {"ivory": "cfc9b4", "teal": "3f6c6e", "dark": "23282a", "roughness": 0.75},
+  "terminals": {
+    "size_m": [0.7, 0.9, 0.08], "height_m": 1.5, "lens_out_m": 0.07, "word": "PROPERTY PROTECTION ACTIVE",
+    "word_font_size": 28, "word_pixel_size": 0.006, "word_up_m": 0.62,
+    "at": [
+      {"space": "junction", "at": [0.03, 0.3]},
+      {"space": "medbay", "at": [0.4, 0.03]},
+      {"space": "cargo", "at": [0.65, 0.03]}
+    ]
+  },
+  "cutter": {
+    "label": "CUTTER UNIT",
+    "killer_key": "custodian_cutter",
+    "source": "cutter",
+    "mount_height_m": 2.35,
+    "aim_floor_m": 1.15,
+    "range_m": 13.0,
+    "sweep_deg_s": 30.0,
+    "slew_deg_s": 150.0,
+    "track_deg_s": 70.0,
+    "aligned_deg": 2.5,
+    "warmup_s": 1.2,
+    "burn_s": 0.35,
+    "damage": 40.0,
+    "hit_radius_m": 0.55,
+    "cool_s": 3.0,
+    "cancel_hold_s": 0.7,
+    "body_size_m": [0.8, 0.55, 0.8],
+    "body_height_m": 0.35,
+    "lens_up_m": 0.5,
+    "line": {"color": "a6e7c4", "width_m": 0.045, "aim_width_m": 0.07, "energy": 2.2, "aim_energy": 4.5, "dash_m": 0.34, "gap_m": 0.16, "unknown_share": 0.0, "cull_margin_m": 20.0},
+    "beam": {"color": "ffb46a", "width_m": 0.2, "energy": 7.0},
+    "ring": {
+      "color": "a6e7c4", "segments": 8, "gap": 0.14, "inner": 0.72, "track_alpha": 0.2, "energy": 3.5,
+      "mount_radius_m": 0.85, "target_radius_m": 0.95, "floor_m": 0.04
+    },
+    "reveal": {"radius_m": 2.2, "hold_s": 0.2, "fade_s": 0.5, "rays": 24},
+    "warm_sound": {"low_hz": 300.0, "high_hz": 1300.0, "sweep_s": 1.2, "length_s": 1.2, "volume_db": -8.0},
+    "burn_sound": {"low_hz": 90.0, "high_hz": 150.0, "sweep_s": 0.05, "length_s": 0.35, "volume_db": -3.0}
+  },
+  "cutters": [
+    {"name": "cargo north", "space": "cargo", "at": [0.5, 0.03], "home_yaw_deg": 180.0, "arc_half_deg": 75.0, "on_wake": true},
+    {"name": "medbay south", "space": "medbay", "at": [0.3, 0.97], "home_yaw_deg": 0.0, "arc_half_deg": 75.0, "on_wake": true},
+    {"name": "cargo south", "space": "cargo", "at": [0.97, 0.95], "home_yaw_deg": 45.0, "arc_half_deg": 60.0, "on_wake": false}
+  ],
+  "drone": {
+    "label": "PATROL UNIT",
+    "health": 50.0,
+    "hit_radius_m": 0.5,
+    "shot_height_m": 0.45,
+    "speed_m_s": 1.1,
+    "turn_deg_s": 70.0,
+    "move_within_deg": 12.0,
+    "arrive_m": 0.2,
+    "eye_height_m": 0.62,
+    "spot_range_m": 9.0,
+    "spot_half_deg": 17.0,
+    "call_s": 2.4,
+    "bars": 3,
+    "track_deg_s": 45.0,
+    "reacquire_s": 0.8,
+    "call_cooldown_s": 12.0,
+    "body_size_m": [0.5, 0.34, 0.65],
+    "skirt_size_m": [0.55, 0.17, 0.58],
+    "body_height_m": 0.28,
+    "bar_size_m": [0.1, 0.04, 0.2],
+    "bar_gap_m": 0.02,
+    "bar_up_m": 0.47,
+    "bar_lit_energy": 4.0,
+    "bar_dim_energy": 0.2,
+    "tell_up_m": 1.15,
+    "tell_size_m": [0.2, 0.11],
+    "tell_gap_m": 0.04,
+    "lens_up_m": 0.7,
+    "wreck_tilt_deg": 14.0,
+    "spot": {
+      "color": "ffe9b8", "energy": 5.0, "attenuation": 0.8, "angle_attenuation": 1.0, "pitch_deg": -4.0,
+      "rays": 13, "hz": 15.0, "reach_rate_m_s": 18.0, "snap_m": 2.0, "floor_m": 0.03,
+      "beam_strength": 0.22, "call_strength": 0.42, "fade_power": 0.9, "edge_power": 1.2
+    },
+    "chirp": {"low_hz": 700.0, "high_hz": 1050.0, "sweep_s": 0.16, "length_s": 0.16, "volume_db": -9.0, "pitch_step": 0.35},
+    "unit_size_m": 6.0
+  },
+  "call": {"wake_cutter_m": 22.0},
+  "words": {"called_cutter": "DRONE CALL COMPLETE. CUTTER ONLINE.", "called_stalker": "DRONE CALL COMPLETE. POSITION SHARED."},
+  "drones": [
+    {"name": "junction", "space": "junction", "at": [0.5, 0.55], "route": [[0.5, 0.55], [0.75, 0.3], [0.3, 0.14], [0.25, 0.42]]},
+    {"name": "cargo", "space": "cargo", "at": [0.7, 0.8], "route": [[0.7, 0.8], [0.12, 0.88], [0.12, 0.3], [0.6, 0.12], [0.59, 0.7]]}
+  ]
+}

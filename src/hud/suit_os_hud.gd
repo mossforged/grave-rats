@@ -114,6 +114,7 @@ func _draw_hud() -> void:
 	_draw_hit_arcs()
 	_draw_action()
 	_draw_announcement(view)
+	_draw_custodian(view)
 	_draw_banner(view)
 	_draw_quota(view)
 	if help_on:
@@ -282,6 +283,23 @@ func _draw_announcement(view: Vector2) -> void:
 	var col := _col("warn")
 	col.a *= fade
 	_text(_bold, Vector2(r.position.x + _px(a.pad_px), r.position.y + (r.size.y + _px(a.font_px)) * 0.5 - _px(a.font_drop_px)), line, a.font_px, col)
+
+
+## CUSTODIAN speaking: its mint, its own plate, under the suit's line.
+func _draw_custodian(view: Vector2) -> void:
+	var line: String = os_state.custodian_line()
+	if line == "":
+		return
+	var a: Dictionary = cfg.custodian
+	var w := _text_w(_regular, line, a.font_px) + _px(a.pad_px) * 2.0
+	var r := Rect2((view.x - w) * 0.5, _px(a.y_px), w, _px(a.h_px))
+	var fade: float = os_state.custodian_alpha()
+	var plate := _col("plate")
+	plate.a *= fade
+	_canvas.draw_rect(r, plate)
+	var col := Color(String(a.color))
+	col.a *= fade
+	_text(_regular, Vector2(r.position.x + _px(a.pad_px), r.position.y + (r.size.y + _px(a.font_px)) * 0.5 - _px(a.font_drop_px)), line, a.font_px, col)
 
 
 ## The shift's over: the first line big, the rest under it.

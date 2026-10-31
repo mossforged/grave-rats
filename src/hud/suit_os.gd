@@ -9,6 +9,8 @@ var driven := false            # a shift owns the clock (src/shift); otherwise i
 
 var _announce := ""
 var _announce_left := 0.0
+var _custodian := ""
+var _custodian_left := 0.0
 
 
 func _init(config: Dictionary) -> void:
@@ -19,6 +21,8 @@ func _init(config: Dictionary) -> void:
 func reset() -> void:
 	_announce = ""
 	_announce_left = 0.0
+	_custodian = ""
+	_custodian_left = 0.0
 	if not driven:
 		oxygen_total = float(cfg.oxygen.start_s)
 		oxygen_left = oxygen_total
@@ -26,6 +30,7 @@ func reset() -> void:
 
 func step(delta: float) -> void:
 	_announce_left = maxf(_announce_left - delta, 0.0)
+	_custodian_left = maxf(_custodian_left - delta, 0.0)
 	if not driven:
 		oxygen_left = maxf(oxygen_left - delta, 0.0)
 
@@ -50,6 +55,20 @@ func announcement() -> String:
 
 func announcement_alpha() -> float:
 	return minf(_announce_left / float(cfg.announce.fade_s), 1.0)
+
+
+## The ship's own voice, on its own line under the suit's: neither talks over the other.
+func custodian_say(line: String) -> void:
+	_custodian = line
+	_custodian_left = float(cfg.custodian.life_s)
+
+
+func custodian_line() -> String:
+	return _custodian if _custodian_left > 0.0 else ""
+
+
+func custodian_alpha() -> float:
+	return minf(_custodian_left / float(cfg.custodian.fade_s), 1.0)
 
 
 func oxygen_text() -> String:

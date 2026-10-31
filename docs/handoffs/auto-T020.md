@@ -10,7 +10,7 @@ Branch `auto/t020-mac`. **Nobody has heard any of this, me included, and nobody 
 - **Pirates now fire through the same timeline and bank.** Their private sound is gone, along with `src/enemies/placeholder_sound.gd` and `sound` in `data/pirates.json`.
 - **Environment:** `effects` lists in `data/deck.json` and `data/pirates.json`: one sparking console, one plume, one steam jet, dust motes per room. Fire, acid pool and explosion are gallery-only.
 - **Gallery:** F1 → Effects. Pick a recipe; P spawns it at the cursor; O stands a steel, hull, clinical and glass wall in front of you and fires on each; also a row of every environment effect, and Clear.
-- **Outside the packet's module list, small and needed:** `weight_deck` and `sight_deck` (wiring, shake), `spine_twist`, `hauler_anim`, `operator_anim`, `operator` (arm kick), `tuning_panel` (the section), `pirate_deck` (its effects list), `project.godot` (the autoload), one line each of `tests/test_audio.gd` (renamed cues) and `tests/test_session.gd` (RNG exemption for `vfx.gd`).
+- **Outside the packet's module list, small and needed:** `weight_deck` and `sight_deck` (wiring, shake), `spine_twist`, `hauler_anim`, `operator_anim`, `operator` (arm kick), `tuning_panel` (the section), `pirate_deck` (its effects list), `project.godot` (the autoload), `tests/test_audio.gd` (renamed cues, tinks in place of the delayed casing, the bus-slider count) and `tests/test_session.gd` (RNG exemption for `vfx.gd`).
 
 ## Checks
 - **Import:** exits 0, no errors.
@@ -38,12 +38,11 @@ Peak particles were about 200–230 of 1000. The dump adds about 0.4 ms. The 22.
 - The panel's buttons were never clicked; tests call what they call, and P directly.
 - The screenshots ran with the AI stopped; pirates firing with the new timeline ran only in headless tests.
 - The arm kick: tested as a number falling back, never seen moving. The recording may show it.
-- A trial merge with `auto/t019-mac`: see the end.
 
 ## Calls I made (each is a data change if wrong)
 - **Most of a cargo wall is glass.** The packet says surface comes from the kit material, and the reinforced family's window fills most of each bay. So the hold's walls chip rather than spark, except on frames and posts. If you want sparks there: `surfaces.by_material.glass`, or the wall rule in `surface_map.gd`.
 - **No holes on doors or beds.** Decals skip layer 1, because those move. A round there still plays its impact.
-- **Effects are only visible where you see now**, not in remembered rooms, so a fire doesn't give itself away through the fog. You can hear loops through walls within their range (9–13 m), filter-free, as with T017's stalkers. First lever: `max_distance_m`.
+- **Effects are only visible where you see now**, not in remembered rooms, so a fire doesn't give itself away through the fog. You can hear loops through walls within their range (8–13 m), unfiltered, as with T017's stalkers. First lever: `max_distance_m`.
 - **Smoke is lit by the scene**, so it's nearly gone outside light. That's on purpose in a dark ship ("every effect at full brightness" is on the spec's avoid list).
 - **A casing checks one wall, when thrown, and the floor or a prop's top where it should land.** It can't bounce off a second wall, and can pass through a prop it wasn't aimed at.
 - **The last-rounds layer and the thump are the local player's only.**
@@ -60,3 +59,6 @@ Peak particles were about 200–230 of 1000. The dump adds about 0.4 ms. The 22.
 - Do you hear the magazine running out before the click? Does the hold boom and the corridor slap?
 - Can you read the holes from this camera (`impact_*.decal.size_m`), and the casings (`casing.scale`)? The magazine is a grey sliver at this distance.
 - Does the muzzle light wash out the wall you're shooting? It's T003's number, unchanged (`fx.flash_light_energy`).
+
+## Merging
+`auto/t019-mac` isn't on main yet. A trial merge (`git merge-tree`, nothing changed) conflicts only in `docs/STATUS.md` and `src/study/CONTRACT.md`; code and data merge clean. I haven't run the tests on the merged result, so run them at merge.

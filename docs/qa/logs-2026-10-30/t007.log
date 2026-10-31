@@ -111,5 +111,3 @@ OUT    rounds_blocked_for_you mean   7.25  median   8.00  min   3.00  max  19.00
 OUT    your_rounds_blocked    mean   2.92  median   3.00  min   1.00  max   6.00  (12 of 12 runs)
 OUT    hits_taken             mean  13.00  median  13.00  min  13.00  max  13.00  (12 of 12 runs)
 OUT    your_hit_percent       mean  52.06  median  50.00  min  22.22  max  75.00  (12 of 12 runs)
-WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).
-   at: cleanup (core/object/object.cpp:2536)

@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 merged, waiting on John's gate. T012 (the run loop, part 1) done on `auto/t012-mac`, waiting on review and John's gate. **Next:** John plays T012; then T013 (quota, end screens).
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 merged, waiting on John's gate. T012 (the run loop, part 1) done on `auto/t012-mac`, waiting on review and John's gate. T013 (scripted console, cabinet and lockers in the slots) done on `auto/t013-mac`, waiting on review. **Next:** John plays T012 and T013; then T014 (quota, end screens).
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,13 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T012 awaiting review and John's gate; T011 awaiting John's gate.
-- Code: T012 on `auto/t012-mac`: 315/315, three runs in a row; see `docs/handoffs/auto-T012.md`. The main scene is now `scenes/shift/shift_deck.tscn`.
+- Queue order (lead): T013 awaiting review; T012 merged, awaiting John's gate; T011 awaiting John's gate.
+- Code: T013 on `auto/t013-mac`: 321/321, see `docs/handoffs/auto-T013.md`. The main scene is `scenes/shift/shift_deck.tscn`.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T013 look: the locker bank reads as a dark slab from the game camera (its top is `steel`, and the steep camera rarely shows its front). Keep it, or have the lead make the top a lighter material? The bed is now the plainest thing in the medbay.
+- T013 (lead): the pirate deck's console is 1.6 m long and there is no 1.6 file. It shows the 1.4 centred, with 10 cm of invisible collision at each end. Add `console_1600`, or leave it?
 - T012 play (`scenes/shift/shift_deck.tscn`, now the main scene): does "one more room?" happen? Is grabbing the black box scary? Tier stalkers can reach a still player in about 2 s (`spawning.min_player_m`). Are failed lights dark enough? Bots: greedy banks about 1.8× cautious but survives 50% against 100%; cautious may be too safe until the quota (T014).
 - T012 play (`godot --path .`, sheet `docs/screens/T012/sheet.png`): does "one more room?" happen? Is grabbing the black box scary? Bots: greedy banks 2,380 on average and survives 6 of 12; cautious banks 1,309 and survives 12 of 12.
 - T012 calls: rings hidden in unseen rooms until seen, a tier stalker can spawn out of sight 7 m or more away and hit within about 2 s, the airlock is a marked zone and not a room, lights failing is looks only. Handoff has each lever.
@@ -29,7 +31,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
 - T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)
 - T007 play (`scenes/pirates/pirate_deck.tscn`, now the main scene): does cover matter? Is lock-to-cover (Space, RMB) better than plain crouch (F1 toggle)? Too lethal (3.4 s in the open)? Do the crew read as rivals? Do the barks give too much away? Bots: cover doubles survival; lock is no better than crouch when fighting from one spot.
-- Meshy models from John (`docs/handoffs/meshy-shortlist.md`): hauler, stalker, bed, console, rifle.
+- Meshy models from John (`docs/handoffs/meshy-shortlist.md`): stalker, bed, rifle still open; the console slot is now filled by the lead's scripted one.
 - T006 open: is 8 s of door banging right?
 - T006 decisions: 1.2 m crates are now tall cover (you can't fire over them); locked doors hold stalkers; your light makes a prowler hunt you.
 - Stage 1: John picked rooms ×0.85, character ×1.15, fade cut-away (T006 addendum makes them default). Confirm the framing after T006.
@@ -55,5 +57,4 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T012 (315/315 reproduced) and Q001 (health green); queued T013. Lead built scripted props in Blender (`tools/blender/props.py`).
-2026-10-31 (code, unattended): T012: `src/salvage`, `src/shift`, `scenes/shift/shift_deck.tscn` (main scene): carry classes, 8:00 oxygen, tiers at 60%/30%, out-of-sight spawns, prize alarm, airlock hold and LEAVE, run log shift fields.
+2026-10-31 (code, unattended): T013: lead's console (3 widths), cabinet and locker bank in the `src/kit` slots on kit materials, UVs and grime, turned to face the room; bed still the box. 321/321, snapshot unchanged, frame cost 0.03 to 0.07 ms average.

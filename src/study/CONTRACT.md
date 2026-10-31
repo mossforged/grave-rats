@@ -4,7 +4,7 @@ T002 camera and scale study; since T010 its builder places the real kit (`src/ki
 
 ## Owns
 - `deck_layout.gd`: scene-free deck generator. `data/deck.json` → space rects, doorways (+ frame posts), wall pieces, props, and a walkability check (grid BFS for a disc of given radius).
-- `deck_builder.gd`: layout → nodes. Kit pieces: floors, wall pivots in the camera's cut-away group, door jambs and headers, props, wall and floor signs. Box collision on walls, frames and props, as in T009. Every mesh has meta `kit_piece`.
+- `deck_builder.gd`: layout → nodes. Kit pieces: floors, wall pivots in the camera's cut-away group, door jambs and headers, props, wall and floor signs. Props take their yaw from `KitPieces.prop_yaw`. Box collision on walls, frames and props, as in T009. Every mesh has meta `kit_piece`.
 - `stand_in.gd`: CharacterBody3D with the legacy operator; WASD (screen-relative), faces `aim_point`, `L_Run_F`/`L_Idle`. No shooting.
 - `scale_deck.gd`: root of `scenes/study/scale_deck.tscn`; plain lighting, HUD, live keys, capture shots.
 - `tools/t002_sheet.py`: comparison sheets from the captures.

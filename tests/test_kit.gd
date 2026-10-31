@@ -240,7 +240,7 @@ func test_props_face_the_room_and_stay_inside_their_footprints() -> void:
 			check(front.dot(to_centre) >= 0.0, "%s at %s faces the room's centre" % [p.type, p.center])
 
 
-func test_a_turned_prop_is_placed_turned_with_its_box_collision_as_before() -> void:
+func test_a_turned_prop_is_placed_turned() -> void:
 	var deck := _main_deck()
 	var layout := DeckLayout.new(deck, float(deck.room_scale))
 	var root := DeckBuilder.build(layout)

@@ -18,8 +18,6 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 
 ## Open questions (for John)
 - T011: MSAA dropped from 4x to 2x to meet the frame budget (reverses the 2026-10-30 decision); turning shimmer rose (0.09 → 0.12% twinkle), possibly from that. Accept 2x, or go back to 4x and find the time elsewhere?
-- A011: is CUSTODIAN (Vesper Reach's maintenance AI, mint lens) the second threat? Build the cutter turret and patrol drone first?
-- A012: approve the briefing, payslip and death bill layouts and copy for a build task?
 - T011 play (stage 3): sheet `docs/screens/T011/sheet.png`, then medbay to junction to cargo. Does it match or beat the concept?
 - T011 calls: MSAA 4x to 2x (biggest frame win; rougher edges?), dimmer rooms with no shadowed practicals, the ambush panel's new tell, door strips in a fight, shimmer when turning (twinkle up 30% on T010).
 - T011 frame time: pirate deck met the target in one window (7.07 / 9.1) and missed in a busier one (7.7 / 10.4; T010 8.2 / 10.5). Re-measure T010 against T011 on a quiet Mac.

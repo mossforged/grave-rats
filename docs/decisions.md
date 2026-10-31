@@ -28,4 +28,10 @@
 - 2026-10-30: A006 approved as the stage 3 target (John: "yes this looks good"). Modelling split: John makes a short list of irregular models in Meshy (hauler, stalker, bed, console, rifle; `docs/handoffs/meshy-shortlist.md`); scripts build the grid-snapped kit (walls, floors, doors and their states, crates).
 - 2026-10-31: **Open Tender** is the planned competitive mode (John: "open tender makes sense"). 2-4 crews (solo or pairs) on one derelict with AI threats. Your flashlight is your sight and everyone else's tell. One big prize raises an alarm; extraction is limited; AI pirate crews fill empty slots; private lobbies only. It comes after co-op. Habits from now on: every action carries a player ID, sight is computed per player (never global), and an AI crew must be swappable for a human one.
 - 2026-10-31: A010 company graphics approved (John: "Yes I like the graphics"). The rival crew is Prior Claim (A009); John will make the leader in Meshy when he can. Model generation stays on Meshy, not Tripo (lead's research: the Mixamo-named rig pipeline, hard-surface style, a full API with rig and animation). Tripo is only a second opinion for organic creatures. A Meshy API "models" lane is proposed and waits on John buying API credits.
+- 2026-10-31: Run loop approved (John: "yes to all"), see `docs/design/run-loop.md`:
+  - a credit quota over 3 shifts (miss it and the crew is "let go");
+  - death loss shared by the crew, for the run only;
+  - the clock: oxygen billed per minute plus ship escalation tiers;
+  - light progression (cosmetics and side-grades).
+- 2026-10-31: CUSTODIAN (A011) is the second threat; build the cutter turret and patrol drone first, the loader after its charge timing is playtested. A012 end-of-shift layouts and copy approved for building. MSAA 2x (T011) stands until John has played it.
 

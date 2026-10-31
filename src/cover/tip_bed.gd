@@ -12,6 +12,7 @@ var tip: TipState
 var cfg: Dictionary
 var upright_rect := Rect2()
 var cover: RefCounted
+var edge_stripe: MeshInstance3D
 
 var _spec: Dictionary
 var _size := Vector3.ZERO
@@ -51,6 +52,10 @@ func _build() -> void:
 	# The file is long in Z; a bed lying east-west turns it, so it stays long along the bed.
 	_mesh.rotation.y = 0.0 if _along_z else PI * 0.5
 	_pivot.add_child(_mesh)
+	edge_stripe = MeshInstance3D.new()
+	edge_stripe.name = "EdgeStripe"
+	edge_stripe.mesh = KitPieces.bed_edge_stripe(_across(), _long())
+	_mesh.add_child(edge_stripe)
 	_body = StaticBody3D.new()
 	_body.name = "Body"
 	_shape = BoxShape3D.new()

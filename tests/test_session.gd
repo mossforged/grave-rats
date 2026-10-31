@@ -125,7 +125,8 @@ func test_one_session_seed_gives_the_same_rolls() -> void:
 func test_every_command_carries_a_player_id_and_all_the_packets_actions_exist() -> void:
 	var made: Array = [Commands.move(B, Vector2.ZERO, false, 0.0), Commands.aim(B, Vector3.ZERO), Commands.fire(B, true),
 			Commands.reload_gun(B), Commands.crouch(B, true), Commands.interact(B), Commands.take(B), Commands.drop(B),
-			Commands.door(B), Commands.tip(B), Commands.leave(B, true), Commands.lock(B)]
+			Commands.door(B), Commands.tip(B), Commands.leave(B, true), Commands.lock(B),
+			Commands.lock_controls(B, Vector2.ZERO, false, false, false, 0.0)]
 	for cmd: Dictionary in made:
 		check_eq(int(cmd.player_id), B, "%s has the ID" % cmd.type)
 	check_eq(made.map(func(c: Dictionary) -> String: return c.type), Commands.ALL, "one of each")

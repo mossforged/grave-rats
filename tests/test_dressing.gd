@@ -375,6 +375,31 @@ func test_a_tipped_bed_turns_its_plated_face_away_from_whoever_tipped_it() -> vo
 		check(underside.dot(way[2]) > 0.99, "from %s the underside faces %s, not %s" % [way[1], underside, way[2]])
 
 
+## T021: low cover you can see. From the steep camera the silhouette is the top rim, so the stripe is there
+## whichever way it falls and along either bed direction.
+func test_an_overturned_beds_top_rim_wears_the_hazard_stripe() -> void:
+	var kit: Dictionary = Data.load_data("kit")
+	for way: Array in _each_way():
+		var bed := _bed(way[0], way[1])
+		bed.tick(float(bed.cfg.tip_s) + 0.1)
+		check(bed.edge_stripe.visible, "it shows")
+		check(bed.edge_stripe.mesh.get_surface_count() == 1 and bed.edge_stripe.mesh.surface_get_material(0) == KitMaterials.material(String(kit.bed_edge_stripe.material)), "in the kit's own material")
+		var box: AABB = bed.edge_stripe.global_transform * bed.edge_stripe.mesh.get_aabb()
+		var body: AABB = _mesh_box(bed)
+		var proud := float(kit.bed_edge_stripe.proud_m)
+		check(absf(box.end.y - body.end.y) <= proud + 0.001, "up on the top rim (%.3f, bed %.3f)" % [box.end.y, body.end.y])
+		var flat := Rect2(Vector2(box.position.x, box.position.z), Vector2(box.size.x, box.size.z))
+		check(bed.footprint().grow(proud + 0.001).encloses(flat), "and inside the footprint (%s in %s)" % [flat, bed.footprint()])
+		check(bed.find_children("*", "Light3D", true, false).is_empty(), "no light of its own")
+
+
+func test_the_stripe_stands_proud_of_the_plates_rim() -> void:
+	var s: Dictionary = (Data.load_data("kit") as Dictionary).bed_edge_stripe
+	var box: AABB = KitPieces.bed_edge_stripe(0.9, 2.0).get_aabb()
+	check_eq(snappedf(box.end.x, 0.0001), snappedf(0.45 + float(s.proud_m), 0.0001), "past the file's own rim, so the two can't depth-fight")
+	check(float(s.proud_m) > 0.0, "by something")
+
+
 func test_the_files_underside_is_a_solid_plate() -> void:
 	var mesh := KitPieces.prop("bed", Vector3(0.9, 0.75, 2.0))
 	var area := 0.0

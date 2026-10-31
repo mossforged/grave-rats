@@ -83,6 +83,7 @@ func _ready() -> void:
 	driver.name = "LockDriver"
 	add_child(driver)
 	driver.setup(operator, cover, _cover_cfg.lock, func(p: Vector2, r: float) -> bool: return layout.is_free(p, r))
+	session.world_commands = _on_world_command
 	run_log = RunLog.new()
 	run_log.enabled = not _capture
 	_ready_done = true
@@ -235,14 +236,25 @@ func _process(delta: float) -> void:
 			p.light.apply_cfg()
 
 
+## The world end of the command layer on this deck: the lock. Its one driver is the local player's.
+func _on_world_command(cmd: Dictionary) -> void:
+	if int(cmd.player_id) != operator.player_id or not session.is_authority():
+		return
+	match String(cmd.type):
+		Commands.LOCK:
+			if not suit.dead:
+				driver.press()
+		Commands.LOCK_CONTROLS:
+			driver.apply_command(cmd)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		driver.tap_fire()
 	if event is InputEventKey and event.pressed and not event.echo:
 		var k := (event as InputEventKey).physical_keycode
 		if k == KEY_SPACE:
-			if not suit.dead:
-				driver.press()
+			session.send(Commands.lock(operator.player_id))
 			get_viewport().set_input_as_handled()
 			return
 		if k == KEY_R and driver.lock.locked():

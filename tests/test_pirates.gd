@@ -9,6 +9,7 @@ const CoverField := preload("res://src/cover/cover_field.gd")
 const CoverLock := preload("res://src/cover/cover_lock.gd")
 const RunLog := preload("res://src/run_log/run_log.gd")
 const OperatorModel := preload("res://src/player/operator_model.gd")
+const Commands := preload("res://src/session/commands.gd")
 const DT := 1.0 / 60.0
 const TEST_DIR := "user://test_runs_t007"
 
@@ -605,6 +606,116 @@ func test_lock_hands_the_players_own_controls_back() -> void:
 	scene.driver.press()
 	check(op.input_enabled, "and gives them back")
 	op.input_enabled = false
+
+
+## A client's player: nothing but commands reach this body, and no key is read.
+func test_lock_works_from_commands_alone() -> void:
+	var scene: Node = await _scene()
+	var r := _low_rect(scene)
+	var op: Node = scene.operator
+	var id: int = op.player_id
+	var yaw: float = op.move_yaw_deg
+	op.remote = true
+	_park_others(scene, null)
+	_at(scene, Vector2(r.end.x + 0.7, r.get_center().y), Vector2(r.position.x - 3.5, r.get_center().y))
+	check(scene.session.send(Commands.lock(id)), "the session takes it")
+	check(scene.driver.lock.locked(), "LOCK locks")
+	await _run(scene, float(scene._cover_cfg.lock.snap_s) + 0.3)
+	check_eq(scene.driver.lock.state, CoverLock.State.LOCKED, "and snaps")
+	check(op.model.crouch_amount >= 1.0, "crouched")
+	check(scene.in_cover_now(), "IN COVER")
+	scene.session.send(Commands.lock_controls(id, Vector2.ZERO, true, false, false, yaw))
+	await _run(scene, float(scene._cover_cfg.lock.raise_s) + 0.05)
+	check(scene.driver.lock.exposed(), "aim raises over the cover")
+	var mag: int = op.rifle.state.mag
+	scene.session.send(Commands.lock_controls(id, Vector2.ZERO, true, true, false, yaw))
+	await _run(scene, 0.2)
+	check(op.rifle.state.mag < mag, "fire fires over it")
+	scene.session.send(Commands.lock_controls(id, Vector2.ZERO, false, false, false, yaw))
+	await _run(scene, float(scene._cover_cfg.lock.aim_hold_s) + float(scene._cover_cfg.lock.lower_s) + 0.1)
+	check(not scene.driver.lock.exposed(), "and lowers when told")
+	mag = op.rifle.state.mag
+	scene.session.send(Commands.lock_controls(id, Vector2.ZERO, false, false, true, yaw))
+	await _run(scene, float(scene._cover_cfg.lock.raise_s) + 0.1)
+	check(op.rifle.state.mag < mag, "a tap raises and fires once it can")
+	check(not op.rifle.trigger_held, "and doesn't stick")
+	scene.session.send(Commands.lock(id))
+	check(not scene.driver.lock.locked(), "LOCK lets go too")
+	await _run(scene, 0.1)
+	check_eq(op._keys, Vector2.ZERO, "and leaves no move behind")
+	check(not op._crouch, "or a crouch")
+	op.remote = false
+
+
+func test_a_lock_command_obeys_the_id_the_suit_and_the_authority() -> void:
+	var scene: Node = await _scene()
+	var r := _low_rect(scene)
+	var id: int = scene.operator.player_id
+	_park_others(scene, null)
+	_at(scene, Vector2(r.end.x + 0.7, r.get_center().y), Vector2(r.position.x - 3.5, r.get_center().y))
+	check(not scene.session.send(Commands.lock(id + 1)), "nobody has that ID")
+	check(not scene.driver.lock.locked(), "so nobody locks")
+	scene.session.authority = false
+	scene.session.send(Commands.lock(id))
+	check(not scene.driver.lock.locked(), "no authority, no lock")
+	scene.session.authority = true
+	scene.suit.take(INF, "test")
+	check(scene.suit.dead, "fixture: down")
+	scene.session.send(Commands.lock(id))
+	check(not scene.driver.lock.locked(), "the dead don't lock")
+	scene.suit.reset()
+	var keys: Vector2 = scene.operator.scripted.get("keys", Vector2.ZERO)
+	scene.session.send(Commands.lock_controls(id, Vector2(1, 0), true, true, true, 0.0))
+	scene.session.send(Commands.lock(id))
+	check(scene.driver.lock.locked(), "alive, it locks")
+	await _run(scene, DT)
+	check_eq(scene.operator.scripted.get("keys", keys), Vector2.ZERO, "controls sent while free were dropped")
+	check(not scene.driver.lock.exposed(), "and raise nothing")
+
+
+func test_the_key_and_the_driver_go_through_the_session() -> void:
+	var scene: Node = await _scene()
+	var r := _low_rect(scene)
+	_park_others(scene, null)
+	_at(scene, Vector2(r.end.x + 0.7, r.get_center().y), Vector2(r.position.x - 3.5, r.get_center().y))
+	var seen: Array = []
+	var deck_end: Callable = scene.session.world_commands
+	scene.session.world_commands = func(cmd: Dictionary) -> void:
+		seen.append(String(cmd.type))
+		deck_end.call(cmd)
+	var space := InputEventKey.new()
+	space.physical_keycode = KEY_SPACE
+	space.pressed = true
+	scene._unhandled_input(space)
+	check_eq(seen, [Commands.LOCK], "Space sends LOCK")
+	check(scene.driver.lock.locked(), "and locks")
+	seen.clear()
+	scene.driver.scripted = {"aim": true}
+	await _run(scene, float(scene._cover_cfg.lock.snap_s) + float(scene._cover_cfg.lock.raise_s) + 0.3)
+	check(not seen.is_empty() and seen.all(func(t: String) -> bool: return t == Commands.LOCK_CONTROLS), "held controls travel as commands")
+	check(scene.driver.lock.exposed(), "and raise")
+
+
+# --- their guns ---
+
+func test_a_pirate_shot_plays_a_bank_cue_at_its_muzzle_on_the_sfx_bus() -> void:
+	var scene: Node = await _scene()
+	var heard: Array = []
+	var on_played := func(cue: String, at: Vector3, _pitch: float) -> void:
+		heard.append({"cue": cue, "at": at})
+	Audio.played.connect(on_played)
+	var guns: Array = scene.squad.pirates
+	for p: Node in guns:
+		scene.squad._fire(p)
+	Audio.played.disconnect(on_played)
+	check_eq(scene.squad.find_child("ShotSound", false, false), null, "no private player left")
+	for p: Node in guns:
+		var near_muzzle := heard.filter(func(h: Dictionary) -> bool:
+			return (h.at as Vector3).distance_to(p.muzzle_position()) < 0.01 and Audio.bank.spec(h.cue).bus == "SFX")
+		check(not near_muzzle.is_empty(), "%s's shot sounds on the SFX bus at its muzzle, even in the same step" % p.name)
+		for h: Dictionary in near_muzzle:
+			check(Audio.bank.positional(h.cue), "%s fades with distance" % h.cue)
+	Audio.reset()
 
 
 func test_with_the_toggle_off_the_key_does_nothing_and_crouch_is_the_plain_one() -> void:

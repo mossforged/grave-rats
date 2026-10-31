@@ -34,6 +34,7 @@ The rival crew (T007): an enemy that shoots back, by your rules, in a squad of 3
 - **Beam:** additive sheet, drawn only where the player has sight, so it can't shine out of a room you can't see. Its spot lights the floor for real, so a remembered room shows it dimly.
 
 - **Their guns (T020):** each pirate holds a `ShotTimeline`, so a round has the same layers, smoke, casing and landing as yours, through `src/audio` (filtered by range and walls), not a sound of its own. A hit on one calls `Vfx.body_hit("pirate", ...)`: red-brown spray, grunt, a floor splat. A round in the player does the same (`PlayerTarget.hit_surface`).
+- **The lock is a command (T021):** `pirate_deck` is the world end of `LOCK` and `LOCK_CONTROLS`. Space and held controls only ever become commands.
 
 ## Public API
 - `PirateBrain.new(cfg, loot_points, yaw)`: `step(delta, senses) -> events`, `order(role, spot)`, `stand_down()`, `take_hit(amount) -> dealt`, `alive()`, `exposed()`, `hurt()`, `wants_fall_back()`, `dug_in()`, `gun_yaw()`, `state_name()`; fields `state`, `role`, `spot`, `goal`, `brace`, `model`, `gun`, `cone`, `suit`, `rng`, `fell_back`. Senses: `pos`, `next_point`, `aim`, `can_engage`, `sees`. Events `EV_SHOT`, `EV_RELOAD`, `EV_HURT`.

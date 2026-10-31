@@ -10,6 +10,8 @@ var doors: Array = []
 var cfg: Dictionary
 ## `actors` are {position: Vector2, radius: float}: who a closing panel must not shut on.
 var actors: Array = []
+## () -> bool: may this machine change a door? Empty: yes.
+var authority := Callable()
 
 var _label: Label3D
 
@@ -39,8 +41,20 @@ func _physics_process(delta: float) -> void:
 
 
 func tick(delta: float) -> void:
+	if not _has_authority():
+		return
 	for d: Door in doors:
 		d.tick(delta, actors)
+
+
+func set_authority(check: Callable) -> void:
+	authority = check
+	for d: Door in doors:
+		d.authority = check
+
+
+func _has_authority() -> bool:
+	return not authority.is_valid() or authority.call()
 
 
 ## `bind` is SightMask.bind: from here on the doors' state lights show only where the player's been.
@@ -64,7 +78,7 @@ func door_in_reach(p: Vector2) -> Door:
 ## E pressed at `p`. Returns the answer, or "" when no door is in reach.
 func interact(p: Vector2) -> String:
 	var d := door_in_reach(p)
-	if d == null:
+	if d == null or not _has_authority():
 		return ""
 	var answer := d.interact(actors)
 	door_used.emit(d, answer)

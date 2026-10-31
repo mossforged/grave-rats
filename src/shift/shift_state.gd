@@ -25,13 +25,17 @@ var alarm_left := 0.0
 var outcome := RUNNING
 var oxygen_at_exit := -1.0
 var survivors: Array = []
+## Alive and not in the airlock when LEAVE completed.
+var left_behind: Array = []
+## Who set off the alarm; -1 nobody yet.
+var alarm_by := -1
 ## Deposits that put something in the hold: what the airlock bills.
 var airlock_cycles := 0
 ## What was on whoever went down: {count, value}.
 var carried_at_death := {"count": 0, "value": 0}
 
 var _rules: RefCounted
-var _players := {}        # player ID -> {carry, alive, leave_left}
+var _players := {}        # player ID -> {carry, alive, leave_left, aboard, tank_extra}
 var _touched := {}        # item id -> SalvageItem: everything anyone ever lifted
 var _oxygen_out := false
 
@@ -52,6 +56,8 @@ func begin() -> void:
 	outcome = RUNNING
 	oxygen_at_exit = -1.0
 	survivors = []
+	left_behind = []
+	alarm_by = -1
 	airlock_cycles = 0
 	carried_at_death = {"count": 0, "value": 0}
 	_touched = {}
@@ -61,7 +67,12 @@ func begin() -> void:
 
 
 func add_player(id: int) -> void:
-	_players[id] = {"carry": CarryState.new(_rules, id), "alive": true, "leave_left": float(cfg.leave.hold_s)}
+	_players[id] = {"carry": CarryState.new(_rules, id), "alive": true, "leave_left": float(cfg.leave.hold_s),
+			"aboard": false, "tank_extra": 0.0}
+
+
+func crew() -> Array:
+	return _players.keys()
 
 
 func carry(id: int) -> CarryState:
@@ -84,6 +95,15 @@ func oxygen_out() -> bool:
 	return oxygen_left <= 0.0
 
 
+## This player's air: the shift's clock plus whatever extra their tank holds. The tiers run on the clock.
+func oxygen_of(id: int) -> float:
+	return oxygen_left + float(_players[id].tank_extra)
+
+
+func set_tank_extra(id: int, seconds: float) -> void:
+	_players[id].tank_extra = seconds
+
+
 ## One step of the clock.
 func step(delta: float) -> Array:
 	var events: Array = []
@@ -104,9 +124,10 @@ func step(delta: float) -> Array:
 	return events
 
 
-## The share of a full suit lost this step for lack of air.
-func suit_loss(delta: float) -> float:
-	return float(cfg.out_of_air.suit_fraction_per_s) * delta if oxygen_out() and not ended() else 0.0
+## The share of a full suit lost this step for lack of air: this player's air, or the clock's.
+func suit_loss(delta: float, id := -1) -> float:
+	var out := oxygen_out() if id < 0 else oxygen_of(id) <= 0.0
+	return float(cfg.out_of_air.suit_fraction_per_s) * delta if out and not ended() else 0.0
 
 
 func note_taken(item: SalvageItem) -> void:
@@ -114,10 +135,11 @@ func note_taken(item: SalvageItem) -> void:
 
 
 ## The big prize came off its mount. True the first time: the alarm goes off once a shift.
-func trip_alarm(_by_player: int) -> bool:
+func trip_alarm(by_player: int) -> bool:
 	if prize_taken:
 		return false
 	prize_taken = true
+	alarm_by = by_player
 	alarm_left = float(cfg.alarm.reveal_s)
 	return true
 
@@ -136,19 +158,29 @@ func deposit(id: int) -> Array:
 	return items
 
 
+## Who's standing in the airlock right now: who LEAVE takes with it.
+func set_aboard(id: int, inside: bool) -> void:
+	_players[id].aboard = inside
+
+
 ## One step of E in the airlock. True on the step LEAVE completes, which ends the shift for whoever's
 ## in the airlock. Letting go starts it over.
 func step_leave(id: int, delta: float, in_airlock: bool, held: bool) -> bool:
 	if ended() or not alive(id):
 		return false
 	var p: Dictionary = _players[id]
+	p.aboard = in_airlock
 	if not (in_airlock and held):
 		p.leave_left = float(cfg.leave.hold_s)
 		return false
 	p.leave_left = float(p.leave_left) - delta
 	if float(p.leave_left) > 0.0:
 		return false
-	survivors = [id]
+	survivors = []
+	left_behind = []
+	for other: int in _players:
+		if alive(other):
+			(survivors if _players[other].aboard else left_behind).append(other)
 	_finish(EXTRACTED)
 	return true
 
@@ -217,6 +249,7 @@ func report() -> Dictionary:
 		"prize_taken": prize_taken,
 		"tier_reached": tier_reached,
 		"survivors": survivors,
+		"left_behind": left_behind,
 		"airlock_cycles": airlock_cycles,
 		"salvage": salvage,
 		"carried_at_death": int(carried_at_death.count),

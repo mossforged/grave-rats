@@ -1,6 +1,9 @@
 extends "res://src/enemies/stalker_deck.gd"
-## Root of scenes/shift/shift_deck.tscn: one shift, solo, end to end. The stalker deck plus salvage on
-## the floor, the airlock as the hold, the oxygen clock, the tiers and the big prize's alarm.
+## Root of scenes/shift/shift_deck.tscn: one shift, end to end, for a crew of one or more. The stalker
+## deck plus salvage on the floor, the airlock as the hold, the oxygen clock, the tiers and the big
+## prize's alarm. Whatever a player does arrives as a command with their ID (`_on_world_command`); what
+## changes the shared world checks `session.is_authority()` first. Everything keyed "local" is what this
+## machine's screen shows.
 ## E takes, G drops, walking into the airlock deposits, holding E there leaves, Backspace starts a new
 ## shift. Rules are scene-free (shift_state.gd, src/salvage); this wires them to the world.
 
@@ -15,6 +18,7 @@ const Paperwork := preload("res://src/paperwork/paperwork.gd")
 const PaperworkScreen := preload("res://src/paperwork/paperwork_screen.gd")
 const Custodian := preload("res://src/custodian/custodian.gd")
 const CustodianTrace := preload("res://src/custodian/custodian_trace.gd")
+const PlayerSight := preload("res://src/session/player_sight.gd")
 
 ## Fired as each tier lands: (index from 1, its data). The ship's next threat hangs off this.
 signal tier_fired(index: int, spec: Dictionary)
@@ -24,8 +28,10 @@ var field: SalvageField
 var section: SectionLights
 var marker: AlarmMarker
 var airlock: Airlock
+## The local player. Everyone else is in `session.players`.
 var player_id := 1
-var rng := RandomNumberGenerator.new()
+## The session's RNG.
+var rng: RandomNumberGenerator
 ## Names in a tier's "wake" list -> (tier index) -> void. CUSTODIAN registers here (T014).
 var wake_hooks := {}
 ## The seed the next shift starts from; 0 rolls a new one. Bots and tests set it.
@@ -54,19 +60,33 @@ var _shift_ready := false
 var _custodian_cfg: Dictionary
 var _custodian_trace: CustodianTrace
 var _drone_tracer: ShotTracer
+## Who the pack is hunting: it has one target at a time.
+var _hunted_id := -1
 
 
 func _ready() -> void:
 	_cfg = Data.load_data("shift")
 	_salvage_cfg = Data.load_data("salvage")
 	super()
-	player_id = int(_cfg.player_id)
+	player_id = session.local_id
+	rng = session.rng
 	field = SalvageField.new()
 	field.name = "Salvage"
 	add_child(field)
 	field.setup(_salvage_cfg, layout, mask.bind)
 	shift = ShiftState.new(_cfg, field.rules)
 	shift.add_player(player_id)
+	session.shift = shift
+	session.world_commands = _on_world_command
+	var me: Session.SessionPlayer = session.local()
+	me.suit = suit
+	me.run_log = run_log
+	me.sight = sight
+	me.flashlight = flashlight
+	run_log.player_id = me.id
+	run_log.crew = me.crew
+	doors.set_authority(session.is_authority)
+	pack.light_on = _anyone_lights
 	airlock = Airlock.new()
 	airlock.name = "Airlock"
 	add_child(airlock)
@@ -83,6 +103,7 @@ func _ready() -> void:
 	run_log.shift_report = func() -> Dictionary: return shift.report()
 	hud.hold_estimate = 0
 	quota = QuotaState.new(_cfg.quota)
+	session.quota = quota
 	paper = PaperworkScreen.new()
 	paper.name = "Paperwork"
 	add_child(paper)
@@ -91,8 +112,286 @@ func _ready() -> void:
 	_make_custodian()
 	_shift_ready = true
 	_start_shift()
-	if get_tree().current_scene == self and not _capture:
+	if get_tree().current_scene == self and not _capture and _opens_on_session():
 		start_session()
+
+
+## The main scene runs the quota and the forms around its shifts.
+func _opens_on_session() -> bool:
+	return true
+
+
+# --- the crew: everyone but the local player comes on through here ---
+
+## Spawns another player and gives them what's theirs: suit, log, sight, light. Their carry is the
+## shift's. Null if the session won't have them.
+func join_player(id: int, crew: String, source: String) -> Operator:
+	var op := spawn_player(id, crew, source)
+	if op == null:
+		return null
+	var p: Session.SessionPlayer = session.player(id)
+	p.suit = Suit.new(_health_cfg)
+	p.run_log = RunLog.new(run_log.dir)
+	p.run_log.enabled = run_log.enabled
+	p.run_log.player_id = id
+	p.run_log.crew = crew
+	p.run_log.shift_report = run_log.shift_report
+	p.sight = PlayerSight.new()
+	p.sight.name = "Sight%d" % id
+	add_child(p.sight)
+	p.sight.setup(layout)
+	p.sight.refresh_occluders()
+	p.flashlight = Flashlight.new()
+	p.flashlight.name = "Flashlight%d" % id
+	add_child(p.flashlight)
+	p.flashlight.setup(sight.cfg)
+	p.flashlight.set_mask(mask.visible_texture(), sight.bounds)
+	# This screen's sight decides whether they show. Rounds pass through the crew.
+	var seen := SightTarget.new()
+	seen.name = "SightTarget"
+	op.add_child(seen)
+	op.visuals.visible = false
+	operator.rifle.exclude.append(op.get_rid())
+	op.rifle.exclude = operator.rifle.exclude
+	op.rifle.shot_tracer = operator.rifle.shot_tracer
+	op.rifle.fired.connect(_on_mate_fired.bind(p))
+	shift.add_player(id)
+	op.set_carry(shift.carry(id).penalties())
+	_seed_player(p)
+	update_player_sight(p, 0.0, true)
+	return op
+
+
+func _is_local(p: Session.SessionPlayer) -> bool:
+	return p.id == player_id
+
+
+func player_pos(p: Session.SessionPlayer) -> Vector2:
+	return Vector2(p.operator.global_position.x, p.operator.global_position.z)
+
+
+func _height_of(p: Session.SessionPlayer) -> float:
+	return body_height() if _is_local(p) else cover.torso_height(p.operator.model.crouch_amount, p.brace_left > 0.0)
+
+
+func _lit(p: Session.SessionPlayer) -> bool:
+	return flashlight.on if _is_local(p) else p.light_on
+
+
+## Anyone's light on `at`: a stalker notices whichever beam finds it.
+func _anyone_lights(at: Vector2) -> bool:
+	for p: Session.SessionPlayer in session.players:
+		if _lit(p) and p.sight.visibility.in_light(player_pos(p), p.operator.gun_yaw(), at):
+			return true
+	return false
+
+
+## The local sight runs in `sight_deck`; this keeps another player's up to date.
+func update_player_sight(p: Session.SessionPlayer, delta: float, force_memory: bool) -> void:
+	var yaw: float = p.operator.gun_yaw()
+	p.sight.update_sight(player_pos(p), yaw, p.light_on, delta, force_memory)
+	var muzzle: Vector3 = p.operator.muzzle_position()
+	p.flashlight.set_on(p.light_on)
+	p.flashlight.follow(muzzle, yaw)
+	p.flashlight.draw_beam(p.sight.visibility, player_pos(p), yaw, muzzle, delta)
+
+
+## The world end of the command layer. The operator takes the rest (src/session/commands.gd).
+func _on_world_command(cmd: Dictionary) -> void:
+	var p: Session.SessionPlayer = session.player(int(cmd.player_id))
+	match String(cmd.type):
+		Commands.INTERACT:
+			_act_interact(p)
+		Commands.TAKE:
+			_act_take(p)
+		Commands.TIP:
+			_act_tip(p)
+		Commands.DOOR:
+			_act_door(p)
+		Commands.DROP:
+			_act_drop(p)
+		Commands.LEAVE:
+			p.leave_held = bool(cmd.held)
+
+
+func _can_act(p: Session.SessionPlayer) -> bool:
+	return session.is_authority() and not shift.ended() and not p.suit.dead and not p.operator.control_held()
+
+
+## E: salvage in reach comes before a bed or a door. A full pocket or full hands lets them through.
+func _act_interact(p: Session.SessionPlayer) -> void:
+	if not _can_act(p) or shift.carry(p.id).busy():
+		return
+	if not _act_take(p) and not _act_tip(p):
+		_act_door(p)
+
+
+func _act_take(p: Session.SessionPlayer) -> bool:
+	if not _can_act(p):
+		return false
+	var c: CarryState = shift.carry(p.id)
+	var item: RefCounted = field.nearest(player_pos(p))
+	if item == null or c.begin_take(item) != CarryState.OK:
+		return false
+	p.operator.hold_control(c.busy_left())
+	return true
+
+
+func _act_tip(p: Session.SessionPlayer) -> bool:
+	if not _can_act(p):
+		return false
+	var bed := bed_in_reach(player_pos(p))
+	if bed == null or not bed.try_tip(player_pos(p)):
+		return false
+	p.operator.hold_control(float(_cover_cfg.bed.tip_s))
+	return true
+
+
+func _act_door(p: Session.SessionPlayer) -> void:
+	if _can_act(p):
+		doors.interact(player_pos(p))
+
+
+## G: lets go of what's in your hands, the heavy kind at once and loudly.
+func _act_drop(p: Session.SessionPlayer) -> void:
+	if not _can_act(p):
+		return
+	var c: CarryState = shift.carry(p.id)
+	for ev: Dictionary in c.drop():
+		_on_carry_event(ev, p)
+	if c.busy():
+		p.operator.hold_control(c.busy_left())
+
+
+## What a body does for the world that isn't the local player's (theirs is in `stalker_deck`).
+func _step_crew(delta: float) -> void:
+	for p: Session.SessionPlayer in session.players:
+		if _is_local(p):
+			continue
+		p.brace_left = maxf(p.brace_left - delta, 0.0)
+		p.operator.crouch_shown = move_toward(p.operator.crouch_shown,
+				float(_cover_cfg.brace_crouch_shown) if p.brace_left > 0.0 else 1.0, float(_cover_cfg.brace_rate_per_s) * delta)
+		p.suit.step(delta)
+		if p.suit.dead:
+			continue
+		p.run_log.note_time(delta)
+		var at := player_pos(p)
+		p.noise_left -= delta
+		var kind: String = p.operator.model.noise_kind()
+		if kind != "" and p.noise_left <= 0.0:
+			p.noise_left = float(pack.cfg.senses.sprint_emit_s)
+			pack.noise(kind, at)
+		var acid: float = pack.spits.puddles.damage_at(at, delta)
+		if acid > 0.0:
+			hurt_player(p.id, "puddle", acid, String(pack.spits.puddles.puddle_at(at).owner), false)
+		if not p.suit.dead and ambush.check(at, Vector2(p.operator.aim_dir().x, p.operator.aim_dir().z)):
+			fire_ambush()
+
+
+func _on_mate_fired(from: Vector3, to: Vector3, _direction: Vector3, hit: Object, p: Session.SessionPlayer) -> void:
+	if p.operator.model.crouch_amount > 0.0:
+		p.brace_left = float(_cover_cfg.brace_hold_s)
+	p.run_log.note_shot(hit != null and hit.has_method("shot_disc"))
+	pack.noise("gunfire", Vector2(from.x, from.z))
+	pack.shot_at(Vector2(from.x, from.z), Vector2(to.x, to.z))
+
+
+## The pack hunts one player at a time: the living one nearest a stalker that's up.
+func _hunted() -> Session.SessionPlayer:
+	var best: Session.SessionPlayer = session.local()
+	var best_d := INF
+	for p: Session.SessionPlayer in session.players:
+		if p.suit.dead:
+			continue
+		for s: Node in pack.stalkers:
+			var d: float = s.floor_position().distance_to(player_pos(p))
+			if s.brain.alive() and s.brain.state != s.brain.State.DORMANT and d < best_d:
+				best = p
+				best_d = d
+	if best.suit.dead or best_d == INF:
+		for p: Session.SessionPlayer in session.players:
+			if not p.suit.dead:
+				return p
+	return best
+
+
+func _sync_target() -> void:
+	if not _shift_ready or session.players.size() == 1:
+		_hunted_id = session.local_id
+		super()
+		return
+	var p := _hunted()
+	_hunted_id = p.id
+	pack.target = {"pos": player_pos(p), "height": _height_of(p), "alive": not p.suit.dead}
+
+
+func _on_player_hit(source: String, amount: float, stalker: Node3D, in_cover: bool) -> void:
+	if _hunted_id == player_id:
+		super(source, amount, stalker, in_cover)
+	else:
+		hurt_player(_hunted_id, source, amount, stalker.label, in_cover)
+
+
+func _on_player_protected(_stalker: Node3D) -> void:
+	session.player(_hunted_id).run_log.note_protected()
+
+
+## Everything that hurts anyone comes through here.
+func hurt_player(id: int, source: String, amount: float, who: String, in_cover: bool) -> void:
+	if id == player_id:
+		_hurt(source, amount, who, in_cover)
+		return
+	if not session.is_authority():
+		return
+	var p: Session.SessionPlayer = session.player(id)
+	var result: Dictionary = p.suit.take(amount, source)
+	if float(result.amount) <= 0.0:
+		return
+	p.run_log.note_damage(source, float(result.amount), in_cover)
+	if bool(result.staggered):
+		var st: Dictionary = _health_cfg.stagger
+		p.operator.hold_control(float(st.control_loss_s))
+		p.operator.rifle.cone.spread_deg = maxf(p.operator.rifle.cone.spread_deg, float(st.cone_deg))
+	if bool(result.died):
+		_mate_down(p, who, source)
+
+
+func _mate_down(p: Session.SessionPlayer, who: String, how: String) -> void:
+	p.run_log.note_death_location(layout.space_at(player_pos(p)))
+	_drop_body(p)
+	p.operator.hold_control(INF)
+	p.run_log.note_death(who, how, _killer_kind(how))
+	p.run_log.hold_back = not shift.ended()
+	p.run_log.write("death")
+	_after_death(p)
+
+
+## What they carried lands around them. Whole crew down ends the shift, in ShiftState.
+func _drop_body(p: Session.SessionPlayer) -> void:
+	var at := player_pos(p)
+	var items := shift.player_died(p.id)
+	var spread := float(_salvage_cfg.drop_scatter_m)
+	for i in items.size():
+		var around := Vector2.from_angle(TAU * float(i) / float(items.size())) * spread
+		field.lay_down(items[i], at + around)
+
+
+## The alarm goes quiet with whoever set it off. The crew's last death ends the shift.
+func _after_death(p: Session.SessionPlayer) -> void:
+	if shift.ended() or shift.alarm_by == p.id:
+		_stop_siren()
+		marker.hide_now()
+	if not shift.ended():
+		return
+	_flush_logs()
+	if session_live:
+		_bill_wait = float(_cfg.session.death_hold_s)
+
+
+## How the shift ended is known now, so the lives that were waiting on it can go on file.
+func _flush_logs() -> void:
+	for p: Session.SessionPlayer in session.players:
+		p.run_log.flush_held()
 
 
 ## The ship's AI on the deck: registers on the tier hook, gets the guns' trace, and adds its drones to
@@ -129,12 +428,14 @@ func _trace_shot(origin: Vector3, dir: Vector3, length: float) -> Dictionary:
 	return shot
 
 
+## This screen's fog: has the local player seen this spot?
 func _player_knows(p: Vector2) -> bool:
 	return sight.grid.state_at(p) != sight.grid.UNKNOWN
 
 
 func _on_custodian_hit(id: int, source: String, amount: float, from: Vector2, who: String) -> void:
 	if id != player_id:
+		hurt_player(id, source, amount, who, false)
 		return
 	note_hit_from(from, source)
 	run_log.note_threat("custodian", layout.space_at(_eye()))
@@ -179,18 +480,39 @@ func _help_text() -> String:
 ## A new shift. The one under way, if any, goes to the log as abandoned.
 func respawn() -> void:
 	if _shift_ready:
+		if not session.is_authority():
+			return
 		shift.abandon()
+		_flush_logs()
 	super()
 	if _shift_ready:
+		_reset_crew()
 		_start_shift()
 
 
+## Everybody but the local player, back to a new life. `stalker_deck` did the local one.
+func _reset_crew() -> void:
+	for p: Session.SessionPlayer in session.players:
+		if _is_local(p):
+			continue
+		if p.run_log.time_alive_s > 0.0:
+			p.run_log.write("respawn")
+		p.run_log.begin()
+		p.suit.reset()
+		p.operator.release_control()
+		p.operator.crouch_shown = 1.0
+		p.brace_left = 0.0
+		p.noise_left = 0.0
+		p.leave_held = false
+		p.sight.refresh_occluders()
+		p.sight.forget()
+		update_player_sight(p, 0.0, true)
+	session.local().leave_held = false
+
+
 func _start_shift() -> void:
-	if next_seed != 0:
-		rng.seed = next_seed
-		next_seed = 0
-	else:
-		rng.randomize()
+	session.reseed(next_seed)
+	next_seed = 0
 	section.rng.seed = rng.randi()
 	section.reset()
 	shift.begin()
@@ -205,16 +527,30 @@ func _start_shift() -> void:
 	_bill_wait = -1.0
 	_threat_wait = 0.0
 	custodian.reset()
-	operator.set_carry(shift.carry(player_id).penalties())
+	for p: Session.SessionPlayer in session.players:
+		p.operator.set_carry(shift.carry(p.id).penalties())
+		_seed_player(p)
+	for i in pack.stalkers.size():
+		pack.stalkers[i].brain.rng.seed = session.seed_for("stalker:%d" % i)
 	_sync_hud()
+
+
+## This shift's rounds, from the session's seed.
+func _seed_player(p: Session.SessionPlayer) -> void:
+	p.operator.rifle.state.rng.seed = session.seed_for("rifle:%d" % p.id)
 
 
 ## The shift first, then the deck under it. After LEAVE the deck stops: nobody's left on it.
 func simulate_world(delta: float) -> void:
 	if not _shift_ready:
 		return
+	if not session.is_authority():
+		_show_carried()
+		_sync_hud()
+		return
 	_step_shift(delta)
 	if shift.outcome != ShiftState.EXTRACTED:
+		_step_crew(delta)
 		super(delta)
 	_show_carried()
 	_sync_hud()
@@ -249,9 +585,11 @@ func _step_sounds() -> void:
 
 
 func _step_shift(delta: float) -> void:
+	if not session.is_authority():
+		return
 	_step_sounds()
 	section.tick(delta)
-	marker.tick(delta, _eye())
+	marker.tick(delta, _alarm_at())
 	for ev: Dictionary in shift.step(delta):
 		match String(ev.type):
 			ShiftState.EV_TIER:
@@ -269,52 +607,70 @@ func _step_shift(delta: float) -> void:
 		_alarm_refresh -= delta
 		if _alarm_refresh <= 0.0:
 			_alarm_refresh = float(_cfg.alarm.refresh_s)
-			pack.alert(_eye())
-	for ev: Dictionary in shift.carry(player_id).step(delta):
-		_on_carry_event(ev)
-	var inside := airlock.has_point(_eye())
-	if inside and shift.alive(player_id):
-		_deposit()
-	if shift.step_leave(player_id, delta, inside, _leave_held()):
-		_leave()
-		return
-	var loss := shift.suit_loss(delta)
-	if loss > 0.0:
-		_hurt("oxygen", loss * float(_health_cfg.suit.max), String(_cfg.out_of_air.who), false)
+			if shift.alive(_alarm_holder().id):
+				pack.alert(_alarm_at())
+	for p: Session.SessionPlayer in session.players:
+		for ev: Dictionary in shift.carry(p.id).step(delta):
+			_on_carry_event(ev, p)
+		var inside := airlock.has_point(player_pos(p))
+		shift.set_aboard(p.id, inside)
+		if inside and shift.alive(p.id):
+			_deposit(p)
+	for p: Session.SessionPlayer in session.players:
+		_send_leave_input(p)
+		if shift.step_leave(p.id, delta, airlock.has_point(player_pos(p)), p.leave_held):
+			_leave()
+			return
+	for p: Session.SessionPlayer in session.players:
+		var loss := shift.suit_loss(delta, p.id)
+		if loss > 0.0 and shift.alive(p.id):
+			hurt_player(p.id, "oxygen", loss * float(_health_cfg.suit.max), String(_cfg.out_of_air.who), false)
 
 
-## Who the ship can see, by player ID. Solo for now.
+## Who the ship can see, by player ID.
 func _custodian_players() -> Array:
-	var p := _eye()
-	return [{"id": player_id, "pos": p, "body": Vector3(p.x, body_height(), p.y), "alive": not suit.dead}]
+	var out: Array = []
+	for p: Session.SessionPlayer in session.players:
+		var at := player_pos(p)
+		out.append({"id": p.id, "pos": at, "body": Vector3(at.x, _height_of(p), at.y), "alive": not p.suit.dead})
+	return out
 
 
-func _leave_held() -> bool:
-	if operator.input_enabled:
-		return Input.is_physical_key_pressed(KEY_E)
-	return bool(operator.scripted.get("leave", false))
+## Holding E is read fresh each step, so it stays in step with the airlock.
+func _send_leave_input(p: Session.SessionPlayer) -> void:
+	if p.operator.remote:
+		return
+	var held: bool = p.operator.scripted.get("leave", false)
+	if p.operator.input_enabled:
+		held = Input.is_physical_key_pressed(KEY_E)
+	session.send(Commands.leave(p.id, held))
 
 
-func _deposit() -> void:
-	var items := shift.deposit(player_id)
+func _deposit(p: Session.SessionPlayer) -> void:
+	var items := shift.deposit(p.id)
 	if items.is_empty():
 		return
 	for item: RefCounted in items:
 		field.put_away(item)
-	operator.set_carry(shift.carry(player_id).penalties())
+	p.operator.set_carry(shift.carry(p.id).penalties())
 	hud.os_state.announce(String(_cfg.words.deposit) % items.size())
 
 
+## LEAVE: over for everyone. The crew in the airlock go home; the rest are left behind.
 func _leave() -> void:
-	operator.hold_control(float(_cfg.leave.hold_after_s))
+	for id: int in shift.survivors:
+		session.player(id).operator.hold_control(float(_cfg.leave.hold_after_s))
 	_stop_siren()
 	marker.hide_now()
 	var w: Dictionary = _cfg.words
-	run_log.write("left")
+	_flush_logs()
+	for p: Session.SessionPlayer in session.players:
+		if not p.suit.dead:
+			p.run_log.write("left" if shift.survivors.has(p.id) else "left_behind")
 	if session_live:
-		_file_payslip(run_log.to_dict("left"), QuotaState.LEFT)
+		_file_payslip(run_log.to_dict("death" if suit.dead else "left"), QuotaState.LEFT)
 		return
-	hud.banner = [String(w.closed), String(w.hold_line) % hud.os_state.hold_text(shift.hold.estimate()), String(w.next)]
+	hud.banner = [String(w.closed), String(w.hold_line) % hud.os_state.hold_text(session.hold().estimate()), String(w.next)]
 
 
 func _on_tier(index: int, spec: Dictionary) -> void:
@@ -341,89 +697,110 @@ func _on_tier(index: int, spec: Dictionary) -> void:
 
 ## New stalkers come in where nobody can see. If that's nowhere right now, it asks again shortly.
 func _step_spawns(delta: float) -> void:
-	if _spawns_owed <= 0:
+	if _spawns_owed <= 0 or not session.is_authority():
 		return
 	_spawn_wait -= delta
 	if _spawn_wait > 0.0:
 		return
-	if pack.spawn_out_of_view([_player_sees], [_eye()], rng) != null:
+	if pack.spawn_out_of_view(_viewers(), _player_points(), rng) != null:
 		_spawns_owed -= 1
 	else:
 		_spawn_wait = float(pack._spawn_cfg.retry_s)
 
 
-## Could the player see something standing at `p`? The same five points a SightTarget is judged by.
+## One sight check per living player, and where they stand: nothing spawns where anyone can see it.
+func _viewers() -> Array:
+	var out: Array = []
+	for p: Session.SessionPlayer in session.players:
+		if not p.suit.dead:
+			out.append(_sees_from.bind(p))
+	return out
+
+
+func _player_points() -> Array:
+	var out: Array = []
+	for p: Session.SessionPlayer in session.players:
+		if not p.suit.dead:
+			out.append(player_pos(p))
+	return out
+
+
+## Could the local player see something standing at `p`?
 func _player_sees(p: Vector2) -> bool:
+	return _sees_from(p, session.local())
+
+
+## Could this player? The same five points a SightTarget is judged by.
+func _sees_from(p: Vector2, who: Session.SessionPlayer) -> bool:
 	var r := float(sight.cfg.target_radius_m)
-	var v: RefCounted = sight.visibility
-	var yaw := operator.gun_yaw()
-	var lit: bool = flashlight.on
+	var v: RefCounted = who.sight.visibility
+	var yaw: float = who.operator.gun_yaw()
+	var lit := _lit(who)
+	var eye := player_pos(who)
 	for at: Vector2 in [p, p + Vector2(r, 0), p + Vector2(-r, 0), p + Vector2(0, r), p + Vector2(0, -r)]:
-		if v.can_see(_eye(), yaw, lit, at):
+		if v.can_see(eye, yaw, lit, at):
 			return true
 	return false
 
 
-func _on_carry_event(ev: Dictionary) -> void:
+## Whose lift or drop this was; no one named is the local player.
+func _on_carry_event(ev: Dictionary, who: Session.SessionPlayer = null) -> void:
+	var p: Session.SessionPlayer = who if who != null else session.local()
 	var item: RefCounted = ev.item
+	var at := player_pos(p)
 	var taken := String(ev.type) == CarryState.EV_TAKEN
 	var sounds: Dictionary = Data.value("audio", "carry")
-	Audio.play(String(sounds["pickup" if taken else "drop"][item.klass]), operator.global_position)
+	Audio.play(String(sounds["pickup" if taken else "drop"][item.klass]), p.operator.global_position)
 	if taken:
 		shift.note_taken(item)
 		field.put_away(item)
 		if item.prize:
-			_trip_alarm()
+			_trip_alarm(p.id)
 	else:
-		field.lay_down(item, _eye())
+		field.lay_down(item, at)
 		var noise := String(ev.noise)
 		if noise != "":
-			pack.noise(noise, _eye())
-			noise_ring.state.fire(noise)
-	operator.set_carry(shift.carry(player_id).penalties())
+			pack.noise(noise, at)
+			if _is_local(p):
+				noise_ring.state.fire(noise)
+	p.operator.set_carry(shift.carry(p.id).penalties())
 
 
-## The big prize came off its mount: every stalker gets your position, and keeps getting it while you
-## show. Anything still behind its panel comes out now.
-func _trip_alarm() -> void:
-	if not shift.trip_alarm(player_id):
+## Who set the alarm off, while they're on the roster.
+func _alarm_holder() -> Session.SessionPlayer:
+	return session.player(shift.alarm_by) if session.has_player(shift.alarm_by) else session.local()
+
+
+func _alarm_at() -> Vector2:
+	return player_pos(_alarm_holder())
+
+
+## The big prize came off its mount: every stalker gets the carrier's position, and keeps getting it
+## while they show. Anything still behind its panel comes out now.
+func _trip_alarm(id := -1) -> void:
+	if not session.is_authority() or not shift.trip_alarm(player_id if id < 0 else id):
 		return
 	var a: Dictionary = _cfg.alarm
-	run_log.note_threat("alarm", layout.space_at(_eye()))
+	run_log.note_threat("alarm", layout.space_at(_alarm_at()))
 	hud.os_state.announce(String(a.announce))
 	marker.show_for(float(a.reveal_s))
 	Audio.loop("alarm", "alarm_siren")
 	_alarm_refresh = float(a.refresh_s)
-	pack.alert(_eye())
+	pack.alert(_alarm_at())
 	custodian.wake("prize")
 	if not ambush.fired:
 		ambush.fired = true
 		fire_ambush()
 
 
-## E: salvage in reach comes before a bed or a door. A full pocket or full hands lets them through.
+## E, for this machine's player. See `_act_interact`.
 func interact() -> void:
-	if shift.ended() or suit.dead or operator.control_held():
-		return
-	var c: CarryState = shift.carry(player_id)
-	if c.busy():
-		return
-	var item: RefCounted = field.nearest(_eye())
-	if item != null and c.begin_take(item) == CarryState.OK:
-		operator.hold_control(c.busy_left())
-		return
-	super()
+	session.send(Commands.interact(player_id))
 
 
-## G: lets go of what's in your hands, the heavy kind at once and loudly.
+## G, for this machine's player. See `_act_drop`.
 func drop_item() -> void:
-	if shift.ended() or suit.dead or operator.control_held():
-		return
-	var c: CarryState = shift.carry(player_id)
-	for ev: Dictionary in c.drop():
-		_on_carry_event(ev)
-	if c.busy():
-		operator.hold_control(c.busy_left())
+	session.send(Commands.drop(player_id))
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -443,23 +820,20 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Every hit goes on file under where it found you, for later briefings.
 func _hurt(source: String, amount: float, who: String, in_cover: bool) -> void:
+	if not session.is_authority():
+		return
 	run_log.note_threat(source, layout.space_at(_eye()))
 	super(source, amount, who, in_cover)
 
 
-## You're down: what you carried falls around you, and the shift's log gets written by the deck under this.
+## You're down: what you carried falls around you, and the shift's log gets written by the deck under
+## this, or waits for how the shift ends if the crew's still going.
 func _die(who: String, how: String) -> void:
 	run_log.note_death_location(layout.space_at(_eye()))
-	var items := shift.player_died(player_id)
-	var spread := float(_salvage_cfg.drop_scatter_m)
-	for i in items.size():
-		var around := Vector2.from_angle(TAU * float(i) / float(items.size())) * spread
-		field.lay_down(items[i], _eye() + around)
-	_stop_siren()
-	marker.hide_now()
+	_drop_body(session.local())
+	run_log.hold_back = not shift.ended()
 	super(who, how)
-	if session_live:
-		_bill_wait = float(_cfg.session.death_hold_s)
+	_after_death(session.local())
 
 
 func _killer_kind(how: String) -> String:
@@ -468,17 +842,18 @@ func _killer_kind(how: String) -> String:
 	return "suit" if how == "oxygen" else super(how)
 
 
-## What's in your hands is shown in your hands.
+## What's in anyone's hands is shown in their hands.
 func _show_carried() -> void:
-	var item: RefCounted = shift.carry(player_id).in_hand
-	if item != null:
-		field.hold_up(item, Transform3D(Basis(Vector3.UP, operator.model.torso_yaw), operator.global_position))
+	for p: Session.SessionPlayer in session.players:
+		var item: RefCounted = shift.carry(p.id).in_hand
+		if item != null:
+			field.hold_up(item, Transform3D(Basis(Vector3.UP, p.operator.model.torso_yaw), p.operator.global_position))
 
 
 func _sync_hud() -> void:
 	var c: CarryState = shift.carry(player_id)
-	hud.os_state.set_oxygen(shift.oxygen_left, float(_cfg.oxygen_s))
-	hud.hold_estimate = shift.hold.estimate()
+	hud.os_state.set_oxygen(shift.oxygen_of(player_id), float(_cfg.oxygen_s))
+	hud.hold_estimate = session.hold().estimate()
 	var held: RefCounted = c.in_hand
 	var key := ""
 	if held != null:
@@ -494,7 +869,7 @@ func _sync_hud() -> void:
 	var urgent: Array = []
 	if shift.alarm_left > 0.0:
 		urgent.append("alarm")
-	if shift.oxygen_out() and not shift.ended():
+	if shift.oxygen_of(player_id) <= 0.0 and not shift.ended():
 		urgent.append("o2_out")
 	if not shift.ended() and custodian.cutter_on(player_id):
 		urgent.append("cutter")
@@ -520,6 +895,11 @@ func _process(delta: float) -> void:
 	if not _shift_ready:
 		return
 	_update_prompt()
+	for p: Session.SessionPlayer in session.players:
+		if not _is_local(p):
+			if not p.suit.dead:
+				doors.actors.append({"position": player_pos(p), "radius": p.operator.body_radius()})
+			update_player_sight(p, delta, false)
 
 
 func _update_prompt() -> void:
@@ -560,7 +940,7 @@ func start_session() -> void:
 	past_logs = []
 	_contracts = 0
 	paperwork.book.forget()
-	paperwork.reseed(int(Time.get_ticks_usec()) if next_seed == 0 else next_seed)
+	paperwork.reseed(rng.randi() if next_seed == 0 else next_seed)
 	_brief()
 
 
@@ -576,14 +956,16 @@ func _brief() -> void:
 
 
 func _open_form(screen: String, doc: Dictionary) -> void:
-	operator.process_mode = Node.PROCESS_MODE_DISABLED
+	for p: Session.SessionPlayer in session.players:
+		p.operator.process_mode = Node.PROCESS_MODE_DISABLED
 	Audio.stop_loop("breath")
 	paper.open(screen, doc)
 
 
 func _close_form() -> void:
 	paper.close()
-	operator.process_mode = Node.PROCESS_MODE_INHERIT
+	for p: Session.SessionPlayer in session.players:
+		p.operator.process_mode = Node.PROCESS_MODE_INHERIT
 
 
 func _on_paper_pressed(button: String) -> void:
@@ -598,7 +980,7 @@ func _on_paper_pressed(button: String) -> void:
 			contract["decline_line"] = paperwork.decline_line()
 			paper.update(contract)
 		"confirm_decline":
-			quota.close_shift(0, QuotaState.DECLINED)
+			session.close_quota(0, QuotaState.DECLINED)
 			_after_form()
 		"acknowledge":
 			if paper.screen_name == "termination":
@@ -618,7 +1000,7 @@ func _after_form() -> void:
 func _file_payslip(log: Dictionary, how: String) -> void:
 	past_logs.append(log)
 	var doc := paperwork.payslip(log, contract)
-	quota.close_shift(int(doc.net_cr), how)
+	session.close_quota(int(doc.net_cr), how)
 	doc.merge(paperwork.quota_fields(quota.facts()), true)
 	_open_form("payslip", doc)
 	_tick_ledger(doc.ledger.size())
@@ -636,15 +1018,16 @@ func file_death_bill() -> void:
 	_bill_wait = -1.0
 	var log := run_log.to_dict("death")
 	past_logs.append(log)
-	quota.close_shift(0, QuotaState.DIED)
+	session.close_quota(0, QuotaState.DIED)
 	_open_form("death_bill", paperwork.death_bill(log, contract, quota.facts()))
 
 
 ## Backspace in a session: the shift's written off and billed, nothing banked, and it counts.
 func abandon_shift() -> void:
-	if not session_live or paper.is_open() or shift.ended():
+	if not session_live or paper.is_open() or shift.ended() or not session.is_authority():
 		return
 	shift.abandon()
+	_flush_logs()
 	var log := run_log.to_dict("respawn")
 	run_log.write("respawn")
 	_file_payslip(log, QuotaState.ABANDONED)

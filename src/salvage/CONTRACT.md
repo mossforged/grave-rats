@@ -17,6 +17,7 @@ What's on the ship and what carrying it does to you (T012). Weight is greed made
 - Lifting takes `pickup_s` and holds you. A medium drop takes `drop_s` and holds you. A heavy drop has `drop_s` 0: instant, with `drop_noise` "thud". **Resolved packet vs design:** the packet says drops are committed and also "instant and loud"; the design table says only heavy is instant. Followed the design, and it's all data.
 - `value` is `base` ± `value_spread`. The HUD shows the sum of `base` with an approximate sign; the true sum goes to the run log.
 - E takes the nearest item in `reach_m`, so nothing sits inside the prize's reach (test).
+- Two players can't lift one item: it's reserved (`taken_by`) as the lift starts. A dropped item can be carried on by a crewmate (`tests/test_session.gd`).
 - Items don't block anything: no collision, not cover, no nav blocker.
 - Small items can't be dropped by hand; they leave at the hold or where you fall.
 

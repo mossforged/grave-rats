@@ -1,0 +1,15 @@
+{
+  "local_player_id": 1,
+  "max_players": 4,
+  "crew": "grave_rats",
+  "spawn_spacing_m": 1.5,
+  "two_player": {
+    "mate_id": 2,
+    "mate_bot": {
+      "space": "junction",
+      "arrive_m": 0.3,
+      "reach_share": 0.7,
+      "wait_s": 1.0
+    }
+  }
+}

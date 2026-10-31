@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T016 merged, waiting on John's gates. Q002 health check merged (no unexplained regressions; frame time needs a quiet-Mac re-measure). **Next:** John plays (T015 past tier 2 with the black box; pick an AA mode in F1 → Display). Code lane: T017 sound, T018 co-op groundwork, T019 corridors, T020 gun feel.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T016 merged, waiting on John's gates. Q002 health check merged (no unexplained regressions; frame time needs a quiet-Mac re-measure). **Next:** John plays (T015 past tier 2 with the black box; pick an AA mode in F1 → Display). Code lane: T017 sound waits on John's ear; T018 co-op groundwork done on `auto/t018-mac`, waiting on review (it branched without T017; trial merge 492/492 after hand resolution, see `docs/handoffs/auto-T018.md`); then T019 corridors, T020 gun feel.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -61,8 +61,10 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
 - T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
+- T018: lock to cover through the `LOCK` command (`src/cover`, `src/pirates`); E through commands on the older dev decks; `src/pirates` randomness on the session's seed.
+- T018: per-stalker targets (the pack hunts one player at a time, and the cover-shield lines follow it); a death bill for a player left behind; spectating when you're down with the crew alive; a second input device in the two-player scene.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged Q002 and T016 (410/410 reproduced). Prop library 104 props; VFX textures and `docs/design/gun-feel.md`; queued T019, T020. Free sound shortlist in `docs/handoffs/sound-shortlist.md`.
-2026-10-31 (code, unattended): T016: `bed.glb` on deck and tipping (tip motion changed so the plate faces away), `dressing` in `data/deck.json`, gurney as low cover, nine salvage models, AA modes in F1 → Display saved to `data/display.json`. Bots: cautious ignoring tells 11 of 12 (was 12), deterministic, unattributed.
+2026-10-31 (code, unattended): T018: `src/session` (players, commands, seeded RNG, `is_authority()`), one spawn path, the shift deck keyed by player ID, `scenes/session/two_player_deck.tscn` with a scripted mate. 452/452, existing tests unedited; solo reads about 0.17 ms slower than `main` (two pairs, cause not found).
+Not merged with T017 (its packet dependency); lock to cover and a crew through the forms are the known gaps, in the handoff.

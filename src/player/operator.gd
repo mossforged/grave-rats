@@ -8,6 +8,7 @@ const OperatorBody := preload("res://src/player/operator_body.gd")
 const AimVisuals := preload("res://src/player/aim_visuals.gd")
 const Rifle := preload("res://src/weapons/rifle.gd")
 const SoundRules := preload("res://src/audio/sound_rules.gd")
+const Commands := preload("res://src/session/commands.gd")
 
 var model: OperatorModel
 var rifle: Rifle
@@ -18,6 +19,11 @@ var move_yaw_deg := 0.0        # camera yaw, so W is always screen-up
 var input_enabled := true
 ## When input is off: "keys" (Vector2 screen-relative), "crouch", "sprint", "fire".
 var scripted := {}
+var player_id := 1
+## Moved only by commands from elsewhere: a bot now, a client later. No keys, no `scripted`.
+var remote := false
+## Where this operator's commands go (Session.send). Empty: straight to itself.
+var send_command := Callable()
 var anim_speed := 0.0          # speed the animation got this step
 var crouch_shown := 1.0        # share of the crouch the body shows (a braced shot rises out of it)
 ## (p: Vector2) -> String: the name of the space underfoot, for which footstep. The deck sets it.
@@ -29,6 +35,9 @@ var _visual: Node3D
 var _shape: CapsuleShape3D
 var _muzzle_offset := Vector3.ZERO
 var _trigger_tap := false
+var _keys := Vector2.ZERO
+var _crouch := false
+var _sprint := false
 var _hold_left := 0.0
 var _can_fire := true
 var _cone_extra := 0.0
@@ -153,7 +162,53 @@ func _unhandled_input(event: InputEvent) -> void:
 		_trigger_tap = true
 	elif event is InputEventKey and event.pressed and not event.echo \
 			and (event as InputEventKey).physical_keycode == KEY_R:
-		request_reload()
+		_send(Commands.reload_gun(player_id))
+
+
+func _send(cmd: Dictionary) -> void:
+	if send_command.is_valid():
+		send_command.call(cmd)
+	else:
+		apply_command(cmd)
+
+
+## A player's action arrives. The simulation below only ever reads what these left.
+func apply_command(cmd: Dictionary) -> void:
+	match String(cmd.type):
+		Commands.MOVE:
+			_keys = cmd.keys
+			_sprint = cmd.sprint
+			move_yaw_deg = cmd.yaw_deg
+		Commands.CROUCH:
+			_crouch = cmd.held
+		Commands.AIM:
+			aim_point = cmd.point
+		Commands.FIRE:
+			rifle.trigger_held = cmd.held
+		Commands.RELOAD:
+			request_reload()
+
+
+## Keys and the mouse (or `scripted`) become this step's commands.
+func _send_local_input() -> void:
+	if remote:
+		return
+	var keys: Vector2 = scripted.get("keys", Vector2.ZERO)
+	var crouch: bool = scripted.get("crouch", false)
+	var sprint: bool = scripted.get("sprint", false)
+	var fire: bool = scripted.get("fire", false)
+	if input_enabled:
+		keys = Vector2(
+			float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
+			float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W)))
+		crouch = Input.is_physical_key_pressed(KEY_C) or Input.is_physical_key_pressed(KEY_CTRL)
+		sprint = Input.is_physical_key_pressed(KEY_SHIFT)
+		# A click shorter than a physics step still fires.
+		fire = _trigger_tap or (rifle.trigger_held and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT))
+		_trigger_tap = false
+	_send(Commands.move(player_id, keys, sprint, move_yaw_deg))
+	_send(Commands.crouch(player_id, crouch))
+	_send(Commands.fire(player_id, fire))
 
 
 func _physics_process(delta: float) -> void:
@@ -164,20 +219,10 @@ func _physics_process(delta: float) -> void:
 
 ## One whole step; public so tests can drive it with exact deltas.
 func simulate(delta: float) -> void:
-	var keys: Vector2 = scripted.get("keys", Vector2.ZERO)
-	var crouch: bool = scripted.get("crouch", false)
-	var sprint: bool = scripted.get("sprint", false)
-	if input_enabled:
-		keys = Vector2(
-			float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
-			float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W)))
-		crouch = Input.is_physical_key_pressed(KEY_C) or Input.is_physical_key_pressed(KEY_CTRL)
-		sprint = Input.is_physical_key_pressed(KEY_SHIFT)
-		# A click shorter than a physics step still fires.
-		rifle.trigger_held = _trigger_tap or (rifle.trigger_held and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT))
-		_trigger_tap = false
-	else:
-		rifle.trigger_held = scripted.get("fire", false)
+	_send_local_input()
+	var keys := _keys
+	var crouch := _crouch
+	var sprint := _sprint
 	var to_yaw := model.aim_yaw_for(global_position, aim_point)
 	if _hold_left > 0.0:
 		_hold_left = maxf(_hold_left - delta, 0.0)

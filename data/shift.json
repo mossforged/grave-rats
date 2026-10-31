@@ -1,5 +1,4 @@
 {
-  "player_id": 1,
   "quota": {"shifts_per_cycle": 3, "start_cr": 2400, "growth": 1.5, "round_to": 5},
   "session": {"death_hold_s": 2.5, "threat_check_s": 0.25},
   "oxygen_s": 480.0,

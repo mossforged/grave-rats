@@ -13,11 +13,16 @@ const NO_SHIFT := {
 	"shift_outcome": null, "oxygen_at_exit_s": null, "deposited_by_class": {}, "deposited_items": 0,
 	"deposited_value": 0, "banked_value": 0, "items_lost": 0, "items_lost_value": 0, "prize_taken": false,
 	"tier_reached": 0, "survivors": [], "airlock_cycles": 0, "salvage": [], "carried_at_death": 0,
-	"carried_at_death_value": 0,
+	"carried_at_death_value": 0, "left_behind": [],
 }
 
 var dir := DEFAULT_DIR
 var enabled := true
+## Whose life this is.
+var player_id := 0
+var crew := ""
+## You're down and the crew isn't: the file waits for how the shift ends (`flush_held`).
+var hold_back := false
 var time_alive_s := 0.0
 var shots_fired := 0
 var shots_hit := 0
@@ -42,6 +47,7 @@ var last_path := ""
 var shift_report := Callable()
 
 var _written := false
+var _held_ended := ""
 
 
 func _init(directory := DEFAULT_DIR) -> void:
@@ -70,6 +76,8 @@ func begin() -> void:
 	death_location = null
 	threats_seen = {}
 	_written = false
+	hold_back = false
+	_held_ended = ""
 
 
 func note_time(delta: float) -> void:
@@ -137,6 +145,8 @@ func note_your_shot_blocked() -> void:
 
 func to_dict(ended: String) -> Dictionary:
 	var out := {
+		"player_id": player_id,
+		"crew": crew,
 		"started_at": started_at,
 		"ended": ended,
 		"time_alive_s": time_alive_s,
@@ -165,6 +175,10 @@ func to_dict(ended: String) -> Dictionary:
 func write(ended: String) -> String:
 	if not enabled or _written:
 		return ""
+	if hold_back:
+		if _held_ended == "":
+			_held_ended = ended
+		return ""
 	var err := DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dir))
 	if err != OK:
 		push_error("run_log: can't make %s: %s" % [dir, error_string(err)])
@@ -184,3 +198,11 @@ func write(ended: String) -> String:
 	_written = true
 	last_path = path
 	return path
+
+
+## The shift's over: writes what `hold_back` kept. Returns the path, or "" if nothing was waiting.
+func flush_held() -> String:
+	hold_back = false
+	var ended := _held_ended
+	_held_ended = ""
+	return "" if ended == "" else write(ended)

@@ -26,7 +26,7 @@ Sliding bulkhead doors (T004), which stalkers break (T006).
 ## Public API
 - `DoorState.new(cfg, start)`: `interact(doorway_clear) -> "opening"|"closing"|"locked"|"blocked"|"broken"`, `step(delta, doorway_clear)`, `bash(delta) -> broke`, `blocks()`, `is_locked()`, `is_broken()`, `unlock()`, `prompt_key()`; fields `state`, `progress`, `bash_progress`; enum `State`.
 - `Door`: `setup(door, spec, cfg, wall_height)`, `tick(delta, actors)`, `interact(actors)`, `reset(start)`, `bash(delta, from)`, `bang()`, `front_point(from, radius)`, `within_reach(p, radius)`, `doorway_clear(actors)`, `blocks_sight()`, `sight_rect()`, `state_color()`, `use_mask(bind)`; fields `door_state`, `opening`, `along_x`, `slide`, `space`, `side`. It's in group `sight_occluder`.
-- `DoorSystem`: `setup(layout)`, `tick(delta)`, `door_in_reach(p)`, `interact(p) -> answer or ""`, `show_prompt(p)`, `use_mask(bind)`; fields `doors` (same order as `data/deck.json` "doors"), `cfg`, `actors` [{`position`: Vector2, `radius`}].
+- `DoorSystem`: `setup(layout)`, `set_authority(check)` (T018: `() -> bool`; without it `tick` and `interact` do nothing, nor does `Door.interact` or `Door.bash`. Unset: allowed), `tick(delta)`, `door_in_reach(p)`, `interact(p) -> answer or ""`, `show_prompt(p)`, `use_mask(bind)`; fields `doors` (same order as `data/deck.json` "doors"), `cfg`, `actors` [{`position`: Vector2, `radius`}].
 
 ## Signals
 `Door.state_changed(door)`, `DoorSystem.door_used(door, answer)`.

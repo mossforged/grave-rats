@@ -14,6 +14,8 @@ const PlaceholderSound := preload("res://src/enemies/placeholder_sound.gd")
 
 ## Someone in the squad said something. Tests and the log listen; the labels are its own.
 signal barked(pirate: Node3D, key: String, line: String)
+## A pirate pulled the trigger. The deck lights them up with it.
+signal fired(pirate: Node3D)
 
 var cfg: Dictionary
 var nav: StalkerNav
@@ -391,6 +393,7 @@ func _fire(p: Node) -> void:
 	var b: PirateBrain = p.brain
 	if b.role == Tactics.Role.SUPPRESS:
 		_covering_fire = true
+	fired.emit(p)
 	var yaw: float = b.gun.shot_yaw(b.gun_yaw(), b.cone.spread_deg)
 	var dir := Vector3(-sin(yaw), 0.0, -cos(yaw))
 	var origin: Vector3 = p.shot_origin()

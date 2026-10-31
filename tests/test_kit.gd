@@ -228,7 +228,7 @@ func test_each_door_state_shows() -> void:
 		check(not panel.visible, "open: hidden in the pocket")
 		d.reset("locked")
 		check(panel.visible, "locked: leaf shows")
-		check_eq(d._lamp_mat.emission, Color(String(d.cfg.colors.lamp_locked)), "and the light is the locked one")
+		check_eq(d.state_color(), Color(String(d.cfg.colors.lamp_locked)), "and the light is the locked one")
 		d.reset("closed")
 		var break_s := float(d.cfg.bash.break_s)
 		d.bash(break_s * 0.6, d.opening.get_center() + Vector2(3, 3))

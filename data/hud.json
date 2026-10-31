@@ -138,6 +138,19 @@
       {"poly": [[0.5, 0.02], [1.0, 0.96], [0.0, 0.96]]}
     ]
   },
+  "hit_direction": {
+    "only_out_of_sight": true,
+    "life_s": 1.1,
+    "fade_s": 0.6,
+    "merge_m": 2.0,
+    "max_arcs": 4,
+    "radius_px": 150.0,
+    "width_px": 7.0,
+    "tip_px": 13.0,
+    "span_deg": 44.0,
+    "segments": 14,
+    "colors": {"default": "ff5a3c", "rifle": "ff5a3c", "lunge": "ff5a3c", "spit": "9cff4a"}
+  },
   "ring": {
     "height_m": 0.04,
     "line_m": 0.09,

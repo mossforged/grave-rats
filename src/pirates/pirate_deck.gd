@@ -36,6 +36,7 @@ var _ready_done := false
 var _hold_squad := false       # captures only: the squad stays exactly where the shot put it
 var _shot_light: OmniLight3D
 var _shot_legacy: Node3D
+var _shot_focus: Node3D
 
 
 func _ready() -> void:
@@ -66,6 +67,7 @@ func _ready() -> void:
 	squad.light_on = func(p: Vector2) -> bool: return flashlight.on and sight.visibility.in_light(_eye(), operator.gun_yaw(), p)
 	squad.player_body.radius = float(_pirate_cfg.hit_radius_m)
 	squad.player_body.on_hit = _on_round_landed
+	squad.fired.connect(func(p: Node3D) -> void: sight.flash(p, p.floor_position(), _pirate_cfg.muzzle_reveal))
 	var characters: Array[RID] = [operator.get_rid()]
 	for p: Node in squad.pirates:
 		characters.append(p.get_rid())
@@ -263,6 +265,7 @@ func _on_rifle_fired(from: Vector3, to: Vector3, _direction: Vector3, hit: Objec
 
 func _on_round_landed(hit: Dictionary) -> void:
 	var who: String = hit.shooter.label
+	note_hit_from(hit.shooter.floor_position(), "rifle")
 	_hurt("rifle", float(hit.damage), who, in_cover_now())
 
 
@@ -317,6 +320,7 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "hud_locked", "do": "lock", "aim": false},
 		{"name": "hud_locked_exposed", "do": "lock", "aim": true},
 		{"name": "hud_shields_under_fire", "do": "flank", "wait": 1.8},
+		{"name": "t011_hit_out_of_sight", "do": "hit"},
 	]
 
 
@@ -364,6 +368,8 @@ func apply_shot(shot: Dictionary) -> void:
 			await _beam_shot()
 		"braced":
 			await _braced_shot()
+		"hit":
+			await _hit_shot()
 		"flank":
 			await _flank_shot(float(shot.wait))
 		"lock":
@@ -435,6 +441,10 @@ func _beside_shot() -> void:
 
 
 func release_shot() -> void:
+	if _shot_focus:
+		rig.target = operator
+		_shot_focus.free()
+		_shot_focus = null
 	super()
 	if _shot_legacy:
 		_shot_legacy.free()
@@ -590,6 +600,39 @@ func _braced_shot() -> void:
 	# The hit flash reds out the whole frame, and this shot is about the pirate.
 	suit_hud._flash_left = 0.0
 	suit_hud._flash.visible = false
+
+
+## T011: a pirate behind you, firing for real. The frame is the first round to land:
+## the flash has lit them, and the suit OS points at them.
+func _hit_shot() -> void:
+	var at := layout.point_in("cargo", [0.6, 0.3])
+	var behind := at + Vector2(-1.5, 2.9)
+	await _stand_at(at, at + Vector2(0.0, -5.0))
+	var q: Node = squad.pirates[0]
+	for o: Node in squad.pirates:
+		if o != q:
+			o.global_position = Vector3(16.5, 0, 9.0)
+			o.brain.take_hit(INF)
+	q.global_position = Vector3(behind.x, 0, behind.y)
+	q.brain.model.face_now(q.brain.model.yaw_to(q.global_position, Vector3(at.x, 0, at.y)))
+	q.brain.order(squad.Tactics.Role.SUPPORT, {"hide": behind, "fire": behind, "kind": "low", "id": 11})
+	squad.alert(at)
+	var left := 6.0
+	while left > 0.0 and hud.hits.arcs.is_empty():
+		await get_tree().process_frame
+		left -= get_process_delta_time()
+		operator.aim_point = Vector3(at.x, _aim_height, at.y - 5.0)
+	if hud.hits.arcs.is_empty():
+		push_error("pirate_deck: the hit capture never landed a round")
+	suit_hud._flash_left = 0.0
+	suit_hud._flash.visible = false
+	# The squad has moved them by now: frame the two of you together.
+	_shot_focus = Node3D.new()
+	add_child(_shot_focus)
+	_shot_focus.global_position = (operator.global_position + q.global_position) * 0.5
+	rig.target = _shot_focus
+	rig.aim_dir = Vector3.ZERO
+	rig.snap()
 
 
 ## You behind low cover near the door; the suppressor keeps you down and the flanker goes round.

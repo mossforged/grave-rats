@@ -611,6 +611,12 @@ static func fixture(mat: String, vertical: bool) -> ArrayMesh:
 		return m.build())
 
 
+## The layer only floor plates are on: probes reflect in these and nothing else, for what the sheen's
+## on and no more (T011). No light or camera asks for it by itself.
+static func floor_layer() -> int:
+	return 1 << int(_cfg().floor_wear.layer_index)
+
+
 ## Bit of the render layer a space's static geometry sits on. Its lights touch only that layer (and
 ## the default layer: characters, doors), so a room's lamp can't shine through a wall into the next.
 static func space_layer(layout: RefCounted, space: String) -> int:

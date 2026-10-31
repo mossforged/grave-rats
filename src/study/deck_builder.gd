@@ -5,6 +5,7 @@ extends RefCounted
 const DeckLayout := preload("res://src/study/deck_layout.gd")
 const KitPieces := preload("res://src/kit/kit_pieces.gd")
 const KitMaterials := preload("res://src/kit/kit_materials.gd")
+const FloorWear := preload("res://src/kit/floor_wear.gd")
 const CUTAWAY_GROUP := &"camera_cutaway"  # the camera rig's contract (src/camera/CONTRACT.md)
 
 
@@ -21,9 +22,14 @@ static func build(layout: DeckLayout) -> Node3D:
 	var door_rects: Array = layout.doors.map(func(e: Dictionary) -> Rect2: return e.rect)
 	door_rects.append_array(layout.breaches.map(func(e: Dictionary) -> Rect2: return e.rect))
 	var specs: Dictionary = kit.floors.spaces
+	var wear_cfg: Dictionary = kit.floor_wear
+	var floor_mat := KitMaterials.floor_material(FloorWear.paint(layout, wear_cfg, kit.floors), FloorWear.rect_for(layout, wear_cfg))
 	for n: String in layout.space_order:
 		var spec: Dictionary = specs.get(n, specs.default)
-		_add_floor(floors, n, KitPieces.floor_space(layout.space_rect(n), spec, door_rects), KitPieces.space_layer(layout, n))
+		var mi := _add_floor(floors, n, KitPieces.floor_space(layout.space_rect(n), spec, door_rects), KitPieces.space_layer(layout, n) | KitPieces.floor_layer())
+		for i in mi.mesh.get_surface_count():
+			if mi.mesh.surface_get_name(i) == "deck":
+				mi.set_surface_override_material(i, floor_mat)
 	for door: Dictionary in layout.doors:
 		_add_floor(floors, "Doorway", KitPieces.threshold(door.rect, door.along_x, true), _layers_around(layout, door.rect))
 	for breach: Dictionary in layout.breaches:
@@ -47,13 +53,14 @@ static func build(layout: DeckLayout) -> Node3D:
 	return root
 
 
-static func _add_floor(parent: Node3D, node_name: String, mesh: ArrayMesh, layers: int) -> void:
+static func _add_floor(parent: Node3D, node_name: String, mesh: ArrayMesh, layers: int) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
 	mi.name = node_name
 	mi.mesh = mesh
 	mi.layers = layers
 	mi.set_meta("kit_piece", "floor")
 	parent.add_child(mi)
+	return mi
 
 
 ## The render layers of every space touching `r`.
@@ -195,23 +202,25 @@ static func _add_collision(parent: Node3D, r: Rect2, y0: float, height: float) -
 	parent.add_child(body)
 
 
-# --- signage (A002-08b): quads from data, on the wall pieces so they fade with them ---
+# --- signage (A010): quads from data, on the wall pieces so they fade with them ---
 
 static func _add_signage(root: Node3D, walls: Node3D, layout: DeckLayout, s: Dictionary) -> void:
 	var out := float(s.wall_out_m)
+	var step := float(s.layer_step_m)
+	var half_wall := float(layout.data.wall_thickness_m) * 0.5
 	for e: Dictionary in s.walls:
 		var space := String(e.space)
 		if not layout.spaces.has(space):
 			continue
-		var r := layout.space_rect(space)
-		var x := r.position.x + r.size.x * float(e.at)
-		var face := r.position.y
-		var pivot := wall_at(walls, Vector2(x, face - float(layout.data.wall_thickness_m) * 0.5))
+		var face := _wall_face(layout.space_rect(space), String(e.wall), float(e.at))
+		var pivot := wall_at(walls, face.at - face.inward * half_wall)
 		if pivot == null:
 			continue
 		var mi := _sign_quad(String(e.image), float(e.width_m), KitPieces.space_layer(layout, space))
-		mi.position = Vector3(x - pivot.position.x, float(e.y_m), face + out - pivot.position.z)
-		pivot.add_child(mi)
+		var p: Vector2 = face.at + face.inward * (out + step * float(e.get("layer", 0)))
+		mi.position = Vector3(p.x - pivot.position.x, float(e.y_m), p.y - pivot.position.z)
+		mi.rotation = Vector3(0.0, atan2(face.inward.x, face.inward.y), deg_to_rad(float(e.get("tilt_deg", 0.0))))
+		pivot.add_child(mi, true)
 	var signs := Node3D.new()
 	signs.name = "FloorSigns"
 	root.add_child(signs)
@@ -224,7 +233,19 @@ static func _add_signage(root: Node3D, walls: Node3D, layout: DeckLayout, s: Dic
 		mi.position = Vector3(p.x, float(s.floor_y_m), p.y)
 		mi.rotation = Vector3(-PI * 0.5, deg_to_rad(float(e.turn_deg)), 0.0)
 		mi.rotation_order = EULER_ORDER_YXZ
-		signs.add_child(mi)
+		signs.add_child(mi, true)
+
+
+## A point on the inside of a room's wall, at fraction `at` along it, and the way into the room.
+static func _wall_face(r: Rect2, wall: String, at: float) -> Dictionary:
+	match wall:
+		"north":
+			return {"at": Vector2(r.position.x + r.size.x * at, r.position.y), "inward": Vector2.DOWN}
+		"south":
+			return {"at": Vector2(r.position.x + r.size.x * at, r.end.y), "inward": Vector2.UP}
+		"west":
+			return {"at": Vector2(r.position.x, r.position.y + r.size.y * at), "inward": Vector2.RIGHT}
+	return {"at": Vector2(r.end.x, r.position.y + r.size.y * at), "inward": Vector2.LEFT}
 
 
 ## The wall pivot whose footprint holds `p`, or null.
@@ -244,7 +265,7 @@ static func _sign_quad(image: String, width: float, layers: int) -> MeshInstance
 	var mi := MeshInstance3D.new()
 	mi.name = "Sign_%s" % image
 	mi.mesh = quad
-	mi.material_override = mat
+	quad.material = mat
 	mi.layers = layers
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	mi.set_meta("kit_piece", "sign")

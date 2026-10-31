@@ -6,6 +6,7 @@
   "health": 81.0,
   "stagger": {"threshold_fraction": 0.25, "control_loss_s": 0.35, "cone_deg": 22.0},
   "big_hit": {"window_s": 0.6},
+  "muzzle_reveal": {"radius_m": 2.6, "hold_s": 0.12, "fade_s": 0.4, "rays": 24},
   "weight": {
     "move": {
       "walk_speed_m_s": 3.4,

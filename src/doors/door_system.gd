@@ -43,6 +43,12 @@ func tick(delta: float) -> void:
 		d.tick(delta, actors)
 
 
+## `bind` is SightMask.bind: from here on the doors' state lights show only where the player's been.
+func use_mask(bind: Callable) -> void:
+	for d: Door in doors:
+		d.use_mask(bind)
+
+
 ## The nearest door within reach of `p`, or null.
 func door_in_reach(p: Vector2) -> Door:
 	var best: Door = null

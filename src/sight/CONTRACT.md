@@ -7,7 +7,12 @@ Pillar 2, "Know the room, fear the corner" (T004): line of sight, the three stat
 - `sight_grid.gd`: scene-free memory, cells of `memory.cell_m`, each UNKNOWN, REMEMBERED or VISIBLE. **Cells, not rooms:** a sight polygon cuts rooms, and the half you haven't seen is the corner you fear.
 - `sight_system.gd`: the Godot adapter. Occluders from the layout and the group, one update per frame, hides targets, emits `sight_updated`.
 - `sight_target.gd`: child node of any entity that must hide unless seen (sets the parent's `visible`).
-- `sight_mask.gd`, `sight_mask.gdshader`: two deck-wide SubViewports (visible, cleared each frame, 4x MSAA; memory, never cleared, no MSAA) and a fullscreen quad that looks up each pixel's world XZ from depth. Lighting stays real. Drawn first among the transparents (`RENDER_PRIORITY_MIN`), so FX, aim drawings and prompts draw after it, unmasked. The beam draws after it too, but looks the mask up itself.
+- `sight_mask.gd`, `sight_mask.gdshader`: two deck-wide SubViewports (visible, cleared each frame, 4x MSAA; memory, never cleared, no MSAA) and a fullscreen quad that looks up each pixel's world XZ from depth. Lighting stays real. Drawn first among the transparents (`RENDER_PRIORITY_MIN`), so everything transparent draws after it, unmasked unless it looks the mask up itself: FX and prompts don't; the beam, the aim cone and arc, faded walls and beacons do.
+- `sight_lookup.gdshaderinc`: that lookup (`sight_knowledge(world_xz)` -> seen now, ever seen), one copy for all of them. `SightMask.bind(material)` fills in its uniforms.
+- `aim_floor.gdshader`: the gun's cone and arc under sight. The ring under the aim point stays plain, so you can aim into the dark.
+- `fade_mask.gd`, `faded_surface.gdshader`: while the cut-away fades a surface, it wears a copy of its material that applies the mask to its own light. Originals come back when the fade ends. `src/camera` is untouched: it still only sets `transparency`.
+- `beacon.gdshader`: a light the player must read outside the cone: full strength anywhere they've ever seen, `unknown_share` elsewhere, hidden by walls and props.
+- `flash_reveals.gd`: scene-free moments of something lighting itself up. Drawn into the visible mask only, never memory; `SightSystem` shows targets inside one.
 - `flashlight.gd`, `beam_fan.gd`, `beam.gdshader`, `mote.gdshader`: shadowed `SpotLight3D` at the muzzle, a beam sheet in the same cone, dust motes that show only inside the wedge and the visible mask. `beam_fan.gd` and the shader are shared with the pirates' lights.
 - `sight_debug.gd`: F2 view.
 - `sight_deck.gd`: root of `scenes/sight/sight_deck.tscn`. Extends `src/player/weight_deck.gd`, adding all of the above plus `src/doors`, with darker lighting. `_help_text()` is a hook for scenes built on it.
@@ -26,13 +31,15 @@ Pillar 2, "Know the room, fear the corner" (T004): line of sight, the three stat
 ## Public API
 - `Visibility.new(cfg)`: `set_static(rects)`, `set_dynamic(rects)`, `polygon(eye, aim_yaw, light_on) -> PackedVector2Array`, `can_see(eye, aim_yaw, light_on, p)`, `in_light(eye, aim_yaw, p)`, `blocked(a, b)`, `cone(light_on)`, `reach(dir_yaw, aim_yaw, cone)`, `fan(from, first_yaw, span, count, limit)`, `edge_count()`; field `hit_dynamic`; static `yaw_dir2(yaw)`. Points are world XZ in `Vector2`; yaw matches `OperatorModel`.
 - `SightGrid.new(bounds, cell_m)`: `update(polygon, rects)`, `state_at(p)`, `count(state)`, `clear()`, `boundary(state)`; enum `UNKNOWN`, `REMEMBERED`, `VISIBLE`.
-- `SightSystem`: `setup(layout)`, `refresh_occluders()`, `update_sight(from, yaw, light, delta, force_memory)`, `forget()`; fields `visibility`, `grid`, `polygon`, `reveal`, `bounds`, `eye`, `aim_yaw`, `light_on`, `cfg`.
+- `SightSystem`: `setup(layout)`, `refresh_occluders()`, `update_sight(from, yaw, light, delta, force_memory)`, `flash(key, at, {radius_m, hold_s, fade_s, rays})`, `forget()`; fields `visibility`, `grid`, `polygon`, `reveal`, `reveals`, `bounds`, `eye`, `aim_yaw`, `light_on`, `cfg`.
+- `FlashReveals`: `add(key, at, radius, points, hold_s, fade_s)`, `step(delta)`, `clear()`, `covers(p)`, static `strength(flash)`; field `flashes`.
+- `FadeMask`: `sync_now()`, `masked_surfaces()`.
 - `SightTarget`: `seen`, `set_seen(bool)`, `floor_position()`.
 - `Flashlight`: `setup(cfg)`, `set_on(bool)`, `toggle()`, `on`, `spot`, `follow(muzzle, yaw)`, `draw_beam(visibility, eye, yaw, muzzle, delta)`, `set_mask(texture, bounds)`, `apply_cfg()`, `spot_angle_deg()`; field `fan`.
 - `BeamFan.new(rays)`: `configure(half_rad, range_m, rate, snap)`, `restart()`, `cast(visibility, eye, muzzle, yaw)`, `step(delta, muzzle, yaw)`, `point(i)`, `ray_yaw(i, yaw)`, `fill(mesh, muzzle, pitch_rad, floor_m)`; fields `reach`, `apex`, `yaw`, `half`, `range_m`.
-- `SightMask`: `setup(system)`, `apply_cfg()`, `visible_texture()`, `reveal_all()` (captures: paints the whole deck into memory).
+- `SightMask`: `setup(system)`, `bind(shader_material)`, `apply_cfg()`, `visible_texture()`, `reveal_all()` (captures: paints the whole deck into memory); field `fade_mask`.
 - Occluder contract: any node in group `sight_occluder` with `sight_rect() -> Rect2` and `blocks_sight() -> bool`. Call `refresh_occluders()` after adding one.
-- `sight_deck`: `deck_lighting` (`src/kit`), `set_kit_view("off"|"known"|"play")` (captures). The kit's lights and fog are its mood; the mask stays on top.
+- `sight_deck`: `deck_lighting` (`src/kit`), `set_kit_view("off"|"known"|"play")` (captures), `note_hit_from(from, source)` (a hit from out of sight gets an arc in the suit OS). The kit's lights and fog are its mood; the mask stays on top.
 - Scene keys: F flashlight, E door, F2 sight debug, plus everything in `weight_deck`. Env `SIGHT_FLASHLIGHT=on|off` fixes the light for a capture. A respawn forgets the deck.
 
 ## Signals
@@ -41,4 +48,4 @@ Pillar 2, "Know the room, fear the corner" (T004): line of sight, the three stat
 ## Data keys (`data/sight.json`)
 `tall_prop_min_m`, `awareness_radius_m`, `cone_on` / `cone_off` {`range_m`, `half_angle_deg`}, `arc_step_deg`, `edge_step_deg`, `target_radius_m`; `memory` {`cell_m`, `update_hz`}; `mask` {`px_per_m`, `dilate_m`, `edge_low`, `edge_high`, `remembered_brightness`, `remembered_saturation`, `remembered_tint`, `unknown_brightness`, `unknown_saturation`, `bounds_margin_m`}; `flashlight` {`start_on`, `color`, `energy`, `attenuation`, `angle_attenuation`, `pitch_deg`, `muzzle_ahead_m`, `shadows`, `shadow_blur`} (its fog energy is `data/kit.json` `lighting.fog.flashlight_energy`); `beam` {`color`, `strength`, `fade_power`, `edge_power`, `rays`, `reach_rate_m_s`, `snap_m`, `floor_m`}; `motes` {`count`, `lifetime_s`, `box_half_m`, `height_m`, `size_m`, `drift_m_s`, `spread_deg`, `color`, `strength`}; `lighting` {overrides of `data/deck.json` "lighting" in this scene}; `debug` {`polygon_color`, `visible_color`, `remembered_color`, `unknown_color`, `floor_y_m`, `outline_hz`}; `help` {`text`}.
 
-Tests: `tests/test_sight.gd`. CPU cost: `tools/t004_sight_bench.gd`. Flicker measurement on the real GPU: `tools/t008_flicker.gd`, `tools/t008_flicker_diff.py`.
+Tests: `tests/test_sight.gd`, `tests/test_slice_polish.gd`. CPU cost: `tools/t004_sight_bench.gd`. Flicker measurement on the real GPU: `tools/t008_flicker.gd`, `tools/t008_flicker_diff.py`.

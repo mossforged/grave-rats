@@ -4,6 +4,7 @@ extends RefCounted
 
 const TEX_DIR := "res://assets/game/kit/tex/%s_%s.png"
 const DECAL_DIR := "res://assets/game/kit/decals/%s.png"
+const FLOOR_SHADER := preload("res://src/kit/kit_floor.gdshader")
 
 static var _cache := {}
 static var _decals := {}
@@ -15,6 +16,11 @@ static func cfg() -> Dictionary:
 
 static func uv_metres(key: String) -> float:
 	return float((cfg().materials[key] as Dictionary).uv_m)
+
+
+## Metres of a face's rim that map to the texture's worn edge band; 0 for plain tiling materials.
+static func edge_band(key: String) -> float:
+	return float((cfg().materials[key] as Dictionary).get("edge_band_m", 0.0))
 
 
 static func material(key: String) -> StandardMaterial3D:
@@ -34,11 +40,33 @@ static func make(spec: Dictionary, shared: Dictionary) -> StandardMaterial3D:
 		m.metallic_specular = float(spec.specular)
 	m.albedo_color = Color(String(spec.get("tint", spec.get("color", "ffffff"))))
 	if spec.has("texture"):
-		_add_textures(m, String(spec.texture), shared)
+		_add_textures(m, String(spec.texture), spec, shared)
 	if spec.has("emission"):
 		m.emission_enabled = true
 		m.emission = Color(String(spec.emission))
 		m.emission_energy_multiplier = float(spec.energy)
+	return m
+
+
+## The deck plate as a floor: `deck`'s textures plus the wear map from floor_wear.gd, placed at `rect`.
+static func floor_material(wear: Image, rect: Rect2) -> ShaderMaterial:
+	var f: Dictionary = cfg().floor_wear
+	var spec: Dictionary = cfg().materials.deck
+	var tex := String(spec.texture)
+	var m := ShaderMaterial.new()
+	m.shader = FLOOR_SHADER
+	if ResourceLoader.exists(TEX_DIR % [tex, "albedo"]):
+		m.set_shader_parameter("albedo_tex", load(TEX_DIR % [tex, "albedo"]))
+		m.set_shader_parameter("normal_tex", load(TEX_DIR % [tex, "normal"]))
+		m.set_shader_parameter("orm_tex", load(TEX_DIR % [tex, "orm"]))
+		m.set_shader_parameter("breakup_tex", load(TEX_DIR % ["breakup", "albedo"]))
+	m.set_shader_parameter("wear_map", ImageTexture.create_from_image(wear))
+	m.set_shader_parameter("wear_origin", rect.position)
+	m.set_shader_parameter("wear_size", rect.size)
+	m.set_shader_parameter("normal_scale", float(spec.get("normal_scale", cfg().material_shared.normal_scale)))
+	m.set_shader_parameter("ao_light_affect", float(cfg().material_shared.ao_light_affect))
+	for key: String in ["breakup_m", "traffic_rough", "traffic_bright", "traffic_metal", "damp_rough", "damp_dark", "damp_flatten", "base_damp", "tone"]:
+		m.set_shader_parameter(key, float(f.look[key]))
 	return m
 
 
@@ -60,14 +88,14 @@ static func decal(image: String) -> StandardMaterial3D:
 	return m
 
 
-static func _add_textures(m: StandardMaterial3D, tex: String, shared: Dictionary) -> void:
+static func _add_textures(m: StandardMaterial3D, tex: String, spec: Dictionary, shared: Dictionary) -> void:
 	var albedo := TEX_DIR % [tex, "albedo"]
 	if not ResourceLoader.exists(albedo):
 		push_warning("kit: no texture %s; run tools/t010_textures.py and import" % albedo)
 		return
 	m.albedo_texture = load(albedo)
 	m.normal_enabled = true
-	m.normal_scale = float(shared.normal_scale)
+	m.normal_scale = float(spec.get("normal_scale", shared.normal_scale))
 	m.normal_texture = load(TEX_DIR % [tex, "normal"])
 	var orm: Texture2D = load(TEX_DIR % [tex, "orm"])
 	m.roughness_texture = orm

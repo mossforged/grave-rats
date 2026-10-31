@@ -1,24 +1,312 @@
 {
-  "_note": "Lead's scripted props (tools/blender/props*.py). size_m is w x h x d in metres (glTF X, Y, Z). role: cover_low / cover_tall (collision + cover class from deck data), clutter (no cover; small collision or none), pickup (salvage), wall (mounted, back at the rear face).",
-  "console_1000": {"size_m": [1.0, 1.1, 0.59], "role": "cover_low", "set": "slice"},
-  "console_1200": {"size_m": [1.2, 1.1, 0.59], "role": "cover_low", "set": "slice"},
-  "console_1400": {"size_m": [1.4, 1.1, 0.59], "role": "cover_low", "set": "slice"},
-  "console_1600": {"size_m": [1.6, 1.1, 0.59], "role": "cover_low", "set": "slice"},
-  "cabinet": {"size_m": [0.6, 1.9, 0.49], "role": "cover_tall", "set": "medbay"},
-  "locker_bank": {"size_m": [2.4, 2.0, 0.6], "role": "cover_tall", "set": "slice"},
-  "bed": {"size_m": [0.9, 0.75, 2.0], "role": "cover_low when tipped", "set": "medbay", "note": "solid plated deck underneath = the shield face when tipped"},
-  "surgical_lamp": {"size_m": [0.54, 1.72, 0.52], "role": "clutter", "set": "medbay"},
-  "iv_stand": {"size_m": [0.44, 1.9, 0.46], "role": "clutter", "set": "medbay"},
-  "gurney": {"size_m": [0.6, 0.89, 1.9], "role": "cover_low", "set": "medbay"},
-  "trolley": {"size_m": [0.53, 0.94, 0.43], "role": "clutter", "set": "medbay"},
-  "med_station": {"size_m": [0.9, 0.8, 0.23], "role": "wall", "set": "medbay", "mount_y_m": 1.0},
-  "salvage_data_chips": {"size_m": [0.28, 0.12, 0.2], "role": "pickup", "kind": "data_chips"},
-  "salvage_med_pack": {"size_m": [0.26, 0.12, 0.19], "role": "pickup", "kind": "med_pack"},
-  "salvage_fuse": {"size_m": [0.25, 0.14, 0.12], "role": "pickup", "kind": "fuse"},
-  "salvage_relay": {"size_m": [0.42, 0.31, 0.34], "role": "pickup", "kind": "relay"},
-  "salvage_canister": {"size_m": [0.51, 0.31, 0.3], "role": "pickup", "kind": "canister"},
-  "salvage_busbar": {"size_m": [0.5, 0.22, 0.11], "role": "pickup", "kind": "busbar"},
-  "salvage_cargo_pod": {"size_m": [0.88, 0.54, 0.6], "role": "pickup", "kind": "cargo_pod"},
-  "salvage_engine_part": {"size_m": [0.8, 0.64, 0.58], "role": "pickup", "kind": "engine_part"},
-  "salvage_black_box": {"size_m": [0.63, 0.48, 0.47], "role": "pickup", "kind": "black_box"}
+ "_note": "Lead's scripted props (tools/blender/props*.py). size_m is w x h x d in metres (glTF X, Y, Z). role: cover_low / cover_tall (collision + cover class from deck data), clutter (no cover; small collision or none), pickup (salvage), wall (mounted, back at the rear face).",
+ "console_1000": {
+  "size_m": [
+   1.0,
+   1.1,
+   0.59
+  ],
+  "role": "cover_low",
+  "set": "slice"
+ },
+ "console_1200": {
+  "size_m": [
+   1.2,
+   1.1,
+   0.59
+  ],
+  "role": "cover_low",
+  "set": "slice"
+ },
+ "console_1400": {
+  "size_m": [
+   1.4,
+   1.1,
+   0.59
+  ],
+  "role": "cover_low",
+  "set": "slice"
+ },
+ "console_1600": {
+  "size_m": [
+   1.6,
+   1.1,
+   0.59
+  ],
+  "role": "cover_low",
+  "set": "slice"
+ },
+ "cabinet": {
+  "size_m": [
+   0.6,
+   1.9,
+   0.49
+  ],
+  "role": "cover_tall",
+  "set": "medbay"
+ },
+ "locker_bank": {
+  "size_m": [
+   2.4,
+   2.0,
+   0.6
+  ],
+  "role": "cover_tall",
+  "set": "slice"
+ },
+ "bed": {
+  "size_m": [
+   0.9,
+   0.75,
+   2.0
+  ],
+  "role": "cover_low when tipped",
+  "set": "medbay",
+  "note": "solid plated deck underneath = the shield face when tipped"
+ },
+ "surgical_lamp": {
+  "size_m": [
+   0.54,
+   1.72,
+   0.52
+  ],
+  "role": "clutter",
+  "set": "medbay"
+ },
+ "iv_stand": {
+  "size_m": [
+   0.44,
+   1.9,
+   0.46
+  ],
+  "role": "clutter",
+  "set": "medbay"
+ },
+ "gurney": {
+  "size_m": [
+   0.6,
+   0.89,
+   1.9
+  ],
+  "role": "cover_low",
+  "set": "medbay"
+ },
+ "trolley": {
+  "size_m": [
+   0.53,
+   0.94,
+   0.43
+  ],
+  "role": "clutter",
+  "set": "medbay"
+ },
+ "med_station": {
+  "size_m": [
+   0.9,
+   0.8,
+   0.23
+  ],
+  "role": "wall",
+  "set": "medbay",
+  "mount_y_m": 1.0
+ },
+ "salvage_data_chips": {
+  "size_m": [
+   0.28,
+   0.12,
+   0.2
+  ],
+  "role": "pickup",
+  "kind": "data_chips"
+ },
+ "salvage_med_pack": {
+  "size_m": [
+   0.26,
+   0.12,
+   0.19
+  ],
+  "role": "pickup",
+  "kind": "med_pack"
+ },
+ "salvage_fuse": {
+  "size_m": [
+   0.25,
+   0.14,
+   0.12
+  ],
+  "role": "pickup",
+  "kind": "fuse"
+ },
+ "salvage_relay": {
+  "size_m": [
+   0.42,
+   0.31,
+   0.34
+  ],
+  "role": "pickup",
+  "kind": "relay"
+ },
+ "salvage_canister": {
+  "size_m": [
+   0.51,
+   0.31,
+   0.3
+  ],
+  "role": "pickup",
+  "kind": "canister"
+ },
+ "salvage_busbar": {
+  "size_m": [
+   0.5,
+   0.22,
+   0.11
+  ],
+  "role": "pickup",
+  "kind": "busbar"
+ },
+ "salvage_cargo_pod": {
+  "size_m": [
+   0.88,
+   0.54,
+   0.6
+  ],
+  "role": "pickup",
+  "kind": "cargo_pod"
+ },
+ "salvage_engine_part": {
+  "size_m": [
+   0.8,
+   0.64,
+   0.58
+  ],
+  "role": "pickup",
+  "kind": "engine_part"
+ },
+ "salvage_black_box": {
+  "size_m": [
+   0.63,
+   0.48,
+   0.47
+  ],
+  "role": "pickup",
+  "kind": "black_box"
+ },
+ "pallet": {
+  "size_m": [
+   1.2,
+   0.14,
+   1.0
+  ],
+  "role": "clutter",
+  "set": "cargo"
+ },
+ "barrel": {
+  "size_m": [
+   0.58,
+   0.9,
+   0.58
+  ],
+  "role": "cover_low",
+  "set": "cargo"
+ },
+ "gas_rack": {
+  "size_m": [
+   0.9,
+   1.6,
+   0.4
+  ],
+  "role": "cover_tall",
+  "set": "cargo"
+ },
+ "shelving_rack": {
+  "size_m": [
+   2.0,
+   2.2,
+   0.6
+  ],
+  "role": "cover_tall",
+  "set": "cargo"
+ },
+ "strapped_stack": {
+  "size_m": [
+   1.2,
+   1.5,
+   1.0
+  ],
+  "role": "cover_tall",
+  "set": "cargo"
+ },
+ "cargo_lift": {
+  "size_m": [
+   2.4,
+   0.13,
+   2.4
+  ],
+  "role": "clutter",
+  "set": "cargo",
+  "note": "platform 0.13 high; control post to 1.2 m at one corner"
+ },
+ "junction_box": {
+  "size_m": [
+   0.5,
+   0.72,
+   0.18
+  ],
+  "role": "wall",
+  "set": "engineering"
+ },
+ "fuse_panel": {
+  "size_m": [
+   0.7,
+   0.9,
+   0.15
+  ],
+  "role": "wall",
+  "set": "engineering"
+ },
+ "wall_terminal": {
+  "size_m": [
+   0.5,
+   0.55,
+   0.15
+  ],
+  "role": "wall",
+  "set": "engineering"
+ },
+ "pipe_valve": {
+  "size_m": [
+   1.2,
+   0.56,
+   0.23
+  ],
+  "role": "wall",
+  "set": "engineering"
+ },
+ "emergency_locker": {
+  "size_m": [
+   0.6,
+   1.2,
+   0.29
+  ],
+  "role": "wall",
+  "set": "corridor"
+ },
+ "cable_spool": {
+  "size_m": [
+   0.72,
+   0.9,
+   0.9
+  ],
+  "role": "cover_low",
+  "set": "engineering"
+ },
+ "vent_cover": {
+  "size_m": [
+   0.8,
+   0.06,
+   0.6
+  ],
+  "role": "clutter",
+  "set": "any"
+ }
 }

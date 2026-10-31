@@ -7,7 +7,7 @@ What's on the ship and what carrying it does to you (T012). Weight is greed made
 - `salvage_rules.gd`: scene-free. Rolls items, says what a class costs.
 - `carry_state.gd`: scene-free. One per player: pockets, the in-hand item, committed lifts and drops.
 - `hold.gd`: scene-free. What's banked for the crew: estimate, truth, by class.
-- `salvage_field.gd`: the items in the world: grey boxes in class colours, each on a ring of light (`src/sight` beacon, `rim.unknown_share` where you've never looked: the fairness rule).
+- `salvage_field.gd`: the items in the world: grey boxes in class colours, each on a ring of light (a `src/sight` beacon: the fairness rule). Like a door's lights, a ring reads from anywhere once you've seen it, cone or no cone; `rim.unknown_share` is what shows where you've never looked (0: nothing, so a new room is still a question).
 
 ## Does not own
 - The clock, tiers, alarm, LEAVE (`src/shift`). How penalties take effect (`Operator.set_carry`, `src/player`). Who hears a drop (`StalkerPack.noise`).

@@ -373,7 +373,8 @@ func _update_prompt() -> void:
 		return
 	var carry: CarryState = shift.carry(player_id)
 	if airlock.has_point(_eye()):
-		_show_prompt(String(c.leave), _eye(), c.color)
+		if shift.leave_share(player_id) <= 0.0:
+			_show_prompt(String(c.leave), _eye(), c.color)
 		return
 	var item: RefCounted = field.nearest(_eye())
 	if item == null or carry.busy():
@@ -526,6 +527,10 @@ func _deposit_shot() -> void:
 
 func _lights_shot(phase: String) -> void:
 	var space := "cargo"
+	# Nothing else going on: a hit flash would hide the lights.
+	for s: Node in pack.stalkers:
+		s.brain.state = s.brain.State.DORMANT
+		s.global_position = Vector3(layout.bounds.end.x + 50.0, 0.0, layout.bounds.end.y + 50.0)
 	var d := _door("cargo", 0.6)
 	d.door_state.progress = 1.0
 	d.door_state.state = d.door_state.State.OPEN
@@ -536,7 +541,8 @@ func _lights_shot(phase: String) -> void:
 	await _sim(0.2)
 	if phase == "before":
 		return
-	shift.tier_reached = (_cfg.tiers as Array).size() - 1
+	# Both tiers count as landed, so the real one doesn't fire on top of this and pick its own section.
+	shift.tier_reached = (_cfg.tiers as Array).size()
 	shift.oxygen_left = float(_cfg.oxygen_s) * float(_cfg.tiers[-1].at_oxygen)
 	hud.os_state.announce(String(_cfg.tiers[-1].announce).replace("%s", String(_cfg.section_words[space])))
 	section.fail(space)
@@ -571,6 +577,7 @@ func _demo_step(delta: float) -> void:
 		_step_clock_to(float(_cfg.tiers[0].at_oxygen))
 		pack.spawn_out_of_view([_player_sees], [_eye()], rng)
 		_spawns_owed = 0
+		print("shift_deck: frame-time window with %d stalkers" % pack.stalkers.size())
 		pack.stalkers[0].place_hunting(p + Vector2(float(dm.hunter_ahead_m), float(dm.hunter_side_m)), p)
 	_demo_t += delta
 	suit.reset()

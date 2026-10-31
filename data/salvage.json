@@ -37,7 +37,7 @@
       "color": "3a2440", "rim_color": "ff4fd8"
     }
   },
-  "rim": {"energy": 2.2, "width_m": 0.035, "height_m": 0.02, "segments": 24, "unknown_share": 0.28},
+  "rim": {"energy": 2.2, "width_m": 0.035, "height_m": 0.02, "segments": 24, "unknown_share": 0.0},
   "placements": [
     {"kind": "data_chips", "space": "junction", "at": [0.2, 0.62]},
     {"kind": "fuse", "space": "junction", "at": [0.8, 0.45]},

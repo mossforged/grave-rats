@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 in progress. Stage 2 passed (tag `stage-2`). T010 merged. T011 (slice polish) done on `auto/t011-mac`, waiting on review and John's gate. **Next:** John plays T011; Meshy props when his files land.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 merged, waiting on John's gate. T012 (the run loop, part 1) done on `auto/t012-mac`, waiting on review and John's gate. **Next:** John plays T012; then T013 (quota, end screens).
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,13 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T011 awaiting review and John's gate.
-- Code: T011 on `auto/t011-mac`: 282/282, three runs in a row; see `docs/handoffs/auto-T011.md`.
+- Queue order (lead): T012 awaiting review and John's gate; T011 awaiting John's gate.
+- Code: T012 on `auto/t012-mac`: 315/315, three runs in a row; see `docs/handoffs/auto-T012.md`. The main scene is now `scenes/shift/shift_deck.tscn`.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T012 play (`godot --path .`, sheet `docs/screens/T012/sheet.png`): does "one more room?" happen? Is grabbing the black box scary? Bots: greedy banks 2,380 on average and survives 6 of 12; cautious banks 1,309 and survives 12 of 12.
+- T012 calls: rings hidden in unseen rooms until seen, a stalker can spawn 7 m behind you and hit within about 2 s, the airlock is a marked zone and not a room, lights failing is looks only. Handoff has each lever.
 - T011: MSAA dropped from 4x to 2x to meet the frame budget (reverses the 2026-10-30 decision); turning shimmer rose (0.09 → 0.12% twinkle), possibly from that. Accept 2x, or go back to 4x and find the time elsewhere?
 - T011 play (stage 3): sheet `docs/screens/T011/sheet.png`, then medbay to junction to cargo. Does it match or beat the concept?
 - T011 calls: MSAA 4x to 2x (biggest frame win; rougher edges?), dimmer rooms with no shadowed practicals, the ambush panel's new tell, door strips in a fight, shimmer when turning (twinkle up 30% on T010).
@@ -48,8 +50,9 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - A roll move: the hauler has the clip (`anim.play_state("roll")`), but no key or rule uses it yet.
 - `stalker_deck` stagger doesn't call `operator.play_hit` (`src/enemies` was outside T009); its death does play the clip.
 - Door state lights tell states apart by colour alone; a pattern per state would help colourblind players.
+- T012: a carry pose; drawn vents and closets at spawn points; the airlock as a real room; stale `p_size` engine errors from headless HUD text.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T011 (282/282 reproduced), A011 and A012; queued Q001.
-2026-10-31 (code, unattended): T011: A010 decals placed from data, edge-concentrated wear, floor wear and damp maps, probe sheen, masked aim cone and faded walls, side-door strips, muzzle-flash reveal, hit arcs; MSAA 4x→2x; pirate deck 7.07/9.1 ms on a quiet Mac.
+2026-10-30 (code, unattended): T012: salvage, oxygen clock, tiers with out-of-sight spawns and section lights, prize alarm, airlock hold and LEAVE, real HUD readouts, run log fields, on the new `shift_deck`.
+Three stalkers 6.82 / 9.87 ms with a QA run alive alongside (earlier runs 6.5 / 9.4); re-measure on a quiet Mac. Nobody has played it.

@@ -41,8 +41,8 @@ func setup(c: Dictionary, layout: RefCounted, bind: Callable) -> void:
 	sign_label.font_size = int(c.sign_font_size)
 	sign_label.modulate = Color(String(c.sign_color))
 	add_child(sign_label)
-	var mid := rect.get_center()
-	sign_label.global_position = Vector3(mid.x, float(c.sign_height_m), mid.y)
+	# On the threshold, so it doesn't sit on whoever's standing inside.
+	sign_label.global_position = Vector3(rect.get_center().x, float(c.sign_height_m), rect.position.y)
 
 
 func has_point(p: Vector2) -> bool:

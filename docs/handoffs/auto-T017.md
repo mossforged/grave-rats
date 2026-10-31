@@ -2,13 +2,13 @@
 
 Branch `auto/t017-mac`. **Nobody has heard any of this, me included.** I can measure levels and read a spectrogram, but whether it sounds like a place is John's call.
 
-**Dependency:** the packet says "Needs: T016 merged", and T016 isn't merged, so this branch starts from `main` without it. T017 doesn't use anything from T016. A trial merge with `auto/t016-mac` is clean in code and data. I haven't run the tests on the merged result, so run them at merge. Result of the same trial for `docs/STATUS.md`: see the end.
+**Dependency:** the packet says "Needs: T016 merged", and T016 isn't merged, so this branch starts from `main` without it. T017 doesn't use anything from T016. In a trial merge with `auto/t016-mac`, the only conflict is `docs/STATUS.md`, where both branches rewrote the same lines; code and data merge clean. I haven't run the tests on the merged result, so run them at merge.
 
 ## What changed
 - **`src/audio/` (new), autoload `Audio`:** the bank, the buses (SFX, Ambience, UI, VoicePlaceholder), a hard limiter on the master bus (ceiling -1 dB), a fixed pool of 24 positional and 12 flat voices, and the listener. The listener stands at the player and turns with the camera, so left on screen is left in your ear.
 - **`data/audio.json`:** 44 cues, each with file, volume, pitch variance, max distance, cooldown and bus, plus the rule numbers. Bus and master volumes are F1 sliders ("Audio buses"), added through `data/debug.json`, so `tuning_panel.gd` is untouched.
 - **`tools/audio/gen_placeholder_audio.py`:** synthesises all 44 to `assets/game/audio/<group>/ph_<cue>.wav` (3.8 MB). I ran it twice and got identical files.
-- **Call sites:** weapons, enemies, custodian, doors, shift and player (footsteps, crouch rustle). `weight_deck` also makes two lines' worth of audio calls: it points the listener at the operator and stops the sound when the deck leaves.
+- **Call sites:** weapons, enemies, custodian, doors, shift and player (footsteps, crouch rustle). `weight_deck` also has a few audio lines beyond footsteps: it points the listener at the operator and stops the sound when the deck leaves.
 - **Noise-ring logic unchanged.** No line of `StalkerPack.noise`, the brain's hearing or the ring's rules changed. A test plays loud cues beside a stalker and checks that neither it nor the ring reacts.
 - **Removed:** `src/shift/placeholder_siren.gd` and the old generated-sound numbers in `data/enemies.json`, `shift.json` and `custodian.json`.
 

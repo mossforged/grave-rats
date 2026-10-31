@@ -1,8 +1,9 @@
 #!/bin/bash
 # Q001: the repeatable health check. Runs against a fresh clone of main, on the real GPU, and writes
 # docs/qa/health-<date>.md and .json (raw logs in docs/qa/logs-<date>/, stills in docs/screens/qa-<date>/).
-#   tools/qa/health_check.sh [--write-baseline]
+#   tools/qa/health_check.sh [--write-baseline | --add-baseline]
 # --write-baseline: store this run's numbers in docs/qa/baseline.json (thresholds there are kept).
+# --add-baseline: add only the scenes and bot sets the baseline has no entry for; every other number stays.
 # Exit: 0 report written, nothing red; 1 report written, something red; 2 no report.
 # Env, for debugging the check itself: QA_WINDOWS (frame-time windows per scene, default 2),
 # QA_SECONDS (default 30), QA_RUNS (bot runs per case, default 12), QA_POLL_S (300), QA_WAIT_MAX_S (7200),
@@ -20,7 +21,7 @@ RUNS="${QA_RUNS:-12}"
 POLL_S="${QA_POLL_S:-300}"
 WAIT_MAX_S="${QA_WAIT_MAX_S:-7200}"
 WRITE_BASELINE=""
-[ "${1:-}" = "--write-baseline" ] && WRITE_BASELINE="--write-baseline"
+case "${1:-}" in --write-baseline|--add-baseline) WRITE_BASELINE="$1" ;; esac
 
 WORK="$(mktemp -d /tmp/grave-rats-qa.XXXXXX)"
 RAW="$WORK/raw"; CLONE="$WORK/clone"; mkdir -p "$RAW"
@@ -113,18 +114,20 @@ step_done import "$T"
 capture() { # capture <scene> <out> <seconds> <log>
   CAPTURE_ONLY=none CAPTURE_SIZE=1920x1080 limited $(( $3 + 180 )) "$4" "$CLONE/tools/capture.sh" "$1" "$2" "$3"
 }
+# shift_deck: no session under capture, three stalkers hunting, CUSTODIAN awake (its _demo_step).
+FRAME_SCENES="scenes/pirates/pirate_deck.tscn scenes/enemies/stalker_deck.tscn scenes/shift/shift_deck.tscn"
 T=$(date +%s)
 mkdir -p "$RAW/frame"
 : > "$RAW/frame/windows.txt"
 # A fresh clone has no pipeline cache: one short throwaway run of each scene so compiles don't land in the windows.
-for SCENE in scenes/pirates/pirate_deck.tscn scenes/enemies/stalker_deck.tscn; do
+for SCENE in $FRAME_SCENES; do
   say "warming $SCENE"
   capture "$SCENE" "$WORK/warm" 5 "$RAW/frame/warm_$(basename "$SCENE" .tscn).log"
 done
 sleep 20
 W=1
 while [ "$W" -le "$WINDOWS" ]; do
-  for SCENE in scenes/pirates/pirate_deck.tscn scenes/enemies/stalker_deck.tscn; do
+  for SCENE in $FRAME_SCENES; do
     NAME="$(basename "$SCENE" .tscn)"
     wait_for_code_lane "frame time"
     OUT="$RAW/frame/${NAME}_$W"
@@ -139,7 +142,7 @@ ps -Ao %cpu,comm -r | head -7 | sed 's#/.*/##' > "$RAW/frame/top_cpu.txt"
 meta thermal_end "$(pmset -g therm 2>/dev/null | tr '\n' ' ')"
 step_done frame "$T"
 SHOTS="$ROOT/docs/screens/qa-$DATE"; mkdir -p "$SHOTS"
-for NAME in pirate_deck stalker_deck; do
+for NAME in pirate_deck stalker_deck shift_deck; do
   [ -f "$RAW/frame/${NAME}_1/$NAME.png" ] && \
     sips -s format jpeg -s formatOptions 70 "$RAW/frame/${NAME}_1/$NAME.png" --out "$SHOTS/$NAME.jpg" >/dev/null 2>&1
 done
@@ -171,6 +174,28 @@ for I in 1 2 3; do
   meta "footslide_${I}_rc" "$?"
 done
 step_done bots "$T"
+
+# --- Shift, session and CUSTODIAN bots (Q002) ---------------------------------------------------------
+# Together, so they fit the packet's 10 minutes: T014 alone is 24 min in one process. Fixed step, so load doesn't
+# move the numbers. T014 stays split the same way every run: its numbers depend on what ran earlier in the process.
+bot_job() { # bot_job <log> <tool> <args...>
+  local log="$1" tool="$2"; shift 2
+  limited 900 "$RAW/$log.log" "$GODOT" --headless --path "$CLONE" --fixed-fps 60 -s "$tool" "--" "$@"
+  meta "${log}_rc" "$?"
+}
+T=$(date +%s)
+say "T012, T014, T015 bots, together"
+bot_job t012 tools/t012_bots.gd "$RUNS" "$RAW/t012.json" &
+bot_job t015_shift tools/t015_shift_bots.gd "$RUNS" "$RAW/t015_shift.json" &
+bot_job t015 tools/t015_bots.gd "$RUNS" "$RAW/t015.json" &
+T014_EACH=$(( RUNS / 4 )); [ "$T014_EACH" -lt 1 ] && T014_EACH=1
+F=0
+while [ "$F" -lt "$RUNS" ]; do
+  bot_job "t014_$F" tools/t014_bots.gd "$T014_EACH" "$RAW/t014.part$F.json" "$F" &
+  F=$((F + T014_EACH))
+done
+wait
+step_done session_bots "$T"
 
 # --- Flicker ---------------------------------------------------------------------------------------
 T=$(date +%s)

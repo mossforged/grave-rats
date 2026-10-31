@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Q001: turns a health_check.sh run into docs/qa/health-<date>.md and .json, comparing with baseline.json.
-usage: health_report.py <raw-dir> <qa-dir> [--write-baseline]
+usage: health_report.py <raw-dir> <qa-dir> [--write-baseline | --add-baseline]
+--write-baseline replaces every number in baseline.json. --add-baseline only adds scenes and bot sets it has no
+entry for and leaves the rest untouched (Q002).
 Exit: 0 nothing red, 1 something red."""
 import glob, json, os, re, sys
 
@@ -16,8 +18,10 @@ DEFAULT_THRESHOLDS = {
 # Context only, from T011's packet; missing them raises no flag.
 TARGETS = {"pirate_deck": {"avg": 7.5, "p95": 9.5}}
 RANK = {"green": 0, "amber": 1, "red": 2}
-SCENES = ("pirate_deck", "stalker_deck")
-BOT_SETS = ("t006", "t007", "foot_slide", "foot_slide_realtime")
+SCENES = ("pirate_deck", "stalker_deck", "shift_deck")
+# Q002: the T012, T014 and T015 tools. Each writes a JSON file, read by bot_json_sets.
+JSON_BOT_SETS = ("t012", "t015_shift", "t014", "t015")
+BOT_SETS = ("t006", "t007", "foot_slide", "foot_slide_realtime") + JSON_BOT_SETS
 WANT_RES = "1920x1080"
 
 
@@ -137,6 +141,80 @@ def read_flicker(raw):
     return out
 
 
+def read_json_files(raw, name):
+    """{key: rows} from <raw>/<name>.json and <name>.part*.json; a tool split across processes writes several files with the same keys."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(raw, f"{name}.json")) + glob.glob(os.path.join(raw, f"{name}.part*.json"))):
+        try:
+            with open(path) as f:
+                for key, rows in json.load(f).items():
+                    out.setdefault(key, []).extend(rows)
+        except (OSError, ValueError):
+            pass
+    return out
+
+
+def mean(vals):
+    vals = list(vals)
+    return round(sum(vals) / len(vals), 2) if vals else None
+
+
+def shift_metrics(by_bot):
+    """T012's bots, whole shifts: the numbers T012 and T015 report. Causes of death are context (see shift_causes)."""
+    out = {}
+    for bot, rows in by_bot.items():
+        out[f"{bot} | survived"] = sum(r["outcome"] == "extracted" for r in rows)
+        for key in ("banked", "deposited", "items", "lost", "tier", "time_s", "prize"):
+            out[f"{bot} | {key} (mean)"] = mean(float(r[key]) for r in rows)
+    return out
+
+
+def shift_causes(rows):
+    out = {}
+    for r in rows:
+        if r.get("cause") is not None:
+            out[r["cause"]] = out.get(r["cause"], 0) + 1
+    return dict(sorted(out.items()))
+
+
+def session_metrics(by_bot):
+    """T014's bots, whole sessions: the numbers tools/t014_report.py prints."""
+    out = {}
+    for bot, sessions in by_bot.items():
+        shifts = [x for s in sessions for x in s["shifts"]]
+        alive = [x for x in shifts if x["outcome"] == "extracted"]
+        cycles = [c for s in sessions for c in s["cycles"]]
+        first = [s["cycles"][0] for s in sessions if s["cycles"]]
+        deaths = sum(int(s["deaths"]) for s in sessions)
+        out[f"{bot} | sessions"] = len(sessions)
+        out[f"{bot} | fired"] = sum(bool(s["fired"]) for s in sessions)
+        out[f"{bot} | quota_1_met"] = sum(bool(c["met"]) for c in first)
+        out[f"{bot} | quotas_met"] = sum(bool(c["met"]) for c in cycles)
+        out[f"{bot} | quotas_due"] = len(cycles)
+        out[f"{bot} | quotas_met_per_session (mean)"] = mean(int(s["cycles_met"]) for s in sessions)
+        out[f"{bot} | shifts"] = len(shifts)
+        out[f"{bot} | deaths"] = deaths
+        out[f"{bot} | death_pct"] = round(100.0 * deaths / max(len(shifts), 1), 1)
+        out[f"{bot} | net_per_shift_deaths_at_0 (mean)"] = mean(float(x["net"]) for x in shifts)
+        out[f"{bot} | survivors_gross (mean)"] = mean(float(x["gross"]) for x in alive)
+        out[f"{bot} | survivors_deductions (mean)"] = mean(float(x["deductions"]) for x in alive)
+        out[f"{bot} | negative_payslips"] = sum(float(x["net"]) < 0 for x in alive)
+    return out
+
+
+def session_causes(sessions):
+    return shift_causes([x for s in sessions for x in s["shifts"]])
+
+
+def window_metrics(by_case):
+    """T015's 90 s windows: the mean of each number the tool counts."""
+    out = {}
+    for case, rows in by_case.items():
+        for key in (rows[0] if rows else {}):
+            out[f"{case} | {key} (mean)"] = mean(float(r[key]) for r in rows)
+    return out
+
+
 def pct_level(base, cur, limit, mult):
     """(pct change or None, level)"""
     if base is None and cur is None:
@@ -183,6 +261,7 @@ def flat_bots(bots):
 def main():
     raw, qa = sys.argv[1], sys.argv[2]
     write_baseline = "--write-baseline" in sys.argv[3:]
+    add_baseline = "--add-baseline" in sys.argv[3:]
     meta = read_meta(raw)
     date = meta.get("date", "unknown")
     base_path = os.path.join(qa, "baseline.json")
@@ -249,7 +328,14 @@ def main():
     t006, t007 = read_bots(read(os.path.join(raw, "t006.log"))), read_bots(read(os.path.join(raw, "t007.log")))
     foot = read_footslide(raw, ["footslide_fixed"])
     foot_rt = read_footslide(raw, ["footslide_1", "footslide_2", "footslide_3"])
-    bot_now = {"t006": flat_bots(t006), "t007": flat_bots(t007), "foot_slide": foot, "foot_slide_realtime": foot_rt}
+    t012_rows, t015s_rows = read_json_files(raw, "t012"), read_json_files(raw, "t015_shift")
+    t014_rows, t015_rows = read_json_files(raw, "t014"), read_json_files(raw, "t015")
+    bot_now = {"t006": flat_bots(t006), "t007": flat_bots(t007), "foot_slide": foot, "foot_slide_realtime": foot_rt,
+               "t012": shift_metrics(t012_rows), "t015_shift": shift_metrics(t015s_rows),
+               "t014": session_metrics(t014_rows), "t015": window_metrics(t015_rows)}
+    causes = {"t012": {b: shift_causes(r) for b, r in t012_rows.items()},
+              "t015_shift": {b: shift_causes(r) for b, r in t015s_rows.items()},
+              "t014": {b: session_causes(r) for b, r in t014_rows.items()}}
     bot_rows, bot_level, bot_notes = {}, "green", []
     for name in BOT_SETS:
         if not bot_now[name]:
@@ -258,11 +344,15 @@ def main():
         bot_rows[name] = rows
         if baseline:
             bot_level = worst(bot_level, lv)
-    for rc in ("t006_rc", "t007_rc", "footslide_fixed_rc", "footslide_1_rc", "footslide_2_rc", "footslide_3_rc"):
+    for rc in ("t006_rc", "t007_rc", "footslide_fixed_rc", "footslide_1_rc", "footslide_2_rc", "footslide_3_rc",
+               "t012_rc", "t015_shift_rc", "t015_rc") + tuple(k for k in meta if re.fullmatch(r"t014_\d+_rc", k)):
         if meta.get(rc) != "0":
             bot_level = "red"; bot_notes.append(f"{rc} = {meta.get(rc)}")
+    if not any(re.fullmatch(r"t014_\d+_rc", k) for k in meta):
+        bot_level = "red"; bot_notes.append("t014: never ran")
     logged = {}
-    for log in ("tests_1", "t006", "t007", "footslide_1", "flicker", "frame/pirate_deck_1", "frame/stalker_deck_1"):
+    for log in ("tests_1", "t006", "t007", "footslide_1", "t012", "t015_shift", "t014_0", "t015", "flicker",
+                "frame/pirate_deck_1", "frame/stalker_deck_1", "frame/shift_deck_1"):
         errors = engine_errors(read(os.path.join(raw, f"{log}.log")))
         if errors:
             logged[log] = errors
@@ -297,7 +387,8 @@ def main():
         "baseline": {"present": bool(baseline), "commit": (baseline or {}).get("commit"), "date": (baseline or {}).get("date"), "thresholds": th},
         "tests": tests, "import_errors": import_errors,
         "frame_time": {**frames, "compare": frame_rows, "targets": TARGETS},
-        "bots": {"t006": t006, "t007": t007, "foot_slide": foot, "foot_slide_realtime": foot_rt, "compare": bot_rows},
+        "bots": {"t006": t006, "t007": t007, "foot_slide": foot, "foot_slide_realtime": foot_rt,
+                 **{name: bot_now[name] for name in JSON_BOT_SETS}, "causes": causes, "compare": bot_rows},
         "engine_errors": logged,
         "flicker": {"now": flicker, "compare": flick_rows},
     }
@@ -311,6 +402,25 @@ def main():
                       f, indent=2)
             f.write("\n")
         report["baseline"]["written_this_run"] = True
+    elif add_baseline:
+        added = []
+        for s in SCENES:
+            if s in frames["summary"] and s not in baseline.setdefault("frame_time", {}):
+                baseline["frame_time"][s] = frames["summary"][s]
+                added.append(f"frame_time.{s}")
+        for name in BOT_SETS:
+            if bot_now[name] and name not in baseline.setdefault("bots", {}):
+                baseline["bots"][name] = bot_now[name]
+                added.append(f"bots.{name}")
+        if added:
+            baseline.setdefault("added", []).append({"date": date, "commit": meta.get("commit"), "entries": added})
+            baseline.setdefault("load", []).extend(
+                {k: w.get(k) for k in ("scene", "window", "load_before", "load_after")}
+                for w in frames["windows"] if f"frame_time.{w['scene']}" in added)
+            with open(base_path, "w") as f:
+                json.dump(baseline, f, indent=2)
+                f.write("\n")
+        report["baseline"]["added_this_run"] = added
 
     os.makedirs(qa, exist_ok=True)
     with open(os.path.join(qa, f"health-{date}.json"), "w") as f:
@@ -334,6 +444,8 @@ def render(r, th):
         out += ["", "**No baseline: nothing compared.**"]
     else:
         out += ["", f"Compared with baseline `{b['commit']}` ({b['date']})."]
+        if b.get("added_this_run"):
+            out += ["", f"First numbers, added to the baseline by this run, so nothing to compare yet: {', '.join(b['added_this_run'])}. Every other baseline number was left alone."]
     out += ["", "## Summary", "", "| Area | Level | Notes |", "| --- | --- | --- |"]
     for key, title in (("fresh_clone", "Fresh clone and tests"), ("frame_time", "Frame time"), ("bots", "Bots and foot slide"), ("flicker", "Flicker")):
         out.append(f"| {title} | **{a[key]['level']}** | {'; '.join(a[key]['notes']) or 'nothing flagged'} |")
@@ -355,7 +467,7 @@ def render(r, th):
     out += ["", "Repro: clone main, `godot --headless --path . --import`, then `godot --headless --path . -s tests/run_tests.gd` (logs: `docs/qa/logs-" + r["date"] + "/tests_*.log`)."]
 
     ft = r["frame_time"]
-    out += ["", "## Frame time", "", "Windowed on the real GPU, vsync off, project default quality on main; the game's capture readout (`src/debug/capture.gd`). During a capture each deck plays its `_demo_step` loop: the operator walks, aims and fires among live enemies, so the windows are a scripted fight, not an idle room. The enemies aren't seeded, so no two windows are the same frames. Stills are whatever frame the window ended on; a red one is the hit flash.", ""]
+    out += ["", "## Frame time", "", "Windowed on the real GPU, vsync off, project default quality on main; the game's capture readout (`src/debug/capture.gd`). During a capture each deck plays its `_demo_step` loop: the operator walks, aims and fires among live enemies, so the windows are a scripted fight, not an idle room. `shift_deck` runs with no session, three stalkers hunting and CUSTODIAN awake. The enemies aren't seeded, so no two windows are the same frames. Stills are whatever frame the window ended on; a red one is the hit flash.", ""]
     out += ["| Scene | Window | Resolution | MSAA | Frames | Avg ms | p95 ms | p99 ms | Load before (1/5/15 min) | Load after |", "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for w in ft["windows"]:
         if w.get("missing"):
@@ -372,18 +484,22 @@ def render(r, th):
             verdict = "met" if now["avg"] < t["avg"] and now["p95"] < t["p95"] else "missed"
             out += ["", f"T011's target for {s} (context, not a flag): under {t['avg']} / {t['p95']} ms. This run {now['avg']:.2f} / {now['p95']:.2f}: {verdict}."]
     out += ["", f"Stills: `docs/screens/qa-{r['date']}/`. Busiest processes after the windows: `docs/qa/logs-{r['date']}/top_cpu.txt`.",
-            "", "Repro: `CAPTURE_ONLY=none tools/capture.sh scenes/pirates/pirate_deck.tscn /tmp/q 30` (same for `scenes/enemies/stalker_deck.tscn`)."]
+            "", "Repro: `CAPTURE_ONLY=none tools/capture.sh scenes/pirates/pirate_deck.tscn /tmp/q 30` (same for `scenes/enemies/stalker_deck.tscn`, `scenes/shift/shift_deck.tscn`)."]
 
     bots = r["bots"]
-    out += ["", "## Bots and foot slide", "", f"`tools/qa/t006_seeded.gd` and `t007_seeded.gd` ({m.get('seconds_bots')} s with foot slide). Fixed seeds, so a change here means the game changed, not the dice. Foot slide runs `tools/t003_footslide.gd` twice over: once at `--fixed-fps 60` (repeatable) and three times in real time, averaged (the tool's documented usage, noisier, comparable with the T003-T009 tables). The two modes read very differently; compare like with like."]
+    out += ["", "## Bots and foot slide", "", f"`tools/qa/t006_seeded.gd` and `t007_seeded.gd` ({m.get('seconds_bots')} s with foot slide; the T012 to T015 bots another {m.get('seconds_session_bots')} s, run together). Fixed seeds, so a change here means the game changed, not the dice. Foot slide runs `tools/t003_footslide.gd` twice over: once at `--fixed-fps 60` (repeatable) and three times in real time, averaged (the tool's documented usage, noisier, comparable with the T003-T009 tables). The two modes read very differently; compare like with like."]
     for name, title in (("t006", "T006 stalker bots"), ("t007", "T007 pirate bots")):
         out += ["", f"### {title}", ""] + bot_table(bots[name], bots["compare"][name])
-    for name, title in (("foot_slide", "Foot slide, fixed step"), ("foot_slide_realtime", "Foot slide, real time (mean of 3)")):
+    for name, title in (("foot_slide", "Foot slide, fixed step"), ("foot_slide_realtime", "Foot slide, real time (mean of 3)"),
+                        ("t012", "T012 shift bots, tell-blind"), ("t015_shift", "T015 shift bots, read the cutter ring"),
+                        ("t014", "T014 session bots"), ("t015", "T015 tell bots, 90 s windows")):
         out += ["", f"### {title}", "", "| Case | Metric | Baseline | Now | Change | Level |", "| --- | --- | --- | --- | --- | --- |"]
         for c in bots["compare"][name]:
             case, metric = c["id"].split(" | ")
             out.append(f"| {case} | {metric} | {fmt(c['base'])} | {fmt(c['now'])} | {fmt_pct(c['pct'])} | {c['level']} |")
-    out += ["", "Repro: `godot --headless --path . --fixed-fps 60 -s tools/qa/t006_seeded.gd` (or `t007_seeded.gd`), `godot --headless --path . [--fixed-fps 60] -s tools/t003_footslide.gd`."]
+        for bot, counts in bots["causes"].get(name, {}).items():
+            out += ["", f"{bot}, deaths by cause: {json.dumps(counts)}."]
+    out += ["", "Repro: `godot --headless --path . --fixed-fps 60 -s tools/qa/t006_seeded.gd` (or `t007_seeded.gd`), `godot --headless --path . [--fixed-fps 60] -s tools/t003_footslide.gd`. The T012 to T015 commands are in `tools/qa/health_check.sh`."]
 
     fl = r["flicker"]
     out += ["", "## Flicker", "", "`tools/t008_flicker.gd`, 60 frames at 60 fps; `turn_beam_on` is the turning-slowly number (10°/s). Twinkle: % of screen.", "",

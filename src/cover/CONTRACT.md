@@ -5,7 +5,7 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the sta
 ## Owns
 - `cover_field.gd`: scene-free pieces (footprint + class) and the straight 3D trace against them. The torso height of a stance.
 - `tip_state.gd`: scene-free rules of a tipping bed: upright (no cover), tipping (a commitment, still no cover), overturned (low).
-- `tip_bed.gd`: one bed: mesh hinged on its far long edge, collision, its piece in the field.
+- `tip_bed.gd`: one bed: the kit's bed mesh (`KitPieces.prop`), collision, its piece in the field. The far edge rears up and the bed rides over onto `TipState.footprint`, so it lands past its far long edge with the mattress toward whoever tipped it and the plated underside out, as the shield (T016; it used to fall the other way, underside toward the player).
 - `shot_tracer.gd`: `Rifle.shot_tracer`. Walls and doors through physics; bodies on the plan line, aimed at at their torso height; cover in between stops the round.
 - `cover_lock.gd`: scene-free lock-to-cover: the slot, the snap, raise and lower, sliding, letting go.
 - `lock_driver.gd`: lock-to-cover in a scene: takes the operator's controls while locked, the prompt, and `state_word()` for the suit OS's `LOCKED` readout. It hands them back when free, and touches nothing while free.
@@ -42,6 +42,6 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the sta
 `TipBed.landed(bed)`, `TipBed.footprint_changed(bed)`, `ShotTracer.cover_stopped(body)`.
 
 ## Data keys (`data/cover.json`)
-`low_height_m`, `standing_torso_m`, `crouched_torso_m`, `braced_torso_m`, `brace_hold_s`, `brace_crouch_shown`, `brace_rate_per_s`; `lock` {`enabled`, `reach_m`, `gap_m`, `edge_inset_m`, `search_step_m`, `snap_s`, `raise_s`, `lower_s`, `release_dot`, `break_m`, `exposed_at`, `fire_at`, `face_hold_s`, `aim_hold_s`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `bed` {`tip_s`, `reach_m`, `lying_height_m`, `mattress_m`, `color`, `mattress_color`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `mark` {`in_cover_reach_m`, `in_cover_min_crouch`}. Props' classes are in `data/deck.json`.
+`low_height_m`, `standing_torso_m`, `crouched_torso_m`, `braced_torso_m`, `brace_hold_s`, `brace_crouch_shown`, `brace_rate_per_s`; `lock` {`enabled`, `reach_m`, `gap_m`, `edge_inset_m`, `search_step_m`, `snap_s`, `raise_s`, `lower_s`, `release_dot`, `break_m`, `exposed_at`, `fire_at`, `face_hold_s`, `aim_hold_s`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `bed` {`tip_s`, `reach_m`, `lying_height_m`, `prompt`, `prompt_height_m`, `prompt_pixel_size`, `prompt_font_size`, `prompt_color`}; `mark` {`in_cover_reach_m`, `in_cover_min_crouch`}. Props' classes are in `data/deck.json`.
 
-Tests: `tests/test_cover.gd`, `tests/test_pirates.gd`.
+Tests: `tests/test_cover.gd`, `tests/test_pirates.gd`, `tests/test_dressing.gd`.

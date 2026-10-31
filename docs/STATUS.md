@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T014 merged, waiting on John's gates. T015 (CUSTODIAN: cutter and drone) done on `auto/t015-mac`, waiting on review and John's gate. **Next:** John plays T015 past tier 2 and takes the black box.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T015 merged, waiting on John's gates. T016 (bed, medbay dressing, salvage models, AA toggle) done on `auto/t016-mac`, waiting on review. **Next:** John plays, picks the AA mode (F1 → Display), and answers the T016 questions below.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,11 +12,13 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T015 awaiting review; T011, T012 and T014 awaiting John's gates.
-- Code: T015 on `auto/t015-mac`: 383/383, see `docs/handoffs/auto-T015.md`. The main scene is `scenes/shift/shift_deck.tscn`, and it opens on the briefing.
+- Queue order (lead): T016 awaiting review; T011, T012, T014 and T015 awaiting John's gates.
+- Code: T016 on `auto/t016-mac`: 410/410, see `docs/handoffs/auto-T016.md`. The main scene is `scenes/shift/shift_deck.tscn`, and it opens on the briefing.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T016 (sheets `docs/screens/T016/sheet.png`, `aa_sheet.png`): pick an AA mode by eye (costs on `shift_deck`: 4x +0.8 ms, SMAA +0.3, FXAA about 0). Does the changed tip motion look right (plated face now out, as the packet asked; T005 had it toward you)? The overturned bed by the door is now hard to see: lighten it? Is the salvage tint (`body_tint_share` 0.6) too painted?
+- T016 unexplained: the wall-top band changes between identical frozen shots in any AA mode; cause not found. Watch for flicker there in play.
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
 - T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
 - T015 balance: the prize route may now be too lethal. Greedy bot survives 1 of 12 (was 6 of 12), even reading the cutter's ring; cautious stays 12 of 12 because it leaves before CUSTODIAN wakes. First lever: move the cargo cutter off the prize's route.
@@ -61,8 +63,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
 - T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
+- T016: small collision for the trolley and lamp (needs nav, and a layer rounds ignore); dressing for the other rooms; dressing positions at room scales other than 0.85.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T015 (383/383 reproduced); queued Q002; paused new gameplay pending John's play.
-2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json` (cutter: line, ring, 1.2 s warm-up, tall cover cancels; drone: spotlight, 3 bars, 2.4 s call wakes a cutter or alerts a stalker); wakes at tier 2 or on the prize; new causes and payslip line.
+2026-10-31 (code, unattended): T016: `bed.glb` on deck and tipping, `dressing` in `data/deck.json` (`src/kit/dressing.gd`), gurney as low cover, nine salvage models in kit materials, AA modes in F1 → Display saved to `data/display.json`. 410/410. Bots: cautious ignoring tells dropped to 11 of 12, deterministic and unattributed; see handoff.

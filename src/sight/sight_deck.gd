@@ -47,6 +47,8 @@ func _ready() -> void:
 	flashlight.set_mask(mask.visible_texture(), sight.bounds)
 	operator.visuals.use_mask(mask.bind)
 	doors.use_mask(mask.bind)
+	Vfx.use_mask(mask.bind)
+	Audio.occluded_by = sight.visibility.blocked
 	sight_debug = SightDebug.new()
 	sight_debug.name = "SightDebug"
 	add_child(sight_debug)
@@ -102,6 +104,7 @@ func _update_sight(delta: float, force_memory: bool) -> void:
 	sight.update_sight(_eye(), yaw, flashlight.on, delta, force_memory)
 	var muzzle := operator.muzzle_position()
 	flashlight.follow(muzzle, yaw)
+	Vfx.set_beam(muzzle, sight.visibility.yaw_dir2(yaw), deg_to_rad(float(sight.cfg.cone_on.half_angle_deg)), float(sight.cfg.cone_on.range_m), flashlight.on)
 	flashlight.draw_beam(sight.visibility, _eye(), yaw, muzzle, delta)
 
 

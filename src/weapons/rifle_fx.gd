@@ -1,30 +1,40 @@
 extends Node3D
-## Placeholder muzzle flash, tracer and impact. Everything is unshaded additive, so with any
-## post-processing the worst a dark pixel can do is add nothing: no black boxes.
+## Muzzle flash and tracer, per gun. The flash is the sheet's: a random side cone along the barrel and a small
+## front star at the tip, random roll and scale, on screen for `flash_frames` frames and no more, with the muzzle
+## light dying over `flash_life_s`. Everything is unshaded additive, so with any post-processing the worst a dark
+## pixel can do is add nothing: no black boxes. Where a round lands is src/vfx's.
 ## tests/test_weapons.gd checks the materials; tools/t003_blackbox.py checks captured frames.
 ## Numbers from data/weapons.json "fx".
 
 var _cfg: Dictionary
 var _flash: MeshInstance3D
 var _flash_mat: StandardMaterial3D
+var _star: MeshInstance3D
+var _star_mat: StandardMaterial3D
 var _light: OmniLight3D
 var _flash_left := 0.0
+var _sprite_frames := 0
 var _tracers: Array[Dictionary] = []
-var _impacts: Array[Dictionary] = []
 var _next_tracer := 0
-var _next_impact := 0
 
 
 func _ready() -> void:
 	_cfg = Data.value("weapons", "fx", {})
 	top_level = true
 	global_transform = Transform3D.IDENTITY
-	var glow := _radial_texture()
+	var sheet: Texture2D = load(String(_cfg.flash_sheet))
 	var flash_color := Color(_cfg.flash_color)
-	_flash_mat = additive_material(flash_color, float(_cfg.flash_energy), glow)
-	_flash = _quad(float(_cfg.flash_size_m), _flash_mat)
+	_flash_mat = additive_material(flash_color, float(_cfg.flash_energy), sheet)
+	_flash = _quad(Vector2(float(_cfg.flash_cone_length_m), float(_cfg.flash_cone_width_m)), _flash_mat)
 	_flash.name = "Flash"
 	add_child(_flash)
+	_star_mat = additive_material(flash_color, float(_cfg.flash_energy), sheet)
+	_star = _quad(Vector2.ONE * float(_cfg.flash_star_size_m), _star_mat)
+	_star.name = "FlashStar"
+	add_child(_star)
+	var cell := Vector3(1.0 / float(_cfg.flash_cols), 1.0 / float(_cfg.flash_rows), 1.0)
+	_flash_mat.uv1_scale = cell
+	_star_mat.uv1_scale = cell
 	_light = OmniLight3D.new()
 	_light.name = "FlashLight"
 	_light.light_color = flash_color
@@ -43,11 +53,12 @@ func _ready() -> void:
 		t.visible = false
 		add_child(t)
 		_tracers.append({"node": t, "mat": tm, "left": 0.0})
-		var im := additive_material(Color(_cfg.impact_color), float(_cfg.impact_energy), glow)
-		var q := _quad(float(_cfg.impact_size_m), im)
-		q.name = "Impact%d" % i
-		add_child(q)
-		_impacts.append({"node": q, "mat": im, "left": 0.0})
+	# Drawn once out of sight, so the first real shot doesn't compile them.
+	_flash.visible = true
+	_star.visible = true
+	_sprite_frames = int(_cfg.flash_frames)
+	_flash.global_position = Vector3.DOWN * float(_cfg.flash_warm_depth_m)
+	_star.global_position = _flash.global_position
 
 
 ## A material that can only add light. `tex` is multiplied in, so its black adds nothing.
@@ -57,19 +68,17 @@ static func additive_material(color: Color, energy: float, tex: Texture2D) -> St
 	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
 	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	m.cull_mode = BaseMaterial3D.CULL_DISABLED
-	m.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED if tex else BaseMaterial3D.BILLBOARD_DISABLED
 	m.albedo_color = Color(color.r * energy, color.g * energy, color.b * energy, 1.0)
 	m.albedo_texture = tex
 	return m
 
 
 func shot(muzzle: Vector3, to: Vector3) -> void:
-	_flash.global_position = muzzle
-	_flash.visible = true
+	_place_flash(muzzle, (to - muzzle).normalized())
 	_light.global_position = muzzle
 	_light.visible = true
 	_flash_left = float(_cfg.flash_life_s)
-	_set_flash(1.0)
+	_light.light_energy = float(_cfg.flash_light_energy)
 	var t: Dictionary = _tracers[_next_tracer]
 	_next_tracer = (_next_tracer + 1) % _tracers.size()
 	var node: MeshInstance3D = t.node
@@ -81,30 +90,46 @@ func shot(muzzle: Vector3, to: Vector3) -> void:
 	t.mat.albedo_color.a = 1.0
 
 
-func impact(at: Vector3) -> void:
-	var i: Dictionary = _impacts[_next_impact]
-	_next_impact = (_next_impact + 1) % _impacts.size()
-	var node: MeshInstance3D = i.node
-	node.global_position = at
-	node.visible = true
-	i.left = float(_cfg.impact_life_s)
-	i.mat.albedo_color.a = 1.0
+## The cone lies along the barrel, turned to the camera as far as that allows; the star faces the camera. Both pick
+## a frame, a roll and a size, so no two shots match.
+func _place_flash(muzzle: Vector3, dir: Vector3) -> void:
+	var cam := get_viewport().get_camera_3d() if is_inside_tree() else null
+	var to_cam := (cam.global_position - muzzle).normalized() if cam != null else Vector3.UP
+	var jitter := float(_cfg.flash_scale_jitter)
+	var size := Vfx.rng.randf_range(1.0 - jitter, 1.0 + jitter)
+	var side := to_cam.cross(dir).normalized() * (1.0 if Vfx.rng.randf() < 0.5 else -1.0)
+	var front := dir.cross(side).normalized()
+	var length := float(_cfg.flash_cone_length_m) * size
+	_flash.global_transform = Transform3D(Basis(dir, side, front).scaled_local(Vector3.ONE * size), muzzle + dir * length * 0.5)
+	_set_frame(_flash_mat, _cfg.flash_cone_frames)
+	var right := Vector3.UP.cross(to_cam).normalized() if absf(to_cam.y) < 1.0 else Vector3.RIGHT
+	var star_basis := Basis(right, to_cam.cross(right), to_cam).rotated(to_cam, Vfx.rng.randf_range(0.0, TAU))
+	_star.global_transform = Transform3D(star_basis.scaled_local(Vector3.ONE * size), muzzle)
+	_set_frame(_star_mat, _cfg.flash_star_frames)
+	_flash.visible = true
+	_star.visible = true
+	_sprite_frames = int(_cfg.flash_frames)
+
+
+func _set_frame(mat: StandardMaterial3D, frames: Array) -> void:
+	var f := Vfx.rng.randi_range(int(frames[0]), int(frames[1]))
+	var cols := int(_cfg.flash_cols)
+	mat.uv1_offset = Vector3(float(f % cols) / float(cols), float(f / cols) / float(_cfg.flash_rows), 0.0)
 
 
 func _process(delta: float) -> void:
+	# Counted in frames, however fast they come. A frozen capture holds it.
+	if _sprite_frames > 0 and delta > 0.0:
+		_sprite_frames -= 1
+		if _sprite_frames == 0:
+			_flash.visible = false
+			_star.visible = false
 	if _flash_left > 0.0:
 		_flash_left = maxf(_flash_left - delta, 0.0)
-		_set_flash(_flash_left / float(_cfg.flash_life_s))
+		_light.light_energy = float(_cfg.flash_light_energy) * _flash_left / float(_cfg.flash_life_s)
 		if _flash_left == 0.0:
-			_flash.visible = false
 			_light.visible = false
 	_fade(_tracers, float(_cfg.tracer_life_s), delta)
-	_fade(_impacts, float(_cfg.impact_life_s), delta)
-
-
-func _set_flash(amount: float) -> void:
-	_flash_mat.albedo_color.a = amount
-	_light.light_energy = float(_cfg.flash_light_energy) * amount
 
 
 func _fade(pool: Array[Dictionary], life: float, delta: float) -> void:
@@ -116,24 +141,12 @@ func _fade(pool: Array[Dictionary], life: float, delta: float) -> void:
 				p.node.visible = false
 
 
-func _quad(size: float, mat: Material) -> MeshInstance3D:
+func _quad(size: Vector2, mat: Material) -> MeshInstance3D:
 	var q := QuadMesh.new()
-	q.size = Vector2(size, size)
+	q.size = size
 	q.material = mat
 	var mi := MeshInstance3D.new()
 	mi.mesh = q
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	mi.visible = false
 	return mi
-
-
-func _radial_texture() -> GradientTexture2D:
-	var g := Gradient.new()
-	g.set_color(0, Color.WHITE)
-	g.set_color(1, Color.BLACK)
-	var t := GradientTexture2D.new()
-	t.gradient = g
-	t.fill = GradientTexture2D.FILL_RADIAL
-	t.fill_from = Vector2(0.5, 0.5)
-	t.fill_to = Vector2(0.5, 0.0)
-	return t

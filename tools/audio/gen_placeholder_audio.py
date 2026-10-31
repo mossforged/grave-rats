@@ -182,20 +182,84 @@ def drop_heavy(y):
 
 # --- weapons ---
 
-def rifle_shot(y):
-    s = 1.1
-    crack = y.band(y.noise(s), 900, 11000) * y.fall(s, 75)
-    body = y.thump(s, 260, 64, 22, 55)
-    mid = y.band(y.noise(s), 180, 1400) * y.fall(s, 30)
-    # The tail: the same shot, far away down steel corridors.
-    tail = y.band(y.noise(s), 140, 1800) * y.attack(s, 0.03, 5.5)
-    slap = y.place(s, (0.055, 0.4 * mid[:int(0.4 * y.sr)]), (0.13, 0.22 * mid[:int(0.4 * y.sr)]))
-    return 1.15 * crack + 1.2 * body + 0.8 * mid + 0.17 * tail + slap
+def _rifle_body(y, punch_hz, crack_per_s, mid_per_s):
+    """The punch of the shot and nothing else: the action and the room are their own layers."""
+    s = 0.34
+    crack = y.band(y.noise(s), 900, 11000) * y.fall(s, crack_per_s)
+    body = y.thump(s, punch_hz, 64, 24, 55)
+    mid = y.band(y.noise(s), 180, 1400) * y.fall(s, mid_per_s)
+    return 1.15 * crack + 1.2 * body + 0.8 * mid
+
+
+def rifle_body_1(y):
+    return _rifle_body(y, 260, 75, 30)
+
+
+def rifle_body_2(y):
+    return _rifle_body(y, 240, 85, 34)
+
+
+def rifle_body_3(y):
+    return _rifle_body(y, 285, 68, 28)
+
+
+def rifle_body_4(y):
+    return _rifle_body(y, 225, 80, 36)
+
+
+def rifle_body_5(y):
+    return _rifle_body(y, 270, 92, 26)
+
+
+def rifle_mech(y):
+    """The action: bolt back and home, close to the gun."""
+    s = 0.09
+    return y.place(s, (0.0, y.clank(0.05, [1900, 3100, 4700], 90, 0.02)), (0.04, 0.8 * y.clank(0.05, [1400, 2500, 3900], 100, 0.02)))
+
+
+def rifle_mech_bright(y):
+    """The last five rounds: the same action, thinner and higher, as the magazine spring runs out."""
+    s = 0.09
+    return y.place(s, (0.0, y.clank(0.05, [3300, 5200, 7400], 95, 0.02)), (0.035, 0.7 * y.clank(0.05, [2800, 4400, 6600], 110, 0.02)))
+
+
+def rifle_thump(y):
+    """Felt more than heard: only your own gun has this."""
+    s = 0.16
+    return y.thump(s, 90, 42, 24, 40)
+
+
+def _tail(y, s, lo, hi, attack_s, per_s, slaps):
+    wash = y.band(y.noise(s), lo, hi) * y.attack(s, attack_s, per_s)
+    hits = [(at, g * y.burst(0.12, lo, hi, 40)) for at, g in slaps]
+    return wash + y.place(s, *hits)
+
+
+def tail_slap(y):
+    """A corridor: a short hard slap off the walls."""
+    return _tail(y, 0.35, 300, 3200, 0.008, 16, [(0.03, 0.9), (0.075, 0.5)])
+
+
+def tail_room(y):
+    """A medbay: a medium room with soft walls."""
+    return _tail(y, 0.7, 200, 2400, 0.02, 8, [(0.05, 0.4), (0.12, 0.25)])
+
+
+def tail_hold(y):
+    """A cargo hold: long and boomy."""
+    return _tail(y, 1.5, 70, 1100, 0.05, 3.2, [(0.09, 0.3), (0.21, 0.2)]) + 0.5 * y.thump(1.5, 80, 50, 4, 8)
 
 
 def rifle_dry(y):
+    """A hard click."""
     s = 0.12
     return y.clank(s, [2400, 3700, 5200], 80, 0.02) + 0.4 * y.burst(s, 2000, 9000, 110)
+
+
+def rifle_dry_tail(y):
+    """The nothing after the click: a breath of room, with no shot in it."""
+    s = 0.22
+    return 0.5 * y.band(y.noise(s), 400, 2200) * y.attack(s, 0.01, 22)
 
 
 def rifle_mag_out(y):
@@ -216,10 +280,213 @@ def rifle_charge(y):
     return y.place(s, (0.0, 0.8 * back), (0.15, home))
 
 
-def rifle_casing(y):
+def _tink(y, freqs, per_s):
+    s = 0.14
+    return y.clank(s, freqs, per_s, 0.04)
+
+
+def tink_deck_1(y):
+    return _tink(y, [4300, 6200, 8100], 34)
+
+
+def tink_deck_2(y):
+    return _tink(y, [4700, 6600, 8900], 38)
+
+
+def tink_deck_3(y):
+    return _tink(y, [3900, 5800, 7600], 30)
+
+
+def tink_grate_1(y):
+    """Rattly: the casing chatters on the bars."""
+    s = 0.2
+    t = lambda: _tink(y, [2900, 4400], 60)
+    return y.place(s, (0.0, t()), (0.04, 0.6 * t()), (0.08, 0.4 * t()))
+
+
+def tink_grate_2(y):
+    s = 0.2
+    t = lambda: _tink(y, [3300, 4900], 60)
+    return y.place(s, (0.0, t()), (0.03, 0.7 * t()), (0.1, 0.3 * t()))
+
+
+def tink_wet_1(y):
+    s = 0.12
+    return 0.7 * _tink(y, [2300, 3100], 70)[:int(s * y.sr)] + 0.4 * y.burst(s, 600, 2800, 45)
+
+
+def tink_wet_2(y):
+    s = 0.12
+    return 0.7 * _tink(y, [2600, 3500], 70)[:int(s * y.sr)] + 0.4 * y.burst(s, 500, 2400, 45)
+
+
+def mag_clatter_deck(y):
     s = 0.42
-    ting = lambda: y.clank(0.16, [4300, 6200, 8100], 34, 0.04)
-    return y.place(s, (0.0, ting()), (0.11, 0.6 * ting()), (0.2, 0.36 * ting()), (0.27, 0.2 * ting()))
+    hit = lambda g: g * (y.clank(0.2, [820, 1560, 2700], 30, 0.03) + 0.5 * y.thump(0.2, 200, 110, 30))
+    return y.place(s, (0.0, hit(1.0)), (0.13, hit(0.55)), (0.22, hit(0.3)))
+
+
+def mag_clatter_grate(y):
+    s = 0.5
+    hit = lambda g: g * (y.clank(0.16, [1100, 2100, 3300], 40, 0.03) + 0.3 * y.burst(0.16, 1500, 6000, 40))
+    return y.place(s, (0.0, hit(1.0)), (0.07, hit(0.7)), (0.14, hit(0.5)), (0.24, hit(0.3)), (0.31, hit(0.2)))
+
+
+def mag_clatter_wet(y):
+    s = 0.36
+    return y.clank(s, [640, 1200], 26, 0.03) + 0.6 * y.burst(s, 500, 2600, 18)
+
+
+# --- impacts ---
+
+def _ping(y, freqs, per_s):
+    s = 0.22
+    return y.clank(s, freqs, per_s, 0.03) + 0.5 * y.burst(s, 1800, 9000, 70)
+
+
+def impact_metal_1(y):
+    return _ping(y, [1800, 3100, 5200], 32)
+
+
+def impact_metal_2(y):
+    return _ping(y, [1300, 2500, 4100], 42)
+
+
+def impact_metal_3(y):
+    """More thunk than ping."""
+    s = 0.22
+    return 0.8 * y.clank(s, [620, 1180, 2100], 44, 0.03) + 0.7 * y.thump(s, 240, 110, 36) + 0.4 * y.burst(s, 1200, 6000, 80)
+
+
+def _whine(y, hi, lo):
+    s = 0.55
+    f = lo + (hi - lo) * np.exp(-5.0 * y.t(s))
+    return y.tone(s, f) * y.attack(s, 0.006, 7) + 0.25 * y.burst(s, 2000, 9000, 30)
+
+
+def ricochet_1(y):
+    return _whine(y, 5200, 1800)
+
+
+def ricochet_2(y):
+    return _whine(y, 3900, 1300)
+
+
+def _crack(y, lo, hi, per_s, snap_hz):
+    s = 0.16
+    return y.burst(s, lo, hi, per_s) + 0.6 * y.clank(s, [snap_hz, snap_hz * 1.7], 90, 0.04)
+
+
+def impact_panel_1(y):
+    return _crack(y, 700, 6000, 60, 1600)
+
+
+def impact_panel_2(y):
+    return _crack(y, 900, 7000, 70, 2100)
+
+
+def impact_panel_3(y):
+    return _crack(y, 500, 5000, 50, 1300)
+
+
+def impact_glass_1(y):
+    return _crack(y, 2500, 11000, 80, 4600)
+
+
+def impact_glass_2(y):
+    return _crack(y, 3000, 12000, 95, 5600)
+
+
+def _wet(y, lo, hi):
+    s = 0.2
+    return y.burst(s, lo, hi, 26) + 0.8 * y.thump(s, 170, 80, 30)
+
+
+def impact_wet_1(y):
+    return _wet(y, 300, 2600)
+
+
+def impact_wet_2(y):
+    return _wet(y, 240, 2100)
+
+
+def impact_flesh_1(y):
+    s = 0.16
+    return 0.7 * y.burst(s, 200, 1600, 40) + y.thump(s, 150, 70, 38)
+
+
+def impact_flesh_2(y):
+    s = 0.16
+    return 0.7 * y.burst(s, 160, 1300, 44) + y.thump(s, 130, 62, 40)
+
+
+def grunt_1(y):
+    """A man who's been shot, on the placeholder budget: a buzzed vowel falling away."""
+    s = 0.26
+    f = 150 - 40 * y.t(s) / s
+    return y.band(y.tone(s, f, "saw"), 200, 1500) * y.attack(s, 0.015, 9)
+
+
+def grunt_2(y):
+    s = 0.22
+    f = 175 - 55 * y.t(s) / s
+    return y.band(y.tone(s, f, "saw"), 240, 1700) * y.attack(s, 0.012, 11)
+
+
+def impact_chew(y):
+    """Cover coming apart: heavier, under the surface's own hit."""
+    s = 0.24
+    return y.thump(s, 190, 80, 24) + 0.9 * y.burst(s, 300, 3400, 28)
+
+
+# --- environment effects ---
+
+def env_buzz(y):
+    """A shorted panel: mains buzz that loops."""
+    s = 1.2
+    x = y.tone(s, 120, "saw") * 0.5 + y.tone(s, 240, "square") * 0.14 + 0.2 * y.band(y.noise(s), 1800, 7000)
+    return y.band(x, 90, 4500)
+
+
+def env_crackle(y):
+    s = 0.3
+    hits = [(y.rng.uniform(0.0, 0.2), y.rng.uniform(0.3, 1.0) * y.burst(0.08, 2000, 11000, 90)) for _ in range(7)]
+    return y.place(s, *hits)
+
+
+def env_hiss(y):
+    """Steam from a broken pipe: loops; the jet's pulse is the game's."""
+    s = 2.0 + 0.15
+    return y.seamless(y.band(y.noise(s), 1800, 11000), 0.15)
+
+
+def env_fire(y):
+    s = 3.0 + 0.2
+    roar = y.band(y.noise(s), 60, 520)
+    pops = [(y.rng.uniform(0.0, s - 0.1), y.rng.uniform(0.2, 0.9) * y.burst(0.06, 1200, 7000, 90)) for _ in range(26)]
+    return y.seamless(0.6 * roar + y.place(s, *pops), 0.2)
+
+
+def env_sizzle(y):
+    s = 2.5 + 0.2
+    fizz = y.band(y.noise(s), 2600, 9000) * (0.6 + 0.4 * np.sin(2.0 * np.pi * 3.0 * y.t(s)))
+    pops = [(y.rng.uniform(0.0, s - 0.1), y.rng.uniform(0.3, 1.0) * y.burst(0.05, 500, 2400, 80)) for _ in range(12)]
+    return y.seamless(0.5 * fizz + y.place(s, *pops), 0.2)
+
+
+def explosion_near(y):
+    s = 1.8
+    boom = y.thump(s, 150, 34, 3.4, 16)
+    crack = y.band(y.noise(s), 400, 9000) * y.fall(s, 12)
+    rumble = y.band(y.noise(s), 40, 400) * y.attack(s, 0.02, 3)
+    return 1.3 * boom + 0.9 * crack + 0.9 * rumble
+
+
+def explosion_far(y):
+    s = 1.8
+    boom = y.thump(s, 90, 30, 3.0, 12)
+    rumble = y.band(y.noise(s), 30, 260) * y.attack(s, 0.06, 2.4)
+    return boom + rumble
 
 
 # --- stalker ---
@@ -447,7 +714,13 @@ def ledger_tick(y):
 SOUNDS = {
     "player": [step_deck, step_grate, step_wet, crouch_rustle, (suit_breath, SR_AMB), pickup_small, pickup_medium,
             pickup_heavy, drop_small, drop_medium, drop_heavy],
-    "weapons": [rifle_shot, rifle_dry, rifle_mag_out, rifle_mag_in, rifle_charge, rifle_casing],
+    "weapons": [rifle_body_1, rifle_body_2, rifle_body_3, rifle_body_4, rifle_body_5, rifle_mech, rifle_mech_bright, rifle_thump,
+                tail_slap, tail_room, tail_hold, rifle_dry, rifle_dry_tail, rifle_mag_out, rifle_mag_in, rifle_charge,
+                tink_deck_1, tink_deck_2, tink_deck_3, tink_grate_1, tink_grate_2, tink_wet_1, tink_wet_2,
+                mag_clatter_deck, mag_clatter_grate, mag_clatter_wet],
+    "impacts": [impact_metal_1, impact_metal_2, impact_metal_3, ricochet_1, ricochet_2, impact_panel_1, impact_panel_2, impact_panel_3,
+                impact_glass_1, impact_glass_2, impact_wet_1, impact_wet_2, impact_flesh_1, impact_flesh_2, grunt_1, grunt_2, impact_chew],
+    "effects": [env_buzz, env_crackle, env_hiss, env_fire, env_sizzle, explosion_near, explosion_far],
     "stalker": [stalker_click, stalker_chirp, stalker_spit_windup, stalker_spit, stalker_lunge, stalker_hit,
             stalker_death, stalker_scuttle, stalker_bash, bulkhead_burst],
     "custodian": [cutter_warm, cutter_burn, drone_chirp, custodian_chime],
@@ -455,7 +728,7 @@ SOUNDS = {
             door_break, lights_fail, alarm_siren, oxygen_warning],
     "ui": [stamp_accept, stamp_acknowledge, ledger_tick],
 }
-LOOPS = {suit_breath, amb_medbay, amb_cargo, amb_junction, cutter_warm, alarm_siren}
+LOOPS = {env_buzz, env_hiss, env_fire, env_sizzle, suit_breath, amb_medbay, amb_cargo, amb_junction, cutter_warm, alarm_siren}
 
 
 def write_wav(path, x, sr):

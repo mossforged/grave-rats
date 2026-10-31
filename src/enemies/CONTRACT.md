@@ -11,7 +11,6 @@ The stalker, its spit, the bulkhead ambush, and the scene that closes the grey-b
 - `spit_system.gd`: globs and puddles in the world, in opaque materials so the sight mask hides them.
 - `stalker_pack.gd`: the stalkers and what they share: builds senses, carries noise, turns events into spits and hits.
 - `bulkhead.gd`: the sealed panel: wall-coloured, stops bodies and sight, bursts into debris. A hairline beacon along its foot is the tell (T011, `ambush.tell`), a look and not a rule.
-- `placeholder_sound.gd`: a generated bang. Only `src/pirates` still uses it; everything else plays through `src/audio`.
 - `spawn_picker.gd`: scene-free. Where a new stalker may come in: not in any viewer's sight, not within `spawning.min_player_m` of a player, not a point already used (T012).
 - `stalker_deck.gd`: root of `scenes/enemies/stalker_deck.tscn`. Extends `src/sight/sight_deck.gd`; wires cover, suit, pack, ambush, run log. Dresses a copy of the deck: adds the closet and breach, moves the spawn south of the panel, removes dummies, makes the `tippable` props TipBeds.
 
@@ -36,6 +35,9 @@ The stalker, its spit, the bulkhead ambush, and the scene that closes the grey-b
 
 ## Sounds (T017)
 Through `src/audio`. The hiss starts as the spit's wind-up starts, however it started. Awake and alive, a stalker clicks or chirps every `stalker_idle` gap; you can hear one through a wall, and that's how you know it's there. Hit, death, spit, lunge, bash at the door, the panel's burst, and a scuttle where a vent stalker comes in.
+
+## Hit reaction (T020)
+`Stalker.take_hit` calls `Vfx.body_hit("stalker", ...)`: ichor spray, wet hit, a splat on what's behind it. It has `plays_own_hit()`, so the rifle leaves it alone. The pain chirp is `stalker_hit`.
 
 ## Public API
 - `StalkerBrain.new(cfg, patrol, dormant, yaw)`: `step(delta, senses) -> events`, `hear(kind, at, from, through_door) -> bool`, static `hearing_radius(cfg, kind, through_door)`, `take_hit(damage, from) -> dealt`, `notice_shot(from)`, `alert(at)` (told where you are: it hunts; dormant and dead ignore it), `wants_dodge()`, `backing_off()`, `wake(player, from)`, `force_hunt`, `force_spit`, `force_lunge`, `alive()`, `hunting()`, `vulnerable()`, `state_name()`; static `perceives(...)`; fields `state`, `yaw`, `goal`, `velocity`, `last_known`, `knows`, `windup`, `charging`, `dashing`, `rushing`, `bashing`, `plan_now`, `flip_side`, `rng`, `health`. Events `EV_SPIT`, `EV_LUNGE_START`, `EV_LUNGE_HIT`, `EV_BANG`.

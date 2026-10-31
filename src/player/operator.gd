@@ -253,6 +253,7 @@ func simulate(delta: float) -> void:
 		upper = "low"
 	anim.set_motion(model.sprinting, model.speed, model.hip_turn_deg_s)
 	anim.set_recoil(model.firing_share())
+	anim.set_arm_kick(rifle.state.arm_kick)
 	anim.update(model.leg_blend(), model.leg_time_scale(), model.crouch_time_scale(),
 			model.crouch_amount * crouch_shown, model.torso_lead(), upper, rifle.state.reload_total)
 	velocity = model.velocity

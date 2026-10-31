@@ -54,6 +54,11 @@ func _ready() -> void:
 	_pivot.add_child(head)
 
 
+## What a round does to it, for src/vfx.
+func hit_surface() -> String:
+	return "panel"
+
+
 ## `hit` has "direction" (Vector3, the way the shot travels) and "damage".
 func take_hit(hit: Dictionary) -> void:
 	if down:

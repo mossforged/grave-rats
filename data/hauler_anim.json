@@ -16,7 +16,9 @@
     "toes": [
       "mixamorig_LeftToeBase",
       "mixamorig_RightToeBase"
-    ]
+    ],
+    "arm_right": "mixamorig_RightArm",
+    "arm_left": "mixamorig_LeftArm"
   },
   "states": {
     "idle": {
@@ -121,7 +123,8 @@
     "roll_fade_in_s": 0.08,
     "roll_fade_out_s": 0.2,
     "turn_left_clip_deg_s": 128.0,
-    "turn_right_clip_deg_s": 95.0
+    "turn_right_clip_deg_s": 95.0,
+    "arm_kick_deg": 5.0
   },
   "rifle": {
     "hand_offset_m": [

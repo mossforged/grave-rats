@@ -10,7 +10,6 @@ const PlayerTarget := preload("res://src/pirates/player_target.gd")
 const StalkerNav := preload("res://src/enemies/stalker_nav.gd")
 const StalkerBrain := preload("res://src/enemies/stalker_brain.gd")
 const ShotTracer := preload("res://src/cover/shot_tracer.gd")
-const PlaceholderSound := preload("res://src/enemies/placeholder_sound.gd")
 
 ## Someone in the squad said something. Tests and the log listen; the labels are its own.
 signal barked(pirate: Node3D, key: String, line: String)
@@ -42,11 +41,11 @@ var _roles := {}
 var _trail: Array = []
 var _retask_left := 0.0
 var _sprint_left := 0.0
+var _layout: RefCounted
 var _bark_ready := {}
 var _labels := {}
 var _bark_left := {}
 var _rng := RandomNumberGenerator.new()
-var _shot_sound: AudioStreamPlayer3D
 var _reflank_left := {}
 var _covering_fire := false    # the suppressor has opened up; the flanker goes on that
 var _flank_wait_left := 0.0
@@ -63,6 +62,7 @@ func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, sight
 	var radius := float(cfg.radius_m) * character_scale
 	var nav_cfg := {"radius_m": radius, "nav": cfg.nav, "stalk": cfg.stalk}
 	nav = StalkerNav.new(nav_cfg, layout)
+	_layout = layout
 	for d: Node in doors:
 		if d.door_state.is_locked():
 			nav.set_blocker(d, d.opening)
@@ -97,13 +97,6 @@ func setup(layout: RefCounted, cover_field: RefCounted, blocked: Callable, sight
 				p.add_collision_exception_with(q)
 	tracer = ShotTracer.new(cover, world)
 	tracer.bodies = [player_body]
-	_shot_sound = AudioStreamPlayer3D.new()
-	_shot_sound.name = "ShotSound"
-	_shot_sound.stream = PlaceholderSound.make(cfg.sound.shot, int(cfg.sound.mix_rate))
-	_shot_sound.volume_db = float(cfg.sound.shot.volume_db)
-	_shot_sound.unit_size = float(cfg.sound.unit_size_m)
-	_shot_sound.max_polyphony = pirates.size() * 2
-	add_child(_shot_sound)
 
 
 func reset() -> void:
@@ -267,6 +260,7 @@ func tick(delta: float) -> void:
 		_retask(delta)
 	for p: Node in pirates:
 		p.torso_height = _torso(p)
+		p.timeline.step(delta, p.muzzle_position(), Vector3(-sin(p.brain.gun_yaw()), 0.0, -cos(p.brain.gun_yaw())))
 		for ev: String in p.simulate(delta, self):
 			_handle(ev, p)
 		_open_door_for(p)
@@ -405,12 +399,15 @@ func _fire(p: Node) -> void:
 		var body: Object = hit.collider
 		if body != null and body.has_method("take_hit"):
 			body.take_hit({"point": to, "direction": dir, "damage": float(cfg.rifle.damage), "origin": origin, "shooter": p})
-		p.fx.impact(to)
+		p.timeline.land(body, to, hit.get("normal", -dir), dir, float(cfg.rifle.damage))
 	p.fx.shot(p.muzzle_position(), to)
+	p.timeline.shot(p.muzzle_position(), dir, b.gun.mag, _space_of(p), false)
 	if not _sees(p, p.floor_position(), target.pos):
 		shots_fired_at_cover += 1
-	_shot_sound.global_position = origin
-	_shot_sound.play()
+
+
+func _space_of(p: Node) -> String:
+	return String(_layout.space_at(p.floor_position()))
 
 
 ## Humans use doors. A shut, unlocked one on the way gets opened.

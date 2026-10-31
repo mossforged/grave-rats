@@ -1,0 +1,75 @@
+{
+  "adapter": "Apple M2 Pro (Apple8)",
+  "all_environment_effects": {
+    "frames": 1056,
+    "live_particles": 196,
+    "ms_avg": 5.68247443181819,
+    "ms_max": 18.557,
+    "ms_p95": 6.241,
+    "ms_p99": 6.662,
+    "peak_particles": 232,
+    "running": 12
+  },
+  "brass": {
+    "casings": 30,
+    "magazine_at": [
+      2.8061192035675,
+      0.0179999992251396,
+      2.34722757339478
+    ],
+    "magazines": 1
+  },
+  "budgets": {
+    "max_casings": 60.0,
+    "max_decals": 96.0,
+    "max_emitters": 24.0,
+    "max_lights": 6.0,
+    "max_magazines": 10.0,
+    "max_particles": 1000.0,
+    "max_pools": 2.0
+  },
+  "idle": {
+    "frames": 1191,
+    "ms_avg": 5.04061041141898,
+    "ms_max": 15.568,
+    "ms_p95": 5.478,
+    "ms_p99": 5.74,
+    "peak_particles": 155
+  },
+  "mag_dump": {
+    "casings": 60,
+    "decals": 90,
+    "frames": 1851,
+    "live_particles_end": 153,
+    "ms_avg": 5.4964835224203,
+    "ms_max": 22.272,
+    "ms_p95": 6.253,
+    "ms_p99": 6.636,
+    "peak_particles": 201
+  },
+  "resolution": "(1920.0, 953.0)",
+  "t020_burst_glass": {
+    "material": "glass",
+    "surface": "glass",
+    "wall_at": [
+      11.5,
+      0.0
+    ]
+  },
+  "t020_burst_metal": {
+    "material": "hull",
+    "surface": "metal",
+    "wall_at": [
+      2.5,
+      0.0
+    ]
+  },
+  "t020_burst_panel": {
+    "material": "clinical",
+    "surface": "panel",
+    "wall_at": [
+      -6.5,
+      2.5
+    ]
+  }
+}

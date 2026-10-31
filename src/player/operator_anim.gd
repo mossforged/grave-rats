@@ -86,6 +86,10 @@ func set_recoil(_share: float) -> void:
 	pass
 
 
+func set_arm_kick(_share: float) -> void:
+	pass
+
+
 func play_state(_state: String, _seconds := -1.0) -> bool:
 	return false
 

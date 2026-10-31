@@ -21,6 +21,7 @@ var reload_left := 0.0
 var reload_total := 0.0
 var recoil_deg := 0.0          # signed yaw offset of the gun
 var camera_kick_m := 0.0
+var arm_kick := 0.0            # 1 as a round goes off, falling back to 0
 
 var _incoming := 0
 var _cooldown := 0.0
@@ -42,6 +43,7 @@ func refill() -> void:
 	reserve = int(cfg.reserve)
 	recoil_deg = 0.0
 	camera_kick_m = 0.0
+	arm_kick = 0.0
 
 
 func reloading() -> bool:
@@ -117,6 +119,7 @@ func _kick() -> void:
 	recoil_deg = clampf(recoil_deg + _side * float(r.kick_deg), -limit, limit)
 	_recoil_wait = float(r.recover_delay_s)
 	camera_kick_m = float(cfg.camera_kick.kick_m)
+	arm_kick = 1.0
 
 
 func _step_recoil(delta: float) -> void:
@@ -127,3 +130,4 @@ func _step_recoil(delta: float) -> void:
 	var k: Dictionary = cfg.camera_kick
 	var rate := float(k.kick_m) / maxf(float(k.recover_s), delta)
 	camera_kick_m = move_toward(camera_kick_m, 0.0, rate * delta)
+	arm_kick = move_toward(arm_kick, 0.0, delta / float(cfg.arm_kick.recover_s))

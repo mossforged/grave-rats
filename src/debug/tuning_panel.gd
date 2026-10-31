@@ -6,6 +6,7 @@ extends CanvasLayer
 ## the panel is open, so that number is the real cost and not the display's refresh.
 
 const DisplayAA := preload("res://src/debug/display_aa.gd")
+const VfxGallery := preload("res://src/vfx/vfx_gallery.gd")
 const FILE_DIR := "res://data"
 
 var save_dir := FILE_DIR
@@ -13,6 +14,7 @@ var sliders: Dictionary = {}      # "file:path" -> HSlider
 var dirty: Dictionary = {}        # file name -> true
 var aa_picker: OptionButton
 var frame_label: Label
+var gallery: VfxGallery
 
 var _status: Label
 var _root: Control
@@ -178,6 +180,10 @@ func _build() -> void:
 	_status = Label.new()
 	save_row.add_child(_status)
 	_add_display(box)
+	gallery = VfxGallery.new()
+	gallery.name = "Gallery"
+	add_child(gallery)
+	gallery.build(box, get_parent())
 	for entry: Dictionary in Data.value("debug", "tuning", []):
 		if entry.has("section"):
 			var head := Label.new()

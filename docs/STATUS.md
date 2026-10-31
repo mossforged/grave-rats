@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T016 merged, waiting on John's gates. Q002 health check merged (no unexplained regressions; frame time needs a quiet-Mac re-measure). **Next:** John plays (T015 past tier 2 with the black box; pick an AA mode in F1 → Display). Code lane: T017 sound waits on John's ear; T018 co-op groundwork done on `auto/t018-mac`, waiting on review (it branched without T017; trial merge 492/492 after hand resolution, see `docs/handoffs/auto-T018.md`); then T019 corridors, T020 gun feel.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T018 merged, waiting on John's gates (T017 is sound: his ear decides). Q002 health check merged. **Next:** John plays a shift: T015 past tier 2 with the black box, pick an AA mode (F1 → Display), listen (T017), and check solo feels unchanged (T018 routes input through commands). Code lane: T019 corridors, then T020 gun feel.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -66,5 +66,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (code, unattended): T018: `src/session` (players, commands, seeded RNG, `is_authority()`), one spawn path, the shift deck keyed by player ID, `scenes/session/two_player_deck.tscn` with a scripted mate. 452/452, existing tests unedited; solo reads about 0.17 ms slower than `main` (two pairs, cause not found).
-Not merged with T017 (its packet dependency); lock to cover and a crew through the forms are the known gaps, in the handoff.
+2026-10-31 (lead): merged T017 and T018 (492/492 after resolving T018's listed conflicts in `shift_deck.gd`, `weight_deck.gd`, `operator.gd`, shift contract). Earlier: Q002, T016, prop library (104), VFX textures, gun-feel spec, sound shortlist.
+2026-10-31 (code, unattended): T017 placeholder sound (`src/audio`, 44 cues, limiter; nobody has heard it). T018 `src/session` (players, commands, seeded RNG, authority), two-player debug scene; solo about 0.17 ms slower, cause not found.

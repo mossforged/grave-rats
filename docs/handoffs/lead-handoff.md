@@ -48,8 +48,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | Q002 | qa | merged: health rerun; no unexplained regressions; frame time needs a quiet-Mac re-measure; greedy dies 34 of 36 with CUSTODIAN |
 | (pause) | code | no new gameplay/balance until John plays T012–T015; non-balance work continues |
 | T016 | code | merged: bed, medbay dressing, salvage models; AA toggle (John picks by eye) |
-| T017 | code | queued: placeholder sound pass |
-| T018 | code | queued: co-op groundwork (no networking) |
+| T017 | code | merged: placeholder sound (44 cues); John listens |
+| T018 | code | merged: co-op groundwork; solo must feel unchanged |
 | T019 | code | queued: corridor wall dressing from the hallway prop set (visual only; needs T016 merged) |
 | T020 | code | queued: gun feel and environment effects (VFX library, shot timeline, sound layers; needs T017) |
 

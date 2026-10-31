@@ -1,0 +1,7 @@
+ %CPU COMM
+ 51.0 WindowServer
+ 30.8 Camera Hub
+  7.3 mds_stores
+  6.9 BambuStudio
+  6.2 BambuStudio
+  3.8 ContextStoreAgent

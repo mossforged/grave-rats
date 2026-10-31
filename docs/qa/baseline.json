@@ -25,6 +25,12 @@
       "avg": 6.604,
       "p95": 9.466,
       "resolution": "1920x1080"
+    },
+    "shift_deck": {
+      "avg": 7.067,
+      "p95": 10.329,
+      "resolution": "1920x1080",
+      "screen_scale": 1.0
     }
   },
   "bots": {
@@ -223,6 +229,88 @@
       "sprint forward | body_m_s": 5.4,
       "sprint forward | slide_m_s": 3.183,
       "sprint forward | planted_pct": 17.67
+    },
+    "t012": {
+      "cautious | survived": 12,
+      "cautious | banked (mean)": 1318.67,
+      "cautious | deposited (mean)": 1318.67,
+      "cautious | items (mean)": 14.42,
+      "cautious | lost (mean)": 0.0,
+      "cautious | tier (mean)": 1.0,
+      "cautious | time_s (mean)": 202.69,
+      "cautious | prize (mean)": 0.0,
+      "greedy | survived": 1,
+      "greedy | banked (mean)": 159.67,
+      "greedy | deposited (mean)": 3168.75,
+      "greedy | items (mean)": 16.92,
+      "greedy | lost (mean)": 1.17,
+      "greedy | tier (mean)": 1.0,
+      "greedy | time_s (mean)": 267.6,
+      "greedy | prize (mean)": 0.67
+    },
+    "t015_shift": {
+      "cautious | survived": 12,
+      "cautious | banked (mean)": 1204.08,
+      "cautious | deposited (mean)": 1204.08,
+      "cautious | items (mean)": 13.17,
+      "cautious | lost (mean)": 0.0,
+      "cautious | tier (mean)": 1.0,
+      "cautious | time_s (mean)": 202.67,
+      "cautious | prize (mean)": 0.0,
+      "greedy | survived": 1,
+      "greedy | banked (mean)": 100.83,
+      "greedy | deposited (mean)": 2823.25,
+      "greedy | items (mean)": 15.5,
+      "greedy | lost (mean)": 1.0,
+      "greedy | tier (mean)": 1.0,
+      "greedy | time_s (mean)": 257.34,
+      "greedy | prize (mean)": 0.5
+    },
+    "t014": {
+      "cautious | sessions": 12,
+      "cautious | fired": 12,
+      "cautious | quota_1_met": 7,
+      "cautious | quotas_met": 9,
+      "cautious | quotas_due": 21,
+      "cautious | quotas_met_per_session (mean)": 0.75,
+      "cautious | shifts": 63,
+      "cautious | deaths": 1,
+      "cautious | death_pct": 1.6,
+      "cautious | net_per_shift_deaths_at_0 (mean)": 893.54,
+      "cautious | survivors_gross (mean)": 1281.76,
+      "cautious | survivors_deductions (mean)": 373.81,
+      "cautious | negative_payslips": 0,
+      "greedy | sessions": 12,
+      "greedy | fired": 12,
+      "greedy | quota_1_met": 0,
+      "greedy | quotas_met": 0,
+      "greedy | quotas_due": 12,
+      "greedy | quotas_met_per_session (mean)": 0.0,
+      "greedy | shifts": 36,
+      "greedy | deaths": 34,
+      "greedy | death_pct": 94.4,
+      "greedy | net_per_shift_deaths_at_0 (mean)": 97.81,
+      "greedy | survivors_gross (mean)": 2101.0,
+      "greedy | survivors_deductions (mean)": 340.5,
+      "greedy | negative_payslips": 0
+    },
+    "t015": {
+      "cutter_cover | aims (mean)": 24.83,
+      "cutter_cover | burns (mean)": 1.67,
+      "cutter_cover | cancelled (mean)": 22.83,
+      "cutter_cover | damage (mean)": 50.0,
+      "cutter_cover | hits (mean)": 1.67,
+      "cutter_ignore | aims (mean)": 15.08,
+      "cutter_ignore | burns (mean)": 12.17,
+      "cutter_ignore | cancelled (mean)": 2.75,
+      "cutter_ignore | damage (mean)": 365.0,
+      "cutter_ignore | hits (mean)": 12.17,
+      "drone_break | broken (mean)": 7.25,
+      "drone_break | calls_started (mean)": 7.83,
+      "drone_break | completed (mean)": 0.5,
+      "drone_ignore | broken (mean)": 2.67,
+      "drone_ignore | calls_started (mean)": 5.75,
+      "drone_ignore | completed (mean)": 3.0
     }
   },
   "flicker": {
@@ -257,6 +345,31 @@
       "window": 2,
       "load_before": "3.58 4.27 4.53",
       "load_after": "6.63 4.87 4.74"
+    },
+    {
+      "scene": "shift_deck",
+      "window": 1,
+      "load_before": "12.25 10.76 9.05",
+      "load_after": "8.35 9.95 8.82"
+    },
+    {
+      "scene": "shift_deck",
+      "window": 2,
+      "load_before": "5.00 8.55 8.37",
+      "load_after": "4.52 8.03 8.19"
+    }
+  ],
+  "added": [
+    {
+      "date": "2026-10-31",
+      "commit": "c5cde11 Lead: medbay prop set and all nine salvage pickups (Blender by script), catalogue; queue T016 (props + AA toggle), T017 (sound), T018 (co-op groundwork)",
+      "entries": [
+        "frame_time.shift_deck",
+        "bots.t012",
+        "bots.t015_shift",
+        "bots.t014",
+        "bots.t015"
+      ]
     }
   ]
 }

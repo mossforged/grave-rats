@@ -41,8 +41,8 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | Q001 | qa | written: repeatable health check. queued 2026-10-31 |
 | A011 | art | merged and approved 2026-10-31 (cutter + drone first) |
 | A012 | art | merged and approved 2026-10-31 |
-| T012 | code | queued: run loop part 1 (salvage, oxygen, escalation, prize alarm, extraction) |
-| T013 | code | written: lead's scripted props (console, cabinet, locker bank) into the kit slots. **Queue after T012** |
+| T012 | code | merged 2026-10-31; waits for John's play (one more room? black box scary?) |
+| T013 | code | written: lead's scripted props (console, cabinet, locker bank) into the kit slots. queued 2026-10-31 |
 | T014 | code | planned: quota over 3 shifts, briefing/payslip/death bill from A012, termination notice |
 | T015 | code | planned: CUSTODIAN cutter turret + patrol drone |
 

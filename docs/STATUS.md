@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T012 play (`scenes/shift/shift_deck.tscn`, now the main scene): does "one more room?" happen? Is grabbing the black box scary? Tier stalkers can reach a still player in about 2 s (`spawning.min_player_m`). Are failed lights dark enough? Bots: greedy banks about 1.8× cautious but survives 50% against 100%; cautious may be too safe until the quota (T014).
 - T012 play (`godot --path .`, sheet `docs/screens/T012/sheet.png`): does "one more room?" happen? Is grabbing the black box scary? Bots: greedy banks 2,380 on average and survives 6 of 12; cautious banks 1,309 and survives 12 of 12.
 - T012 calls: rings hidden in unseen rooms until seen, a tier stalker can spawn out of sight 7 m or more away and hit within about 2 s, the airlock is a marked zone and not a room, lights failing is looks only. Handoff has each lever.
 - T011: MSAA dropped from 4x to 2x to meet the frame budget (reverses the 2026-10-30 decision); turning shimmer rose (0.09 → 0.12% twinkle), possibly from that. Accept 2x, or go back to 4x and find the time elsewhere?
@@ -54,5 +55,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-30 (code, unattended): T012: salvage, oxygen clock, tiers with out-of-sight spawns and section lights, prize alarm, airlock hold and LEAVE, real HUD readouts, run log fields, on the new `shift_deck`.
-Three stalkers 6.82 / 9.87 ms with a QA run alive alongside (earlier runs 6.5 / 9.4); re-measure on a quiet Mac. Nobody has played it.
+2026-10-31 (lead): merged T012 (315/315 reproduced) and Q001 (health green); queued T013. Lead built scripted props in Blender (`tools/blender/props.py`).
+2026-10-31 (code, unattended): T012: `src/salvage`, `src/shift`, `scenes/shift/shift_deck.tscn` (main scene): carry classes, 8:00 oxygen, tiers at 60%/30%, out-of-sight spawns, prize alarm, airlock hold and LEAVE, run log shift fields.

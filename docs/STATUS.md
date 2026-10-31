@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T019 merged, waiting on John's gates (T017 sound: his ear). A013 room graphics merged, waiting on his copy approval. **Next:** John plays a shift (black box past tier 2, AA pick, listen, solo feel, the dressed corridors). Code lane: T020 gun feel, then T021 polish. Art: A014 second derelict concept. QA: Q003 once T021 merges.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T019 merged, waiting on John's gates (T017 sound: his ear). A013 room graphics merged, waiting on his copy approval. T020 (`auto/t020-mac`) and T021 (`auto/t021-mac`) await merge; T021 was built without T020, merge notes in `auto-T021`. **Next:** the lead merges T020, then T021. John plays a shift (black box past tier 2, AA pick, listen, solo feel, the dressed corridors). Art: A014 second derelict concept. QA: Q003 once T021 merges.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T021 look (`docs/screens/T021/sheet.png`): the wall tops now always show their paint (a z-fight used to hide it), so there's more yellow up there; beds carry a hazard stripe on their long rims. Enough to read the overturned bed with your light off? Calls in `auto-T021`.
 - T019 look (`docs/screens/T019/sheet.png`, then walk the junction and the side corridor): is it realistic enough? North-facing walls gain the most; the long junction's side walls mostly show their tops from the steep camera. Lever if the junction stays flat: floor-level pieces and more light there, not more wall pieces. Calls in `auto-T019`.
 - T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
 - T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
@@ -62,12 +63,12 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
 - T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
 - T015: a collider for the drone; cutters and drones reacting to stalkers; the T014 session bots rerun with CUSTODIAN.
-- T018: lock to cover through the `LOCK` command (`src/cover`, `src/pirates`); E through commands on the older dev decks; `src/pirates` randomness on the session's seed.
+- T018: E through commands on the older dev decks; `src/pirates` randomness on the session's seed.
+- T021: a `LockDriver` per player (the pirate deck has the local player's only); volumetric fog leaves 1–2 grey levels of frame-to-frame difference on a still camera.
 - T018: per-stalker targets (the pack hunts one player at a time, and the cover-shield lines follow it); a death bill for a player left behind; spectating when you're down with the crew alive; a second input device in the two-player scene.
 - T019: `hanging_cables` spark flicker. T008's "flicker" was a bug fix, not an effect, and T012's flickers whole sections from `src/shift`; the tip glows steadily for now.
 - T019: door surrounds on doors' room faces; a generated `floor_grate` rule that exempts flush grates from route keep-outs.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T019 (511/511 reproduced) and A013. Earlier today: T016-T018, Q002, prop library, VFX textures, gun-feel spec, sound shortlist; queued T021, A013, A014.
-2026-10-31 (code, unattended): T019 corridor dressing from the hallway set (63 pieces on the shift deck, 60 on pirate), fixtures for every corridor light, intrusion and route tests, bots identical; +0.28 ms shift deck. Spark flicker parked; `conduit_tray` unused (too deep).
+2026-10-31 (code, unattended): T021, 518/518, on `main` without T020 (trial merge with it: 566/566, resolve `pirate_squad.gd` to T020's side). Wall-top band was a kit z-fight since T010: fixed. Bed hazard stripe, pirate shots through `Audio`, lock through `LOCK` and `LOCK_CONTROLS`. Not played or heard.

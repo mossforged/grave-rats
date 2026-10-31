@@ -86,7 +86,7 @@ def read_frames(raw):
             with open(os.path.join(raw, "frame", f"{name}_{w}", "frametime.json")) as f:
                 d = json.load(f)
             row.update({k: d.get(k) for k in ("frame_ms_avg", "frame_ms_p95", "frame_ms_p99", "frame_ms_max",
-                                              "frames", "resolution", "msaa_3d", "adapter", "rendering_driver")})
+                                              "frames", "resolution", "screen_scale", "msaa_3d", "adapter", "rendering_driver")})
         except (OSError, ValueError):
             row["missing"] = True
         windows.append(row)
@@ -98,6 +98,7 @@ def read_frames(raw):
                 "avg": round(sum(w["frame_ms_avg"] for w in good) / len(good), 3),
                 "p95": round(sum(w["frame_ms_p95"] for w in good) / len(good), 3),
                 "resolution": good[0]["resolution"],
+                "screen_scale": good[0].get("screen_scale"),
             }
     return {"windows": windows, "summary": summary}
 
@@ -467,7 +468,8 @@ def render(r, th):
     out += ["", "Repro: clone main, `godot --headless --path . --import`, then `godot --headless --path . -s tests/run_tests.gd` (logs: `docs/qa/logs-" + r["date"] + "/tests_*.log`)."]
 
     ft = r["frame_time"]
-    out += ["", "## Frame time", "", "Windowed on the real GPU, vsync off, project default quality on main; the game's capture readout (`src/debug/capture.gd`). During a capture each deck plays its `_demo_step` loop: the operator walks, aims and fires among live enemies, so the windows are a scripted fight, not an idle room. `shift_deck` runs with no session, three stalkers hunting and CUSTODIAN awake. The enemies aren't seeded, so no two windows are the same frames. Stills are whatever frame the window ended on; a red one is the hit flash.", ""]
+    display = f"Display: screen scale {sorted({w.get('screen_scale') for w in ft['windows'] if not w.get('missing')}, key=str)}, remote desktop host {m.get('remote_desktop', '?')}, window {'borderless (a titled one fell short of 1080)' if m.get('borderless') else 'titled'}."
+    out += ["", "## Frame time", "", "Windowed on the real GPU, vsync off, project default quality on main; the game's capture readout (`src/debug/capture.gd`). During a capture each deck plays its `_demo_step` loop: the operator walks, aims and fires among live enemies, so the windows are a scripted fight, not an idle room. `shift_deck` runs with no session, three stalkers hunting and CUSTODIAN awake. The enemies aren't seeded, so no two windows are the same frames. Stills are whatever frame the window ended on; a red one is the hit flash.", "", display, ""]
     out += ["| Scene | Window | Resolution | MSAA | Frames | Avg ms | p95 ms | p99 ms | Load before (1/5/15 min) | Load after |", "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for w in ft["windows"]:
         if w.get("missing"):

@@ -83,6 +83,7 @@ meta godot "$("$GODOT" --version 2>/dev/null | tail -1)"
 meta chip "$(sysctl -n machdep.cpu.brand_string)"
 meta macos "$(sw_vers -productVersion)"
 meta thermal_start "$(pmset -g therm 2>/dev/null | tr '\n' ' ')"
+meta remote_desktop "$(pgrep -q remoting_me2me && echo running || echo none)"
 
 wait_for_code_lane "the whole run"
 
@@ -123,6 +124,14 @@ mkdir -p "$RAW/frame"
 for SCENE in $FRAME_SCENES; do
   say "warming $SCENE"
   capture "$SCENE" "$WORK/warm" 5 "$RAW/frame/warm_$(basename "$SCENE" .tscn).log"
+  # A screen of 1080 points (a remote desktop session sets one) leaves a titled window short of 1080 pixels. Borderless
+  # fits, through an override in the clone only, for the windows and flicker alike. Otherwise the numbers aren't comparable.
+  if [ ! -f "$CLONE/override.cfg" ] && ! grep -q '"resolution": "1920x1080"' "$WORK/warm/frametime.json" 2>/dev/null; then
+    printf '[display]\n\nwindow/size/borderless=true\n' > "$CLONE/override.cfg"
+    meta borderless "yes"
+    say "titled window fell short of 1920x1080; using a borderless window"
+    capture "$SCENE" "$WORK/warm" 5 "$RAW/frame/warm_$(basename "$SCENE" .tscn).log"
+  fi
 done
 sleep 20
 W=1

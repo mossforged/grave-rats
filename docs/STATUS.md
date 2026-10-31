@@ -17,6 +17,8 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- A009: approve the rival crew **Prior Claim** (white/navy, sponsor Lien Capital)? Its Meshy A-pose inputs are in `assets/source/meshy/input/rival-apose-*.png`.
+- A010: approve the company graphics and copy (Vesper Reach Freight, the dead owner; Remnant overlays; room plates; floor stencils; medbay). T010 uses them if merged before it starts; John can veto any line.
 - T009 play: does the hauler look and move right from the game camera? Known: the head bows forward when aiming, the left hand sits below the foregrip, feet slide on strafes, and firing has no clip yet. Next clips worth fetching from Mixamo: strafe run left/right, run backward, rifle firing, crouch backward/strafes, low-ready walk.
 - T009 play: does the hauler look and move right from the game camera? Nobody has seen it move. Watch strafing and walking backward (feet slide most, slow clips sped up), the bowed head when aiming, and turning on the spot. Clips to fetch: handoff.
 - T008 play: is the flicker gone? Does the suit-OS HUD read? Does the noise ring help? (Placeholder O2 and salvage counters.)

@@ -4,7 +4,7 @@ Branch `auto/t011-mac`. Play it: `godot --path .` (`pirate_deck`), or open `scen
 
 **My read of the gate: closer, not there.** Walls and floors moved the most: chips now sit on edges, the floors have a broken wet sheen with no splats, and the signs give the rooms a history. The biggest remaining gap is the bed, console, lockers and stalker, which are still boxes and out of scope. The paint-overs are also richer and busier in their floors and brighter mid-room than this. John decides. Nobody has played this: all checks are headless tests, stills and one flicker measurement.
 
-**One acceptance number depends on when it's measured.** The frame-time target was met in the first window (about 7.07 / 9.1 ms) and missed later when the Mac got busier (about 7.7 / 10.4 ms). The same later runs put T010 at about 8.2 / 10.5, so T011 is faster on average but its p95 barely moves. Details below.
+**One acceptance number depends on when it's measured.** The frame-time target was met in the first window (about 7.07 / 9.1 ms) and missed later when the Mac got busier (about 7.7 / 10.4 ms). Alternating runs in that later window put T010 at about 8.2 / 10.5, so T011 is faster on average but its p95 is about level. Details below.
 
 ## What changed
 1. **Decals (`tools/t011_decals.py`, `data/kit.json` `decals`, `signage`):** 34 cut-outs from A010's five sheets, with alpha. All A002-08b signs are gone. 43 placements on the main deck, on north, east and west walls and floors. Vesper Reach graphics are washed out and worn; Remnant stickers and tape are fresh and sit a layer above them, some tilted.
@@ -39,9 +39,9 @@ Target, pirate deck: **under 7.5 and under 9.5.** T010's handoff: 7.81 / 9.95.
 | Window | T010 | T011 pirate | T011 stalker | Target |
 | --- | --- | --- | --- | --- |
 | First (21:03-21:14), load average 3-4 | not run | **7.07 / 9.07, 7.07 / 9.18** | 6.23 / 8.39 | **met** |
-| Second (21:30-21:47), Mac busier | 8.13-8.26 / 10.46-10.52 | 7.54-7.89 / 10.15-10.61 | 7.28 / 10.72 | **missed** |
+| Second (21:30-21:54), Mac busier | 8.13-8.26 / 10.46-10.52 | 7.54-8.00 / 10.15-10.73 | 7.18-7.28 / 10.57-10.72 | **missed** |
 
-- **The slowdown isn't the code.** An export of the earlier commit that measured 7.07 gave 7.69 and 7.84 in the second window. I found no thermal warning and no single culprit; WindowServer, Camera Hub and the Claude app were the top processes. On average T011 beat T010 by about 0.48 ms there, but p95 only by about 0.1.
+- **The slowdown isn't the code.** An export of the earlier commit that measured 7.07 gave 7.69 and 7.84 in the second window. I found no thermal warning and no single culprit; WindowServer, Camera Hub and the Claude app were the top processes. In alternating runs there T011 beat T010 by 0.14 to 0.6 ms on average (about 0.4), and p95 was about level.
 - **The first-window figures predate one cleanup:** I removed room culling after them. With culling already disabled it measured 7.09 / 9.19, the same within noise, but the final code itself was only measured in the second window.
 - **What would settle it:** alternate T010 and T011 on a quiet Mac, with `CAPTURE_ONLY=none tools/capture.sh`.
 
@@ -67,7 +67,7 @@ Target, pirate deck: **under 7.5 and under 9.5.** T010's handoff: 7.81 / 9.95.
 
 **Tried and dropped:**
 - Turning off lamps in rooms nobody has seen: no gain (7.07 against 7.09), so I took the code out. T010's per-room light layers stay.
-- Pirate flashlight shadows off: no gain in a direct comparison (7.76 against 7.67-7.73), so they stay on.
+- Pirate flashlight shadows off: 0.18 in one combined run, but no gain in a direct comparison (7.76 against 7.67-7.73), so they stay on.
 - Fewer practicals and a smaller SSAO radius: about 0.1 each, within noise, and not worth the look.
 
 ### Flicker (`tools/t008_flicker.gd`, 60 frames, twinkle % of screen)

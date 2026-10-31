@@ -1,0 +1,25 @@
+{
+ "name": "stalker",
+ "kind": "multi-image-to-3d",
+ "images": [
+  "assets/source/meshy/input/stalker-front.png",
+  "assets/source/meshy/input/stalker-side.png",
+  "assets/source/meshy/input/stalker-34.png",
+  "assets/source/meshy/input/stalker-back.png"
+ ],
+ "out_dir": "assets/source/meshy/stalker",
+ "estimate_credits": 30,
+ "params": {
+  "ai_model": "latest",
+  "should_texture": true,
+  "enable_pbr": true,
+  "texture_resolution": "2k",
+  "texture_prompt": "emaciated quadruped alien stalker, bony grey-brown dorsal plates and spines, dry leathery hide, paired pale yellow-green translucent throat sacs, dark curved claws, grime",
+  "should_remesh": true,
+  "topology": "triangle",
+  "target_polycount": 20000,
+  "target_formats": ["glb"],
+  "auto_size": true,
+  "origin_at": "bottom"
+ }
+}

@@ -1,0 +1,43 @@
+== cautious: 12 sessions, 72 shifts
+quotas met 12 of 24 (50%); mean surplus when met 424
+  quota 1 (2400 CR): met 10 of 12; mean surplus 491; mean shortfall on a miss 392
+  quota 2 (3600 CR): met 2 of 10; mean surplus 87; mean shortfall on a miss 703
+  quota 3 (5400 CR): met 0 of 2; mean surplus 0; mean shortfall on a miss 3316
+sessions reaching the cap (not fired): 0 of 12; quotas met per session, mean 1.0
+deaths 3 of 72 shifts (4%)
+deaths by {'puddle': 1, 'lunge': 2}
+net per shift, deaths and all: 869
+prize taken in 0 of 72 shifts
+  survivors' gross      mean    1268  median    1330  min     624  max    1781
+  survivors' deductions mean     361  median     381  min     253  max     508
+  survivors' net        mean     907  median     967  min     371  max    1386
+  survivors' rounds     mean      17  median      18  min       7  max      36
+  survivors' cycles     mean       4  median       4  min       3  max       5
+  survivors' time_s     mean     203  median     202  min     196  max     209
+  survivors' items      mean      14  median      14  min       8  max      18
+  mean charge per surviving shift: {'suit_rental': 80, 'ammunition': 67, 'oxygen': 80, 'airlock_cycling': 62, 'morale': 20, 'corrosive_contact': 23, 'floor_residue': 22, 'impact_seal': 7}
+  death bill mean 2043, max 2073
+  negative payslips: 0 of 69
+
+== greedy: 12 sessions, 132 shifts
+quotas met 42 of 44 (95%); mean surplus when met 7066
+  quota 1 (2400 CR): met 11 of 12; mean surplus 4113; mean shortfall on a miss 2400
+  quota 2 (3600 CR): met 11 of 11; mean surplus 8445; mean shortfall on a miss 0
+  quota 3 (5400 CR): met 10 of 11; mean surplus 8788; mean shortfall on a miss 210
+  quota 4 (8100 CR): met 10 of 10; mean surplus 7077; mean shortfall on a miss 0
+sessions reaching the cap (not fired): 10 of 12; quotas met per session, mean 3.5
+deaths 60 of 132 shifts (45%)
+deaths by {'spit': 20, 'puddle': 35, 'lunge': 5}
+net per shift, deaths and all: 2098
+prize taken in 90 of 132 shifts
+  survivors' gross      mean    4438  median    5042  min    1053  max    6627
+  survivors' deductions mean     592  median     640  min     308  max     771
+  survivors' net        mean    3847  median    4366  min     532  max    5939
+  survivors' rounds     mean      30  median      33  min       7  max      52
+  survivors' cycles     mean       8  median       9  min       3  max      11
+  survivors' time_s     mean     368  median     373  min     332  max     455
+  survivors' items      mean      20  median      20  min       8  max      26
+  mean charge per surviving shift: {'suit_rental': 80, 'ammunition': 121, 'oxygen': 134, 'airlock_cycling': 121, 'morale': 20, 'corrosive_contact': 60, 'floor_residue': 43, 'covered_review': 1, 'impact_seal': 12}
+  death bill mean 1931, max 2637
+  negative payslips: 0 of 72
+

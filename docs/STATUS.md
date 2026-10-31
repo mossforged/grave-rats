@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 merged, waiting on John's gate. T012 (the run loop, part 1) done on `auto/t012-mac`, waiting on review and John's gate. T013 (scripted console, cabinet and lockers in the slots) done on `auto/t013-mac`, waiting on review. **Next:** John plays T012 and T013; then T014 (quota, end screens).
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011, T012 and T013 merged, waiting on John's gates. T014 (quota over three shifts, company paperwork) done on `auto/t014-mac`, waiting on review and John's gate. **Next:** John plays T014 (it includes T012's loop); then T015 (CUSTODIAN).
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -12,13 +12,13 @@
 Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions), ship generation, contracts and meta, the threat roster.
 
 ## What builders need now
-- Queue order (lead): T013 awaiting review; T012 merged, awaiting John's gate; T011 awaiting John's gate.
-- Code: T013 on `auto/t013-mac`: 321/321, see `docs/handoffs/auto-T013.md`. The main scene is `scenes/shift/shift_deck.tscn`.
+- Queue order (lead): T014 awaiting review; T012 and T013 merged, T012 awaiting John's gate; T011 awaiting John's gate.
+- Code: T014 on `auto/t014-mac`: 360/360, see `docs/handoffs/auto-T014.md`. The main scene is `scenes/shift/shift_deck.tscn`, and it now opens on the briefing.
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
-- T013 look: the locker bank reads as a dark slab from the game camera (its top is `steel`, and the steep camera rarely shows its front). Keep it, or have the lead make the top a lighter material? The bed is now the plainest thing in the medbay.
-- T013 (lead): the pirate deck's console is 1.6 m long and there is no 1.6 file. It shows the 1.4 centred, with 10 cm of invisible collision at each end. Add `console_1600`, or leave it?
+- T014 play (`godot --path .`, sheet `docs/screens/T014/sheet.png`): does the quota make you take risks? Do the payslip and death bill land? New copy for your approval is in the handoff (termination notice, decline lines, vessels).
+- T014 balance: the cautious bot meets quota 1 (10 of 12), then mostly misses (2 of 10), as asked. Greedy meets 42 of 44 while dying in 45% of shifts, so dying barely threatens it. Levers: `quota.growth`, the prize's value, charging deaths to the quota. Dying also costs less than leaving empty-handed; keep it?
 - T012 play (`scenes/shift/shift_deck.tscn`, now the main scene): does "one more room?" happen? Is grabbing the black box scary? Tier stalkers can reach a still player in about 2 s (`spawning.min_player_m`). Are failed lights dark enough? Bots: greedy banks about 1.8× cautious but survives 50% against 100%; cautious may be too safe until the quota (T014).
 - T012 play (`godot --path .`, sheet `docs/screens/T012/sheet.png`): does "one more room?" happen? Is grabbing the black box scary? Bots: greedy banks 2,380 on average and survives 6 of 12; cautious banks 1,309 and survives 12 of 12.
 - T012 calls: rings hidden in unseen rooms until seen, a tier stalker can spawn out of sight 7 m or more away and hit within about 2 s, the airlock is a marked zone and not a room, lights failing is looks only. Handoff has each lever.
@@ -40,7 +40,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 ## Parked
 - Lock-to-cover, Gears style (John): brace against cover and shoot over it. Waits for a shooting enemy.
 - Visible aim cone may go in the final game (John); keep for testing.
-- Competitive modes; procedural ship generation; contracts and meta-progression; the in-game "shift" framing (runs as shifts, timecard end screen).
+- Competitive modes; procedural ship generation; contracts and meta-progression.
 - T002 capture: auto-walk during the frame-time window so camera motion and cut-away are measured.
 - Physics interpolation: the operator steps at 60 Hz, so a faster display may show slight camera jitter.
 - Legacy clips: a real walk (the run clips stand in), a crouch walk with real steps, turn-in-place feet. Foot slide numbers in auto-T003.
@@ -54,7 +54,9 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - `stalker_deck` stagger doesn't call `operator.play_hit` (`src/enemies` was outside T009); its death does play the clip.
 - Door state lights tell states apart by colour alone; a pattern per state would help colourblind players.
 - T012: a carry pose; drawn vents and closets at spawn points; the airlock as a real room; stale `p_size` engine errors from headless HUD text.
+- T014: the HUD help has both "Backspace abandon shift" and the shared "Backspace respawn"; the death screen says "Backspace: next shift" where it now opens the bill. Text in `data/hud.json`, `data/health.json`.
+- T014: the forms render over a running 3D view; hiding the camera behind an opaque form would save the GPU.
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (code, unattended): T013: lead's console (3 widths), cabinet and locker bank in the `src/kit` slots on kit materials, UVs and grime, turned to face the room; bed still the box. 321/321, snapshot unchanged, frame cost 0.03 to 0.07 ms average.
+2026-10-31 (code, unattended): T014: quota over 3 shifts, briefing, payslip, death bill and termination notice as real forms from data and the run log, quota on the HUD. 360/360, frame time 6.62 / 9.54 ms. Bots: cautious meets quota 1, then mostly misses; greedy dies in 45% of shifts and still meets nearly all.

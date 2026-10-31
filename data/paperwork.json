@@ -1,0 +1,2106 @@
+{
+ "screen": {
+  "layer": 60,
+  "sheet": [
+   1920,
+   1080
+  ],
+  "font_regular": "res://assets/game/fonts/Barlow-Condensed-500.ttf",
+  "font_bold": "res://assets/game/fonts/Barlow-Condensed-700.ttf",
+  "input_lock_s": 0.4,
+  "clip_px": 16.0,
+  "rule_px": 1.0,
+  "frame_px": 2.0,
+  "button_font_px": 40,
+  "row_slack_px": 2.0,
+  "stripe": {
+   "pitch_px": 42.0,
+   "gap_px": 15.0,
+   "lean_px": 10.0
+  },
+  "colors": {
+   "bg": "12191c",
+   "ink": "171b1c",
+   "paper": "eee9d9",
+   "muted": "a5b0b0",
+   "line": "b3b1a6",
+   "yellow": "f5cc24",
+   "yellow_hot": "ffe05a",
+   "red": "aa302d",
+   "track": "a5b0b040"
+  }
+ },
+ "format": {
+  "group_digits": 3,
+  "separator": ",",
+  "minus": "-",
+  "plus": "+",
+  "minute_s": 60
+ },
+ "words": {
+  "not_recorded": "Not recorded",
+  "no_hazards": "No hazards confirmed.",
+  "hazard_row": "{description} / {location}",
+  "hazard_rest": "Remaining compartments / unverified",
+  "ref_contract": "CONTRACT / {id}",
+  "ref_shift": "SHIFT / {id} / {name}",
+  "ref_invoice": "INVOICE / {id}-D / {name}",
+  "ref_notice": "NOTICE / {id}-T / {name}",
+  "credits_head": "CREDITS RECOVERED",
+  "amount_head": "AMOUNT / CR",
+  "gross_head": "GROSS RECOVERED",
+  "deductions_head": "DEDUCTIONS",
+  "no_salvage": "No recoveries recorded.",
+  "credit_one": "1 × {value}",
+  "credit_many": "{qty} × assessed",
+  "charge_unit": "{qty} {unit} × {rate}",
+  "net_positive": "NET PAY",
+  "net_negative": "NET PAY / BALANCE DUE",
+  "status_returned": "RETURN FILED",
+  "status_abandoned": "RETURN NOT FILED",
+  "quota_met": "QUOTA MET. {surplus} CR CARRIED OVER. NEXT QUOTA {next} CR.",
+  "quota_missed": "QUOTA MISSED BY {shortfall} CR.",
+  "final_positive": "FINAL BALANCE",
+  "final_negative": "FINAL BALANCE DUE"
+ },
+ "space_words": {
+  "junction": "junction",
+  "medbay": "medbay",
+  "cargo": "cargo",
+  "side_corridor": "side corridor",
+  "ship": "ship-wide",
+  "": "doorway"
+ },
+ "killer_keys": [
+  "stalker",
+  "pirate",
+  "suit"
+ ],
+ "salvage_labels": {
+  "data_chips": "Data chips",
+  "med_pack": "Sealed medical pack",
+  "fuse": "Fuse",
+  "relay": "Relay assembly",
+  "canister": "Canister",
+  "busbar": "Copper busbar",
+  "cargo_pod": "Cargo pod",
+  "engine_part": "Engine part",
+  "black_box": "Black box"
+ },
+ "contract": {
+  "id_format": "RAR-%03d",
+  "id_base": 40,
+  "status": "probably abandoned",
+  "estimate_spread": 0.2,
+  "estimate_round_to": 100,
+  "hazard_rows": 3,
+  "crew": [
+   {
+    "name": "ROOK",
+    "role": "Recovery"
+   }
+  ],
+  "next_of_kin": "VALE",
+  "vessels": [
+   {
+    "id": "MERIDIAN DUE",
+    "text": "MERIDIAN DUE",
+    "cooldown": 3
+   },
+   {
+    "id": "CASSIA LINE",
+    "text": "CASSIA LINE",
+    "cooldown": 3
+   },
+   {
+    "id": "SECOND TENDER",
+    "text": "SECOND TENDER",
+    "cooldown": 3
+   },
+   {
+    "id": "ORIN'S PATIENCE",
+    "text": "ORIN'S PATIENCE",
+    "cooldown": 3
+   },
+   {
+    "id": "HALF MEASURE",
+    "text": "HALF MEASURE",
+    "cooldown": 3
+   },
+   {
+    "id": "VESPER COURTESY",
+    "text": "VESPER COURTESY",
+    "cooldown": 3
+   },
+   {
+    "id": "LOW ASSURANCE",
+    "text": "LOW ASSURANCE",
+    "cooldown": 3
+   },
+   {
+    "id": "THE GOOD STANDING",
+    "text": "THE GOOD STANDING",
+    "cooldown": 3
+   }
+  ]
+ },
+ "hazards": [
+  {
+   "kind": "stalker",
+   "text": "Corrosive organism sighted"
+  },
+  {
+   "kind": "alarm",
+   "text": "Asset tamper alarm"
+  },
+  {
+   "kind": "spit",
+   "text": "Corrosive discharge recorded"
+  },
+  {
+   "kind": "lunge",
+   "text": "Close-contact incident"
+  },
+  {
+   "kind": "puddle",
+   "text": "Corrosive residue on deck"
+  },
+  {
+   "kind": "rifle",
+   "text": "Armed rival crew reported"
+  },
+  {
+   "kind": "power_loss",
+   "text": "Section power failure"
+  },
+  {
+   "kind": "vents",
+   "text": "Movement in the vents"
+  }
+ ],
+ "decline_lines": [
+  {
+   "id": "decline_1",
+   "text": "Declining is a shift. It counts. Confirm?",
+   "cooldown": 1
+  },
+  {
+   "id": "decline_2",
+   "text": "A declined contract still occupies your schedule. Confirm?",
+   "cooldown": 1
+  },
+  {
+   "id": "decline_3",
+   "text": "The quota has not declined. Confirm?",
+   "cooldown": 1
+  }
+ ],
+ "note_cooldown": 1,
+ "tariff": [
+  {
+   "id": "suit_rental",
+   "label": "Suit rental",
+   "note": "One shift. No ownership implied.",
+   "qty": "shift",
+   "unit": "shift",
+   "units": "shifts",
+   "enabled": true,
+   "rate": 80
+  },
+  {
+   "id": "ammunition",
+   "label": "Ammunition / company-store prices",
+   "note": "Every discharge is a purchase.",
+   "qty": "rounds",
+   "unit": "round",
+   "units": "rounds",
+   "enabled": true,
+   "rate": 4
+  },
+  {
+   "id": "oxygen",
+   "label": "Oxygen / billed per minute",
+   "note": "Partial minutes remain breathable.",
+   "qty": "oxygen_minutes",
+   "unit": "min",
+   "units": "min",
+   "enabled": true,
+   "rate": 20
+  },
+  {
+   "id": "airlock_cycling",
+   "label": "Airlock cycling",
+   "note": "Return journeys are separate journeys.",
+   "qty": "cycles",
+   "unit": "cycle",
+   "units": "cycles",
+   "enabled": true,
+   "rate": 15
+  },
+  {
+   "id": "morale",
+   "label": "Morale",
+   "note": "Participation confirms satisfaction.",
+   "qty": "shift",
+   "unit": "shift",
+   "units": "shifts",
+   "enabled": true,
+   "rate": 20
+  },
+  {
+   "id": "missed_rounds",
+   "label": "Missed-round disposal",
+   "note": "Unrecovered rounds remain sold.",
+   "qty": "rounds_missed",
+   "unit": "round",
+   "units": "rounds",
+   "enabled": false,
+   "rate": 0
+  },
+  {
+   "id": "impact_reconciliation",
+   "label": "Impact reconciliation",
+   "note": "Successful delivery confirmed.",
+   "qty": "rounds_hit",
+   "unit": "round",
+   "units": "rounds",
+   "enabled": false,
+   "rate": 0
+  },
+  {
+   "id": "obstruction",
+   "label": "Obstruction damage assessment",
+   "note": "Cover is company-adjacent property.",
+   "qty": "your_shots_blocked",
+   "unit": "round",
+   "units": "rounds",
+   "enabled": false,
+   "rate": 0
+  },
+  {
+   "id": "ballistic_shelter",
+   "label": "Ballistic shelter service",
+   "note": "Protection has been itemised.",
+   "qty": "shots_blocked_for_you",
+   "unit": "round",
+   "units": "rounds",
+   "enabled": true,
+   "rate": 10
+  },
+  {
+   "id": "corrosive_interception",
+   "label": "Corrosive interception",
+   "note": "Exposure avoided. Service supplied.",
+   "qty": "times_protected",
+   "unit": "glob",
+   "units": "globs",
+   "enabled": true,
+   "rate": 15
+  },
+  {
+   "id": "cover_occupancy",
+   "label": "Cover occupancy",
+   "note": "Shelter is billed while occupied.",
+   "qty": "locked_minutes",
+   "unit": "min",
+   "units": "min",
+   "enabled": true,
+   "rate": 15
+  },
+  {
+   "id": "open_review",
+   "label": "Open-position incident review",
+   "note": "The review does not reverse the incident.",
+   "qty": "hits_in_open",
+   "unit": "hit",
+   "units": "hits",
+   "enabled": false,
+   "rate": 0
+  },
+  {
+   "id": "covered_review",
+   "label": "Covered-position incident review",
+   "note": "Cover does not imply coverage.",
+   "qty": "hits_in_cover",
+   "unit": "hit",
+   "units": "hits",
+   "enabled": true,
+   "rate": 20
+  },
+  {
+   "id": "corrosive_contact",
+   "label": "Corrosive contact treatment",
+   "note": "Contact has been established.",
+   "qty": "spit_damage",
+   "unit": "pt",
+   "units": "pts",
+   "enabled": true,
+   "rate": 2
+  },
+  {
+   "id": "floor_residue",
+   "label": "Floor-residue decontamination",
+   "note": "Residue transfers with the contractor.",
+   "qty": "puddle_damage",
+   "unit": "pt",
+   "units": "pts",
+   "enabled": true,
+   "rate": 2
+  },
+  {
+   "id": "impact_seal",
+   "label": "Impact seal inspection",
+   "note": "Suit integrity requires verification.",
+   "qty": "lunge_damage",
+   "unit": "pt",
+   "units": "pts",
+   "enabled": true,
+   "rate": 2
+  },
+  {
+   "id": "ballistic_seal",
+   "label": "Ballistic seal inspection",
+   "note": "Third-party damage. First-party invoice.",
+   "qty": "rifle_damage",
+   "unit": "pt",
+   "units": "pts",
+   "enabled": true,
+   "rate": 2
+  },
+  {
+   "id": "early_closure",
+   "label": "Early closure administration",
+   "note": "Departure does not cancel the account.",
+   "qty": "ended_quit",
+   "unit": "closure",
+   "units": "closures",
+   "enabled": false,
+   "rate": 0
+  },
+  {
+   "id": "replacement_shift",
+   "label": "Replacement-shift administration",
+   "note": "A new start is a separate service.",
+   "qty": "ended_respawn",
+   "unit": "shift",
+   "units": "shifts",
+   "enabled": true,
+   "rate": 150
+  },
+  {
+   "id": "salvage_handling",
+   "label": "Salvage handling",
+   "note": "Recovery includes a handling charge.",
+   "qty": "items",
+   "unit": "item",
+   "units": "items",
+   "enabled": false,
+   "rate": 0
+  }
+ ],
+ "causes": {
+  "primary": [
+   {
+    "id": "cause_unavailable",
+    "text": "Cause unavailable",
+    "line": "Evidence unavailable. Balance available.",
+    "requires": [
+     "no_killer"
+    ]
+   },
+   {
+    "id": "spit",
+    "text": "Corrosive discharge",
+    "line": "Contact recorded. Liability retained.",
+    "requires": [
+     "method_spit"
+    ]
+   },
+   {
+    "id": "puddle",
+    "text": "Residual corrosive exposure",
+    "line": "Exposure continued after delivery.",
+    "requires": [
+     "method_puddle"
+    ]
+   },
+   {
+    "id": "lunge",
+    "text": "Close-contact impact",
+    "line": "Personal space is not insured.",
+    "requires": [
+     "method_lunge"
+    ]
+   },
+   {
+    "id": "rifle",
+    "text": "Ballistic injury",
+    "line": "Third-party fire. Contractor account.",
+    "requires": [
+     "method_rifle"
+    ]
+   },
+   {
+    "id": "oxygen",
+    "text": "Oxygen exhausted",
+    "line": "Supply ended. Billing did not.",
+    "requires": [
+     "method_oxygen"
+    ]
+   },
+   {
+    "id": "unclassified",
+    "text": "Unclassified fatal incident",
+    "line": "Classification pending. Processing complete."
+   }
+  ],
+  "party": [
+   {
+    "id": "stalker",
+    "text": "Stalker involvement",
+    "line": "Organism liability could not be established.",
+    "requires": [
+     "by_stalker"
+    ]
+   },
+   {
+    "id": "pirate",
+    "text": "Rival-contractor involvement",
+    "line": "Competing claim acknowledged.",
+    "requires": [
+     "by_pirate"
+    ]
+   }
+  ],
+  "context": [
+   {
+    "id": "many",
+    "text": "Multiple exposure classes",
+    "line": "Separate incidents. One account.",
+    "requires": [
+     "many_classes"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "cover",
+    "text": "Cover-related injury history",
+    "line": "Cover was present. Coverage was not.",
+    "requires": [
+     "hits_in_cover"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "open",
+    "text": "Open-position injury history",
+    "line": "Exposure review added to file.",
+    "requires": [
+     "hits_in_open"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "residue",
+    "text": "Corrosive residue on file",
+    "line": "Decontamination remains chargeable.",
+    "requires": [
+     "puddle_on_file"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "contact",
+    "text": "Close-contact damage on file",
+    "line": "Seal inspection remains chargeable.",
+    "requires": [
+     "lunge_on_file"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "ballistic",
+    "text": "Ballistic damage on file",
+    "line": "Inspection excludes projectile recovery.",
+    "requires": [
+     "rifle_on_file"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "shelter",
+    "text": "Shelter service on file",
+    "line": "Prior protection does not void this invoice.",
+    "requires": [
+     "sheltered"
+    ],
+    "cooldown": 1
+   }
+  ]
+ },
+ "death": {
+  "processing_label": "Posthumous processing",
+  "processing_cr": 180,
+  "suit_label": "Unreturned equipment / suit",
+  "suit_cr": 1240,
+  "carried_label": "Unreturned equipment / carried salvage",
+  "cleanup_label": "Biohazard cleanup (you)",
+  "cleanup_cr": 420
+ },
+ "termination": {
+  "deductions": [
+   {
+    "label": "Contract closure administration",
+    "rate": 180
+   },
+   {
+    "label": "Suit recall",
+    "rate": 240
+   },
+   {
+    "label": "Exit interview (waived)",
+    "rate": 90
+   }
+  ],
+  "lines": [
+   {
+    "id": "let_go",
+    "text": "The crew has been let go. The vessel has not been told.",
+    "cooldown": 1
+   },
+   {
+    "id": "next_liability",
+    "text": "Remnant wishes you every success in your next liability.",
+    "cooldown": 1
+   },
+   {
+    "id": "reference",
+    "text": "References are available at company-store prices.",
+    "cooldown": 1
+   },
+   {
+    "id": "prior",
+    "text": "Prior quotas met do not constitute a pattern.",
+    "requires": [
+     "cycles_met"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "never",
+    "text": "No quota was met during this engagement. This has been noted as consistency.",
+    "requires": [
+     "no_cycles"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "kin",
+    "text": "Next of kin have been notified of their balance.",
+    "requires": [
+     "deaths"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "declined",
+    "text": "Declined contracts have been counted as attendance.",
+    "requires": [
+     "declined"
+    ],
+    "cooldown": 1
+   },
+   {
+    "id": "debt",
+    "text": "Negative earnings have been recorded as earnings.",
+    "requires": [
+     "in_debt"
+    ],
+    "cooldown": 1
+   }
+  ]
+ },
+ "base": [
+  {
+   "text": "REMNANT",
+   "at": [
+    56,
+    24
+   ],
+   "size": 50,
+   "color": "paper",
+   "font": "bold"
+  },
+  {
+   "text": "ASSET RECOVERY",
+   "at": [
+    238,
+    36
+   ],
+   "size": 26,
+   "color": "paper",
+   "font": "bold"
+  },
+  {
+   "text": "EVERYTHING HAS A SECOND OWNER.",
+   "at": [
+    56,
+    84
+   ],
+   "size": 20,
+   "color": "muted",
+   "font": "regular"
+  },
+  {
+   "text": "{ref}",
+   "at": [
+    1864,
+    44
+   ],
+   "size": 24,
+   "color": "paper",
+   "font": "regular",
+   "align": "right"
+  },
+  {
+   "stripe": [
+    56,
+    116,
+    1864,
+    126
+   ]
+  },
+  {
+   "text": "INDEPENDENT RECOVERY CONTRACTOR / REMNANT ACCOUNTS",
+   "at": [
+    56,
+    1034
+   ],
+   "size": 20,
+   "color": "muted",
+   "font": "regular"
+  }
+ ],
+ "screens": {
+  "briefing": [
+   {
+    "text": "RECOVERY AGREEMENT",
+    "at": [
+     56,
+     146
+    ],
+    "size": 76,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     56,
+     244,
+     1236,
+     896
+    ]
+   },
+   {
+    "panel": [
+     1260,
+     244,
+     1864,
+     896
+    ],
+    "color": "ink"
+   },
+   {
+    "text": "VESSEL",
+    "at": [
+     84,
+     264
+    ],
+    "size": 22,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "{vessel}",
+    "at": [
+     84,
+     290
+    ],
+    "size": 62,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "{status}",
+    "at": [
+     1208,
+     316
+    ],
+    "size": 32,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "rule": [
+     84,
+     373,
+     1208
+    ]
+   },
+   {
+    "text": "ESTIMATED SALVAGE VALUE",
+    "at": [
+     84,
+     396
+    ],
+    "size": 24,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "{estimate} CR",
+    "at": [
+     1208,
+     380
+    ],
+    "size": 50,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "rule": [
+     84,
+     453,
+     1208
+    ]
+   },
+   {
+    "text": "KNOWN HAZARDS / AS FOUND SO FAR",
+    "at": [
+     84,
+     470
+    ],
+    "size": 24,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "list": "hazards",
+    "top": 510,
+    "bottom": 670,
+    "styles": {
+     "row": {
+      "pitch": 40,
+      "cells": [
+       {
+        "text": "{n}",
+        "x": 84,
+        "size": 30,
+        "color": "ink"
+       },
+       {
+        "text": "{text}",
+        "x": 138,
+        "size": 30,
+        "color": "ink"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "rule": [
+     84,
+     676,
+     1208
+    ]
+   },
+   {
+    "text": "Contractor assumes liability for anything that is not abandoned.",
+    "at": [
+     84,
+     692
+    ],
+    "size": 29,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "Recovery estimates exclude recovery costs.",
+    "at": [
+     84,
+     740
+    ],
+    "size": 29,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "Recovery does not include rescue.",
+    "at": [
+     84,
+     788
+    ],
+    "size": 29,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "Acceptance confirms the clauses shown above.",
+    "at": [
+     84,
+     836
+    ],
+    "size": 29,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "ASSIGNED CREW",
+    "at": [
+     1292,
+     268
+    ],
+    "size": 32,
+    "color": "yellow",
+    "font": "bold"
+   },
+   {
+    "list": "crew",
+    "top": 320,
+    "bottom": 440,
+    "styles": {
+     "row": {
+      "pitch": 100,
+      "cells": [
+       {
+        "text": "{n}",
+        "x": 1292,
+        "size": 28,
+        "color": "yellow"
+       },
+       {
+        "text": "{name}",
+        "x": 1362,
+        "dy": -6,
+        "size": 42,
+        "color": "paper",
+        "font": "bold"
+       },
+       {
+        "text": "{role}",
+        "x": 1362,
+        "dy": 40,
+        "size": 26,
+        "color": "muted"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "text": "QUOTA DUE",
+    "at": [
+     1292,
+     464
+    ],
+    "size": 22,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{quota} CR",
+    "at": [
+     1832,
+     458
+    ],
+    "size": 36,
+    "color": "paper",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "BANKED SO FAR",
+    "at": [
+     1292,
+     510
+    ],
+    "size": 22,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{banked} CR",
+    "at": [
+     1832,
+     504
+    ],
+    "size": 36,
+    "color": "paper",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "bar": [
+     1292,
+     556,
+     540,
+     10
+    ],
+    "value": "quota_share"
+   },
+   {
+    "text": "SHIFTS LEFT",
+    "at": [
+     1292,
+     576
+    ],
+    "size": 22,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{shifts_left}",
+    "at": [
+     1832,
+     570
+    ],
+    "size": 36,
+    "color": "yellow",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "{quota_note}",
+    "at": [
+     1292,
+     624
+    ],
+    "size": 26,
+    "color": "yellow",
+    "font": "bold",
+    "wrap": 540
+   },
+   {
+    "text": "ENTRY CONFIRMS ACCEPTANCE.",
+    "at": [
+     1292,
+     742
+    ],
+    "size": 24,
+    "color": "paper",
+    "font": "bold",
+    "unless": "confirming"
+   },
+   {
+    "text": "Liability begins at the airlock.",
+    "at": [
+     1292,
+     780
+    ],
+    "size": 26,
+    "color": "muted",
+    "font": "regular",
+    "unless": "confirming"
+   },
+   {
+    "text": "{decline_line}",
+    "at": [
+     1292,
+     730
+    ],
+    "size": 28,
+    "color": "yellow",
+    "font": "bold",
+    "wrap": 540,
+    "if": "confirming"
+   },
+   {
+    "button": "accept",
+    "rect": [
+     56,
+     924,
+     1236,
+     1008
+    ],
+    "label": "ACCEPT  >",
+    "primary": true
+   },
+   {
+    "button": "decline",
+    "rect": [
+     1260,
+     924,
+     1564,
+     1008
+    ],
+    "label": "DECLINE",
+    "unless": "confirming"
+   },
+   {
+    "button": "confirm_decline",
+    "rect": [
+     1260,
+     924,
+     1564,
+     1008
+    ],
+    "label": "CONFIRM DECLINE",
+    "size": 30,
+    "if": "confirming"
+   }
+  ],
+  "payslip": [
+   {
+    "text": "SHIFT SETTLEMENT",
+    "at": [
+     56,
+     146
+    ],
+    "size": 76,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     56,
+     244,
+     1236,
+     1008
+    ]
+   },
+   {
+    "panel": [
+     1260,
+     244,
+     1864,
+     1008
+    ],
+    "color": "ink"
+   },
+   {
+    "list": "ledger",
+    "top": 258,
+    "bottom": 878,
+    "min_fit": 0.72,
+    "styles": {
+     "head": {
+      "pitch": 50,
+      "cells": [
+       {
+        "text": "{label}",
+        "x": 84,
+        "dy": 6,
+        "size": 32,
+        "color": "ink",
+        "font": "bold"
+       },
+       {
+        "text": "{amount}",
+        "x": 1208,
+        "dy": 14,
+        "size": 22,
+        "color": "ink",
+        "align": "right"
+       }
+      ]
+     },
+     "row": {
+      "pitch": 50,
+      "cells": [
+       {
+        "text": "{label}",
+        "x": 84,
+        "size": 30,
+        "color": "ink"
+       },
+       {
+        "text": "{unit}",
+        "x": 990,
+        "dy": 4,
+        "size": 25,
+        "color": "ink",
+        "align": "right"
+       },
+       {
+        "text": "{amount}",
+        "x": 1208,
+        "size": 30,
+        "color": "ink",
+        "font": "bold",
+        "align": "right"
+       }
+      ]
+     },
+     "total": {
+      "pitch": 56,
+      "cells": [
+       {
+        "text": "{label}",
+        "x": 84,
+        "dy": 6,
+        "size": 28,
+        "color": "ink",
+        "font": "bold"
+       },
+       {
+        "text": "{amount}",
+        "x": 1208,
+        "dy": 4,
+        "size": 32,
+        "color": "ink",
+        "font": "bold",
+        "align": "right"
+       }
+      ]
+     }
+    },
+    "more": {
+     "text": "MORE ROWS / SCROLL",
+     "at": [
+      640,
+      904
+     ],
+     "size": 20,
+     "color": "red",
+     "font": "bold",
+     "align": "right"
+    }
+   },
+   {
+    "rule": [
+     84,
+     884,
+     1208
+    ]
+   },
+   {
+    "text": "TOTAL DEDUCTIONS",
+    "at": [
+     84,
+     898
+    ],
+    "size": 28,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "{deductions_total}",
+    "at": [
+     1208,
+     892
+    ],
+    "size": 36,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "Time aboard {time_aboard} / Oxygen rounded up to whole minutes.",
+    "at": [
+     84,
+     952
+    ],
+    "size": 27,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "CONTRACTOR / {contractor}",
+    "at": [
+     1292,
+     268
+    ],
+    "size": 28,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "{status}",
+    "at": [
+     1292,
+     310
+    ],
+    "size": 24,
+    "color": "yellow",
+    "font": "regular"
+   },
+   {
+    "text": "{net_label}",
+    "at": [
+     1292,
+     356
+    ],
+    "size": 52,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "{net} CR",
+    "at": [
+     1292,
+     404
+    ],
+    "size": 112,
+    "color": "yellow",
+    "font": "bold"
+   },
+   {
+    "text": "{gross} earned.",
+    "at": [
+     1292,
+     544
+    ],
+    "size": 28,
+    "color": "paper",
+    "font": "regular"
+   },
+   {
+    "text": "{deductions_paid} recovered by Remnant.",
+    "at": [
+     1292,
+     580
+    ],
+    "size": 28,
+    "color": "paper",
+    "font": "regular"
+   },
+   {
+    "text": "{note}",
+    "at": [
+     1292,
+     622
+    ],
+    "size": 25,
+    "color": "muted",
+    "font": "regular",
+    "wrap": 540
+   },
+   {
+    "text": "QUOTA DUE",
+    "at": [
+     1292,
+     664
+    ],
+    "size": 22,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{quota} CR",
+    "at": [
+     1832,
+     658
+    ],
+    "size": 36,
+    "color": "paper",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "BANKED SO FAR",
+    "at": [
+     1292,
+     710
+    ],
+    "size": 22,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{banked} CR",
+    "at": [
+     1832,
+     704
+    ],
+    "size": 36,
+    "color": "paper",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "bar": [
+     1292,
+     756,
+     540,
+     10
+    ],
+    "value": "quota_share"
+   },
+   {
+    "text": "SHIFTS LEFT",
+    "at": [
+     1292,
+     776
+    ],
+    "size": 22,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{shifts_left}",
+    "at": [
+     1832,
+     770
+    ],
+    "size": 36,
+    "color": "yellow",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "{quota_note}",
+    "at": [
+     1292,
+     812
+    ],
+    "size": 24,
+    "color": "yellow",
+    "font": "bold",
+    "wrap": 540
+   },
+   {
+    "text": "Thank you for choosing independent recovery.",
+    "at": [
+     1292,
+     866
+    ],
+    "size": 25,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "button": "acknowledge",
+    "rect": [
+     1292,
+     904,
+     1832,
+     984
+    ],
+    "label": "ACKNOWLEDGE  >",
+    "primary": true
+   }
+  ],
+  "death_bill": [
+   {
+    "text": "ACCOUNT CONTINUES.",
+    "at": [
+     56,
+     146
+    ],
+    "size": 76,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     56,
+     244,
+     644,
+     1008
+    ],
+    "color": "ink"
+   },
+   {
+    "panel": [
+     668,
+     244,
+     1864,
+     1008
+    ]
+   },
+   {
+    "text": "RECOVERY STATUS",
+    "at": [
+     88,
+     262
+    ],
+    "size": 30,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     88,
+     304,
+     612,
+     372
+    ],
+    "color": "yellow"
+   },
+   {
+    "text": "NOT RETURNED",
+    "at": [
+     108,
+     312
+    ],
+    "size": 46,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "CAUSE OF DEATH / AS RECORDED",
+    "at": [
+     88,
+     386
+    ],
+    "size": 26,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "KILLER",
+    "at": [
+     88,
+     426
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{killer}",
+    "at": [
+     88,
+     446
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "METHOD",
+    "at": [
+     88,
+     498
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{method}",
+    "at": [
+     88,
+     518
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "LOCATION",
+    "at": [
+     88,
+     570
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{location}",
+    "at": [
+     88,
+     590
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "TIME ALIVE",
+    "at": [
+     88,
+     642
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{time_alive}",
+    "at": [
+     88,
+     662
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "rule": [
+     88,
+     720,
+     612
+    ]
+   },
+   {
+    "text": "{cause}",
+    "at": [
+     88,
+     732
+    ],
+    "size": 32,
+    "color": "yellow",
+    "font": "bold"
+   },
+   {
+    "text": "{cause_line}",
+    "at": [
+     88,
+     772
+    ],
+    "size": 26,
+    "color": "paper",
+    "font": "regular",
+    "wrap": 524
+   },
+   {
+    "text": "{party_line}",
+    "at": [
+     88,
+     812
+    ],
+    "size": 26,
+    "color": "muted",
+    "font": "regular",
+    "wrap": 524
+   },
+   {
+    "text": "{context_line}",
+    "at": [
+     88,
+     852
+    ],
+    "size": 26,
+    "color": "muted",
+    "font": "regular",
+    "wrap": 524
+   },
+   {
+    "text": "No location supplied by run log.",
+    "at": [
+     88,
+     952
+    ],
+    "size": 25,
+    "color": "muted",
+    "font": "regular",
+    "unless": "location_recorded"
+   },
+   {
+    "text": "POSTHUMOUS INVOICE",
+    "at": [
+     700,
+     264
+    ],
+    "size": 38,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "AMOUNT / CR",
+    "at": [
+     1832,
+     280
+    ],
+    "size": 22,
+    "color": "ink",
+    "font": "regular",
+    "align": "right"
+   },
+   {
+    "list": "lines",
+    "top": 322,
+    "bottom": 566,
+    "styles": {
+     "row": {
+      "pitch": 60,
+      "cells": [
+       {
+        "text": "{label}",
+        "x": 700,
+        "size": 34,
+        "color": "ink"
+       },
+       {
+        "text": "{amount}",
+        "x": 1832,
+        "size": 36,
+        "color": "ink",
+        "font": "bold",
+        "align": "right"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "rule": [
+     700,
+     568,
+     1832
+    ]
+   },
+   {
+    "text": "OUTSTANDING BALANCE",
+    "at": [
+     700,
+     582
+    ],
+    "size": 34,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     700,
+     628,
+     1832,
+     740
+    ],
+    "color": "yellow"
+   },
+   {
+    "text": "{outstanding} CR",
+    "at": [
+     728,
+     632
+    ],
+    "size": 88,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "PASSED TO NEXT OF KIN",
+    "at": [
+     700,
+     760
+    ],
+    "size": 28,
+    "color": "red",
+    "font": "bold"
+   },
+   {
+    "text": "Nominated contact / {next_of_kin}",
+    "at": [
+     700,
+     800
+    ],
+    "size": 32,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "Liability survives the contractor.",
+    "at": [
+     700,
+     856
+    ],
+    "size": 31,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "Recovery does not include rescue.",
+    "at": [
+     700,
+     900
+    ],
+    "size": 29,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "button": "acknowledge",
+    "rect": [
+     1292,
+     904,
+     1832,
+     984
+    ],
+    "label": "ACKNOWLEDGE  >",
+    "primary": true
+   }
+  ],
+  "termination": [
+   {
+    "text": "YOUR CREW HAS BEEN LET GO.",
+    "at": [
+     56,
+     146
+    ],
+    "size": 76,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     56,
+     244,
+     644,
+     1008
+    ],
+    "color": "ink"
+   },
+   {
+    "panel": [
+     668,
+     244,
+     1864,
+     1008
+    ]
+   },
+   {
+    "text": "EMPLOYMENT STATUS",
+    "at": [
+     88,
+     262
+    ],
+    "size": 30,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "panel": [
+     88,
+     304,
+     612,
+     372
+    ],
+    "color": "yellow"
+   },
+   {
+    "text": "LET GO",
+    "at": [
+     108,
+     312
+    ],
+    "size": 46,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "SERVICE RECORD",
+    "at": [
+     88,
+     392
+    ],
+    "size": 26,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "QUOTA CYCLE",
+    "at": [
+     88,
+     436
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{cycle}",
+    "at": [
+     88,
+     456
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "SHIFTS BILLED",
+    "at": [
+     88,
+     510
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{shifts_billed}",
+    "at": [
+     88,
+     530
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "DECLINED",
+    "at": [
+     88,
+     584
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{declined}",
+    "at": [
+     88,
+     604
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "text": "BALANCES PASSED TO NEXT OF KIN",
+    "at": [
+     88,
+     658
+    ],
+    "size": 20,
+    "color": "muted",
+    "font": "regular"
+   },
+   {
+    "text": "{deaths_on_file}",
+    "at": [
+     88,
+     678
+    ],
+    "size": 40,
+    "color": "paper",
+    "font": "bold"
+   },
+   {
+    "rule": [
+     88,
+     740,
+     612
+    ]
+   },
+   {
+    "text": "{line_one}",
+    "at": [
+     88,
+     756
+    ],
+    "size": 28,
+    "color": "paper",
+    "font": "regular",
+    "wrap": 524
+   },
+   {
+    "text": "{line_two}",
+    "at": [
+     88,
+     836
+    ],
+    "size": 28,
+    "color": "muted",
+    "font": "regular",
+    "wrap": 524
+   },
+   {
+    "text": "Replacement contractor assigned. Name retained for administrative convenience.",
+    "at": [
+     88,
+     920
+    ],
+    "size": 24,
+    "color": "muted",
+    "font": "regular",
+    "wrap": 524
+   },
+   {
+    "text": "QUOTA RECONCILIATION",
+    "at": [
+     700,
+     264
+    ],
+    "size": 38,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "AMOUNT / CR",
+    "at": [
+     1832,
+     280
+    ],
+    "size": 22,
+    "color": "ink",
+    "font": "regular",
+    "align": "right"
+   },
+   {
+    "text": "Quota due",
+    "at": [
+     700,
+     318
+    ],
+    "size": 32,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "{quota_due}",
+    "at": [
+     1832,
+     318
+    ],
+    "size": 34,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "Banked at close of cycle",
+    "at": [
+     700,
+     364
+    ],
+    "size": 32,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "{banked}",
+    "at": [
+     1832,
+     364
+    ],
+    "size": 34,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "panel": [
+     700,
+     414,
+     1832,
+     508
+    ],
+    "color": "yellow"
+   },
+   {
+    "text": "SHORTFALL",
+    "at": [
+     728,
+     434
+    ],
+    "size": 48,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "text": "{shortfall} CR",
+    "at": [
+     1804,
+     422
+    ],
+    "size": 70,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "FINAL DEDUCTIONS",
+    "at": [
+     700,
+     526
+    ],
+    "size": 34,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "list": "deductions",
+    "top": 572,
+    "bottom": 716,
+    "styles": {
+     "row": {
+      "pitch": 46,
+      "cells": [
+       {
+        "text": "{label}",
+        "x": 700,
+        "size": 30,
+        "color": "ink"
+       },
+       {
+        "text": "{amount}",
+        "x": 1832,
+        "size": 32,
+        "color": "ink",
+        "font": "bold",
+        "align": "right"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "rule": [
+     700,
+     722,
+     1832
+    ]
+   },
+   {
+    "text": "{balance_label}",
+    "at": [
+     700,
+     734
+    ],
+    "size": 34,
+    "color": "red",
+    "font": "bold"
+   },
+   {
+    "text": "{final_balance} CR",
+    "at": [
+     1832,
+     728
+    ],
+    "size": 44,
+    "color": "ink",
+    "font": "bold",
+    "align": "right"
+   },
+   {
+    "text": "Balance carries no further. Neither does the contract.",
+    "at": [
+     700,
+     796
+    ],
+    "size": 30,
+    "color": "ink",
+    "font": "regular"
+   },
+   {
+    "text": "Thank you for choosing independent recovery.",
+    "at": [
+     700,
+     848
+    ],
+    "size": 34,
+    "color": "ink",
+    "font": "bold"
+   },
+   {
+    "button": "acknowledge",
+    "rect": [
+     1292,
+     904,
+     1832,
+     984
+    ],
+    "label": "ACKNOWLEDGE  >",
+    "primary": true
+   }
+  ]
+ }
+}

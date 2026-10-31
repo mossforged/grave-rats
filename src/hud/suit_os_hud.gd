@@ -25,7 +25,8 @@ var carry := {}
 var action := {}           # {word, share}: a lift, a drop, LEAVE, over the operator; empty for none
 var urgent_alerts: Array = []
 var hands_full := false
-var banner: Array = []     # [big line, lines...]: the shift's over, until T013's screens
+var quota := {}            # {quota, banked, shifts_left, share}; empty: no session, no plate
+var banner: Array = []     # [big line, lines...]: the shift's over, on a deck with no session
 var help_on := true
 
 var _canvas: Control
@@ -114,6 +115,7 @@ func _draw_hud() -> void:
 	_draw_action()
 	_draw_announcement(view)
 	_draw_banner(view)
+	_draw_quota(view)
 	if help_on:
 		_draw_help(view)
 
@@ -296,6 +298,30 @@ func _draw_banner(view: Vector2) -> void:
 		y += _px(b.line_px)
 		var line := String(banner[i])
 		_text(_regular, Vector2((view.x - _text_w(_regular, line, b.font_px)) * 0.5, y), line, b.font_px, _col("text_dim"))
+
+
+## Top right: what's due, what's banked, how many shifts are left. Terse.
+func _draw_quota(view: Vector2) -> void:
+	if quota.is_empty():
+		return
+	var q: Dictionary = cfg.quota
+	var r := Rect2(view.x - _px(q.from_right_px) - _px(q.w_px), _px(q.y_px), _px(q.w_px), _px(q.h_px))
+	_plate(r)
+	var pad := _px(q.pad_px)
+	var base := r.position.y + pad + _px(q.label_px)
+	_text(_regular, Vector2(r.position.x + pad, base), String(q.word), q.label_px, _col("text_dim"))
+	var left := String(q.shifts) % int(quota.shifts_left)
+	_text(_regular, Vector2(r.end.x - pad - _text_w(_regular, left, q.label_px), base), left, q.label_px, _col("text_dim"))
+	var banked := int(quota.banked)
+	var big := os_state.credits_text(absi(banked))
+	if banked < 0:
+		big = String(q.minus) + big
+	var due := String(q.of) % os_state.credits_text(int(quota.quota))
+	var line := base + _px(q.value_px) + _px(q.value_gap_px)
+	_text(_bold, Vector2(r.position.x + pad, line), big, q.value_px, _col("danger") if banked < 0 else _col("text"))
+	_text(_regular, Vector2(r.position.x + pad + _text_w(_bold, big, q.value_px), line), due, q.small_px, _col("text_dim"))
+	var bh := _px(q.bar_h_px)
+	_bar(Rect2(r.position.x + pad, r.end.y - pad - bh, r.size.x - pad * 2.0, bh), float(quota.share), _col("accent"))
 
 
 func _draw_watermark(view: Vector2) -> void:

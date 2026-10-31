@@ -25,6 +25,10 @@ var alarm_left := 0.0
 var outcome := RUNNING
 var oxygen_at_exit := -1.0
 var survivors: Array = []
+## Deposits that put something in the hold: what the airlock bills.
+var airlock_cycles := 0
+## What was on whoever went down: {count, value}.
+var carried_at_death := {"count": 0, "value": 0}
 
 var _rules: RefCounted
 var _players := {}        # player ID -> {carry, alive, leave_left}
@@ -48,6 +52,8 @@ func begin() -> void:
 	outcome = RUNNING
 	oxygen_at_exit = -1.0
 	survivors = []
+	airlock_cycles = 0
+	carried_at_death = {"count": 0, "value": 0}
 	_touched = {}
 	_oxygen_out = false
 	for id: int in _players.keys():
@@ -125,6 +131,8 @@ func deposit(id: int) -> Array:
 	var items: Array = c.empty_out()
 	for item: SalvageItem in items:
 		hold.deposit(item)
+	if not items.is_empty():
+		airlock_cycles += 1
 	return items
 
 
@@ -153,6 +161,9 @@ func leave_share(id: int) -> float:
 func player_died(id: int) -> Array:
 	_players[id].alive = false
 	var items: Array = carry(id).empty_out()
+	for item: SalvageItem in items:
+		carried_at_death.count = int(carried_at_death.count) + 1
+		carried_at_death.value = int(carried_at_death.value) + item.value
 	for other: int in _players:
 		if alive(other):
 			return items
@@ -191,6 +202,9 @@ func report() -> Dictionary:
 	var lost_value := 0
 	for item: SalvageItem in lost:
 		lost_value += item.value
+	var salvage: Array = []
+	for item: SalvageItem in hold.items:
+		salvage.append({"kind": item.kind, "word": item.word, "class": item.klass, "value": item.value, "prize": item.prize})
 	return {
 		"shift_outcome": outcome,
 		"oxygen_at_exit_s": oxygen_at_exit if ended() else oxygen_left,
@@ -203,4 +217,8 @@ func report() -> Dictionary:
 		"prize_taken": prize_taken,
 		"tier_reached": tier_reached,
 		"survivors": survivors,
+		"airlock_cycles": airlock_cycles,
+		"salvage": salvage,
+		"carried_at_death": int(carried_at_death.count),
+		"carried_at_death_value": int(carried_at_death.value),
 	}

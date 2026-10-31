@@ -664,7 +664,7 @@ func _leave() -> void:
 	if session_live:
 		_file_payslip(run_log.to_dict("death" if suit.dead else "left"), QuotaState.LEFT)
 		return
-	hud.banner = [String(w.closed), String(w.hold_line) % hud.os_state.hold_text(shift.hold.estimate()), String(w.next)]
+	hud.banner = [String(w.closed), String(w.hold_line) % hud.os_state.hold_text(session.hold().estimate()), String(w.next)]
 
 
 func _on_tier(index: int, spec: Dictionary) -> void:

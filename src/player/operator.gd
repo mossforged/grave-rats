@@ -157,7 +157,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_trigger_tap = true
 	elif event is InputEventKey and event.pressed and not event.echo \
 			and (event as InputEventKey).physical_keycode == KEY_R:
-		_send(Commands.reload(player_id))
+		_send(Commands.reload_gun(player_id))
 
 
 func _send(cmd: Dictionary) -> void:

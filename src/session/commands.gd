@@ -36,7 +36,7 @@ static func fire(id: int, held: bool) -> Dictionary:
 	return {"type": FIRE, "player_id": id, "held": held}
 
 
-static func reload(id: int) -> Dictionary:
+static func reload_gun(id: int) -> Dictionary:
 	return {"type": RELOAD, "player_id": id}
 
 

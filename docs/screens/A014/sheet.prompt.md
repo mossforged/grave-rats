@@ -1,0 +1,1 @@
+Deterministic contact sheet: assemble A014-01 through A014-05 at native aspect ratio on 3000x3900 dark board. Label three pitch thumbnails, recommendation, scaled plan, bridge red, bio lab cyan-green, dressed corridor. Include black-box rationale and room-story captions. Render with build-review.py and Pillow; no generated artwork altered.

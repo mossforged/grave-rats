@@ -1,0 +1,38 @@
+{
+  "spaces": 8,
+  "doors": 10,
+  "connected_spaces": 8,
+  "independent_cycles": 3,
+  "engineering_degree": 1,
+  "grid_check": "all room boundaries on final 0.5m grid",
+  "cover_route_overlap_count": 0,
+  "reserved_route_width_m": 2,
+  "door_clear_conservative_m": 1.6,
+  "image_sizes": {
+    "A014-01": [
+      1942,
+      809
+    ],
+    "A014-02": [
+      2400,
+      2020
+    ],
+    "A014-03": [
+      1692,
+      930
+    ],
+    "A014-04": [
+      1536,
+      1024
+    ],
+    "A014-05": [
+      1774,
+      887
+    ]
+  },
+  "refusals": 0,
+  "limits": [
+    "2D concept check only; no Godot navigation, lighting, performance or play tests",
+    "Mood frames are new scene concepts guided by kit references, not registered gameplay screenshot overlays"
+  ]
+}

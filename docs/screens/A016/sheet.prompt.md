@@ -1,0 +1,1 @@
+Deterministic review assembly of A016 generated cards with Pillow; no new weapon imagery. Three columns by six rows, IDs and hold classes, amber recommendations; missing/refused images explicitly labeled. See build_review.py.

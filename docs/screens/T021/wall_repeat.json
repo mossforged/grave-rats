@@ -1,0 +1,10 @@
+{
+  "pinned_camera_same_seed": {
+    "mean": 0.037,
+    "max": 1.0
+  },
+  "camera_moved_1_mm": {
+    "mean": 1.197,
+    "max": 89.0
+  }
+}

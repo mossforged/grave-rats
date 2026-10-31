@@ -6,6 +6,7 @@
 - Main scene: `scenes/pirates/pirate_deck.tscn` (in `project.godot`), so F5 runs the latest build.
 - `tuning_panel.gd`: F1 tuning panel (dev only; the scene that wants it adds it). Sliders from `data/debug.json` "tuning" write into the loaded data live; Save writes changed files back to `data/`. Its Display section switches anti-aliasing live, saves the pick to `data/display.json` at once, and shows live frame time. Vsync is off while the panel is open, so that number is the cost and not the display's refresh.
 - `display_aa.gd`: the anti-aliasing modes in `data/display.json` (T016). `DebugOverlay` applies the saved one at start; env `DISPLAY_AA=<id>` overrides that for a run without saving. Godot 4.7 offers FXAA and SMAA as screen-space passes; MSAA and those are set on the root viewport.
+- `t021_stand.gd`: script of `scenes/dev/t021_stand.tscn` (dev only): the overturned bed with and without its stripe, and the wall-top repeat on one seed with the camera held still. `tools/t021_sheet.py` makes the sheet and `wall_repeat.json`.
 - `t019_stand.gd`: script of `scenes/dev/t019_stand.tscn` (dev only): T019's stands from the game camera; run with `KIT_CORRIDORS=off` for the "before". `tools/t019_bench.py` prices the dressing, `tools/t019_sheet.py` makes the sheet.
 - `t016_stand.gd`: script of `scenes/dev/t016_stand.tscn` (dev only): T016's capture stands on the real shift deck. `tools/t016_aa_bench.py` prices the modes, `tools/t016_sheet.py` makes the sheets.
 - `asset_viewer.gd`: script of `scenes/dev/asset_viewer.tscn`, the legacy asset viewer (dev only).

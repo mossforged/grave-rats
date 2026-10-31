@@ -80,7 +80,7 @@ func apply_shot(shot: Dictionary) -> void:
 		"aa":
 			set_kit_view("off")
 			DisplayAA.apply(get_tree().root, String(shot.mode))
-			# Light off, so the beam isn't in the crop. The wall top still varies between identical shots (handoff).
+			# Light off, so the beam isn't in the crop.
 			flashlight.set_on(false)
 			await _stand_at(layout.point_in("medbay", AA_AT), layout.point_in("medbay", [0.25, 0.0]))
 	await _sim(0.25)

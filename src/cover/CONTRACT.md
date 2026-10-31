@@ -5,10 +5,10 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the sta
 ## Owns
 - `cover_field.gd`: scene-free pieces (footprint + class) and the straight 3D trace against them. The torso height of a stance.
 - `tip_state.gd`: scene-free rules of a tipping bed: upright (no cover), tipping (a commitment, still no cover), overturned (low).
-- `tip_bed.gd`: one bed: the kit's bed mesh (`KitPieces.prop`), collision, its piece in the field. The far edge rears up and the bed rides over onto `TipState.footprint`, so it lands past its far long edge with the mattress toward whoever tipped it and the plated underside out, as the shield (T016; it used to fall the other way, underside toward the player).
+- `tip_bed.gd`: one bed: the kit's bed mesh (`KitPieces.prop`), collision, its piece in the field. The far edge rears up and the bed rides over onto `TipState.footprint`, so it lands past its far long edge with the mattress toward whoever tipped it and the plated underside out, as the shield (T016; it used to fall the other way, underside toward the player). `edge_stripe` is the kit's hazard stripe along both long rims, so the top edge reads as low cover from the steep camera (T021).
 - `shot_tracer.gd`: `Rifle.shot_tracer`. Walls and doors through physics; bodies on the plan line, aimed at at their torso height; cover in between stops the round.
 - `cover_lock.gd`: scene-free lock-to-cover: the slot, the snap, raise and lower, sliding, letting go.
-- `lock_driver.gd`: lock-to-cover in a scene: takes the operator's controls while locked, the prompt, and `state_word()` for the suit OS's `LOCKED` readout. It hands them back when free, and touches nothing while free.
+- `lock_driver.gd`: lock-to-cover in a scene: takes the operator's controls while locked, the prompt, and `state_word()` for the suit OS's `LOCKED` readout. It hands them back when free, and touches nothing while free. What it reads while locked travels as `LOCK_CONTROLS` commands (T021); the key is the deck's, as `LOCK`.
 - `protection_mark.gd`: the cover readout's state: in cover or not, and one line per shooter. The suit OS (`src/hud`) draws them, and holds the words and sizes.
 
 ## Does not own
@@ -31,7 +31,7 @@ Cover with height (T005): what stops a shot in 3D, the bed you tip over, the sta
 
 ## Public API
 - `CoverLock.new(cfg)`: `enabled()`, `locked()`, `exposed()`, `can_fire()`, `spot_for(field, p, radius, is_free)`, `try_lock(field, p, radius, is_free) -> bool`, `release()`, `step(delta, wish, wants_aim) -> move`, `hold_position(p)`, `facing_point(reach)`; fields `state`, `raise`, `slot`, `normal`, `tangent`, `piece_id`.
-- `LockDriver`: `setup(operator, field, cfg, is_free)`, `press() -> bool`, `tap_fire()`, `release()`, `step(delta)` (before the operator's), `show_state(alive)`, `state_word()`, `spot_here()`; fields `lock`, `scripted` {`keys`, `aim`, `fire`}, `hide_prompt`.
+- `LockDriver`: `setup(operator, field, cfg, is_free)`, `press() -> bool`, `tap_fire()`, `apply_command(cmd)` (`LOCK_CONTROLS`), `release()`, `step(delta)` (before the operator's), `show_state(alive)`, `state_word()`, `spot_here()`; fields `lock`, `scripted` {`keys`, `aim`, `fire`}, `hide_prompt`.
 - `CoverField.new(cfg)`: `set_piece(id, rect, kind)` ("none" removes), `kind_of(id)`, `height_of(kind)`, `segment_hit(a, b) -> {} or {t, point, id, kind}`, `line_blocked(a, b)`, `near(p, reach)`, `low_near(p, reach) -> {} or {id, rect}`, `torso_height(crouch_amount, braced)`. Constants `NONE`, `LOW`, `TALL`.
 - `TipState.new(cfg, overturned := false, fall_side := 1.0)`: `start(from_side) -> bool`, `step(delta) -> bool` (true on landing), `cover_class()`, `footprint(rect, thickness)`; fields `state`, `progress`, `side`.
 - `TipBed`: `setup(spec, rect, cover_field, cfg)`, `reset()`, `tick(delta)`, `try_tip(p) -> bool`, `can_tip()`, `distance_to_point(p)`, `footprint()`; fields `tip`, `upright_rect`.

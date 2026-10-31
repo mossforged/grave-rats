@@ -44,4 +44,4 @@ Later (parked): competitive modes, ship generation, contracts and meta, the thre
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-30 (code, unattended): T009: John's hauler replaces the grey operator and the pirates' body, switchable back by data (`body`, `body.model`). 18 states mapped in `data/hauler_anim.json`, Mixamo clips retargeted, hips pinned, rifle on the hand, pirates repainted navy and off-white by shader. Foot slide at or below legacy on average, still high on strafes; `pirate_deck` about +0.2 ms. Motion unjudged: stills only.
+2026-10-30 (code, unattended): T009: John's hauler replaces the grey operator and the pirates' body, switchable back by data (`body`, `body.model`). 19 states mapped in `data/hauler_anim.json`, Mixamo clips retargeted, hips pinned, rifle on the hand, pirates repainted navy and off-white by shader. Foot slide at or below legacy on average, still high on strafes; `pirate_deck` about +0.2 ms. Motion unjudged: stills only.

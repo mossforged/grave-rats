@@ -56,7 +56,11 @@ func _run() -> void:
 		await _shoot(base + "_overlay")
 		overlay.visible = false
 	if scene and scene.has_method("capture_shots") and scene.has_method("apply_shot"):
+		# Env CAPTURE_ONLY: comma-separated shot names, or "none" for frame time alone.
+		var only := OS.get_environment("CAPTURE_ONLY").split(",", false)
 		for shot in scene.capture_shots():
+			if not only.is_empty() and not only.has(shot.name):
+				continue
 			await scene.apply_shot(shot)
 			await _shoot(String(shot.name))
 		if scene.has_method("release_shot"):

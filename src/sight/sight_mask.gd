@@ -35,6 +35,7 @@ var _visible_vp: SubViewport
 var _memory_vp: SubViewport
 var _visible_canvas: PolyCanvas
 var _memory_canvas: PolyCanvas
+var _reveal_all_next := false
 
 
 func setup(system: SightSystem) -> void:
@@ -128,6 +129,14 @@ func _on_sight(polygon: PackedVector2Array, reveal: Array) -> void:
 		c.points = fan
 		c.rects = rects
 		c.queue_redraw()
+	if _reveal_all_next:
+		_reveal_all_next = false
+		_memory_canvas.rects = rects + [sight.bounds]
+
+
+## Captures only: paints the whole deck into memory, as if every corner had been walked.
+func reveal_all() -> void:
+	_reveal_all_next = true
 
 
 func _on_forgotten() -> void:

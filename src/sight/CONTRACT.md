@@ -30,14 +30,15 @@ Pillar 2, "Know the room, fear the corner" (T004): line of sight, the three stat
 - `SightTarget`: `seen`, `set_seen(bool)`, `floor_position()`.
 - `Flashlight`: `setup(cfg)`, `set_on(bool)`, `toggle()`, `on`, `spot`, `follow(muzzle, yaw)`, `draw_beam(visibility, eye, yaw, muzzle, delta)`, `set_mask(texture, bounds)`, `apply_cfg()`, `spot_angle_deg()`; field `fan`.
 - `BeamFan.new(rays)`: `configure(half_rad, range_m, rate, snap)`, `restart()`, `cast(visibility, eye, muzzle, yaw)`, `step(delta, muzzle, yaw)`, `point(i)`, `ray_yaw(i, yaw)`, `fill(mesh, muzzle, pitch_rad, floor_m)`; fields `reach`, `apex`, `yaw`, `half`, `range_m`.
-- `SightMask`: `setup(system)`, `apply_cfg()`, `visible_texture()`.
+- `SightMask`: `setup(system)`, `apply_cfg()`, `visible_texture()`, `reveal_all()` (captures: paints the whole deck into memory).
 - Occluder contract: any node in group `sight_occluder` with `sight_rect() -> Rect2` and `blocks_sight() -> bool`. Call `refresh_occluders()` after adding one.
+- `sight_deck`: `deck_lighting` (`src/kit`), `set_kit_view("off"|"known"|"play")` (captures). The kit's lights and fog are its mood; the mask stays on top.
 - Scene keys: F flashlight, E door, F2 sight debug, plus everything in `weight_deck`. Env `SIGHT_FLASHLIGHT=on|off` fixes the light for a capture. A respawn forgets the deck.
 
 ## Signals
 `SightSystem.sight_updated(polygon, reveal)`, `forgotten`; `SightTarget.seen_changed(now_seen)`.
 
 ## Data keys (`data/sight.json`)
-`tall_prop_min_m`, `awareness_radius_m`, `cone_on` / `cone_off` {`range_m`, `half_angle_deg`}, `arc_step_deg`, `edge_step_deg`, `target_radius_m`; `memory` {`cell_m`, `update_hz`}; `mask` {`px_per_m`, `dilate_m`, `edge_low`, `edge_high`, `remembered_brightness`, `remembered_saturation`, `remembered_tint`, `unknown_brightness`, `unknown_saturation`, `bounds_margin_m`}; `flashlight` {`start_on`, `color`, `energy`, `attenuation`, `angle_attenuation`, `pitch_deg`, `muzzle_ahead_m`, `shadows`, `shadow_blur`}; `beam` {`color`, `strength`, `fade_power`, `edge_power`, `rays`, `reach_rate_m_s`, `snap_m`, `floor_m`}; `motes` {`count`, `lifetime_s`, `box_half_m`, `height_m`, `size_m`, `drift_m_s`, `spread_deg`, `color`, `strength`}; `lighting` {overrides of `data/deck.json` "lighting" in this scene}; `debug` {`polygon_color`, `visible_color`, `remembered_color`, `unknown_color`, `floor_y_m`, `outline_hz`}; `help` {`text`}.
+`tall_prop_min_m`, `awareness_radius_m`, `cone_on` / `cone_off` {`range_m`, `half_angle_deg`}, `arc_step_deg`, `edge_step_deg`, `target_radius_m`; `memory` {`cell_m`, `update_hz`}; `mask` {`px_per_m`, `dilate_m`, `edge_low`, `edge_high`, `remembered_brightness`, `remembered_saturation`, `remembered_tint`, `unknown_brightness`, `unknown_saturation`, `bounds_margin_m`}; `flashlight` {`start_on`, `color`, `energy`, `attenuation`, `angle_attenuation`, `pitch_deg`, `muzzle_ahead_m`, `shadows`, `shadow_blur`} (its fog energy is `data/kit.json` `lighting.fog.flashlight_energy`); `beam` {`color`, `strength`, `fade_power`, `edge_power`, `rays`, `reach_rate_m_s`, `snap_m`, `floor_m`}; `motes` {`count`, `lifetime_s`, `box_half_m`, `height_m`, `size_m`, `drift_m_s`, `spread_deg`, `color`, `strength`}; `lighting` {overrides of `data/deck.json` "lighting" in this scene}; `debug` {`polygon_color`, `visible_color`, `remembered_color`, `unknown_color`, `floor_y_m`, `outline_hz`}; `help` {`text`}.
 
 Tests: `tests/test_sight.gd`. CPU cost: `tools/t004_sight_bench.gd`. Flicker measurement on the real GPU: `tools/t008_flicker.gd`, `tools/t008_flicker_diff.py`.

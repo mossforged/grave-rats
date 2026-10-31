@@ -4,6 +4,8 @@ extends Node3D
 ## Sight contract (src/sight): group "sight_occluder", sight_rect(), blocks_sight().
 
 const DoorState := preload("res://src/doors/door_state.gd")
+const KitPieces := preload("res://src/kit/kit_pieces.gd")
+const KitMaterials := preload("res://src/kit/kit_materials.gd")
 const CUTAWAY_GROUP := &"camera_cutaway"  # the camera rig's contract
 const OCCLUDER_GROUP := &"sight_occluder"  # src/sight's contract
 
@@ -25,7 +27,12 @@ var _lamp_mat: StandardMaterial3D
 var _height := 0.0
 var _last_state := -1
 var _panel_mat: StandardMaterial3D
-var _dents: Array = []
+var _seam: MeshInstance3D
+var _seam_mat: StandardMaterial3D
+var _leak: OmniLight3D
+var _look: Dictionary
+var _leaf_h := 0.0
+var _leaf_t := 0.0
 var _shake_left := 0.0
 var _shake_t := 0.0
 var _fall_sign := 1.0
@@ -52,8 +59,11 @@ func setup(door: Dictionary, spec: Dictionary, config: Dictionary, wall_height: 
 
 func _build() -> void:
 	var t := float(cfg.panel_thickness_m)
-	var colors: Dictionary = cfg.colors
-	# A hair under the wall top: slid away, the panel lies inside the wall and must not z-fight it.
+	var kit: Dictionary = KitMaterials.cfg()
+	_look = kit.door_look
+	_leaf_h = float(kit.dims.door_aperture_h_m)
+	_leaf_t = float(kit.dims.door_leaf_t_m)
+	# Collision keeps the T006 box; what you see is A006's thinner, lower leaf inside it.
 	var h := _height - float(cfg.panel_top_gap_m)
 	var size := Vector3(opening.size.x, h, t) if along_x else Vector3(t, h, opening.size.y)
 	_pivot = Node3D.new()
@@ -62,18 +72,15 @@ func _build() -> void:
 	# Only a door facing the camera can hide anything: side doors stay tall, so they read as shut.
 	if along_x:
 		_join_cutaway(_pivot, opening)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(colors.panel_locked if door_state.is_locked() else colors.panel)
-	mat.roughness = float(cfg.panel_roughness)
-	_panel_mat = mat
-	var mesh := BoxMesh.new()
-	mesh.size = size
 	_panel = MeshInstance3D.new()
 	_panel.name = "Panel"
-	_panel.mesh = mesh
-	_panel.material_override = mat
+	_panel.mesh = KitPieces.door_leaf(opening.size.x if along_x else opening.size.y, _leaf_h, _leaf_t)
+	_panel.set_meta("kit_piece", "door_leaf")
+	# Its own copy of the paint: each leaf darkens by its own damage.
+	_panel_mat = KitMaterials.material("leaf").duplicate()
+	_panel.set_surface_override_material(0, _panel_mat)
 	_pivot.add_child(_panel)
-	_make_dents(size)
+	_make_seam()
 	_body = StaticBody3D.new()
 	_body.name = "PanelBody"
 	var box := BoxShape3D.new()
@@ -104,31 +111,45 @@ func _build() -> void:
 	_join_cutaway(post, _frame_rect)
 	add_child(post)
 	post.add_child(lamp)
+	post.add_child(_make_state_strip(off))
 
 
-## Dark dents on both faces of the panel, shown one by one as a stalker works on it.
-func _make_dents(panel_size: Vector3) -> void:
-	var b: Dictionary = cfg.bash
-	var s: Array = b.dent_size_m
-	var rng := RandomNumberGenerator.new()
-	rng.seed = int(b.dent_seed) + hash(name)
+## The same state light on top of the header: from above, a side door's jambs hide the lamp's faces.
+func _make_state_strip(post_offset: Vector2) -> MeshInstance3D:
+	var s: Array = _look.strip_size_m
 	var mesh := BoxMesh.new()
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(cfg.colors.dent_mark)
-	mat.roughness = float(cfg.panel_roughness)
-	mesh.material = mat
-	mesh.size = Vector3(float(s[0]), float(s[1]), panel_size.z + float(s[2])) if along_x \
-			else Vector3(panel_size.x + float(s[2]), float(s[1]), float(s[0]))
-	for i in int(b.dent_count):
-		var dent := MeshInstance3D.new()
-		dent.name = "Dent%d" % i
-		dent.mesh = mesh
-		var along := rng.randf_range(-0.5, 0.5) * (panel_size.x if along_x else panel_size.z) * (1.0 - float(s[0]))
-		var up := rng.randf_range(-0.5, 0.5) * panel_size.y * (1.0 - float(s[1]))
-		dent.position = Vector3(along, up, 0.0) if along_x else Vector3(0.0, up, along)
-		dent.visible = false
-		_panel.add_child(dent)
-		_dents.append(dent)
+	mesh.size = Vector3(float(s[0]), float(s[1]), float(s[2])) if along_x else Vector3(float(s[2]), float(s[1]), float(s[0]))
+	var strip := MeshInstance3D.new()
+	strip.name = "StateStrip"
+	strip.mesh = mesh
+	strip.material_override = _lamp_mat
+	strip.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var rail := float(KitMaterials.cfg().dims.header_rail_m) * 0.5
+	var across := float(opening.size.y if along_x else opening.size.x) * 0.5 - rail
+	strip.position = Vector3(-post_offset.x, _height + float(s[1]) * 0.5, -post_offset.y + across) if along_x \
+			else Vector3(-post_offset.x + across, _height + float(s[1]) * 0.5, -post_offset.y)
+	return strip
+
+
+## The warm seam (and the spill it casts) that A006-03c shows once a leaf is pushed out of true.
+func _make_seam() -> void:
+	_seam = MeshInstance3D.new()
+	_seam.name = "Seam"
+	_seam.mesh = KitPieces.door_seam(opening.size.x if along_x else opening.size.y, _leaf_h)
+	_seam_mat = KitMaterials.material("leak").duplicate()
+	_seam.set_surface_override_material(0, _seam_mat)
+	_seam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_seam.visible = false
+	_pivot.add_child(_seam)
+	if not along_x:
+		_seam.rotation.y = -PI * 0.5
+	_seam.position.y = _leaf_h * 0.5
+	_leak = OmniLight3D.new()
+	_leak.name = "Leak"
+	_leak.light_color = Color(String(_look.leak_color))
+	_leak.omni_range = float(_look.leak_light_range_m)
+	_leak.visible = false
+	add_child(_leak)
 
 
 func _join_cutaway(node: Node3D, rect: Rect2) -> void:
@@ -230,30 +251,53 @@ func _apply() -> void:
 	state_changed.emit(self)
 
 
-## The panel you see: shaking under blows, showing its dents, flat on the floor once broken. Fully
-## slid away it lies inside the wall and is hidden: there it fought the door post's surfaces.
-func _show_panel(local: Vector3, half_h: float) -> void:
+## The panel you see: shaking under blows, its mesh dented by the damage so far, flat on the floor
+## once broken. Fully slid away it lies inside the wall and is hidden: there it fought the door post's
+## surfaces.
+func _show_panel(local: Vector3, _half_h: float) -> void:
 	var b: Dictionary = cfg.bash
 	var broken := door_state.is_broken()
 	var colors: Dictionary = cfg.colors
+	var half := _leaf_h * 0.5
+	var base := Vector3(local.x, half, local.z)
 	_panel.visible = broken or door_state.progress < 1.0 - float(cfg.open_tolerance)
 	var dented := door_state.bash_progress
-	if not door_state.is_locked():
-		_panel_mat.albedo_color = Color(colors.panel_broken) if broken else Color(colors.panel).lerp(Color(colors.panel_dented), dented)
-	var shown := ceili(dented * _dents.size())
-	for i in _dents.size():
-		_dents[i].visible = i < shown
+	var tint: Color
+	if broken:
+		tint = Color(colors.panel_broken)
+	elif door_state.is_locked():
+		tint = Color(colors.panel_locked)
+	else:
+		tint = Color(colors.panel).lerp(Color(colors.panel_dented), dented)
+	_panel_mat.albedo_color = tint
+	_set_dent(dented, _fall_sign)
+	var seen := dented > 0.0 and not broken and _panel.visible
+	_seam.visible = seen
+	_seam.position = Vector3(local.x, half, local.z)
+	_seam_mat.emission_energy_multiplier = dented * float(_look.seam_energy)
+	_leak.visible = seen
+	if seen:
+		_leak.light_energy = dented * float(_look.leak_light_energy)
+		var o := float(_look.leak_light_out_m) * _fall_sign
+		_leak.position = Vector3(0, float(_look.leak_light_y_m), o) if along_x else Vector3(o, float(_look.leak_light_y_m), 0)
+	var turn := 0.0 if along_x else -PI * 0.5
 	if broken:
 		var lean := deg_to_rad(float(b.broken_lean_deg)) * _fall_sign
-		var out := sin(lean) * half_h
-		var y := cos(lean) * half_h
+		var out := sin(lean) * half
+		var y := cos(lean) * half + _leaf_t * 0.5
 		_panel.position = Vector3(0, y, out) if along_x else Vector3(out, y, 0)
-		_panel.rotation = Vector3(lean, 0, 0) if along_x else Vector3(0, 0, -lean)
+		_panel.rotation = Vector3(lean, turn, 0) if along_x else Vector3(-lean, turn, 0)
 		return
-	# Bowing away from the blows, which is what reads from above on a door seen edge-on.
-	var bow := deg_to_rad(float(b.bow_deg)) * dented * _fall_sign
-	_panel.rotation = Vector3(bow, 0, 0) if along_x else Vector3(0, 0, -bow)
+	_panel.rotation = Vector3(0, turn, 0)
 	var shake := 0.0
 	if _shake_left > 0.0:
 		shake = sin(_shake_t * TAU * float(b.shake_hz)) * float(b.shake_m) * _shake_left / float(b.shake_s)
-	_panel.position = local + (Vector3(0, 0, shake) if along_x else Vector3(shake, 0, 0))
+	_panel.position = base + (Vector3(0, 0, shake) if along_x else Vector3(shake, 0, 0))
+
+
+## The damage so far on the leaf's mesh, bulging the way the blows push. A side door's leaf is turned a
+## quarter, so its +Z points west: the blend shape that goes east is "dent_back".
+func _set_dent(amount: float, push: float) -> void:
+	var toward_front := push > 0.0 if along_x else push < 0.0
+	_panel.set_blend_shape_value(0, amount if toward_front else 0.0)
+	_panel.set_blend_shape_value(1, 0.0 if toward_front else amount)

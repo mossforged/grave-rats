@@ -9,18 +9,23 @@ const SightTarget := preload("res://src/sight/sight_target.gd")
 const SightDebug := preload("res://src/sight/sight_debug.gd")
 const Flashlight := preload("res://src/sight/flashlight.gd")
 const DoorSystem := preload("res://src/doors/door_system.gd")
+const DeckLighting := preload("res://src/kit/deck_lighting.gd")
 
 var sight: SightSystem
 var mask: SightMask
 var flashlight: Flashlight
 var doors: DoorSystem
 var sight_debug: SightDebug
+var deck_lighting: DeckLighting
 
 var _env_light := ""
 
 
 func _ready() -> void:
 	super()
+	deck_lighting = DeckLighting.new()
+	add_child(deck_lighting)
+	deck_lighting.setup(layout, _plain_env, get_node("Deck"))
 	doors = DoorSystem.new()
 	doors.name = "Doors"
 	add_child(doors)
@@ -38,6 +43,7 @@ func _ready() -> void:
 	flashlight.name = "Flashlight"
 	add_child(flashlight)
 	flashlight.setup(sight.cfg)
+	flashlight.spot.light_volumetric_fog_energy = float(deck_lighting.cfg.fog.flashlight_energy)
 	flashlight.set_mask(mask.visible_texture(), sight.bounds)
 	sight_debug = SightDebug.new()
 	sight_debug.name = "SightDebug"
@@ -112,6 +118,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	super(event)
+
+
+## Captures: how much the mask hides. "off" no mask (the art alone), "known" everything already seen
+## (the paint-overs show rooms you know), "play" as it is.
+func set_kit_view(view: String) -> void:
+	mask.visible = view != "off"
+	if view == "known":
+		mask.reveal_all()
 
 
 # --- capture hooks (src/debug/capture.gd) ---

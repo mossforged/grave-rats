@@ -127,6 +127,8 @@ func blow() -> void:
 
 
 func reset() -> void:
+	if _pivot == null:  # a ship with no ambush: never set up, nothing to put back
+		return
 	sealed = true
 	_pivot.visible = true
 	_tell.visible = true
@@ -162,6 +164,8 @@ func _spawn_debris() -> void:
 
 
 func tick(delta: float) -> void:
+	if _pivot == null:
+		return
 	var d: Dictionary = cfg.debris
 	for e: Dictionary in _debris:
 		var v: Vector3 = e.vel

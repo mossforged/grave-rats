@@ -231,6 +231,7 @@ func texture_path(name: String) -> String:
 
 ## Where walls and rooms are, for the surfaces and the casings' floor.
 func set_layout(layout: RefCounted) -> void:
+	surfaces = SurfaceMap.new(cfg.surfaces, Data.load_data("kit"))  # the ship may have changed
 	surfaces.layout = layout
 	warm_pipelines()
 

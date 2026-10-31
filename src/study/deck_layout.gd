@@ -64,6 +64,13 @@ func space_at(p: Vector2) -> String:
 func _place_spaces() -> void:
 	var t := thickness()
 	for spec in data.spaces:
+		# Final world metres: room_scale has already been paid for, so it doesn't apply a second time.
+		if spec.has("rect_m"):
+			var m: Array = spec.rect_m
+			spaces[String(spec.name)] = {"name": String(spec.name), "kind": String(spec.kind),
+					"rect": Rect2(float(m[0]), float(m[1]), float(m[2]), float(m[3]))}
+			space_order.append(String(spec.name))
+			continue
 		var size := scaled_size(spec)
 		var pos := Vector2.ZERO
 		if spec.has("anchor"):
@@ -217,7 +224,8 @@ func _place_props() -> void:
 		var c := point_in(String(spec.space), spec.at)
 		var s := Vector3(float(spec.size_m[0]), float(spec.size_m[1]), float(spec.size_m[2]))
 		props.append({"type": String(spec.type), "space": String(spec.space), "center": c, "size": s,
-				"rect": Rect2(c.x - s.x * 0.5, c.y - s.z * 0.5, s.x, s.z), "cover": String(spec.get("cover", "none"))})
+				"rect": Rect2(c.x - s.x * 0.5, c.y - s.z * 0.5, s.x, s.z), "cover": String(spec.get("cover", "none")),
+				"wear": spec.get("wear", {})})
 
 
 ## Every footprint a character can't stand in: walls, door frames and props.

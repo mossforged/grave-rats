@@ -1,0 +1,2826 @@
+{
+ "grid_m": 0.5,
+ "floor_tile_m": 1.0,
+ "wall_height_m": 2.6,
+ "wall_thickness_m": 0.5,
+ "wall_segment_m": 2.0,
+ "door_width_m": 2.0,
+ "door_frame_m": 0.2,
+ "room_scale": 0.85,
+ "room_scale_options": [
+  0.85,
+  1.0,
+  1.15
+ ],
+ "character_scale": 1.15,
+ "character_scale_options": [
+  1.0,
+  1.15
+ ],
+ "scale_policy": "spaces use rect_m, final world metres from A014-02: no room_scale is applied to them",
+ "spaces": [
+  {
+   "name": "bridge",
+   "kind": "room",
+   "rect_m": [
+    10.5,
+    0,
+    11.5,
+    6
+   ]
+  },
+  {
+   "name": "bio_lab",
+   "kind": "room",
+   "rect_m": [
+    10.5,
+    6.5,
+    11.5,
+    9.5
+   ]
+  },
+  {
+   "name": "mess",
+   "kind": "room",
+   "rect_m": [
+    10.5,
+    16.5,
+    11.5,
+    5.5
+   ]
+  },
+  {
+   "name": "quarters",
+   "kind": "room",
+   "rect_m": [
+    10.5,
+    22.5,
+    11.5,
+    5.5
+   ]
+  },
+  {
+   "name": "west_spine",
+   "kind": "corridor",
+   "rect_m": [
+    6.5,
+    0,
+    3.5,
+    28
+   ]
+  },
+  {
+   "name": "east_spine",
+   "kind": "corridor",
+   "rect_m": [
+    22.5,
+    0,
+    3.5,
+    28
+   ]
+  },
+  {
+   "name": "engineering",
+   "kind": "room",
+   "rect_m": [
+    26.5,
+    10,
+    10,
+    10
+   ]
+  },
+  {
+   "name": "airlock",
+   "kind": "room",
+   "rect_m": [
+    0,
+    22,
+    6,
+    6
+   ]
+  }
+ ],
+ "doors": [
+  {
+   "id": "D1",
+   "space": "west_spine",
+   "side": "west",
+   "at": 0.892857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D2",
+   "space": "west_spine",
+   "side": "east",
+   "at": 0.142857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D3",
+   "space": "east_spine",
+   "side": "west",
+   "at": 0.142857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D4",
+   "space": "west_spine",
+   "side": "east",
+   "at": 0.392857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D5",
+   "space": "east_spine",
+   "side": "west",
+   "at": 0.392857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D6",
+   "space": "west_spine",
+   "side": "east",
+   "at": 0.678571,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D7",
+   "space": "east_spine",
+   "side": "west",
+   "at": 0.678571,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D8",
+   "space": "west_spine",
+   "side": "east",
+   "at": 0.892857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D9",
+   "space": "east_spine",
+   "side": "west",
+   "at": 0.892857,
+   "state": "closed",
+   "slide": 1
+  },
+  {
+   "id": "D10",
+   "space": "east_spine",
+   "side": "east",
+   "at": 0.535714,
+   "state": "closed",
+   "slide": 1
+  }
+ ],
+ "props": [
+  {
+   "type": "helm_console",
+   "space": "bridge",
+   "at": [
+    0.217391,
+    0.25
+   ],
+   "size_m": [
+    2.38,
+    1.04,
+    0.72
+   ],
+   "cover": "low",
+   "plan_cover": 0
+  },
+  {
+   "type": "nav_table",
+   "space": "bridge",
+   "at": [
+    0.652174,
+    0.25
+   ],
+   "size_m": [
+    1.6,
+    0.93,
+    1.0
+   ],
+   "cover": "low",
+   "plan_cover": 1
+  },
+  {
+   "type": "comms_rack",
+   "space": "bridge",
+   "at": [
+    0.913043,
+    0.166667
+   ],
+   "size_m": [
+    0.86,
+    2.0,
+    0.8
+   ],
+   "cover": "tall",
+   "plan_cover": 2
+  },
+  {
+   "type": "comms_rack",
+   "space": "bridge",
+   "at": [
+    0.913043,
+    0.333333
+   ],
+   "size_m": [
+    0.86,
+    2.0,
+    0.8
+   ],
+   "cover": "tall",
+   "plan_cover": 2
+  },
+  {
+   "type": "specimen_tank",
+   "space": "bio_lab",
+   "at": [
+    0.108696,
+    0.131579
+   ],
+   "size_m": [
+    0.9,
+    2.15,
+    0.9
+   ],
+   "cover": "tall",
+   "plan_cover": 3,
+   "wear": {
+    "emit_blue": "emit_cyan",
+    "glass": "tank_glow"
+   }
+  },
+  {
+   "type": "specimen_tank",
+   "space": "bio_lab",
+   "at": [
+    0.369565,
+    0.131579
+   ],
+   "size_m": [
+    0.9,
+    2.15,
+    0.9
+   ],
+   "cover": "tall",
+   "plan_cover": 4,
+   "wear": {
+    "emit_blue": "emit_cyan",
+    "glass": "tank_glow"
+   }
+  },
+  {
+   "type": "specimen_tank",
+   "space": "bio_lab",
+   "at": [
+    0.630435,
+    0.131579
+   ],
+   "size_m": [
+    0.9,
+    2.15,
+    0.9
+   ],
+   "cover": "tall",
+   "plan_cover": 5,
+   "wear": {
+    "emit_blue": "emit_cyan",
+    "glass": "tank_glow"
+   }
+  },
+  {
+   "type": "sample_freezer",
+   "space": "bio_lab",
+   "at": [
+    0.913043,
+    0.742105
+   ],
+   "size_m": [
+    0.75,
+    1.95,
+    0.8
+   ],
+   "cover": "tall",
+   "plan_cover": 6
+  },
+  {
+   "type": "sample_freezer",
+   "space": "bio_lab",
+   "at": [
+    0.913043,
+    0.836842
+   ],
+   "size_m": [
+    0.75,
+    1.95,
+    0.8
+   ],
+   "cover": "tall",
+   "plan_cover": 6
+  },
+  {
+   "type": "autopsy_table",
+   "space": "bio_lab",
+   "at": [
+    0.347826,
+    0.842105
+   ],
+   "size_m": [
+    2.01,
+    0.98,
+    1.18
+   ],
+   "cover": "low",
+   "plan_cover": 7
+  },
+  {
+   "type": "mess_table",
+   "space": "mess",
+   "at": [
+    0.26087,
+    0.181818
+   ],
+   "size_m": [
+    2.0,
+    0.8,
+    1.6
+   ],
+   "cover": "low",
+   "plan_cover": 8
+  },
+  {
+   "type": "mess_table",
+   "space": "mess",
+   "at": [
+    0.695652,
+    0.727273
+   ],
+   "size_m": [
+    2.0,
+    0.8,
+    1.6
+   ],
+   "cover": "low",
+   "plan_cover": 9
+  },
+  {
+   "type": "food_dispenser",
+   "space": "mess",
+   "at": [
+    0.913043,
+    0.772727
+   ],
+   "size_m": [
+    0.58,
+    2.0,
+    1.0
+   ],
+   "cover": "tall",
+   "plan_cover": 10
+  },
+  {
+   "type": "bunk_bed",
+   "space": "quarters",
+   "at": [
+    0.108696,
+    0.772727
+   ],
+   "size_m": [
+    1.02,
+    1.9,
+    1.99
+   ],
+   "cover": "tall",
+   "plan_cover": 11
+  },
+  {
+   "type": "bunk_bed",
+   "space": "quarters",
+   "at": [
+    0.23913,
+    0.772727
+   ],
+   "size_m": [
+    1.02,
+    1.9,
+    1.99
+   ],
+   "cover": "tall",
+   "plan_cover": 11
+  },
+  {
+   "type": "bunk_bed",
+   "space": "quarters",
+   "at": [
+    0.543478,
+    0.772727
+   ],
+   "size_m": [
+    1.02,
+    1.9,
+    1.99
+   ],
+   "cover": "tall",
+   "plan_cover": 12
+  },
+  {
+   "type": "bunk_bed",
+   "space": "quarters",
+   "at": [
+    0.634783,
+    0.772727
+   ],
+   "size_m": [
+    1.02,
+    1.9,
+    1.99
+   ],
+   "cover": "tall",
+   "plan_cover": 12
+  },
+  {
+   "type": "tarp_pile",
+   "space": "quarters",
+   "at": [
+    0.891304,
+    0.181818
+   ],
+   "size_m": [
+    1.54,
+    1.01,
+    1.06
+   ],
+   "cover": "low",
+   "plan_cover": 13
+  },
+  {
+   "type": "transformer",
+   "space": "engineering",
+   "at": [
+    0.306,
+    0.082
+   ],
+   "size_m": [
+    1.12,
+    2.0,
+    0.64
+   ],
+   "cover": "tall",
+   "plan_cover": 14
+  },
+  {
+   "type": "reactor_core",
+   "space": "engineering",
+   "at": [
+    0.55,
+    0.15
+   ],
+   "size_m": [
+    2.0,
+    2.4,
+    2.0
+   ],
+   "cover": "tall",
+   "plan_cover": 14
+  },
+  {
+   "type": "transformer",
+   "space": "engineering",
+   "at": [
+    0.794,
+    0.082
+   ],
+   "size_m": [
+    1.12,
+    2.0,
+    0.64
+   ],
+   "cover": "tall",
+   "plan_cover": 14
+  },
+  {
+   "type": "control_desk",
+   "space": "engineering",
+   "at": [
+    0.4,
+    0.85
+   ],
+   "size_m": [
+    1.8,
+    1.09,
+    0.7
+   ],
+   "cover": "low",
+   "plan_cover": 15
+  },
+  {
+   "type": "power_cell_rack",
+   "space": "engineering",
+   "at": [
+    0.875,
+    0.69
+   ],
+   "size_m": [
+    0.5,
+    1.8,
+    1.2
+   ],
+   "cover": "tall",
+   "plan_cover": 16
+  },
+  {
+   "type": "power_cell_rack",
+   "space": "engineering",
+   "at": [
+    0.875,
+    0.81
+   ],
+   "size_m": [
+    0.5,
+    1.8,
+    1.2
+   ],
+   "cover": "tall",
+   "plan_cover": 16
+  },
+  {
+   "type": "crate_pile_tipped",
+   "space": "airlock",
+   "at": [
+    0.25,
+    0.166667
+   ],
+   "size_m": [
+    1.61,
+    0.75,
+    1.19
+   ],
+   "cover": "low",
+   "plan_cover": 17
+  },
+  {
+   "type": "container_section",
+   "space": "airlock",
+   "at": [
+    0.25,
+    0.791667
+   ],
+   "size_m": [
+    2.53,
+    2.4,
+    1.27
+   ],
+   "cover": "tall",
+   "plan_cover": 18
+  }
+ ],
+ "effects": [
+  {
+   "recipe": "sparking_console",
+   "space": "bridge",
+   "at": [
+    0.165217,
+    0.258333
+   ],
+   "y_m": 1.08
+  },
+  {
+   "recipe": "steam_jet",
+   "space": "engineering",
+   "at": [
+    0.17,
+    0.99
+   ],
+   "y_m": 1.7,
+   "facing": [
+    0.0,
+    -0.1,
+    -1.0
+   ]
+  },
+  {
+   "recipe": "steam_jet",
+   "space": "engineering",
+   "at": [
+    0.99,
+    0.41
+   ],
+   "y_m": 1.5,
+   "facing": [
+    -1.0,
+    -0.1,
+    0.0
+   ]
+  },
+  {
+   "recipe": "acid_pool",
+   "space": "bio_lab",
+   "at": [
+    0.782609,
+    0.347368
+   ],
+   "y_m": 0.02
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "bridge",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    10.5,
+    1.2,
+    5.0
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "bio_lab",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    10.5,
+    1.2,
+    8.5
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "mess",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    10.5,
+    1.2,
+    4.5
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "quarters",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    10.5,
+    1.2,
+    4.5
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "west_spine",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    2.5,
+    1.2,
+    27.0
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "east_spine",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    2.5,
+    1.2,
+    27.0
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "engineering",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    9.0,
+    1.2,
+    9.0
+   ]
+  },
+  {
+   "recipe": "dust_motes",
+   "space": "airlock",
+   "at": [
+    0.5,
+    0.5
+   ],
+   "box_m": [
+    5.0,
+    1.2,
+    5.0
+   ]
+  }
+ ],
+ "dressing": [
+  {
+   "type": "captain_chair",
+   "space": "bridge",
+   "at": [
+    0.434783,
+    0.566667
+   ],
+   "turn_deg": 180.0
+  },
+  {
+   "type": "holo_projector",
+   "space": "bridge",
+   "at": [
+    0.804348,
+    0.733333
+   ]
+  },
+  {
+   "type": "wall_screen_bank",
+   "space": "bridge",
+   "wall": "north",
+   "at": 0.217391
+  },
+  {
+   "type": "viewport_frame",
+   "space": "bridge",
+   "wall": "north",
+   "at": 0.452174
+  },
+  {
+   "type": "wall_terminal",
+   "space": "bridge",
+   "wall": "west",
+   "at": 0.233333
+  },
+  {
+   "type": "centrifuge",
+   "space": "bio_lab",
+   "at": [
+    0.530435,
+    0.842105
+   ]
+  },
+  {
+   "type": "biohazard_bin",
+   "space": "bio_lab",
+   "at": [
+    0.147826,
+    0.926316
+   ]
+  },
+  {
+   "type": "body_bag",
+   "space": "bio_lab",
+   "at": [
+    0.652174,
+    0.957895
+   ],
+   "turn_deg": 90.0
+  },
+  {
+   "type": "scrub_sink",
+   "space": "bio_lab",
+   "wall": "west",
+   "at": 0.157895
+  },
+  {
+   "type": "waste_bin",
+   "space": "mess",
+   "at": [
+    0.06087,
+    0.890909
+   ]
+  },
+  {
+   "type": "footlocker",
+   "space": "quarters",
+   "at": [
+    0.391304,
+    0.909091
+   ]
+  },
+  {
+   "type": "desk_chair",
+   "space": "quarters",
+   "at": [
+    0.582609,
+    0.118182
+   ]
+  },
+  {
+   "type": "personal_shelf",
+   "space": "quarters",
+   "wall": "north",
+   "at": 0.669565
+  },
+  {
+   "type": "toolbox_cart",
+   "space": "engineering",
+   "at": [
+    0.07,
+    0.88
+   ]
+  },
+  {
+   "type": "catwalk_section",
+   "space": "engineering",
+   "at": [
+    0.15,
+    0.2
+   ]
+  },
+  {
+   "type": "fuse_panel",
+   "space": "engineering",
+   "wall": "east",
+   "at": 0.5
+  },
+  {
+   "type": "junction_box",
+   "space": "engineering",
+   "wall": "east",
+   "at": 0.24
+  },
+  {
+   "type": "pipe_valve",
+   "space": "engineering",
+   "wall": "south",
+   "at": 0.65
+  },
+  {
+   "type": "pallet",
+   "space": "airlock",
+   "at": [
+    0.733333,
+    0.1
+   ]
+  },
+  {
+   "type": "emergency_locker",
+   "space": "airlock",
+   "wall": "north",
+   "at": 0.6
+  },
+  {
+   "type": "tray_trolley",
+   "space": "east_spine",
+   "at": [
+    0.082857,
+    0.285714
+   ]
+  }
+ ],
+ "dressing_max_intrusion_m": 0.3,
+ "corridor_dressing": {
+  "below_m": 2.0,
+  "door_clear_m": 0.6,
+  "door_touch_m": 0.03,
+  "prop_gap_m": 0.1,
+  "low_cover_line_m": 0.8,
+  "corner_probe_m": 0.02,
+  "run_search_m": 0.1,
+  "single_step_m": 0.1,
+  "single_slide_m": 1.2,
+  "over_limit_ok": [
+   "corner_pillar",
+   "wall_panel_breached"
+  ],
+  "cast_shadow": [
+   "wall_rib",
+   "door_jamb",
+   "door_lintel",
+   "corner_pillar",
+   "pipe_run_high",
+   "air_duct",
+   "wall_panel_breached"
+  ],
+  "corridors": {
+   "west_spine": {
+    "pillars": [
+     "nw",
+     "ne",
+     "sw",
+     "se"
+    ],
+    "ribs": {
+     "type": "wall_rib",
+     "every_m": 2.7,
+     "start_m": {
+      "west": 1.2,
+      "east": 2.55
+     }
+    },
+    "landmarks": [
+     {
+      "type": "wall_panel_breached",
+      "wall": "west",
+      "at": 0.246429
+     },
+     {
+      "type": "hanging_cables",
+      "wall": "west",
+      "at": 0.273214,
+      "over": true
+     }
+    ],
+    "runs": [
+     {
+      "type": "pipe_run_high",
+      "wall": "west"
+     },
+     {
+      "type": "pipe_run_low",
+      "wall": "east"
+     }
+    ],
+    "singles": [
+     {
+      "type": "fire_hose_reel",
+      "wall": "west",
+      "at": 0.44
+     },
+     {
+      "type": "handrail",
+      "wall": "west",
+      "at": 0.8
+     },
+     {
+      "type": "maintenance_hatch",
+      "wall": "west",
+      "at": 0.12
+     },
+     {
+      "type": "wall_sign_arrow",
+      "wall": "east",
+      "at": 0.28
+     }
+    ],
+    "floor": [
+     {
+      "type": "debris_pile",
+      "at": [
+       0.142857,
+       0.260714
+      ],
+      "scale_x": 0.9,
+      "turn_deg": 90.0
+     },
+     {
+      "type": "floor_grate",
+      "at": [
+       0.285714,
+       0.971429
+      ]
+     }
+    ]
+   },
+   "east_spine": {
+    "pillars": [
+     "nw",
+     "ne",
+     "sw",
+     "se"
+    ],
+    "ribs": {
+     "type": "wall_rib",
+     "every_m": 2.7,
+     "start_m": {
+      "east": 1.2,
+      "west": 2.55
+     }
+    },
+    "landmarks": [
+     {
+      "type": "wall_panel_breached",
+      "wall": "east",
+      "at": 0.221429
+     },
+     {
+      "type": "hanging_cables",
+      "wall": "east",
+      "at": 0.248214,
+      "over": true
+     }
+    ],
+    "runs": [
+     {
+      "type": "pipe_run_high",
+      "wall": "west"
+     },
+     {
+      "type": "pipe_run_low",
+      "wall": "east"
+     }
+    ],
+    "singles": [
+     {
+      "type": "fire_hose_reel",
+      "wall": "east",
+      "at": 0.44
+     },
+     {
+      "type": "handrail",
+      "wall": "east",
+      "at": 0.8
+     },
+     {
+      "type": "maintenance_hatch",
+      "wall": "east",
+      "at": 0.12
+     },
+     {
+      "type": "wall_sign_arrow",
+      "wall": "west",
+      "at": 0.28
+     }
+    ],
+    "floor": [
+     {
+      "type": "debris_pile",
+      "at": [
+       0.857143,
+       0.235714
+      ],
+      "scale_x": 0.9,
+      "turn_deg": 90.0
+     },
+     {
+      "type": "floor_grate",
+      "at": [
+       0.714286,
+       0.971429
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "spawn": {
+  "space": "airlock",
+  "at": [
+   0.5,
+   0.5
+  ],
+  "aim_deg": 90.0
+ },
+ "path_check": {
+  "from": "airlock",
+  "to": "bridge",
+  "cell_m": 0.1,
+  "margin_m": 0.05
+ },
+ "stand_in": {
+  "speed_m_s": 4.2,
+  "turn_deg_s": 720.0,
+  "radius_m": 0.4,
+  "height_m": 1.8,
+  "aim_height_m": 1.2
+ },
+ "lighting": {
+  "background_color": "0b0e12",
+  "ambient_color": "8a96a6",
+  "ambient_energy": 0.55,
+  "sun_color": "f2f2ee",
+  "sun_energy": 1.1,
+  "sun_pitch_deg": -62.0,
+  "sun_yaw_deg": 35.0,
+  "sun_shadows": true,
+  "sun_shadow_max_distance_m": 70.0,
+  "sun_shadow_blur": 1.5
+ },
+ "colors": {
+  "floor": "8c9096",
+  "floor_line": "6f7378",
+  "wall": "4a4f56",
+  "wall_top": "2c3036",
+  "door_frame": "e0a21a",
+  "prop": "6c737c",
+  "prop_accent": "c9a227"
+ },
+ "data_overrides": {
+  "kit": {
+   "slots": {
+    "autopsy_table": "res://assets/game/props/autopsy_table.glb",
+    "biohazard_bin": "res://assets/game/props/biohazard_bin.glb",
+    "body_bag": "res://assets/game/props/body_bag.glb",
+    "bunk_bed": "res://assets/game/props/bunk_bed.glb",
+    "captain_chair": "res://assets/game/props/captain_chair.glb",
+    "catwalk_section": "res://assets/game/props/catwalk_section.glb",
+    "centrifuge": "res://assets/game/props/centrifuge.glb",
+    "comms_rack": "res://assets/game/props/comms_rack.glb",
+    "container_section": "res://assets/game/props/container_section.glb",
+    "control_desk": "res://assets/game/props/control_desk.glb",
+    "crate_pile_tipped": "res://assets/game/props/crate_pile_tipped.glb",
+    "desk_chair": "res://assets/game/props/desk_chair.glb",
+    "emergency_locker": "res://assets/game/props/emergency_locker.glb",
+    "food_dispenser": "res://assets/game/props/food_dispenser.glb",
+    "footlocker": "res://assets/game/props/footlocker.glb",
+    "fuse_panel": "res://assets/game/props/fuse_panel.glb",
+    "helm_console": "res://assets/game/props/helm_console.glb",
+    "holo_projector": "res://assets/game/props/holo_projector.glb",
+    "junction_box": "res://assets/game/props/junction_box.glb",
+    "mess_table": "res://assets/game/props/mess_table.glb",
+    "nav_table": "res://assets/game/props/nav_table.glb",
+    "pallet": "res://assets/game/props/pallet.glb",
+    "personal_shelf": "res://assets/game/props/personal_shelf.glb",
+    "pipe_valve": "res://assets/game/props/pipe_valve.glb",
+    "power_cell_rack": "res://assets/game/props/power_cell_rack.glb",
+    "reactor_core": "res://assets/game/props/reactor_core.glb",
+    "sample_freezer": "res://assets/game/props/sample_freezer.glb",
+    "scrub_sink": "res://assets/game/props/scrub_sink.glb",
+    "specimen_tank": "res://assets/game/props/specimen_tank.glb",
+    "tarp_pile": "res://assets/game/props/tarp_pile.glb",
+    "toolbox_cart": "res://assets/game/props/toolbox_cart.glb",
+    "transformer": "res://assets/game/props/transformer.glb",
+    "tray_trolley": "res://assets/game/props/tray_trolley.glb",
+    "viewport_frame": "res://assets/game/props/viewport_frame.glb",
+    "wall_screen_bank": "res://assets/game/props/wall_screen_bank.glb",
+    "wall_terminal": "res://assets/game/props/wall_terminal.glb",
+    "waste_bin": "res://assets/game/props/waste_bin.glb"
+   },
+   "wall_mounts": {
+    "wall_screen_bank": {
+     "mount_y_m": 1.25
+    },
+    "viewport_frame": {
+     "mount_y_m": 0.0
+    },
+    "wall_terminal": {
+     "mount_y_m": 1.1
+    },
+    "scrub_sink": {
+     "mount_y_m": 0.0
+    },
+    "personal_shelf": {
+     "mount_y_m": 1.25
+    },
+    "fuse_panel": {
+     "mount_y_m": 1.05
+    },
+    "junction_box": {
+     "mount_y_m": 1.1
+    },
+    "pipe_valve": {
+     "mount_y_m": 0.95
+    },
+    "emergency_locker": {
+     "mount_y_m": 0.55
+    }
+   },
+   "materials": {
+    "emit_cyan": {
+     "color": "000000",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "uv_m": 1.0,
+     "emission": "3affd2",
+     "energy": 5.0
+    },
+    "tank_glow": {
+     "color": "0a2a24",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "specular": 0.7,
+     "uv_m": 1.0,
+     "emission": "2fe6b8",
+     "energy": 1.6
+    }
+   },
+   "wall_families": {
+    "by_space": {
+     "bridge": "reinforced",
+     "bio_lab": "clinical",
+     "mess": "plain",
+     "quarters": "plain",
+     "engineering": "pipe",
+     "west_spine": "corridor",
+     "east_spine": "corridor",
+     "airlock": "reinforced"
+    }
+   },
+   "floors": {
+    "spaces": {
+     "bridge": {
+      "grates": [
+       {
+        "at": [
+         0.5,
+         0.74
+        ],
+        "size_m": [
+         4.0,
+         0.9
+        ]
+       }
+      ],
+      "drains": []
+     },
+     "bio_lab": {
+      "grates": [
+       {
+        "at": [
+         0.72,
+         0.52
+        ],
+        "size_m": [
+         2.6,
+         0.9
+        ]
+       }
+      ],
+      "drains": [
+       [
+        0.78,
+        0.56
+       ]
+      ]
+     },
+     "mess": {
+      "grates": [],
+      "drains": [
+       [
+        0.48,
+        0.36
+       ]
+      ]
+     },
+     "quarters": {
+      "grates": [
+       {
+        "at": [
+         0.5,
+         0.3
+        ],
+        "size_m": [
+         5.0,
+         0.7
+        ]
+       }
+      ],
+      "drains": []
+     },
+     "engineering": {
+      "grates": [
+       {
+        "at": [
+         0.55,
+         0.45
+        ],
+        "size_m": [
+         5.0,
+         1.2
+        ]
+       },
+       {
+        "at": [
+         0.14,
+         0.5
+        ],
+        "size_m": [
+         1.0,
+         3.0
+        ]
+       }
+      ],
+      "drains": [
+       [
+        0.7,
+        0.9
+       ]
+      ]
+     },
+     "west_spine": {
+      "grates": [
+       {
+        "at": [
+         0.5,
+         0.3
+        ],
+        "size_m": [
+         1.2,
+         5.5
+        ]
+       },
+       {
+        "at": [
+         0.5,
+         0.72
+        ],
+        "size_m": [
+         1.2,
+         5.5
+        ]
+       }
+      ],
+      "drains": []
+     },
+     "east_spine": {
+      "grates": [
+       {
+        "at": [
+         0.5,
+         0.25
+        ],
+        "size_m": [
+         1.2,
+         5.5
+        ]
+       },
+       {
+        "at": [
+         0.5,
+         0.68
+        ],
+        "size_m": [
+         1.2,
+         5.5
+        ]
+       }
+      ],
+      "drains": [
+       [
+        0.2,
+        0.9
+       ]
+      ]
+     },
+     "airlock": {
+      "grates": [
+       {
+        "at": [
+         0.72,
+         0.5
+        ],
+        "size_m": [
+         1.2,
+         3.5
+        ]
+       }
+      ],
+      "drains": []
+     }
+    }
+   },
+   "floor_wear": {
+    "spaces": {
+     "bridge": {
+      "hub": [
+       0.5,
+       0.55
+      ],
+      "routes": [
+       [
+        [
+         0.0,
+         0.67
+        ],
+        [
+         0.57,
+         0.5
+        ],
+        [
+         1.0,
+         0.67
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.8,
+        0.7,
+        1.4
+       ]
+      ]
+     },
+     "bio_lab": {
+      "hub": [
+       0.5,
+       0.5
+      ],
+      "routes": [
+       [
+        [
+         0.0,
+         0.47
+        ],
+        [
+         1.0,
+         0.47
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.78,
+        0.35,
+        2.0
+       ],
+       [
+        0.2,
+        0.9,
+        1.5
+       ]
+      ]
+     },
+     "mess": {
+      "hub": [
+       0.5,
+       0.45
+      ],
+      "routes": [
+       [
+        [
+         0.0,
+         0.5
+        ],
+        [
+         1.0,
+         0.5
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.6,
+        0.3,
+        1.4
+       ]
+      ]
+     },
+     "quarters": {
+      "hub": [
+       0.5,
+       0.4
+      ],
+      "routes": [
+       [
+        [
+         0.0,
+         0.5
+        ],
+        [
+         1.0,
+         0.5
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.3,
+        0.2,
+        1.3
+       ]
+      ]
+     },
+     "engineering": {
+      "hub": [
+       0.2,
+       0.5
+      ],
+      "routes": [
+       [
+        [
+         0.0,
+         0.5
+        ],
+        [
+         0.65,
+         0.6
+        ],
+        [
+         0.65,
+         0.4
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.2,
+        0.9,
+        1.8
+       ],
+       [
+        0.9,
+        0.4,
+        1.5
+       ]
+      ]
+     },
+     "west_spine": {
+      "hub": [
+       0.5,
+       0.5
+      ],
+      "routes": [
+       [
+        [
+         0.5,
+         0.02
+        ],
+        [
+         0.5,
+         0.98
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.3,
+        0.68,
+        1.4
+       ]
+      ]
+     },
+     "east_spine": {
+      "hub": [
+       0.5,
+       0.5
+      ],
+      "routes": [
+       [
+        [
+         0.5,
+         0.02
+        ],
+        [
+         0.5,
+         0.98
+        ]
+       ]
+      ],
+      "damp": [
+       [
+        0.7,
+        0.24,
+        1.5
+       ]
+      ]
+     },
+     "airlock": {
+      "hub": [
+       0.6,
+       0.5
+      ],
+      "routes": [
+       [
+        [
+         1.0,
+         0.5
+        ],
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "damp": []
+     }
+    }
+   },
+   "signage": {
+    "walls": [
+     {
+      "image": "plate_bridge",
+      "space": "bridge",
+      "wall": "north",
+      "at": 0.069565,
+      "y_m": 2.1,
+      "width_m": 1.25
+     },
+     {
+      "image": "bridge_commendation",
+      "space": "bridge",
+      "wall": "north",
+      "at": 0.704348,
+      "y_m": 1.4,
+      "width_m": 0.9
+     },
+     {
+      "image": "bridge_captain_chair",
+      "space": "bridge",
+      "wall": "north",
+      "at": 0.804348,
+      "y_m": 1.4,
+      "width_m": 1.2
+     },
+     {
+      "image": "plate_bio_lab",
+      "space": "bio_lab",
+      "wall": "north",
+      "at": 0.843478,
+      "y_m": 2.25,
+      "width_m": 2.2
+     },
+     {
+      "image": "lab_biohazard",
+      "space": "bio_lab",
+      "wall": "north",
+      "at": 0.843478,
+      "y_m": 1.55,
+      "width_m": 2.7
+     },
+     {
+      "image": "lab_ethics",
+      "space": "bio_lab",
+      "wall": "north",
+      "at": 0.5,
+      "y_m": 1.4,
+      "width_m": 1.0
+     },
+     {
+      "image": "rem_bio_tape",
+      "space": "bio_lab",
+      "wall": "north",
+      "at": 0.5,
+      "y_m": 1.3,
+      "width_m": 1.5,
+      "layer": 1,
+      "tilt_deg": -6.0
+     },
+     {
+      "image": "lab_fume_hood",
+      "space": "bio_lab",
+      "wall": "west",
+      "at": 0.789474,
+      "y_m": 1.5,
+      "width_m": 1.1
+     },
+     {
+      "image": "plate_mess",
+      "space": "mess",
+      "wall": "north",
+      "at": 0.904348,
+      "y_m": 2.0,
+      "width_m": 1.2
+     },
+     {
+      "image": "mess_birthday",
+      "space": "mess",
+      "wall": "north",
+      "at": 0.469565,
+      "y_m": 2.0,
+      "width_m": 3.2,
+      "tilt_deg": -1.5
+     },
+     {
+      "image": "mess_menu",
+      "space": "mess",
+      "wall": "north",
+      "at": 0.078261,
+      "y_m": 1.5,
+      "width_m": 0.95
+     },
+     {
+      "image": "mess_nutrition",
+      "space": "mess",
+      "wall": "north",
+      "at": 0.721739,
+      "y_m": 1.45,
+      "width_m": 0.95
+     },
+     {
+      "image": "mess_fridge",
+      "space": "mess",
+      "wall": "north",
+      "at": 0.469565,
+      "y_m": 1.1,
+      "width_m": 0.8
+     },
+     {
+      "image": "plate_crew_quarters",
+      "space": "quarters",
+      "wall": "north",
+      "at": 0.078261,
+      "y_m": 1.75,
+      "width_m": 1.0
+     },
+     {
+      "image": "qtr_quiet_hours",
+      "space": "quarters",
+      "wall": "north",
+      "at": 0.217391,
+      "y_m": 1.45,
+      "width_m": 1.25
+     },
+     {
+      "image": "qtr_bunk_rental",
+      "space": "quarters",
+      "wall": "north",
+      "at": 0.369565,
+      "y_m": 1.45,
+      "width_m": 1.35
+     },
+     {
+      "image": "qtr_drawing",
+      "space": "quarters",
+      "wall": "north",
+      "at": 0.513043,
+      "y_m": 1.45,
+      "width_m": 1.0
+     },
+     {
+      "image": "qtr_mug",
+      "space": "quarters",
+      "wall": "north",
+      "at": 0.669565,
+      "y_m": 1.75,
+      "width_m": 0.55
+     },
+     {
+      "image": "plate_engineering_03",
+      "space": "engineering",
+      "wall": "north",
+      "at": 0.925,
+      "y_m": 2.0,
+      "width_m": 1.1
+     },
+     {
+      "image": "eng_event_board",
+      "space": "engineering",
+      "wall": "north",
+      "at": 0.125,
+      "y_m": 1.3,
+      "width_m": 1.45
+     },
+     {
+      "image": "eng_radiation",
+      "space": "engineering",
+      "wall": "east",
+      "at": 0.8,
+      "y_m": 1.35,
+      "width_m": 1.0
+     },
+     {
+      "image": "eng_lockout",
+      "space": "engineering",
+      "wall": "west",
+      "at": 0.18,
+      "y_m": 1.35,
+      "width_m": 0.95
+     },
+     {
+      "image": "plate_section_a",
+      "space": "west_spine",
+      "wall": "north",
+      "at": 0.5,
+      "y_m": 1.4,
+      "width_m": 0.85
+     },
+     {
+      "image": "plate_section_b",
+      "space": "east_spine",
+      "wall": "north",
+      "at": 0.5,
+      "y_m": 1.4,
+      "width_m": 0.85
+     },
+     {
+      "image": "rem_notice",
+      "space": "west_spine",
+      "wall": "north",
+      "at": 0.785714,
+      "y_m": 1.3,
+      "width_m": 0.8
+     },
+     {
+      "image": "rem_bio_tape",
+      "space": "east_spine",
+      "wall": "west",
+      "at": 0.303571,
+      "y_m": 1.45,
+      "width_m": 1.5,
+      "tilt_deg": 4.0
+     },
+     {
+      "image": "owner_safety",
+      "space": "east_spine",
+      "wall": "north",
+      "at": 0.8,
+      "y_m": 1.3,
+      "width_m": 0.9
+     },
+     {
+      "image": "airlock_fee",
+      "space": "airlock",
+      "wall": "north",
+      "at": 0.241667,
+      "y_m": 1.7,
+      "width_m": 1.9
+     },
+     {
+      "image": "rem_terms",
+      "space": "airlock",
+      "wall": "north",
+      "at": 0.833333,
+      "y_m": 1.3,
+      "width_m": 0.72
+     },
+     {
+      "image": "owner_crew",
+      "space": "airlock",
+      "wall": "east",
+      "at": 0.2,
+      "y_m": 1.35,
+      "width_m": 1.0
+     }
+    ],
+    "floors": [
+     {
+      "image": "floor_keep_clear",
+      "space": "airlock",
+      "at": [
+       0.833333,
+       0.5
+      ],
+      "width_m": 1.4,
+      "turn_deg": 90.0
+     },
+     {
+      "image": "floor_hazard",
+      "space": "west_spine",
+      "at": [
+       0.5,
+       0.971429
+      ],
+      "width_m": 3.0,
+      "turn_deg": 0.0
+     },
+     {
+      "image": "floor_drain",
+      "space": "mess",
+      "at": [
+       0.478261,
+       0.345455
+      ],
+      "width_m": 0.8,
+      "turn_deg": 0.0
+     },
+     {
+      "image": "floor_drain",
+      "space": "bio_lab",
+      "at": [
+       0.782609,
+       0.557895
+      ],
+      "width_m": 0.85,
+      "turn_deg": 0.0
+     },
+     {
+      "image": "floor_keep_clear",
+      "space": "east_spine",
+      "at": [
+       0.5,
+       0.535714
+      ],
+      "width_m": 1.5,
+      "turn_deg": 90.0
+     },
+     {
+      "image": "floor_keep_clear",
+      "space": "engineering",
+      "at": [
+       0.15,
+       0.5
+      ],
+      "width_m": 1.4,
+      "turn_deg": 90.0
+     },
+     {
+      "image": "floor_staging",
+      "space": "airlock",
+      "at": [
+       0.6,
+       0.733333
+      ],
+      "width_m": 1.8,
+      "turn_deg": 0.0
+     }
+    ],
+    "stuck": [
+     {
+      "image": "bridge_nav",
+      "space": "bridge",
+      "at": [
+       0.652174,
+       0.25
+      ],
+      "y_m": 0.945,
+      "width_m": 1.45,
+      "facing": "top"
+     },
+     {
+      "image": "rem_stamp_assessed",
+      "space": "bridge",
+      "at": [
+       0.278261,
+       0.25
+      ],
+      "y_m": 1.055,
+      "width_m": 0.5,
+      "facing": "top",
+      "tilt_deg": 8.0
+     },
+     {
+      "image": "rem_tag_chair",
+      "space": "bridge",
+      "at": [
+       0.434783,
+       0.635833
+      ],
+      "y_m": 0.95,
+      "width_m": 0.42,
+      "facing": "south"
+     },
+     {
+      "image": "lab_specimen_01",
+      "space": "bio_lab",
+      "at": [
+       0.108696,
+       0.180526
+      ],
+      "y_m": 1.25,
+      "width_m": 0.6,
+      "facing": "south"
+     },
+     {
+      "image": "lab_specimen_02",
+      "space": "bio_lab",
+      "at": [
+       0.369565,
+       0.180526
+      ],
+      "y_m": 1.25,
+      "width_m": 0.6,
+      "facing": "south"
+     },
+     {
+      "image": "lab_specimen_03",
+      "space": "bio_lab",
+      "at": [
+       0.630435,
+       0.180526
+      ],
+      "y_m": 1.25,
+      "width_m": 0.6,
+      "facing": "south"
+     },
+     {
+      "image": "rem_priority_high",
+      "space": "bio_lab",
+      "at": [
+       0.347826,
+       0.842105
+      ],
+      "y_m": 0.995,
+      "width_m": 0.75,
+      "facing": "top"
+     },
+     {
+      "image": "rem_priority_low",
+      "space": "mess",
+      "at": [
+       0.695652,
+       0.727273
+      ],
+      "y_m": 0.815,
+      "width_m": 0.7,
+      "facing": "top",
+      "tilt_deg": -6.0
+     },
+     {
+      "image": "qtr_bunk_tag",
+      "space": "quarters",
+      "at": [
+       0.23913,
+       0.636364
+      ],
+      "y_m": 1.915,
+      "width_m": 0.5,
+      "facing": "top"
+     },
+     {
+      "image": "rem_stamp_assessed",
+      "space": "quarters",
+      "at": [
+       0.530435,
+       0.727273
+      ],
+      "y_m": 1.915,
+      "width_m": 0.5,
+      "facing": "top",
+      "tilt_deg": -10.0
+     },
+     {
+      "image": "rem_tag_reactor",
+      "space": "engineering",
+      "at": [
+       0.55,
+       0.2515
+      ],
+      "y_m": 0.7,
+      "width_m": 0.9,
+      "facing": "south"
+     },
+     {
+      "image": "eng_reactor_cage",
+      "space": "engineering",
+      "at": [
+       0.55,
+       0.2515
+      ],
+      "y_m": 1.55,
+      "width_m": 1.1,
+      "facing": "south"
+     },
+     {
+      "image": "eng_power_cells",
+      "space": "engineering",
+      "at": [
+       0.306,
+       0.1155
+      ],
+      "y_m": 1.2,
+      "width_m": 0.85,
+      "facing": "south"
+     },
+     {
+      "image": "rem_priority_medium",
+      "space": "engineering",
+      "at": [
+       0.4,
+       0.85
+      ],
+      "y_m": 1.105,
+      "width_m": 0.7,
+      "facing": "top",
+      "tilt_deg": 5.0
+     }
+    ]
+   },
+   "lighting": {
+    "fixtures": {
+     "looks": {
+      "red": {
+       "mat": "emit_red",
+       "color": "ff3626",
+       "energy": 4.2,
+       "range_m": 7.0,
+       "attenuation": 1.8,
+       "specular": 0.9
+      },
+      "cyan": {
+       "mat": "emit_cyan",
+       "color": "4cffd6",
+       "energy": 3.2,
+       "range_m": 5.5,
+       "attenuation": 1.8,
+       "specular": 0.9
+      }
+     },
+     "spaces": {
+      "bridge": [
+       {
+        "look": "red",
+        "wall": "north",
+        "at": 0.130435,
+        "light_xz": [
+         12,
+         0.5
+        ]
+       },
+       {
+        "look": "red",
+        "wall": "north",
+        "at": 0.73913,
+        "light_xz": [
+         19,
+         0.5
+        ]
+       }
+      ],
+      "bio_lab": [
+       {
+        "look": "cyan",
+        "wall": "west",
+        "at": 0.157895,
+        "light_xz": [
+         12,
+         8
+        ],
+        "bare": true
+       },
+       {
+        "look": "cyan",
+        "wall": "north",
+        "at": 0.391304,
+        "light_xz": [
+         15,
+         8
+        ],
+        "bare": true
+       },
+       {
+        "look": "cyan",
+        "wall": "north",
+        "at": 0.652174,
+        "light_xz": [
+         18,
+         8
+        ],
+        "bare": true
+       }
+      ],
+      "mess": [
+       {
+        "look": "amber",
+        "wall": "north",
+        "at": 0.304348,
+        "light_xz": [
+         14,
+         17
+        ]
+       },
+       {
+        "look": "amber",
+        "wall": "south",
+        "at": 0.73913,
+        "light_xz": [
+         19,
+         21.5
+        ]
+       }
+      ],
+      "quarters": [
+       {
+        "look": "cool",
+        "wall": "south",
+        "at": 0.217391,
+        "light_xz": [
+         13,
+         27.5
+        ]
+       },
+       {
+        "look": "cool",
+        "wall": "south",
+        "at": 0.73913,
+        "light_xz": [
+         19,
+         27.5
+        ]
+       }
+      ],
+      "west_spine": [
+       {
+        "look": "cool_low",
+        "wall": "west",
+        "at": 0.178571,
+        "light_xz": [
+         7,
+         5
+        ],
+        "prop": "wall_light_strip"
+       },
+       {
+        "look": "cool_low",
+        "wall": "west",
+        "at": 0.535714,
+        "light_xz": [
+         7,
+         15
+        ],
+        "prop": "wall_light_strip"
+       },
+       {
+        "look": "cool_low",
+        "wall": "west",
+        "at": 0.928571,
+        "light_xz": [
+         7,
+         26
+        ],
+        "prop": "wall_light_strip"
+       }
+      ],
+      "east_spine": [
+       {
+        "look": "amber_low",
+        "wall": "east",
+        "at": 0.178571,
+        "light_xz": [
+         25.5,
+         5
+        ],
+        "prop": "emergency_lamp"
+       },
+       {
+        "look": "amber_low",
+        "wall": "east",
+        "at": 0.642857,
+        "light_xz": [
+         25.5,
+         18
+        ],
+        "prop": "emergency_lamp"
+       },
+       {
+        "look": "amber_low",
+        "wall": "east",
+        "at": 0.928571,
+        "light_xz": [
+         25.5,
+         26
+        ],
+        "prop": "emergency_lamp"
+       }
+      ],
+      "engineering": [
+       {
+        "look": "cyan",
+        "wall": "north",
+        "at": 0.25,
+        "light_xz": [
+         29,
+         11
+        ]
+       },
+       {
+        "look": "cyan",
+        "wall": "south",
+        "at": 0.85,
+        "light_xz": [
+         35,
+         19
+        ]
+       }
+      ],
+      "airlock": [
+       {
+        "look": "cool",
+        "wall": "west",
+        "at": 0.333333,
+        "light_xz": [
+         1,
+         24
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  "enemies": {
+   "ambush": {
+    "none": true
+   },
+   "pack": [
+    {
+     "name": "lab stalker",
+     "space": "bio_lab",
+     "at": [
+      0.782609,
+      0.578947
+     ],
+     "yaw_deg": -90.0,
+     "patrol": [
+      [
+       0.782609,
+       0.578947
+      ],
+      [
+       0.130435,
+       0.473684
+      ],
+      [
+       0.695652,
+       0.736842
+      ],
+      [
+       0.130435,
+       0.684211
+      ]
+     ]
+    },
+    {
+     "name": "engineering stalker",
+     "space": "engineering",
+     "at": [
+      0.7,
+      0.55
+     ],
+     "yaw_deg": 90.0,
+     "patrol": [
+      [
+       0.7,
+       0.55
+      ],
+      [
+       0.15,
+       0.3
+      ],
+      [
+       0.15,
+       0.65
+      ],
+      [
+       0.7,
+       0.9
+      ]
+     ]
+    }
+   ],
+   "spawn_points": [
+    {
+     "name": "west vent",
+     "kind": "vent",
+     "space": "west_spine",
+     "at": [
+      0.714286,
+      0.25
+     ],
+     "patrol": [
+      [
+       0.714286,
+       0.25
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       0.428571,
+       0.107143
+      ],
+      [
+       0.5,
+       0.785714
+      ]
+     ]
+    },
+    {
+     "name": "west closet",
+     "kind": "closet",
+     "space": "west_spine",
+     "at": [
+      0.714286,
+      0.75
+     ],
+     "patrol": [
+      [
+       0.714286,
+       0.75
+      ],
+      [
+       0.5,
+       0.535714
+      ],
+      [
+       0.428571,
+       0.892857
+      ],
+      [
+       0.5,
+       0.25
+      ]
+     ]
+    },
+    {
+     "name": "east vent",
+     "kind": "vent",
+     "space": "east_spine",
+     "at": [
+      0.714286,
+      0.285714
+     ],
+     "patrol": [
+      [
+       0.714286,
+       0.285714
+      ],
+      [
+       0.5,
+       0.107143
+      ],
+      [
+       0.5,
+       0.535714
+      ],
+      [
+       0.428571,
+       0.928571
+      ]
+     ]
+    },
+    {
+     "name": "east closet",
+     "kind": "closet",
+     "space": "east_spine",
+     "at": [
+      0.714286,
+      0.821429
+     ],
+     "patrol": [
+      [
+       0.714286,
+       0.821429
+      ],
+      [
+       0.5,
+       0.571429
+      ],
+      [
+       0.428571,
+       0.946429
+      ],
+      [
+       0.5,
+       0.214286
+      ]
+     ]
+    },
+    {
+     "name": "engineering vent",
+     "kind": "vent",
+     "space": "engineering",
+     "at": [
+      0.9,
+      0.1
+     ],
+     "patrol": [
+      [
+       0.9,
+       0.1
+      ],
+      [
+       0.65,
+       0.45
+      ],
+      [
+       0.15,
+       0.65
+      ],
+      [
+       0.7,
+       0.9
+      ]
+     ]
+    },
+    {
+     "name": "lab vent",
+     "kind": "vent",
+     "space": "bio_lab",
+     "at": [
+      0.913043,
+      0.157895
+     ],
+     "patrol": [
+      [
+       0.913043,
+       0.157895
+      ],
+      [
+       0.782609,
+       0.578947
+      ],
+      [
+       0.130435,
+       0.526316
+      ],
+      [
+       0.73913,
+       0.736842
+      ]
+     ]
+    }
+   ]
+  },
+  "custodian": {
+   "terminals": {
+    "at": [
+     {
+      "space": "bridge",
+      "at": [
+       0.626087,
+       0.03
+      ]
+     },
+     {
+      "space": "bio_lab",
+      "at": [
+       0.23913,
+       0.018947
+      ]
+     },
+     {
+      "space": "engineering",
+      "at": [
+       0.694,
+       0.018
+      ]
+     }
+    ]
+   },
+   "cutters": [
+    {
+     "name": "east spine",
+     "space": "east_spine",
+     "at": [
+      0.714286,
+      0.464286
+     ],
+     "home_yaw_deg": 180.0,
+     "arc_half_deg": 75.0,
+     "on_wake": true
+    }
+   ],
+   "drones": [
+    {
+     "name": "patrol",
+     "space": "east_spine",
+     "at": [
+      0.428571,
+      0.428571
+     ],
+     "route": [
+      [
+       0.428571,
+       0.428571
+      ],
+      [
+       0.428571,
+       0.678571
+      ],
+      [
+       -1.285714,
+       0.678571
+      ],
+      [
+       -4.142857,
+       0.678571
+      ],
+      [
+       -4.142857,
+       0.392857
+      ],
+      [
+       -1.285714,
+       0.392857
+      ],
+      [
+       0.428571,
+       0.392857
+      ]
+     ]
+    }
+   ]
+  },
+  "salvage": {
+   "placements": [
+    {
+     "kind": "data_chips",
+     "space": "bridge",
+     "at": [
+      0.217391,
+      0.416667
+     ]
+    },
+    {
+     "kind": "black_box",
+     "space": "bridge",
+     "at": [
+      0.565217,
+      0.416667
+     ]
+    },
+    {
+     "kind": "fuse",
+     "space": "bio_lab",
+     "at": [
+      0.73913,
+      0.842105
+     ]
+    },
+    {
+     "kind": "canister",
+     "space": "bio_lab",
+     "at": [
+      0.217391,
+      0.684211
+     ]
+    },
+    {
+     "kind": "data_chips",
+     "space": "mess",
+     "at": [
+      0.478261,
+      0.727273
+     ]
+    },
+    {
+     "kind": "relay",
+     "space": "mess",
+     "at": [
+      0.73913,
+      0.181818
+     ]
+    },
+    {
+     "kind": "fuse",
+     "space": "quarters",
+     "at": [
+      0.304348,
+      0.181818
+     ]
+    },
+    {
+     "kind": "busbar",
+     "space": "quarters",
+     "at": [
+      0.73913,
+      0.818182
+     ]
+    },
+    {
+     "kind": "engine_part",
+     "space": "engineering",
+     "at": [
+      0.65,
+      0.7
+     ]
+    },
+    {
+     "kind": "relay",
+     "space": "engineering",
+     "at": [
+      0.65,
+      0.35
+     ]
+    }
+   ]
+  },
+  "shift": {
+   "airlock": {
+    "space": "airlock",
+    "from": [
+     0.0,
+     0.0
+    ],
+    "to": [
+     1.0,
+     1.0
+    ]
+   },
+   "tiers": [
+    {
+     "at_oxygen": 0.6,
+     "stalkers": 1,
+     "announce": "O2 60%. MOVEMENT IN THE VENTS. BILLING CONTINUES."
+    },
+    {
+     "at_oxygen": 0.3,
+     "stalkers": 1,
+     "lights": [
+      "bio_lab",
+      "mess"
+     ],
+     "wake": [
+      "custodian"
+     ],
+     "announce": "O2 30%. POWER LOSS: %s. BILLING CONTINUES."
+    }
+   ],
+   "section_words": {
+    "bio_lab": "BIO LAB",
+    "mess": "MESS"
+   }
+  },
+  "audio": {
+   "footsteps": {
+    "surfaces": {
+     "bridge": "deck",
+     "bio_lab": "deck",
+     "mess": "deck",
+     "quarters": "deck",
+     "engineering": "grate",
+     "west_spine": "grate",
+     "east_spine": "wet",
+     "airlock": "deck"
+    }
+   },
+   "ambience": {
+    "rooms": {
+     "bridge": "amb_medbay",
+     "bio_lab": "amb_medbay",
+     "mess": "amb_junction",
+     "quarters": "amb_junction",
+     "engineering": "amb_cargo",
+     "west_spine": "amb_junction",
+     "east_spine": "amb_junction",
+     "airlock": "amb_cargo"
+    }
+   },
+   "room_tail": {
+    "bridge": "tail_room",
+    "bio_lab": "tail_room",
+    "mess": "tail_room",
+    "quarters": "tail_room",
+    "engineering": "tail_hold",
+    "west_spine": "tail_slap",
+    "east_spine": "tail_slap",
+    "airlock": "tail_hold"
+   }
+  },
+  "vfx": {
+   "surfaces": {
+    "by_material": {
+     "emit_cyan": "glass",
+     "tank_glow": "glass"
+    },
+    "by_prop": {
+     "specimen_tank": "glass",
+     "sample_freezer": "clinical",
+     "helm_console": "housing",
+     "nav_table": "steel",
+     "comms_rack": "steel",
+     "autopsy_table": "steel",
+     "mess_table": "clinical",
+     "food_dispenser": "clinical",
+     "bunk_bed": "clinical",
+     "reactor_core": "steel",
+     "transformer": "steel",
+     "control_desk": "housing",
+     "power_cell_rack": "steel",
+     "container_section": "hull"
+    }
+   },
+   "room_draft": {
+    "bridge": [
+     0.1,
+     -0.1
+    ],
+    "bio_lab": [
+     -0.08,
+     0.05
+    ],
+    "mess": [
+     0.12,
+     0.0
+    ],
+    "quarters": [
+     0.1,
+     0.05
+    ],
+    "engineering": [
+     0.3,
+     -0.12
+    ],
+    "west_spine": [
+     0.0,
+     0.25
+    ],
+    "east_spine": [
+     0.0,
+     -0.3
+    ],
+    "airlock": [
+     0.2,
+     0.0
+    ]
+   }
+  },
+  "paperwork": {
+   "space_words": {
+    "bridge": "bridge",
+    "bio_lab": "bio lab",
+    "mess": "mess",
+    "quarters": "crew quarters",
+    "engineering": "engineering",
+    "west_spine": "west spine",
+    "east_spine": "east spine",
+    "airlock": "airlock"
+   }
+  }
+ }
+}

@@ -161,7 +161,7 @@ func _place_fixture(layout: RefCounted, walls: Node3D, space: String, e: Diction
 	var vertical := bool(e.get("vertical", false))
 	var host: Node3D = DeckBuilder.wall_at(walls, face - inward * t * 0.5)
 	var layer: int = KitPieces.space_layer(layout, space)
-	if host != null:
+	if host != null and not bool(e.get("bare", false)):
 		var mi := MeshInstance3D.new()
 		mi.name = "Fixture"
 		mi.set_meta("kit_piece", "fixture")
@@ -190,6 +190,8 @@ func _place_fixture(layout: RefCounted, walls: Node3D, space: String, e: Diction
 	light.omni_shadow_mode = OmniLight3D.SHADOW_DUAL_PARABOLOID if String(fx.shadow_mode) == "dual" else OmniLight3D.SHADOW_CUBE
 	var out := float(fx.light_out_m)
 	light.position = Vector3(face.x + inward.x * out, float(fx.light_y_m), face.y + inward.y * out)
+	if e.has("light_xz"):
+		light.position = Vector3(float(e.light_xz[0]), float(fx.light_y_m), float(e.light_xz[1]))
 	add_child(light)
 	lights.append(light)
 

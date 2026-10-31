@@ -11,7 +11,8 @@ var fired := false
 func _init(config: Dictionary, panel_at: Vector2) -> void:
 	cfg = config
 	panel = panel_at
-	pass_dir = Vector2(float(cfg.pass_dir[0]), float(cfg.pass_dir[1])).normalized()
+	if not bool(cfg.get("none", false)):
+		pass_dir = Vector2(float(cfg.pass_dir[0]), float(cfg.pass_dir[1])).normalized()
 
 
 func reset() -> void:
@@ -19,7 +20,7 @@ func reset() -> void:
 
 
 func would_fire(player: Vector2, aim_dir: Vector2) -> bool:
-	if fired:
+	if fired or bool(cfg.get("none", false)):
 		return false
 	var away := player - panel
 	if away.dot(pass_dir) < float(cfg.past_m) or away.length() > float(cfg.max_range_m):

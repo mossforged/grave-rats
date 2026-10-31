@@ -13,6 +13,7 @@ var save_dir := FILE_DIR
 var sliders: Dictionary = {}      # "file:path" -> HSlider
 var dirty: Dictionary = {}        # file name -> true
 var aa_picker: OptionButton
+var ship_picker: OptionButton
 var frame_label: Label
 var gallery: VfxGallery
 
@@ -126,6 +127,9 @@ func save() -> PackedStringArray:
 
 
 func _write(file: String) -> bool:
+	if Data.ship != Data.BASE_SHIP:
+		push_warning("TuningPanel: not saving %s: on %s it holds that ship's overrides too" % [file, Data.ship])
+		return false
 	var path := save_dir.path_join(file + ".json")
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f == null:
@@ -134,6 +138,27 @@ func _write(file: String) -> bool:
 	f.store_string(JSON.stringify(Data.load_data(file), "  ", false) + "\n")
 	f.close()
 	return true
+
+
+## F1 > Shift: which ship. Only on a deck that can change ship; picking one restarts the scene on it.
+func _add_ship_picker(box: VBoxContainer) -> void:
+	var deck := get_parent()
+	if deck == null or not deck.has_method("pick_ship"):
+		return
+	var head := Label.new()
+	head.text = String(Data.value("shift", "ship_section"))
+	head.add_theme_color_override("font_color", Color.GOLD)
+	box.add_child(head)
+	ship_picker = OptionButton.new()
+	ship_picker.name = "ShipPicker"
+	ship_picker.focus_mode = Control.FOCUS_NONE
+	var ships: Array = Data.value("shift", "ships", [])
+	for i in ships.size():
+		ship_picker.add_item(String(ships[i]))
+		if String(ships[i]) == Data.ship:
+			ship_picker.select(i)
+	ship_picker.item_selected.connect(func(i: int) -> void: deck.pick_ship(String(ships[i])))
+	box.add_child(ship_picker)
 
 
 func _add_display(box: VBoxContainer) -> void:
@@ -180,6 +205,7 @@ func _build() -> void:
 	_status = Label.new()
 	save_row.add_child(_status)
 	_add_display(box)
+	_add_ship_picker(box)
 	gallery = VfxGallery.new()
 	gallery.name = "Gallery"
 	add_child(gallery)

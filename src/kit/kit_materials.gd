@@ -4,6 +4,7 @@ extends RefCounted
 
 const TEX_DIR := "res://assets/game/kit/tex/%s_%s.png"
 const DECAL_DIR := "res://assets/game/kit/decals/%s.png"
+const ROOM_DECAL_DIR := "res://assets/game/decals/%s.png"
 const FLOOR_SHADER := preload("res://src/kit/kit_floor.gdshader")
 
 static var _cache := {}
@@ -81,7 +82,7 @@ static func decal(image: String) -> StandardMaterial3D:
 	m.alpha_scissor_threshold = float(s.alpha_scissor)
 	m.roughness = float(s.roughness)
 	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-	var path := DECAL_DIR % image
+	var path := (ROOM_DECAL_DIR if (cfg().room_decals.items as Dictionary).has(image) else DECAL_DIR) % image
 	if ResourceLoader.exists(path):
 		m.albedo_texture = load(path)
 	_decals[image] = m

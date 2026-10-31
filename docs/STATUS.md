@@ -17,6 +17,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Art: A006 merged and approved. A007 merged: Meshy inputs for stalker, bed and console in `assets/source/meshy/input/`; the rifle was refused by the image tool. The hauler is in the game (`assets/game/hauler/`).
 
 ## Open questions (for John)
+- T015 play: does the ship itself feel like a threat? Can you read the cutter (line + filling ring, tall cover blocks it) and the drone (spotlight, three bars; break line of sight to cancel) in time? Bots: the prize route is now near-fatal (greedy survives 1/12; cautious 12/12 because it leaves before CUSTODIAN wakes). First lever if too much: move the cargo cutter off the prize route.
 - T015 play (sheet `docs/screens/T015/sheet.png`): does the ship feel like a threat? Can you read the turret and drone in time? Approve the new copy in auto-T015.
 - T015 balance: the prize route may now be too lethal. Greedy bot survives 1 of 12 (was 6 of 12), even reading the cutter's ring; cautious stays 12 of 12 because it leaves before CUSTODIAN wakes. First lever: move the cargo cutter off the prize's route.
 - T014 play (the game now opens on the briefing): does the quota make you take risks? Do the payslip and death bill land? Balance flags from the bots: greedy met 42 of 44 quotas while dying in 45% of shifts (the black box is about 69% of the first quota, the design says a third); fees are small next to a good shift; dying costs nothing on the quota while leaving empty-handed costs about 120. Approve the new copy (termination notice, decline confirms, vessel names) in auto-T014.
@@ -63,4 +64,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json`: cutter (line, ring, burn; tall cover breaks it, low doesn't), patrol drone (cone, bars, chirp; a completed call wakes a cutter or alerts a stalker), wake on tier 2 or prize, its own HUD line, killer, causes, payslip line. 6.88 / 10.15 ms with three stalkers.
+2026-10-31 (lead): merged T015 (383/383 reproduced); queued Q002; paused new gameplay pending John's play.
+2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json` (cutter: line, ring, 1.2 s warm-up, tall cover cancels; drone: spotlight, 3 bars, 2.4 s call wakes a cutter or alerts a stalker); wakes at tier 2 or on the prize; new causes and payslip line.

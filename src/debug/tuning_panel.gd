@@ -1,26 +1,91 @@
 extends CanvasLayer
 ## F1 tuning panel (dev only). One slider per entry in data/debug.json "tuning". A slider writes
 ## straight into the loaded data dictionary, which the game reads live; Save writes the changed
-## files back to data/, so John's tuning persists as a data change.
+## files back to data/, so John's tuning persists as a data change. Its Display section switches
+## anti-aliasing live and saves that choice at once, with the frame time beside it. Vsync is off while
+## the panel is open, so that number is the real cost and not the display's refresh.
 
+const DisplayAA := preload("res://src/debug/display_aa.gd")
 const FILE_DIR := "res://data"
 
 var save_dir := FILE_DIR
 var sliders: Dictionary = {}      # "file:path" -> HSlider
 var dirty: Dictionary = {}        # file name -> true
+var aa_picker: OptionButton
+var frame_label: Label
 
 var _status: Label
 var _root: Control
+var _vsync_before := -1
+var _last_usec := 0
+var _frame_usec := 0
+var _worst_usec := 0
+var _frames := 0
 
 
 func _ready() -> void:
 	layer = 60
 	visible = false
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build()
+	visibility_changed.connect(_on_visibility_changed)
 
 
 func toggle() -> void:
 	visible = not visible
+
+
+func _on_visibility_changed() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	if visible:
+		_vsync_before = DisplayServer.window_get_vsync_mode()
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	elif _vsync_before >= 0:
+		DisplayServer.window_set_vsync_mode(_vsync_before)
+		_vsync_before = -1
+	_last_usec = 0
+
+
+## Wall-clock, since delta follows Engine.time_scale and the capture driver freezes that.
+func _process(_delta: float) -> void:
+	if not visible:
+		return
+	var now := Time.get_ticks_usec()
+	if _last_usec > 0:
+		var took := now - _last_usec
+		_frame_usec += took
+		_worst_usec = maxi(_worst_usec, took)
+		_frames += 1
+	_last_usec = now
+	if _frame_usec >= int(float(Data.value("display", "readout_s")) * 1e6):
+		show_frame_time(_frame_usec / 1000.0 / _frames, _worst_usec / 1000.0)
+		_frame_usec = 0
+		_worst_usec = 0
+		_frames = 0
+
+
+func show_frame_time(avg_ms: float, worst_ms: float) -> void:
+	frame_label.text = String(Data.value("display", "readout")) % [avg_ms, worst_ms]
+
+
+## Switches the live viewport and writes the choice to data/display.json. False if there's no such
+## mode. An env DISPLAY_AA only sets the start, so this always saves what's picked.
+func pick_aa(id: String) -> bool:
+	if not DisplayAA.apply(get_tree().root, id):
+		return false
+	Data.load_data("display").aa_mode = id
+	_select_aa(id)
+	var written := _write(DisplayAA.FILE)
+	if _status:
+		_status.text = "saved: %s" % DisplayAA.FILE if written else "couldn't save %s" % DisplayAA.FILE
+	return written
+
+
+func _select_aa(id: String) -> void:
+	for i in aa_picker.item_count:
+		if String(aa_picker.get_item_metadata(i)) == id:
+			aa_picker.select(i)
 
 
 ## The dictionary and last key of a dotted path like "turn.standing_deg_s".
@@ -49,19 +114,45 @@ func set_value(file: String, path: String, value: float) -> void:
 func save() -> PackedStringArray:
 	var written: PackedStringArray = []
 	for file: String in dirty.keys():
-		var path := save_dir.path_join(file + ".json")
-		var f := FileAccess.open(path, FileAccess.WRITE)
-		if f == null:
-			push_error("TuningPanel: can't write %s: %s" % [path, error_string(FileAccess.get_open_error())])
-			continue
-		f.store_string(JSON.stringify(Data.load_data(file), "  ", false) + "\n")
-		f.close()
-		written.append(file)
+		if _write(file):
+			written.append(file)
 	for file in written:
 		dirty.erase(file)
 	if _status:
 		_status.text = "saved: %s" % ", ".join(written) if written.size() > 0 else "nothing changed"
 	return written
+
+
+func _write(file: String) -> bool:
+	var path := save_dir.path_join(file + ".json")
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f == null:
+		push_error("TuningPanel: can't write %s: %s" % [path, error_string(FileAccess.get_open_error())])
+		return false
+	f.store_string(JSON.stringify(Data.load_data(file), "  ", false) + "\n")
+	f.close()
+	return true
+
+
+func _add_display(box: VBoxContainer) -> void:
+	var head := Label.new()
+	head.text = String(Data.value("display", "section"))
+	head.add_theme_color_override("font_color", Color.GOLD)
+	box.add_child(head)
+	var row := HBoxContainer.new()
+	box.add_child(row)
+	aa_picker = OptionButton.new()
+	aa_picker.name = "AaPicker"
+	aa_picker.focus_mode = Control.FOCUS_NONE
+	for mode: Dictionary in DisplayAA.modes():
+		aa_picker.add_item(String(mode.label))
+		aa_picker.set_item_metadata(aa_picker.item_count - 1, String(mode.id))
+	_select_aa(DisplayAA.mode_of(get_tree().root))
+	aa_picker.item_selected.connect(func(i: int) -> void: pick_aa(String(aa_picker.get_item_metadata(i))))
+	row.add_child(aa_picker)
+	frame_label = Label.new()
+	frame_label.name = "FrameTime"
+	row.add_child(frame_label)
 
 
 func _build() -> void:
@@ -86,6 +177,7 @@ func _build() -> void:
 	save_row.add_child(save_btn)
 	_status = Label.new()
 	save_row.add_child(_status)
+	_add_display(box)
 	for entry: Dictionary in Data.value("debug", "tuning", []):
 		if entry.has("section"):
 			var head := Label.new()

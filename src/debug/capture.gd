@@ -115,6 +115,7 @@ func _write_report(base: String) -> void:
 		"rendering_driver": RenderingServer.get_current_rendering_driver_name(),
 		"adapter": RenderingServer.get_video_adapter_name(),
 		"msaa_3d": ["off", "2x", "4x", "8x"][get_viewport().msaa_3d],
+		"screen_space_aa": ["off", "fxaa", "smaa"][get_viewport().screen_space_aa],
 		"vsync": "disabled",
 		"godot": Engine.get_version_info().string,
 		"date": Time.get_datetime_string_from_system(),

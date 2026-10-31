@@ -1,0 +1,12 @@
+{
+  "aa_mode": "msaa2",
+  "aa_modes": [
+    {"id": "msaa2", "label": "MSAA 2x", "msaa": "2x", "screen_space": "off"},
+    {"id": "msaa4", "label": "MSAA 4x", "msaa": "4x", "screen_space": "off"},
+    {"id": "msaa2_smaa", "label": "MSAA 2x + SMAA", "msaa": "2x", "screen_space": "smaa"},
+    {"id": "msaa2_fxaa", "label": "MSAA 2x + FXAA", "msaa": "2x", "screen_space": "fxaa"}
+  ],
+  "section": "Display",
+  "readout": "%.2f ms avg  %.2f ms worst",
+  "readout_s": 0.25
+}

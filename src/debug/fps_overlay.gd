@@ -1,6 +1,9 @@
 extends CanvasLayer
 ## FPS and frame-time overlay. Autoloaded as `DebugOverlay`; F3 toggles it.
 ## Starts visible when data/debug.json "fps_overlay" is true. Hidden in headless runs.
+## Being the first thing up, it also applies the saved anti-aliasing mode.
+
+const DisplayAA := preload("res://src/debug/display_aa.gd")
 
 var _label: Label
 var _accum := 0.0
@@ -12,6 +15,7 @@ var _refresh := 0.25
 func _ready() -> void:
 	layer = 100
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	DisplayAA.apply(get_tree().root, DisplayAA.starting_mode())
 	_label = Label.new()
 	_label.position = Vector2(12, 8)
 	_label.add_theme_font_size_override("font_size", 18)

@@ -4,6 +4,7 @@ extends RefCounted
 
 const DeckLayout := preload("res://src/study/deck_layout.gd")
 const KitPieces := preload("res://src/kit/kit_pieces.gd")
+const Dressing := preload("res://src/kit/dressing.gd")
 const KitMaterials := preload("res://src/kit/kit_materials.gd")
 const FloorWear := preload("res://src/kit/floor_wear.gd")
 const CUTAWAY_GROUP := &"camera_cutaway"  # the camera rig's contract (src/camera/CONTRACT.md)
@@ -49,6 +50,7 @@ static func build(layout: DeckLayout) -> Node3D:
 	root.add_child(props)
 	for p: Dictionary in layout.props:
 		_add_prop(props, layout, p)
+	root.add_child(Dressing.build(layout))
 	_add_signage(root, walls, layout, kit.signage)
 	return root
 

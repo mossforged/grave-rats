@@ -1,10 +1,11 @@
 extends Node3D
-## The salvage on the deck: rolls it from data/salvage.json "placements" and draws it. Grey boxes,
-## colour-coded by class, each on a ring of light that reads in the dark (the fairness rule: a
-## `src/sight` beacon, faint where you've never looked). The rules are in carry_state.gd.
+## The salvage on the deck: rolls it from data/salvage.json "placements" and draws it. Each kind's
+## model in kit materials, tinted by class, on a ring of light that reads in the dark (the fairness
+## rule: a `src/sight` beacon, faint where you've never looked). The rules are in carry_state.gd.
 
 const SalvageRules := preload("res://src/salvage/salvage_rules.gd")
 const SalvageItem := preload("res://src/salvage/salvage_item.gd")
+const KitPieces := preload("res://src/kit/kit_pieces.gd")
 const BEACON := preload("res://src/sight/beacon.gdshader")
 
 var rules: SalvageRules
@@ -17,6 +18,7 @@ var _bind := Callable()
 var _props := {}          # SalvageItem.id -> {root, rim}
 var _bodies := {}         # look key -> Mesh
 var _body_mats := {}
+var _tints := {}          # kit material + class colour -> Material
 var _rims := {}
 var _rim_mats := {}
 
@@ -103,9 +105,16 @@ func _dress(item: SalvageItem) -> void:
 	var key := item.kind if spec.has("color") else item.klass
 	var body := MeshInstance3D.new()
 	body.name = "Body"
-	body.mesh = _body_mesh(key, c)
-	body.material_override = _body_mat(key, String(spec.get("color", c.color)))
-	body.position.y = float((c.size_m as Array)[1]) * 0.5
+	var hex := String(spec.get("color", c.color))
+	var model: ArrayMesh = KitPieces.slot_mesh(String(spec.file)) if spec.has("file") else null
+	if model != null:
+		body.mesh = model
+		for i in model.get_surface_count():
+			body.set_surface_override_material(i, _tinted(model.surface_get_material(i), hex))
+	else:
+		body.mesh = _body_mesh(key, c)
+		body.material_override = _body_mat(key, hex)
+		body.position.y = float((c.size_m as Array)[1]) * 0.5
 	root.add_child(body)
 	var rim := MeshInstance3D.new()
 	rim.name = "Rim"
@@ -116,6 +125,23 @@ func _dress(item: SalvageItem) -> void:
 	root.add_child(rim)
 	prop["body"] = body
 	prop["rim"] = rim
+
+
+## A kit material leaning toward the class colour (brightest channel 1, so a dark code doesn't just
+## darken the model), so the code still reads off the rim, in hands too. Lights stay their own colour.
+func _tinted(kit: Material, hex: String) -> Material:
+	var m := kit as StandardMaterial3D
+	if m == null or m.emission_enabled:
+		return kit
+	var key := "%s_%s" % [m.get_instance_id(), hex]
+	if not _tints.has(key):
+		var code := Color(hex)
+		var tinted: StandardMaterial3D = m.duplicate()
+		var bright := maxf(code.r, maxf(code.g, code.b))
+		var full := Color(code.r / bright, code.g / bright, code.b / bright)
+		tinted.albedo_color = m.albedo_color * Color.WHITE.lerp(full, float(_cfg.body_tint_share))
+		_tints[key] = tinted
+	return _tints[key]
 
 
 func _body_mesh(key: String, c: Dictionary) -> Mesh:

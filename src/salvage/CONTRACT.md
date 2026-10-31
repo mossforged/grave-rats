@@ -7,7 +7,7 @@ What's on the ship and what carrying it does to you (T012). Weight is greed made
 - `salvage_rules.gd`: scene-free. Rolls items, says what a class costs.
 - `carry_state.gd`: scene-free. One per player: pockets, the in-hand item, committed lifts and drops.
 - `hold.gd`: scene-free. What's banked for the crew: estimate, truth, by class.
-- `salvage_field.gd`: the items in the world: grey boxes in class colours, each on a ring of light (a `src/sight` beacon: the fairness rule). Like a door's lights, a ring reads from anywhere once you've seen it, cone or no cone; `rim.unknown_share` is what shows where you've never looked (0: nothing, so a new room is still a question).
+- `salvage_field.gd`: the items in the world: each kind's model (`kinds.file`, through `KitPieces.slot_mesh`, the box if it won't load) in kit materials tinted toward the class colour, lights left alone, each on a ring of light (a `src/sight` beacon: the fairness rule). Like a door's lights, a ring reads from anywhere once you've seen it, cone or no cone; `rim.unknown_share` is what shows where you've never looked (0: nothing, so a new room is still a question).
 
 ## Does not own
 - The clock, tiers, alarm, LEAVE (`src/shift`). How penalties take effect (`Operator.set_carry`, `src/player`). Who hears a drop (`StalkerPack.noise`).
@@ -30,6 +30,6 @@ What's on the ship and what carrying it does to you (T012). Weight is greed made
 None.
 
 ## Data keys (`data/salvage.json`)
-`pocket_limit`, `value_spread`, `reach_m`, `drop_scatter_m`; `classes` {`small`, `medium`, `heavy`: `word`, `value_min`, `value_max`, `pocketed`, `speed_mult`, `can_sprint`, `can_fire`, `cone_extra_deg`, `pickup_s`, `drop_s`, `drop_noise` (a stalker `senses` kind, or ""), `size_m`, `color`, `rim_color`, `rim_radius_m`, `carry_at`}; `kinds` {name: `word`, `class`, optional `prize`, `value_min`, `value_max`, `color`, `rim_color`}; `rim` {`energy`, `width_m`, `height_m`, `segments`, `unknown_share`}; `placements` [{`kind`, `space`, `at`}].
+`pocket_limit`, `value_spread`, `reach_m`, `drop_scatter_m`; `classes` {`small`, `medium`, `heavy`: `word`, `value_min`, `value_max`, `pocketed`, `speed_mult`, `can_sprint`, `can_fire`, `cone_extra_deg`, `pickup_s`, `drop_s`, `drop_noise` (a stalker `senses` kind, or ""), `size_m`, `color`, `rim_color`, `rim_radius_m`, `carry_at`}; `kinds` {name: `file`, `word`, `class`, optional `prize`, `value_min`, `value_max`, `color`, `rim_color`}; `body_tint_share` (0 the kit's own colours, 1 fully the class hue); `rim` {`energy`, `width_m`, `height_m`, `segments`, `unknown_share`}; `placements` [{`kind`, `space`, `at`}].
 
-Tests: `tests/test_shift.gd`. Literal scan: `tests/test_weapons.gd`.
+Tests: `tests/test_shift.gd`, `tests/test_dressing.gd`. Literal scan: `tests/test_weapons.gd`.

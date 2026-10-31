@@ -1,8 +1,9 @@
 extends Node3D
 ## One bed that tips over with E: TipState plus mesh, collision and its place in the cover field.
-## The mesh hinges on the far long edge, so the top ends up facing away from whoever tipped it.
+## It lands past its far long edge with the plated underside facing away from whoever tipped it.
 
 const TipState := preload("res://src/cover/tip_state.gd")
+const KitPieces := preload("res://src/kit/kit_pieces.gd")
 
 signal landed(bed: Node3D)
 signal footprint_changed(bed: Node3D)
@@ -16,6 +17,7 @@ var _spec: Dictionary
 var _size := Vector3.ZERO
 var _along_z := true
 var _pivot: Node3D
+var _mesh: MeshInstance3D
 var _body: StaticBody3D
 var _shape: BoxShape3D
 
@@ -43,10 +45,12 @@ func _build() -> void:
 	_pivot = Node3D.new()
 	_pivot.name = "Pivot"
 	add_child(_pivot)
-	var w := _across()
-	var m := float(cfg.mattress_m)
-	_add_slab("Frame", Vector3(w, _size.y - m, _long()), (_size.y - m) * 0.5, cfg.color)
-	_add_slab("Mattress", Vector3(w, m, _long()), _size.y - m * 0.5, cfg.mattress_color)
+	_mesh = MeshInstance3D.new()
+	_mesh.name = "Mesh"
+	_mesh.mesh = KitPieces.prop("bed", Vector3(_across(), _size.y, _long()))
+	# The file is long in Z; a bed lying east-west turns it, so it stays long along the bed.
+	_mesh.rotation.y = 0.0 if _along_z else PI * 0.5
+	_pivot.add_child(_mesh)
 	_body = StaticBody3D.new()
 	_body.name = "Body"
 	_shape = BoxShape3D.new()
@@ -54,20 +58,6 @@ func _build() -> void:
 	cs.shape = _shape
 	_body.add_child(cs)
 	add_child(_body)
-
-
-func _add_slab(slab_name: String, size: Vector3, y: float, hex: Variant) -> void:
-	var mi := MeshInstance3D.new()
-	mi.name = slab_name
-	var box := BoxMesh.new()
-	# The slab's x runs across the bed in the pivot's frame, whichever way the bed lies.
-	box.size = size if _along_z else Vector3(size.z, size.y, size.x)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(String(hex))
-	box.material = mat
-	mi.mesh = box
-	mi.position.y = y
-	_pivot.add_child(mi)
 
 
 func _across() -> float:
@@ -78,25 +68,24 @@ func _long() -> float:
 	return upright_rect.size.y if _along_z else upright_rect.size.x
 
 
-func _far_edge() -> Vector2:
+## A point `offset` across the bed from its middle, on the side it falls to when positive.
+func _across_from_middle(offset: float) -> Vector2:
 	var c := upright_rect.get_center()
-	var half := _across() * 0.5 * tip.side
-	return Vector2(c.x + half, c.y) if _along_z else Vector2(c.x, c.y + half)
+	return Vector2(c.x + offset * tip.side, c.y) if _along_z else Vector2(c.x, c.y + offset * tip.side)
 
 
-## Where the mesh is: the hinge on the far edge, the slabs offset back across the bed.
+## Where the mesh is. The hinge starts on the near long edge and ends a bed's height past the far one:
+## the far edge rears up and the bed rides over, so it lands on TipState's footprint with the mattress
+## toward whoever tipped it and the plated underside out, as the shield.
 func _apply_pose() -> void:
-	var edge := _far_edge()
-	_pivot.global_position = Vector3(edge.x, 0.0, edge.y)
-	var a := smoothstep(0.0, 1.0, tip.progress) * PI * 0.5 * tip.side
-	_pivot.basis = Basis(Vector3.BACK, -a) if _along_z else Basis(Vector3.RIGHT, a)
-	var back := -_across() * 0.5 * tip.side
-	for child: Node in _pivot.get_children():
-		var mi := child as MeshInstance3D
-		if _along_z:
-			mi.position.x = back
-		else:
-			mi.position.z = back
+	var s := smoothstep(0.0, 1.0, tip.progress)
+	var half := _across() * 0.5
+	var hinge := _across_from_middle(lerpf(-half, half + _size.y, s))
+	_pivot.global_position = Vector3(hinge.x, 0.0, hinge.y)
+	var a := s * PI * 0.5 * tip.side
+	_pivot.basis = Basis(Vector3.BACK, a) if _along_z else Basis(Vector3.RIGHT, -a)
+	var middle := half * tip.side
+	_mesh.position = Vector3(middle, 0.0, 0.0) if _along_z else Vector3(0.0, 0.0, middle)
 
 
 func _apply_footprint() -> void:

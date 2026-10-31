@@ -24,19 +24,21 @@
     }
   },
   "kinds": {
-    "data_chips": {"word": "DATA CHIPS", "class": "small"},
-    "med_pack": {"word": "MED PACK", "class": "small"},
-    "fuse": {"word": "FUSE", "class": "small"},
-    "relay": {"word": "RELAY ASSEMBLY", "class": "medium"},
-    "canister": {"word": "CANISTER", "class": "medium"},
-    "busbar": {"word": "BUSBAR", "class": "medium"},
-    "cargo_pod": {"word": "CARGO POD", "class": "heavy"},
-    "engine_part": {"word": "ENGINE PART", "class": "heavy"},
+    "data_chips": {"file": "res://assets/game/props/salvage_data_chips.glb", "word": "DATA CHIPS", "class": "small"},
+    "med_pack": {"file": "res://assets/game/props/salvage_med_pack.glb", "word": "MED PACK", "class": "small"},
+    "fuse": {"file": "res://assets/game/props/salvage_fuse.glb", "word": "FUSE", "class": "small"},
+    "relay": {"file": "res://assets/game/props/salvage_relay.glb", "word": "RELAY ASSEMBLY", "class": "medium"},
+    "canister": {"file": "res://assets/game/props/salvage_canister.glb", "word": "CANISTER", "class": "medium"},
+    "busbar": {"file": "res://assets/game/props/salvage_busbar.glb", "word": "BUSBAR", "class": "medium"},
+    "cargo_pod": {"file": "res://assets/game/props/salvage_cargo_pod.glb", "word": "CARGO POD", "class": "heavy"},
+    "engine_part": {"file": "res://assets/game/props/salvage_engine_part.glb", "word": "ENGINE PART", "class": "heavy"},
     "black_box": {
+      "file": "res://assets/game/props/salvage_black_box.glb",
       "word": "BLACK BOX", "class": "heavy", "prize": true, "value_min": 1500, "value_max": 1800,
       "color": "3a2440", "rim_color": "ff4fd8"
     }
   },
+  "body_tint_share": 0.6,
   "rim": {"energy": 2.2, "width_m": 0.035, "height_m": 0.02, "segments": 24, "unknown_share": 0.0},
   "placements": [
     {"kind": "data_chips", "space": "junction", "at": [0.2, 0.62]},

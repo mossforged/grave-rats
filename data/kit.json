@@ -75,7 +75,12 @@
     "ammo_strap_m": 0.09
   },
   "slots": {
-    "bed": "",
+    "bed": "res://assets/game/props/bed.glb",
+    "gurney": "res://assets/game/props/gurney.glb",
+    "surgical_lamp": "res://assets/game/props/surgical_lamp.glb",
+    "iv_stand": "res://assets/game/props/iv_stand.glb",
+    "trolley": "res://assets/game/props/trolley.glb",
+    "med_station": "res://assets/game/props/med_station.glb",
     "console": {
       "1.0": "res://assets/game/props/console_1000.glb",
       "1.2": "res://assets/game/props/console_1200.glb",
@@ -86,6 +91,7 @@
     "locker_bank": "res://assets/game/props/locker_bank.glb"
   },
   "slot_mat": "hull",
+  "wall_mounts": {"med_station": {"mount_y_m": 1.0}},
   "slot_fit": {"tolerance_m": 0.01, "front_clear_m": 0.5},
   "floors": {
     "plate_m": 2.0,

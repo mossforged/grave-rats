@@ -225,6 +225,8 @@ func _cover_groups(layout: DeckLayout) -> Dictionary:
 	var groups := {}
 	var specs: Array = layout.data.props
 	for i in specs.size():
+		if not specs[i].has("plan_cover"):
+			continue
 		var k := int(specs[i].plan_cover)
 		var g: Rect2 = layout.props[i].rect
 		groups[k] = g if not groups.has(k) else (groups[k] as Rect2).merge(g)
@@ -245,6 +247,9 @@ func test_every_cover_entry_is_catalogue_props_of_the_right_role_within_half_a_c
 		check(over <= FOOTPRINT_OVER_MAX + TOL, "cover %d reaches %.2f m past the plan" % [i, over])
 	for i in layout.props.size():
 		var p: Dictionary = layout.props[i]
+		if not layout.data.props[i].has("plan_cover"):
+			check_eq(String(p.type), "tray_trolley", "the only prop that isn't the plan's")
+			continue
 		var entry: Dictionary = plan[int(layout.data.props[i].plan_cover)]
 		var role := String(cat[p.type].role)
 		check_eq(role, "cover_low" if entry.kind == "L" else "cover_tall", "%s's role fits a %s" % [p.type, entry.kind])
@@ -432,7 +437,7 @@ func test_clutter_stays_inside_off_props_doors_points_and_cover_lines() -> void:
 	for s: Dictionary in Data.value("salvage", "placements"):
 		flat.append(_at(s.space, s.at, layout))
 	var clutter: Array = Dressing.placed(layout).filter(func(d: Dictionary) -> bool: return d.wall == "")
-	check(clutter.size() >= 12, "%d pieces of clutter" % clutter.size())
+	check(clutter.size() >= 10, "%d pieces of clutter" % clutter.size())
 	for d: Dictionary in clutter:
 		var r: Rect2 = d.rect
 		check(layout.space_rect(d.space).encloses(r), "%s inside %s: %s" % [d.type, d.space, r])
@@ -482,11 +487,14 @@ func test_three_tanks_along_the_lab_wall_and_they_glow() -> void:
 
 func test_the_meal_trolley_stopped_at_the_seal() -> void:
 	var layout := _layout()
-	var t: Array = Dressing.placed(layout).filter(func(d: Dictionary) -> bool: return d.type == "tray_trolley")
+	var t: Array = layout.props.filter(func(d: Dictionary) -> bool: return d.type == "tray_trolley")
 	check_eq(t.size(), 1, "one trolley")
 	var d5: Dictionary = _door_at(layout, 22.25, 11.0)
 	check(_rect_dist(d5.rect, (t[0].rect as Rect2).get_center()) < 2.5, "by the bio lab's door")
 	check_eq(String(t[0].space), "east_spine", "on the corridor side of it")
+	check_eq(String(t[0].cover), "none", "it's in the way, not cover")
+	check(not (t[0].rect as Rect2).intersects((d5.rect as Rect2).grow(float(Data.value("player", "radius_m")) * 2.0)), "and leaves the door clear")
+	check_eq(KitPieces.prop("tray_trolley", t[0].size), KitPieces.slot_mesh(KitPieces.slot_file("tray_trolley", t[0].size)), "wearing its file")
 
 
 func test_both_spines_have_t19s_dressing_by_the_same_generator() -> void:

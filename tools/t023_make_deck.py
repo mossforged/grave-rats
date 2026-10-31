@@ -57,29 +57,36 @@ def doors():
 
 
 # The plan's cover, in plan order: [(type, x, z, size x, y, z)] per entry. Centres are the plan rect's centre,
-# except where a group shares a rect or a tank is drawn in toward its wall (within half a grid cell).
+# except where a group shares a rect or a prop is drawn in toward its wall (within half a grid cell): a slot
+# wider than the player but narrower than a stalker's path traps bots and shelters players. T023 bots got wedged.
 GLOW = {"emit_blue": "emit_cyan", "glass": "tank_glow"}
+# A big lit surface at the kit's full energy blooms through the sight mask and gives a dark room away.
+DIM = {"emit_blue": "emit_blue_dim", "emit_cool": "emit_cool_dim"}
+DIM_PROPS = {"reactor_core", "nav_table", "helm_console", "comms_rack", "transformer", "power_cell_rack", "sample_freezer", "control_desk"}
 COVER = [
     [("helm_console", 13.0, 1.5, 2.38, 1.04, 0.72)],
     [("nav_table", 18.0, 1.5, 1.6, 0.93, 1.0)],
-    [("comms_rack", 21.0, 1.0, 0.86, 2.0, 0.8), ("comms_rack", 21.0, 2.0, 0.86, 2.0, 0.8)],
+    [("comms_rack", 21.1, 0.9, 0.86, 2.0, 0.8), ("comms_rack", 21.1, 1.9, 0.86, 2.0, 0.8)],
     [("specimen_tank", 11.75, 7.75, 0.9, 2.15, 0.9)],
     [("specimen_tank", 14.75, 7.75, 0.9, 2.15, 0.9)],
     [("specimen_tank", 17.75, 7.75, 0.9, 2.15, 0.9)],
-    [("sample_freezer", 21.0, 13.55, 0.75, 1.95, 0.8), ("sample_freezer", 21.0, 14.45, 0.75, 1.95, 0.8)],
+    [("sample_freezer", 21.24, 13.55, 0.75, 1.95, 0.8), ("sample_freezer", 21.24, 14.45, 0.75, 1.95, 0.8)],
     [("autopsy_table", 14.5, 14.5, 2.01, 0.98, 1.18)],
     [("mess_table", 13.5, 17.5, 2.0, 0.8, 1.6)],
     [("mess_table", 18.5, 20.5, 2.0, 0.8, 1.6)],
-    [("food_dispenser", 21.0, 20.75, 0.58, 2.0, 1.0)],
-    [("bunk_bed", 11.75, 26.75, 1.02, 1.9, 1.99), ("bunk_bed", 13.25, 26.75, 1.02, 1.9, 1.99)],
+    [("food_dispenser", 21.17, 20.92, 0.58, 2.0, 1.0)],
+    [("bunk_bed", 11.55, 26.75, 1.02, 1.9, 1.99), ("bunk_bed", 13.05, 26.75, 1.02, 1.9, 1.99)],
     [("bunk_bed", 16.75, 26.75, 1.02, 1.9, 1.99), ("bunk_bed", 17.8, 26.75, 1.02, 1.9, 1.99)],
     [("tarp_pile", 20.75, 23.5, 1.54, 1.01, 1.06)],
-    [("transformer", 29.56, 10.82, 1.12, 2.0, 0.64), ("reactor_core", 32.0, 11.5, 2.0, 2.4, 2.0), ("transformer", 34.44, 10.82, 1.12, 2.0, 0.64)],
+    [("transformer", 30.44, 10.82, 1.12, 2.0, 0.64), ("reactor_core", 32.0, 11.5, 2.0, 2.4, 2.0), ("transformer", 33.56, 10.82, 1.12, 2.0, 0.64)],
     [("control_desk", 30.5, 18.5, 1.8, 1.09, 0.7)],
     [("power_cell_rack", 35.25, 16.9, 0.5, 1.8, 1.2), ("power_cell_rack", 35.25, 18.1, 0.5, 1.8, 1.2)],
-    [("crate_pile_tipped", 1.5, 23.0, 1.61, 0.75, 1.19)],
+    [("crate_pile_tipped", 1.3, 23.0, 1.61, 0.75, 1.19)],
     [("container_section", 1.5, 26.75, 2.53, 2.4, 1.27)],
 ]
+
+
+TROLLEY = (22.87, 8.0)
 
 
 def space_of(x, z):
@@ -99,26 +106,37 @@ def props():
                  "cover": "low" if plan["kind"] == "L" else "tall", "plan_cover": i}
             if t == "specimen_tank":
                 p["wear"] = GLOW
+            elif t in DIM_PROPS:
+                p["wear"] = DIM
             out.append(p)
+    # The story beat: a meal trolley stopped at the bio lab's seal (door D5), on the spine side. It's a solid
+    # prop with no cover class, not dressing: the walking lane hugs this wall, so you step round it.
+    s = space_of(*TROLLEY)
+    out.append({"type": "tray_trolley", "space": s, "at": fr(s, *TROLLEY), "size_m": [0.7, 1.25, 1.37], "cover": "none"})
     return out
 
 
 def clutter(t, x, z, turn=0.0):
     s = space_of(x, z)
     e = {"type": t, "space": s, "at": fr(s, x, z)}
+    if t in ("holo_projector", "captain_chair", "centrifuge"):
+        e["wear"] = DIM
     if turn:
         e["turn_deg"] = turn
     return e
 
 
 def on_wall(t, space, wall, m):
-    return {"type": t, "space": space, "wall": wall, "at": along(space, wall, m)}
+    e = {"type": t, "space": space, "wall": wall, "at": along(space, wall, m)}
+    if t in ("wall_screen_bank", "viewport_frame", "wall_terminal"):
+        e["wear"] = DIM
+    return e
 
 
 DRESSING = [
     # Bridge: the chair faces the plot. Screens and the viewport on the wall you see.
-    clutter("captain_chair", 15.5, 3.4, 180.0),
-    clutter("holo_projector", 19.75, 4.4),
+    clutter("captain_chair", 15.5, 5.1, 180.0),
+    clutter("holo_projector", 18.5, 5.2),
     on_wall("wall_screen_bank", "bridge", "north", 13.0),
     on_wall("viewport_frame", "bridge", "north", 15.7),
     on_wall("wall_terminal", "bridge", "west", 1.4),
@@ -142,9 +160,6 @@ DRESSING = [
     # Hold.
     clutter("pallet", 4.4, 22.6),
     on_wall("emergency_locker", "airlock", "north", 3.6),
-    # The story beat: a meal trolley, stopped at the bio lab's seal (door D5), on the spine side, north of
-    # the door: the bots' way down the west spine hugs its door wall, so D4 has no room for it.
-    clutter("tray_trolley", 22.79, 8.0),
 ]
 
 
@@ -175,8 +190,8 @@ def corridor_dressing():
         "west_spine": corridor(("east", "west"), "west", 6.9,
                                [{"type": "debris_pile", "at": fr("west_spine", 7.0, 7.3), "scale_x": 0.9, "turn_deg": 90.0},
                                 {"type": "floor_grate", "at": fr("west_spine", 7.5, 27.2)}]),
-        "east_spine": corridor(("west", "east"), "east", 6.2,
-                               [{"type": "debris_pile", "at": fr("east_spine", 25.5, 6.6), "scale_x": 0.9, "turn_deg": 90.0},
+        "east_spine": corridor(("west", "east"), "east", 2.0,
+                               [{"type": "debris_pile", "at": fr("east_spine", 25.5, 2.4), "scale_x": 0.9, "turn_deg": 90.0},
                                 {"type": "floor_grate", "at": fr("east_spine", 25.0, 27.2)}], True),
     }
     return c
@@ -289,17 +304,17 @@ SIGNS_STUCK = [
     # Top-facing reads best from the steep camera, south faces next.
     stuck("bridge_nav", 18.0, 1.5, 0.945, 1.45, "top"),
     stuck("rem_stamp_assessed", 13.7, 1.5, 1.055, 0.5, "top", 8.0),
-    stuck("rem_tag_chair", 15.5, 3.815, 0.95, 0.42),
+    stuck("rem_tag_chair", 15.5, 5.515, 0.95, 0.42),
     stuck("lab_specimen_01", 11.75, 8.215, 1.25, 0.6),
     stuck("lab_specimen_02", 14.75, 8.215, 1.25, 0.6),
     stuck("lab_specimen_03", 17.75, 8.215, 1.25, 0.6),
     stuck("rem_priority_high", 14.5, 14.5, 0.995, 0.75, "top", 0.0),
     stuck("rem_priority_low", 18.5, 20.5, 0.815, 0.7, "top", -6.0),
-    stuck("qtr_bunk_tag", 13.25, 26.0, 1.915, 0.5, "top"),
+    stuck("qtr_bunk_tag", 13.05, 26.0, 1.915, 0.5, "top"),
     stuck("rem_stamp_assessed", 16.6, 26.5, 1.915, 0.5, "top", -10.0),
     stuck("rem_tag_reactor", 32.0, 12.515, 0.7, 0.9),
     stuck("eng_reactor_cage", 32.0, 12.515, 1.55, 1.1),
-    stuck("eng_power_cells", 29.56, 11.155, 1.2, 0.85),
+    stuck("eng_power_cells", 30.44, 11.155, 1.2, 0.85),
     stuck("rem_priority_medium", 30.5, 18.5, 1.105, 0.7, "top", 5.0),
 ]
 
@@ -362,7 +377,7 @@ def custodian():
         "terminals": {"at": [
             {"space": "bridge", "at": fr("bridge", 17.7, 0.18)},
             {"space": "bio_lab", "at": fr("bio_lab", 13.25, 6.68)},
-            {"space": "engineering", "at": fr("engineering", 33.44, 10.18)},
+            {"space": "engineering", "at": fr("engineering", 35.1, 10.18)},
         ]},
         "cutters": [{"name": "east spine", "space": "east_spine", "at": fr("east_spine", cx, cz), "home_yaw_deg": 180.0, "arc_half_deg": 75.0, "on_wake": True}],
         "drones": [{"name": "patrol", "space": "east_spine", "at": fr("east_spine", *route[0]), "route": [fr("east_spine", *p) for p in route]}],
@@ -392,7 +407,7 @@ WEAR_ROOMS = {
 }
 
 SLOT_TYPES = sorted({row[0] for group in COVER for row in group}
-                    | {d["type"] for d in DRESSING})
+                    | {d["type"] for d in DRESSING} | {"tray_trolley"})
 
 
 def overrides():
@@ -411,8 +426,10 @@ def overrides():
                 "emergency_locker": {"mount_y_m": 0.55},
             },
             "materials": {
-                "emit_cyan": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "3affd2", "energy": 5.0},
-                "tank_glow": {"color": "0a2a24", "roughness": 0.15, "metallic": 0.0, "specular": 0.7, "uv_m": 1.0, "emission": "2fe6b8", "energy": 1.6},
+                "emit_cyan": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "3affd2", "energy": 1.8},
+                "emit_blue_dim": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "38b8ff", "energy": 1.2},
+                "emit_cool_dim": {"color": "000000", "roughness": 0.5, "metallic": 0.0, "uv_m": 1.0, "emission": "cfe4ff", "energy": 1.2},
+                "tank_glow": {"color": "0a2a24", "roughness": 0.15, "metallic": 0.0, "specular": 0.7, "uv_m": 1.0, "emission": "2fe6b8", "energy": 0.7},
             },
             "wall_families": {"by_space": {
                 "bridge": "reinforced", "bio_lab": "clinical", "mess": "plain", "quarters": "plain", "engineering": "pipe",
@@ -455,10 +472,10 @@ def overrides():
         },
         "vfx": {
             "surfaces": {
-                "by_material": {"emit_cyan": "glass", "tank_glow": "glass"},
+                "by_material": {"emit_cyan": "glass", "tank_glow": "glass", "emit_blue_dim": "glass", "emit_cool_dim": "glass"},
                 "by_prop": {"specimen_tank": "glass", "sample_freezer": "clinical", "helm_console": "housing", "nav_table": "steel", "comms_rack": "steel",
                             "autopsy_table": "steel", "mess_table": "clinical", "food_dispenser": "clinical", "bunk_bed": "clinical", "reactor_core": "steel",
-                            "transformer": "steel", "control_desk": "housing", "power_cell_rack": "steel", "container_section": "hull"},
+                            "transformer": "steel", "control_desk": "housing", "power_cell_rack": "steel", "container_section": "hull", "tray_trolley": "clinical"},
             },
             "room_draft": {"bridge": [0.1, -0.1], "bio_lab": [-0.08, 0.05], "mess": [0.12, 0.0], "quarters": [0.1, 0.05], "engineering": [0.3, -0.12],
                            "west_spine": [0.0, 0.25], "east_spine": [0.0, -0.3], "airlock": [0.2, 0.0]},

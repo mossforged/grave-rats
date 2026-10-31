@@ -38,6 +38,8 @@ Through `src/audio`. The cutter's hum runs exactly while it aims, its pitch risi
 - `CustodianVoice.new(cfg)`: `say(event) -> line or ""`, `step(delta)`, `reset()`.
 - `CustodianTrace.new(cover, world, exclude)`: `line(from, to) -> {clear, point}`.
 
+A drone's `route` is fractions of its `space` and may fall outside 0-1 (T023: the survey's patrol crosses rooms). It flies straight through shut doors; see `docs/handoffs/auto-T023.md`.
+
 ## Signals
 `Custodian.player_hit(player_id, source, amount, from, who)`, `spoke(line)`, `woke(reason)`, `revealed(unit, at)`, `stalker_wanted(player_id, at, from)`, `called(player_id, how)` (`CALLED_CUTTER`, `CALLED_STALKER`).
 

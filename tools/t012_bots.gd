@@ -2,7 +2,7 @@ extends SceneTree
 ## T012: a greedy bot against a cautious one on the real shift_deck, no window. Not a test: numbers
 ## for the handoff. Greedy grabs everything, prize included, and stays until nothing's left or the air
 ## is nearly gone. Cautious takes small and medium, and goes home the moment tier 1 lands.
-## usage: godot --headless --path . --fixed-fps 60 -s tools/t012_bots.gd -- [seeds] [out.json] [--trace]
+## usage: godot --headless --path . --fixed-fps 60 -s tools/t012_bots.gd -- [seeds] [out.json] [--trace] [--ship survey] [--old-door-press]
 
 const DT := 1.0 / 30.0
 const AIM_LAG_S := 0.2
@@ -30,6 +30,7 @@ var _nudge := Vector2.ZERO
 var _nudge_left := 0.0
 var _check_left := 0.0
 var _check_at := Vector2.INF
+var _old_door_press := false
 
 
 func _init() -> void:
@@ -41,6 +42,7 @@ func _run() -> void:
 	var seeds := int(args[0]) if args.size() > 0 else 12
 	if args.has("--trace"):
 		_trace_left = 0.0
+	_old_door_press = args.has("--old-door-press")
 	scene = (load("res://scenes/shift/shift_deck.tscn") as PackedScene).instantiate()
 	root.add_child(scene)
 	await process_frame
@@ -211,8 +213,12 @@ func _steer(pos: Vector2, goal: Vector2) -> Vector2:
 		if door == null:
 			return Vector2.ZERO
 		if scene.doors.door_in_reach(pos) == door:
-			scene.doors.actors = [{"position": pos, "radius": op.body_radius()}]
-			scene.doors.interact(pos)
+			# Once: a second press while it's opening would shut it again. T023: the survey's hold door is the
+			# first thing a bot meets there, and pressing every step held it shut for good. --old-door-press
+			# keeps the old way, so the T012 to T021 numbers can still be reproduced.
+			if _old_door_press or door.door_state.state != door.door_state.State.OPENING:
+				scene.doors.actors = [{"position": pos, "radius": op.body_radius()}]
+				scene.doors.interact(pos)
 			return Vector2.ZERO
 		path = nav.path(pos, door.front_point(pos, op.body_radius()))
 		if path.is_empty():

@@ -40,6 +40,10 @@ None.
 
 From `data/deck.json`: `dressing_max_intrusion_m`, `corridor_dressing` {`below_m`, `door_clear_m`, `door_touch_m`, `prop_gap_m`, `low_cover_line_m`, `corner_probe_m`, `run_search_m`, `single_step_m`, `single_slide_m`, `over_limit_ok`, `cast_shadow`, `corridors` {name: {`clear` [{`wall`, `at`, `half_m`}], `pillars` [nw|ne|sw|se], `ribs` {`type`, `every_m`, `start_m` {wall: m}}, `runs` [{`type`, `wall`, `start_m`}], `landmarks` and `singles` [{`type`, `wall`, `at`, `over`}], `floor` [{`type`, `at`, `turn_deg`, `scale_x`}]}}}.
 
+`dressing` entries may add `wear` {slot: kit material}.
+
+From `data/kit.json` too (T023): `room_decals` {`sheets`, `wear`, `items` {name: `sheet`, `box`, `mode`}}, A013's graphics, cut by `tools/t023_decals.py` to `assets/game/decals/` (A013's manifest has no crops, so the boxes are here); `KitMaterials.decal` finds them by name. `signage.stuck` [{`image`, `space`, `at`, `y_m`, `width_m`, `facing` top|north|east|south|west, `tilt_deg`}]: stickers on props (`DeckBuilder`). A `lighting.fixtures.spaces` entry may add `light_xz` [x, z] (the light goes there, in world metres) and `bare` (a light with no strip).
+
 ## Env (frame-time pricing)
 `KIT_FOG`, `KIT_PRACTICALS`, `KIT_SSAO`, `KIT_GLOW`, `KIT_CORRIDORS` = `off`; `KIT_SHEEN` = `probe`, `ssr` or `off`.
 

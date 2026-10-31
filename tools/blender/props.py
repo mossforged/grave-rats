@@ -57,6 +57,11 @@ def mat(name):
     return m
 
 
+def _euler(rot):
+    from mathutils import Euler
+    return Euler(tuple(math.radians(a) for a in rot), "XYZ")
+
+
 class Builder:
     """Collects bevelled boxes into one mesh object with named material slots.
 
@@ -66,12 +71,13 @@ class Builder:
         self.name = name
         self.parts = []  # (center, size, material, bevel)
 
-    def box(self, cx, cy, cz, sx, sy, sz, m, bevel=0.008):
-        self.parts.append((Vector((cx, cy, cz)), Vector((sx, sy, sz)), m, bevel))
+    def box(self, cx, cy, cz, sx, sy, sz, m, bevel=0.008, rot=None):
+        """rot: optional (rx, ry, rz) in degrees, applied about the box centre."""
+        self.parts.append((Vector((cx, cy, cz)), Vector((sx, sy, sz)), m, bevel, rot))
 
-    def cyl(self, cx, cy, cz, r, length, axis, m, segments=12):
+    def cyl(self, cx, cy, cz, r, length, axis, m, segments=12, rot=None):
         """A capped cylinder centred at (cx, cy, cz), its length along axis 'x', 'y' or 'z'."""
-        self.parts.append(("cyl", Vector((cx, cy, cz)), r, length, axis, m, segments))
+        self.parts.append(("cyl", Vector((cx, cy, cz)), r, length, axis, m, segments, rot))
 
     def build(self):
         objs = []
@@ -79,7 +85,7 @@ class Builder:
             me = bpy.data.meshes.new(f"{self.name}_{i}")
             bm = bmesh.new()
             if part[0] == "cyl":
-                _, c, r, length, axis, m, segs = part
+                _, c, r, length, axis, m, segs, rot = part
                 bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=segs,
                                       radius1=r, radius2=r, depth=length)
                 for v in bm.verts:
@@ -88,12 +94,17 @@ class Builder:
                         v.co = Vector((z, y, x))
                     elif axis == "y":
                         v.co = Vector((x, z, y))
+                    if rot:
+                        v.co.rotate(_euler(rot))
                     v.co += c
             else:
-                c, s, m, bev = part
+                c, s, m, bev, rot = part
                 bmesh.ops.create_cube(bm, size=1.0)
                 for v in bm.verts:
-                    v.co = Vector((v.co.x * s.x, v.co.y * s.y, v.co.z * s.z)) + c
+                    v.co = Vector((v.co.x * s.x, v.co.y * s.y, v.co.z * s.z))
+                    if rot:
+                        v.co.rotate(_euler(rot))
+                    v.co += c
                 if bev > 0:
                     bmesh.ops.bevel(bm, geom=list(bm.edges), offset=min(bev, min(s) * 0.45),
                                     segments=1, affect="EDGES", profile=0.5)
@@ -266,9 +277,10 @@ def preview(objs, path):
     cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
     scn.collection.objects.link(cam)
     scn.camera = cam
+    span = max(1.0, (x + 0.3) / 3.6)  # pull the camera back for long rows
     for tag, loc, rot, lens in (("34", (3.2, -5.6, 2.6), (72, 0, 30), 30),
                                 ("game", (0, -4.2, 7.3), (30, 0, 0), 32)):
-        cam.location = loc
+        cam.location = tuple(c * span for c in loc[:2]) + (0.9 + (loc[2] - 0.9) * span,)
         cam.rotation_euler = tuple(math.radians(a) for a in rot)
         cam.data.lens = lens
         scn.render.filepath = path.replace(".png", f"_{tag}.png")

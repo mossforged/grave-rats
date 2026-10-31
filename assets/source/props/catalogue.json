@@ -1,5 +1,5 @@
 {
- "_note": "Lead's scripted props (tools/blender/props*.py). size_m is w x h x d in metres (glTF X, Y, Z). role: cover_low / cover_tall (collision + cover class from deck data), clutter (no cover; small collision or none), pickup (salvage), wall (mounted, back at the rear face).",
+ "_note": "Lead's scripted props (tools/blender/props*.py). size_m is w x h x d in metres (glTF X, Y, Z). role: cover_low / cover_tall (collision + cover class from deck data), clutter (no cover; small collision or none), pickup (salvage), wall (mounted, back at the rear face). wall_high: origin on the floor under the prop, mounting height baked in.",
  "console_1000": {
   "size_m": [
    1.0,
@@ -473,5 +473,494 @@
   "role": "cover_low",
   "set": "mess",
   "note": "counter 0.94 high; overhead cupboards 1.45-2.05 at the back (wall-mounted above it)"
+ },
+ "wall_rib": {
+  "size_m": [
+   0.32,
+   2.6,
+   0.25
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "structural rib, floor to ceiling; repeat every 2-3 m to give corridors depth"
+ },
+ "wall_panel_recessed": {
+  "size_m": [
+   1.2,
+   2.4,
+   0.12
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "standard wall bay"
+ },
+ "wall_panel_breached": {
+  "size_m": [
+   1.2,
+   2.4,
+   0.67
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "bay with its plate torn off; the plate leans 0.35 m out (clutter)"
+ },
+ "pipe_run_low": {
+  "size_m": [
+   2.0,
+   0.54,
+   0.23
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "pipes along the wall base; reads strongly from the steep camera"
+ },
+ "pipe_run_high": {
+  "size_m": [
+   2.0,
+   1.07,
+   0.27
+  ],
+  "role": "wall_high",
+  "set": "hallway"
+ },
+ "conduit_tray": {
+  "size_m": [
+   2.0,
+   0.54,
+   0.33
+  ],
+  "role": "wall_high",
+  "set": "hallway"
+ },
+ "air_duct": {
+  "size_m": [
+   2.0,
+   0.5,
+   0.5
+  ],
+  "role": "wall_high",
+  "set": "hallway"
+ },
+ "wall_light_strip": {
+  "size_m": [
+   1.0,
+   0.18,
+   0.12
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "light fixture; pair with a real light from data"
+ },
+ "emergency_lamp": {
+  "size_m": [
+   0.24,
+   0.3,
+   0.19
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "pair with a red light from data; good for alarm tiers"
+ },
+ "door_jamb": {
+  "size_m": [
+   0.34,
+   2.6,
+   0.32
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "either side of a door; flip X for the other side"
+ },
+ "door_lintel": {
+  "size_m": [
+   2.0,
+   0.4,
+   0.33
+  ],
+  "role": "wall_high",
+  "set": "hallway",
+  "note": "over the 2.2 m door aperture; scale X to the door width"
+ },
+ "corner_pillar": {
+  "size_m": [
+   0.45,
+   2.6,
+   0.48
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "inner corner; rotate to fit"
+ },
+ "handrail": {
+  "size_m": [
+   2.0,
+   0.12,
+   0.13
+  ],
+  "role": "wall",
+  "set": "hallway"
+ },
+ "floor_grate": {
+  "size_m": [
+   1.2,
+   0.05,
+   1.2
+  ],
+  "role": "clutter",
+  "set": "hallway",
+  "note": "flush; walk over it"
+ },
+ "kick_plate": {
+  "size_m": [
+   2.0,
+   0.3,
+   0.09
+  ],
+  "role": "wall",
+  "set": "hallway"
+ },
+ "wall_sign_arrow": {
+  "size_m": [
+   0.6,
+   0.35,
+   0.03
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "text and deck numbers go on as decals"
+ },
+ "maintenance_hatch": {
+  "size_m": [
+   0.8,
+   0.9,
+   0.14
+  ],
+  "role": "wall",
+  "set": "hallway",
+  "note": "low on the wall; stalker vent spawns could use it"
+ },
+ "fire_hose_reel": {
+  "size_m": [
+   0.6,
+   0.7,
+   0.25
+  ],
+  "role": "wall",
+  "set": "hallway"
+ },
+ "debris_pile": {
+  "size_m": [
+   1.5,
+   0.31,
+   1.03
+  ],
+  "role": "clutter",
+  "set": "hallway",
+  "note": "no cover; small collision"
+ },
+ "hanging_cables": {
+  "size_m": [
+   0.6,
+   1.14,
+   0.3
+  ],
+  "role": "wall_high",
+  "set": "hallway",
+  "note": "hangs to ~1.5 m beside the wall; sparking end wants a flicker light"
+ },
+ "cryo_pod": {
+  "size_m": [
+   0.9,
+   2.06,
+   0.9
+  ],
+  "role": "cover_tall",
+  "set": "medbay",
+  "note": "something inside"
+ },
+ "scrub_sink": {
+  "size_m": [
+   1.2,
+   1.2,
+   0.53
+  ],
+  "role": "wall",
+  "set": "medbay"
+ },
+ "privacy_screen": {
+  "size_m": [
+   1.46,
+   1.75,
+   0.23
+  ],
+  "role": "clutter",
+  "set": "medbay",
+  "note": "blocks sight if deck data says so"
+ },
+ "defib_cart": {
+  "size_m": [
+   0.6,
+   1.11,
+   0.47
+  ],
+  "role": "clutter",
+  "set": "medbay"
+ },
+ "biohazard_bin": {
+  "size_m": [
+   0.42,
+   0.66,
+   0.47
+  ],
+  "role": "clutter",
+  "set": "medbay"
+ },
+ "body_bag": {
+  "size_m": [
+   0.55,
+   0.21,
+   1.84
+  ],
+  "role": "clutter",
+  "set": "medbay"
+ },
+ "crate_pile_tipped": {
+  "size_m": [
+   1.61,
+   0.75,
+   1.19
+  ],
+  "role": "cover_low",
+  "set": "cargo"
+ },
+ "container_section": {
+  "size_m": [
+   2.53,
+   2.4,
+   1.27
+  ],
+  "role": "cover_tall",
+  "set": "cargo",
+  "note": "open end faces front; inside is enterable if deck data allows"
+ },
+ "pallet_jack": {
+  "size_m": [
+   0.56,
+   1.18,
+   1.63
+  ],
+  "role": "clutter",
+  "set": "cargo"
+ },
+ "tarp_pile": {
+  "size_m": [
+   1.54,
+   1.01,
+   1.06
+  ],
+  "role": "cover_low",
+  "set": "cargo"
+ },
+ "cargo_net_wall": {
+  "size_m": [
+   2.02,
+   1.7,
+   0.51
+  ],
+  "role": "wall",
+  "set": "cargo"
+ },
+ "manifest_terminal": {
+  "size_m": [
+   0.4,
+   1.36,
+   0.4
+  ],
+  "role": "clutter",
+  "set": "cargo"
+ },
+ "coolant_pump": {
+  "size_m": [
+   1.6,
+   1.05,
+   0.8
+  ],
+  "role": "cover_low",
+  "set": "engineering"
+ },
+ "transformer": {
+  "size_m": [
+   1.12,
+   2.0,
+   0.64
+  ],
+  "role": "cover_tall",
+  "set": "engineering"
+ },
+ "catwalk_section": {
+  "size_m": [
+   1.24,
+   1.12,
+   2.4
+  ],
+  "role": "clutter",
+  "set": "engineering",
+  "note": "walkable; rails along both long sides"
+ },
+ "workbench": {
+  "size_m": [
+   1.8,
+   1.78,
+   0.75
+  ],
+  "role": "cover_low",
+  "set": "engineering"
+ },
+ "incubator_shelf": {
+  "size_m": [
+   1.2,
+   1.9,
+   0.59
+  ],
+  "role": "cover_tall",
+  "set": "biolab"
+ },
+ "chem_cabinet": {
+  "size_m": [
+   0.9,
+   2.03,
+   0.52
+  ],
+  "role": "cover_tall",
+  "set": "biolab"
+ },
+ "autopsy_table": {
+  "size_m": [
+   1.18,
+   0.98,
+   2.01
+  ],
+  "role": "cover_low",
+  "set": "biolab"
+ },
+ "containment_cell": {
+  "size_m": [
+   2.4,
+   2.6,
+   0.25
+  ],
+  "role": "cover_tall",
+  "set": "biolab",
+  "note": "glass pane: sight is deck data's call"
+ },
+ "crew_station": {
+  "size_m": [
+   1.2,
+   1.21,
+   1.16
+  ],
+  "role": "cover_low",
+  "set": "bridge"
+ },
+ "holo_projector": {
+  "size_m": [
+   0.9,
+   1.12,
+   0.9
+  ],
+  "role": "clutter",
+  "set": "bridge"
+ },
+ "comms_rack": {
+  "size_m": [
+   0.8,
+   2.0,
+   0.86
+  ],
+  "role": "cover_tall",
+  "set": "bridge"
+ },
+ "viewport_frame": {
+  "size_m": [
+   3.0,
+   1.54,
+   0.36
+  ],
+  "role": "wall_high",
+  "set": "bridge",
+  "note": "window to space, 0.84-2.35 m"
+ },
+ "wardrobe_locker": {
+  "size_m": [
+   0.62,
+   2.0,
+   0.66
+  ],
+  "role": "cover_tall",
+  "set": "quarters",
+  "note": "door ajar adds ~0.1 m in front"
+ },
+ "sleeping_pod": {
+  "size_m": [
+   2.1,
+   1.2,
+   1.0
+  ],
+  "role": "cover_tall",
+  "set": "quarters"
+ },
+ "shower_stall": {
+  "size_m": [
+   1.01,
+   2.2,
+   1.01
+  ],
+  "role": "cover_tall",
+  "set": "quarters"
+ },
+ "personal_shelf": {
+  "size_m": [
+   1.0,
+   0.45,
+   0.25
+  ],
+  "role": "wall",
+  "set": "quarters"
+ },
+ "drinks_cooler": {
+  "size_m": [
+   0.8,
+   1.94,
+   0.71
+  ],
+  "role": "cover_tall",
+  "set": "mess"
+ },
+ "tray_trolley": {
+  "size_m": [
+   0.7,
+   1.25,
+   1.37
+  ],
+  "role": "clutter",
+  "set": "mess"
+ },
+ "round_table": {
+  "size_m": [
+   1.53,
+   0.75,
+   1.6
+  ],
+  "role": "cover_low",
+  "set": "mess"
+ },
+ "waste_bin": {
+  "size_m": [
+   0.79,
+   1.04,
+   0.72
+  ],
+  "role": "clutter",
+  "set": "mess"
  }
 }

@@ -64,5 +64,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T015 (383/383 reproduced); queued Q002; paused new gameplay pending John's play.
+2026-10-31 (lead): merged T015 (383/383 reproduced); queued Q002; paused new gameplay pending John's play. Prop library 104 scripted props (`assets/source/props/`, `catalogue.json`): hallway wall-depth set of 20 and a second batch per room; queued T019 (corridor dressing, visual only, needs T016).
 2026-10-31 (code, unattended): T015: `src/custodian` and `data/custodian.json` (cutter: line, ring, 1.2 s warm-up, tall cover cancels; drone: spotlight, 3 bars, 2.4 s call wakes a cutter or alerts a stalker); wakes at tier 2 or on the prize; new causes and payslip line.

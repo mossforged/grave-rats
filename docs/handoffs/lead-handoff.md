@@ -50,6 +50,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T016 | code | queued: bed, medbay dressing, salvage models in; live AA toggle |
 | T017 | code | queued: placeholder sound pass |
 | T018 | code | queued: co-op groundwork (no networking) |
+| T019 | code | queued: corridor wall dressing from the hallway prop set (visual only; needs T016 merged) |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

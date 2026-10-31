@@ -23,3 +23,16 @@ Medbay: `bed`, `surgical_lamp`, `iv_stand`, `gurney`, `trolley`, `med_station` (
 ## Set 3–4 and room sets
 `tools/blender/props_set_cargo_engineering.py`: cargo (pallet, barrel, gas_rack, shelving_rack, strapped_stack, cargo_lift) and corridor/engineering wall props (junction_box, fuse_panel, wall_terminal, pipe_valve, emergency_locker, cable_spool, vent_cover).
 `tools/blender/props_set_rooms.py`: engineering (reactor_core, power_cell_rack, control_desk, toolbox_cart), bio lab (specimen_tank, lab_bench, centrifuge, sample_freezer), bridge (captain_chair, helm_console, nav_table, wall_screen_bank), crew quarters (bunk_bed, footlocker, desk_chair), mess (mess_table, food_dispenser, galley_counter). Previews: `docs/screens/props/` (`rooms_sheet.jpg`). These rooms don't exist in the deck yet; they're ready for when level layouts add them.
+
+## Expansion: hallway set and second room batch (`tools/blender/props_set_expansion.py`)
+- **Hallway** (wall depth, for T019): `wall_rib`, `wall_panel_recessed`, `wall_panel_breached`, `pipe_run_low`, `pipe_run_high`, `conduit_tray`, `air_duct`, `wall_light_strip`, `emergency_lamp`, `door_jamb`, `door_lintel`, `corner_pillar`, `handrail`, `floor_grate`, `kick_plate`, `wall_sign_arrow`, `maintenance_hatch`, `fire_hose_reel`, `debris_pile`, `hanging_cables`.
+- **Medbay:** `cryo_pod`, `scrub_sink`, `privacy_screen`, `defib_cart`, `biohazard_bin`, `body_bag`.
+- **Cargo:** `crate_pile_tipped`, `container_section`, `pallet_jack`, `tarp_pile`, `cargo_net_wall`, `manifest_terminal`.
+- **Engineering:** `coolant_pump`, `transformer`, `catwalk_section`, `workbench`.
+- **Bio lab:** `incubator_shelf`, `chem_cabinet`, `autopsy_table`, `containment_cell`.
+- **Bridge:** `crew_station`, `holo_projector`, `comms_rack`, `viewport_frame`.
+- **Crew quarters:** `wardrobe_locker`, `sleeping_pod`, `shower_stall`, `personal_shelf`.
+- **Mess:** `drinks_cooler`, `tray_trolley`, `round_table`, `waste_bin`.
+- New mount kind **`wall_high`**: the origin is on the floor under the prop and the mounting height is baked in, against walls of 2.6 m (`data/deck.json`). Plain `wall` props still sit at a height the game picks.
+- `props.py`'s `Builder.box`/`cyl` take an optional `rot=(rx, ry, rz)` in degrees, used for debris, ajar doors and knocked-over stools.
+- Previews: `docs/screens/props/hall_*.jpg` and `<room>_b_*.jpg`.

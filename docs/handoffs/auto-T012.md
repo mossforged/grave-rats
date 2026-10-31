@@ -77,7 +77,7 @@ Prize alarm frame 3 doesn't show a stalker arriving: at 6 s they're still outsid
 
 ## What needs John's eye
 1. **The gate:** does "one more room?" happen? Is grabbing the black box scary?
-2. **Tier stalkers can be quick:** in one capture, a stalker spawned about 7 m behind a player standing still and hit them about 2 s later. That obeys "never in sight", but it may feel unfair. `spawning.min_player_m` is the lever.
+2. **Tier stalkers can be quick:** in one capture, a tier stalker spawned out of sight (the rule keeps it at least 7 m away; I didn't record the exact spot) and hit a player standing still in about 2 s. That obeys "never in sight", but it may feel unfair. `spawning.min_player_m` is the lever.
 3. **Lights failing is modest:** strips and practicals go out, but ambient and fog stay, and no rule reads the lights. Is it dark enough to matter?
 4. **Rings:** are 0 in unseen rooms and full strength once seen right? Try `rim.unknown_share`.
 5. **Carrying has no pose:** the item floats in front of the body with the rifle still up.

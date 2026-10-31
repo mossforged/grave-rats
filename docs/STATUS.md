@@ -18,7 +18,7 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 
 ## Open questions (for John)
 - T012 play (`godot --path .`, sheet `docs/screens/T012/sheet.png`): does "one more room?" happen? Is grabbing the black box scary? Bots: greedy banks 2,380 on average and survives 6 of 12; cautious banks 1,309 and survives 12 of 12.
-- T012 calls: rings hidden in unseen rooms until seen, a stalker can spawn 7 m behind you and hit within about 2 s, the airlock is a marked zone and not a room, lights failing is looks only. Handoff has each lever.
+- T012 calls: rings hidden in unseen rooms until seen, a tier stalker can spawn out of sight 7 m or more away and hit within about 2 s, the airlock is a marked zone and not a room, lights failing is looks only. Handoff has each lever.
 - T011: MSAA dropped from 4x to 2x to meet the frame budget (reverses the 2026-10-30 decision); turning shimmer rose (0.09 → 0.12% twinkle), possibly from that. Accept 2x, or go back to 4x and find the time elsewhere?
 - T011 play (stage 3): sheet `docs/screens/T011/sheet.png`, then medbay to junction to cargo. Does it match or beat the concept?
 - T011 calls: MSAA 4x to 2x (biggest frame win; rougher edges?), dimmer rooms with no shadowed practicals, the ambush panel's new tell, door strips in a fight, shimmer when turning (twinkle up 30% on T010).

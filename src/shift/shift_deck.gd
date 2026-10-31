@@ -14,6 +14,8 @@ const CarryState := preload("res://src/salvage/carry_state.gd")
 const QuotaState := preload("res://src/shift/quota_state.gd")
 const Paperwork := preload("res://src/paperwork/paperwork.gd")
 const PaperworkScreen := preload("res://src/paperwork/paperwork_screen.gd")
+const Custodian := preload("res://src/custodian/custodian.gd")
+const CustodianTrace := preload("res://src/custodian/custodian_trace.gd")
 
 ## Fired as each tier lands: (index from 1, its data). The ship's next threat hangs off this.
 signal tier_fired(index: int, spec: Dictionary)
@@ -38,6 +40,7 @@ var session_live := false
 ## This session's run logs, oldest first: all the briefing may know.
 var past_logs: Array = []
 var contract: Dictionary = {}
+var custodian: Custodian
 
 var _bill_wait := -1.0
 var _contracts := 0
@@ -51,6 +54,9 @@ var _spawns_owed := 0
 var _spawn_wait := 0.0
 var _alarm_refresh := 0.0
 var _shift_ready := false
+var _custodian_cfg: Dictionary
+var _custodian_trace: CustodianTrace
+var _drone_tracer: ShotTracer
 
 
 func _ready() -> void:
@@ -87,10 +93,76 @@ func _ready() -> void:
 	add_child(paper)
 	paper.pressed.connect(_on_paper_pressed)
 	paperwork = Paperwork.new(paper.cfg)
+	_make_custodian()
 	_shift_ready = true
 	_start_shift()
 	if get_tree().current_scene == self and not _capture:
 		start_session()
+
+
+## The ship's AI on the deck: registers on the tier hook, gets the guns' trace, and adds its drones to
+## what a round can hit. It hears nothing of the suit or the stalkers but through these signals.
+func _make_custodian() -> void:
+	_custodian_cfg = Data.load_data("custodian")
+	_custodian_trace = CustodianTrace.new(cover, get_world_3d(), operator.rifle.exclude)
+	custodian = Custodian.new()
+	custodian.name = "Custodian"
+	add_child(custodian)
+	custodian.setup(_custodian_cfg, layout, _custodian_trace.line, sight.visibility, mask.bind, _player_knows,
+			mask.visible_texture(), sight.bounds, int(_cfg.mix_rate))
+	custodian.player_hit.connect(_on_custodian_hit)
+	custodian.spoke.connect(func(line: String) -> void: hud.os_state.custodian_say(line))
+	custodian.woke.connect(func(_reason: String) -> void: run_log.note_threat("custodian", "ship"))
+	custodian.revealed.connect(func(unit: Node3D, at: Vector2) -> void: sight.flash(unit, at, _custodian_cfg.cutter.reveal))
+	custodian.stalker_wanted.connect(_on_stalker_wanted)
+	custodian.called.connect(_on_custodian_called)
+	wake_hooks["custodian"] = func(_tier: int) -> void: custodian.wake("tier")
+	_drone_tracer = ShotTracer.new(cover, get_world_3d())
+	_drone_tracer.exclude = operator.rifle.exclude
+	_drone_tracer.bodies = custodian.drones
+	operator.rifle.shot_tracer = _trace_shot
+
+
+## A round: stalkers first, as ever, then any drone that's nearer on the same line.
+func _trace_shot(origin: Vector3, dir: Vector3, length: float) -> Dictionary:
+	var shot: Dictionary = tracer.trace(origin, dir, length)
+	var at_drone: Dictionary = _drone_tracer.trace(origin, dir, length)
+	if at_drone.get("collider") == null or not (at_drone.collider as Object).has_method("shot_disc"):
+		return shot
+	if shot.is_empty() or origin.distance_to(at_drone.position) < origin.distance_to(shot.position):
+		return at_drone
+	return shot
+
+
+func _player_knows(p: Vector2) -> bool:
+	return sight.grid.state_at(p) != sight.grid.UNKNOWN
+
+
+func _on_custodian_hit(id: int, source: String, amount: float, from: Vector2, who: String) -> void:
+	if id != player_id:
+		return
+	note_hit_from(from, source)
+	run_log.note_threat("custodian", layout.space_at(_eye()))
+	_hurt(source, amount, who, in_cover_now())
+
+
+## The nearest stalker that can come gets your position. All of them is what the alarm's for.
+func _on_stalker_wanted(_id: int, at: Vector2, from: Vector2) -> void:
+	var best: Node = null
+	var best_d := INF
+	for s: Node in pack.stalkers:
+		var d: float = s.floor_position().distance_to(from)
+		if s.brain.alive() and s.brain.state != s.brain.State.DORMANT and d < best_d:
+			best = s
+			best_d = d
+	if best != null:
+		best.brain.alert(at)
+
+
+func _on_custodian_called(_id: int, how: String) -> void:
+	run_log.note_custodian_call()
+	var w: Dictionary = _custodian_cfg.words
+	hud.os_state.announce(String(w.called_cutter if how == Custodian.CALLED_CUTTER else w.called_stalker))
 
 
 func _sound_player(node_name: String, spec: Dictionary, looped: bool) -> AudioStreamPlayer:
@@ -144,6 +216,7 @@ func _start_shift() -> void:
 	_alarm_refresh = 0.0
 	_bill_wait = -1.0
 	_threat_wait = 0.0
+	custodian.reset()
 	operator.set_carry(shift.carry(player_id).penalties())
 	_sync_hud()
 
@@ -185,6 +258,7 @@ func _step_shift(delta: float) -> void:
 		return
 	_note_threats(delta)
 	_step_spawns(delta)
+	custodian.tick(delta, _custodian_players())
 	if shift.alarm_left > 0.0:
 		_alarm_refresh -= delta
 		if _alarm_refresh <= 0.0:
@@ -201,6 +275,12 @@ func _step_shift(delta: float) -> void:
 	var loss := shift.suit_loss(delta)
 	if loss > 0.0:
 		_hurt("oxygen", loss * float(_health_cfg.suit.max), String(_cfg.out_of_air.who), false)
+
+
+## Who the ship can see, by player ID. Solo for now.
+func _custodian_players() -> Array:
+	var p := _eye()
+	return [{"id": player_id, "pos": p, "body": Vector3(p.x, body_height(), p.y), "alive": not suit.dead}]
 
 
 func _leave_held() -> bool:
@@ -307,6 +387,7 @@ func _trip_alarm() -> void:
 	_siren.play()
 	_alarm_refresh = float(a.refresh_s)
 	pack.alert(_eye())
+	custodian.wake("prize")
 	if not ambush.fired:
 		ambush.fired = true
 		fire_ambush()
@@ -374,6 +455,8 @@ func _die(who: String, how: String) -> void:
 
 
 func _killer_kind(how: String) -> String:
+	if how == String(_custodian_cfg.cutter.source):
+		return String(_custodian_cfg.cutter.killer_key)
 	return "suit" if how == "oxygen" else super(how)
 
 
@@ -405,6 +488,10 @@ func _sync_hud() -> void:
 		urgent.append("alarm")
 	if shift.oxygen_out() and not shift.ended():
 		urgent.append("o2_out")
+	if not shift.ended() and custodian.cutter_on(player_id):
+		urgent.append("cutter")
+	if not shift.ended() and custodian.drone_on(player_id):
+		urgent.append("drone_call")
 	hud.urgent_alerts = urgent
 	hud.action = _action_now(c)
 	hud.quota = quota.facts() if session_live or (_capture and _demo_t >= 0.0) else {}
@@ -588,6 +675,20 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "t014_payslip_long", "do": "form", "form": "long"},
 		{"name": "t014_death_bill", "do": "form", "form": "death"},
 		{"name": "t014_termination", "do": "form", "form": "termination"},
+		{"name": "t015_lens_dormant", "do": "t015", "shot": "dormant"},
+		{"name": "t015_lens_awake", "do": "t015", "shot": "awake"},
+		{"name": "t015_cutter_sweep", "do": "t015", "shot": "sweep"},
+		{"name": "t015_cutter_warmup", "do": "t015", "shot": "warmup"},
+		{"name": "t015_cutter_beam", "do": "t015", "shot": "beam"},
+		{"name": "t015_cutter_stopped_by_tall", "do": "t015", "shot": "tall"},
+		{"name": "t015_cutter_over_low", "do": "t015", "shot": "low"},
+		{"name": "t015_drone_patrol", "do": "t015", "shot": "patrol"},
+		{"name": "t015_drone_bars_1", "do": "t015", "shot": "bars", "share": 0.2},
+		{"name": "t015_drone_bars_2", "do": "t015", "shot": "bars", "share": 0.5},
+		{"name": "t015_drone_bars_3", "do": "t015", "shot": "bars", "share": 0.85},
+		{"name": "t015_drone_call_complete", "do": "t015", "shot": "called"},
+		{"name": "t015_death_bill", "do": "t015", "shot": "bill"},
+		{"name": "t015_payslip", "do": "t015", "shot": "payslip"},
 	]
 
 
@@ -608,6 +709,8 @@ func apply_shot(shot: Dictionary) -> void:
 			await _quota_hud_shot()
 		"form":
 			await _form_shot(String(shot.form))
+		"t015":
+			await _t015_shot(shot)
 		"carry":
 			await _carry_shot(String(shot["class"]))
 		"dark":
@@ -821,6 +924,129 @@ func _prize_shot(wait: float) -> void:
 	suit.reset()
 
 
+# --- T015: CUSTODIAN's frames. Nothing else going on, so the tell is what's in shot. ---
+
+func _quiet_stalkers() -> void:
+	for s: Node in pack.stalkers:
+		s.brain.state = s.brain.State.DORMANT
+		s.global_position = Vector3(layout.bounds.end.x + 50.0, 0.0, layout.bounds.end.y + 50.0)
+	shift.tier_reached = (_cfg.tiers as Array).size()
+
+
+func _t015_shot(shot: Dictionary) -> void:
+	_quiet_stalkers()
+	set_kit_view("known")
+	var cutter: Node3D = custodian.cutters[0]
+	var drone: Node3D = custodian.drones[1]
+	var cargo: Rect2 = layout.space_rect("cargo")
+	var mid: Vector2 = cargo.get_center() + Vector2(cargo.size.x * 0.12, 0.0)
+	match String(shot.shot):
+		"dormant":
+			await _stand_at(cutter.floor_position() + Vector2(-1.0, 4.0), cutter.floor_position())
+			await _sim(0.2)
+		"awake":
+			await _stand_at(cutter.floor_position() + Vector2(-1.0, 4.0), cutter.floor_position())
+			custodian.wake("tier")
+			cutter.brain.state = cutter.brain.State.COOL
+			cutter.brain._cool = INF
+			await _sim(0.3)
+		"sweep":
+			await _stand_at(mid, cutter.floor_position())
+			custodian.wake("tier")
+			cutter.brain._hold = INF
+			await _sim(1.2)
+		"warmup":
+			await _stand_at(mid, cutter.floor_position())
+			custodian.wake("tier")
+			await _until_warm(cutter, 0.65)
+		"beam":
+			await _stand_at(mid, cutter.floor_position())
+			custodian.wake("tier")
+			await _until_burn(cutter)
+		"tall", "low":
+			await _behind_cover(cutter, String(shot.shot))
+			custodian.wake("tier")
+			await _sim(0.15)
+			var aim: Vector2 = cutter.floor_position().direction_to(_eye())
+			cutter.brain.yaw = atan2(-aim.x, -aim.y)
+			cutter.brain._offset = angle_difference(cutter.brain.home_yaw, cutter.brain.yaw)
+			cutter.brain._sweep_dir = 0.0
+			await _sim(0.1 if shot.shot == "tall" else float(cutter.cfg.warmup_s) * 0.6)
+		"patrol":
+			custodian.wake("tier")
+			for c: Node3D in custodian.cutters:
+				c.brain.state = c.brain.State.COOL
+				c.brain._cool = INF
+			drone.brain._reacquire = INF
+			await _stand_at(drone.floor_position() + Vector2(0.0, -5.0), drone.floor_position())
+			await _sim(0.5)
+		"bars", "called":
+			custodian.wake("tier")
+			for c: Node3D in custodian.cutters:
+				if c.brain.awake():
+					c.brain.state = c.brain.State.COOL
+					c.brain._cool = INF
+			var to: Vector2 = Vector2(0.0, -5.0)
+			drone.brain.yaw = atan2(-to.x, -to.y)
+			await _stand_at(drone.floor_position() + to, drone.floor_position())
+			await _sim(0.1)
+			var call_s := float(drone.cfg.call_s)
+			if shot.shot == "bars":
+				await _sim(call_s * float(shot.share) - 0.1)
+			else:
+				await _sim(call_s + 0.3)
+		"bill":
+			next_seed = CAPTURE_SEED
+			start_session()
+			paper.press("accept")
+			_stand_quick(mid)
+			run_log.note_time(301.0)
+			_on_custodian_hit(player_id, String(cutter.cfg.source), float(cutter.cfg.damage), cutter.floor_position(), cutter.label)
+			_on_custodian_hit(player_id, String(cutter.cfg.source), 1000.0, cutter.floor_position(), cutter.label)
+			file_death_bill()
+			await get_tree().process_frame
+			await get_tree().process_frame
+		"payslip":
+			next_seed = CAPTURE_SEED
+			start_session()
+			paper.press("accept")
+			_on_custodian_hit(player_id, String(cutter.cfg.source), float(cutter.cfg.damage), cutter.floor_position(), cutter.label)
+			_shot_home(8, 22, 4, 330.0)
+			await get_tree().process_frame
+			await get_tree().process_frame
+
+
+func _stand_quick(p: Vector2) -> void:
+	operator.global_position = Vector3(p.x, 0.0, p.y)
+
+
+## Right behind a tall or low piece of cargo cover, as the cutter sees it, crouched.
+func _behind_cover(cutter: Node3D, kind: String) -> void:
+	var mount: Vector2 = cutter.floor_position()
+	for p: Dictionary in layout.props:
+		if String(p.space) == "cargo" and String(p.cover) == kind:
+			var r: Rect2 = p.rect
+			var c := r.get_center()
+			if c.distance_to(mount) > float(cutter.cfg.range_m) * 0.75:
+				continue
+			var spot := c + mount.direction_to(c) * (r.size.length() * 0.5 + operator.body_radius())
+			await _crouch_at(spot, mount)
+			return
+
+
+func _until_warm(cutter: Node3D, share: float) -> void:
+	while cutter.brain.warm_share() < share:
+		await get_tree().process_frame
+
+
+func _until_burn(cutter: Node3D) -> void:
+	while not cutter.brain.burning():
+		await get_tree().process_frame
+	await _sim(float(cutter.cfg.burn_s) * 0.4)
+	suit.reset()
+	suit_hud.show_death("")
+
+
 ## Measuring window: tier 1 has landed, so three stalkers, all told where the player is, in the
 ## junction with the cargo door open. The suit refills, so the window stays a fight.
 func _demo_step(delta: float) -> void:
@@ -835,9 +1061,10 @@ func _demo_step(delta: float) -> void:
 		operator.global_position = Vector3(p.x, 0, p.y)
 		rig.snap()
 		_step_clock_to(float(_cfg.tiers[0].at_oxygen))
+		custodian.wake("tier")
 		pack.spawn_out_of_view([_player_sees], [_eye()], rng)
 		_spawns_owed = 0
-		print("shift_deck: frame-time window with %d stalkers" % pack.stalkers.size())
+		print("shift_deck: frame-time window with %d stalkers and CUSTODIAN awake" % pack.stalkers.size())
 		pack.stalkers[0].place_hunting(p + Vector2(float(dm.hunter_ahead_m), float(dm.hunter_side_m)), p)
 	_demo_t += delta
 	suit.reset()

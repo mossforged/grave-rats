@@ -12,7 +12,7 @@ One shift, solo, end to end (T012): oxygen, tiers, the alarm, the hold, LEAVE. T
 - `placeholder_siren.gd`: a swept sine, until real sound.
 
 ## Does not own
-- Salvage rules (`src/salvage`), spawning and alert (`StalkerPack`, `SpawnPicker`, `StalkerBrain.alert`), drawing the HUD (`src/hud`), carry penalties in motion (`src/player`), the log file (`src/run_log`).
+- Salvage rules (`src/salvage`), spawning and alert (`StalkerPack`, `SpawnPicker`, `StalkerBrain.alert`), CUSTODIAN's rules (`src/custodian`), drawing the HUD (`src/hud`), carry penalties in motion (`src/player`), the log file (`src/run_log`).
 
 ## Rules
 - **Oxygen** runs from `oxygen_s`; the hold doesn't refill it. At zero, the suit loses `out_of_air.suit_fraction_per_s` of a full suit per second. That's source "oxygen": no flash, no stagger, not a hit in the log; a death by it is `killed_by {suit, how: "oxygen"}`.
@@ -36,9 +36,9 @@ One shift, solo, end to end (T012): oxygen, tiers, the alarm, the hold, LEAVE. T
 - `AlarmMarker`: `setup(cfg)`, `show_for(s)`, `hide_now()`, `tick(delta, at)`, `alpha()`; fields `on`, `time_left`.
 - `Airlock`: `setup(cfg, layout, bind)`, `has_point(p)`; field `rect`.
 - `QuotaState.new(cfg)`: `begin()`, `close_shift(net_cr, how)` -> `RUNNING`, `MET`, `MISSED`; `share()`, `facts()`; fields `cycle`, `quota`, `banked`, `shifts_left`, `verdict`, `surplus`, `shortfall`, `quota_due`, `shifts_billed`, `deaths`, `declined`, `cycles_met`. `how`: `LEFT`, `DIED`, `DECLINED`, `ABANDONED`.
-- `shift_deck`: `interact()`, `drop_item()`, `simulate_world(delta)`, `respawn()`, `start_session()`, `abandon_shift()`, `file_death_bill()`; fields `shift`, `field`, `section`, `marker`, `airlock`, `player_id`, `rng`, `next_seed` (next shift's seed; 0 rolls one), `wake_hooks`, `quota`, `paperwork`, `paper`, `session_live`, `past_logs`, `contract`. `operator.scripted` gains `leave`.
+- `shift_deck`: `interact()`, `drop_item()`, `simulate_world(delta)`, `respawn()`, `start_session()`, `abandon_shift()`, `file_death_bill()`; fields `shift`, `field`, `section`, `marker`, `airlock`, `player_id`, `rng`, `next_seed` (next shift's seed; 0 rolls one), `wake_hooks`, `custodian`, `quota`, `paperwork`, `paper`, `session_live`, `past_logs`, `contract`. `operator.scripted` gains `leave`.
 - Keys: E take/door/bed, hold E in the airlock to leave, G drop, Backspace abandon shift (with no session, next shift).
-- **CUSTODIAN hook (T014):** put a Callable in `wake_hooks["custodian"]`, `(tier_index) -> void`. Tier 2's `wake` list names it; with nothing registered, it does nothing. There's also the signal.
+- **CUSTODIAN (T015):** `_make_custodian` registers on `wake_hooks["custodian"]` (`(tier_index) -> void`; tier 2's `wake` list names it). The prize's alarm wakes it too. The deck gives it the players each step and answers its signals: a hit goes through `_hurt` with the arc and the log, a call with no cutter left alerts the nearest stalker that's up (not dormant, one only), an announcement goes on the suit's line. A round can hit a drone (`_trace_shot`). It stops with the deck, behind forms and after LEAVE; a new shift puts it back to sleep.
 
 ## Signals
 `shift_deck.tier_fired(index, spec)`.
@@ -46,4 +46,4 @@ One shift, solo, end to end (T012): oxygen, tiers, the alarm, the hold, LEAVE. T
 ## Data keys (`data/shift.json`)
 `player_id`, `quota` {`shifts_per_cycle`, `start_cr`, `growth`, `round_to`}, `session` {`death_hold_s`, `threat_check_s`}, `oxygen_s`; `out_of_air` {`suit_fraction_per_s`, `who`}; `tiers` [{`at_oxygen`, `stalkers`, `lights`, `wake`, `announce` (`%s` is the section)}]; `section_words`; `lights` {`flicker_s`, `gap_min_s`, `gap_max_s`, `flicker_energy`}; `airlock` {`space`, `from`, `to`, `strip_m`, `strip_height_m`, `color`, `energy`, `unknown_share`, `sign`, `sign_height_m`, `sign_pixel_size`, `sign_font_size`, `sign_color`}; `leave` {`hold_s`, `hold_after_s`}; `alarm` {`reveal_s`, `refresh_s`, `announce`, `marker` {...}, `siren` {...}}; `tier_chirp`, `mix_rate`; `drop_sound` {noise: pack sound}; `prompt`, `words`, `demo`, `help`.
 
-Tests: `tests/test_shift.gd`, `tests/test_paperwork.gd`. Bots: `tools/t012_bots.gd`, `tools/t014_bots.gd`.
+Tests: `tests/test_shift.gd`, `tests/test_paperwork.gd`, `tests/test_custodian.gd`. Bots: `tools/t012_bots.gd`, `tools/t014_bots.gd`, `tools/t015_bots.gd`.

@@ -31,7 +31,9 @@
     "low_ammo": "LOW AMMO",
     "hands_full": "HANDS FULL - CAN'T FIRE",
     "alarm": "ALARM",
-    "o2_out": "O2 OUT"
+    "o2_out": "O2 OUT",
+    "cutter": "CUTTER LOCK",
+    "drone_call": "DRONE CALLING"
   },
   "mark": {
     "x_px": 92.0,
@@ -153,7 +155,7 @@
     "tip_px": 13.0,
     "span_deg": 44.0,
     "segments": 14,
-    "colors": {"default": "ff5a3c", "rifle": "ff5a3c", "lunge": "ff5a3c", "spit": "9cff4a"}
+    "colors": {"default": "ff5a3c", "rifle": "ff5a3c", "lunge": "ff5a3c", "spit": "9cff4a", "cutter": "a6e7c4"}
   },
   "ring": {
     "height_m": 0.04,
@@ -176,6 +178,7 @@
     "empty": "HANDS FREE", "hand": "%s  /  %s", "slot_filled": "5fe0d0",
     "class_colors": {"small": "5fe0d0", "medium": "f0c040", "heavy": "ff7a3a", "prize": "ff4fd8"}
   },
+  "custodian": {"y_px": 168.0, "h_px": 40.0, "pad_px": 18.0, "font_px": 26.0, "font_drop_px": 3.0, "life_s": 6.0, "fade_s": 1.0, "color": "a6e7c4"},
   "announce": {"y_px": 118.0, "h_px": 46.0, "pad_px": 18.0, "font_px": 28.0, "font_drop_px": 3.0, "life_s": 6.0, "fade_s": 1.0},
   "action": {"above_m": 2.45, "w_px": 150.0, "h_px": 10.0, "font_px": 20.0, "gap_px": 4.0},
   "banner": {"y_px": 420.0, "h_px": 150.0, "w_px": 620.0, "big_px": 56.0, "font_px": 28.0, "line_px": 38.0}

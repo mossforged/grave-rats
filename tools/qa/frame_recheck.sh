@@ -40,7 +40,8 @@ wait_quiet() {
 }
 capture() { CAPTURE_ONLY=none CAPTURE_SIZE=1920x1080 "$WORK/clone/tools/capture.sh" "$1" "$2" "$3" >"$2.log" 2>&1; }
 
-git clone -q "file://$ROOT" "$WORK/clone" && git -C "$WORK/clone" checkout -q "$COMMIT" || exit 2
+# The origin, not this checkout: main may have moved on past what's fetched into local branches.
+git clone -q --filter=blob:none "$(git -C "$ROOT" remote get-url origin)" "$WORK/clone" && git -C "$WORK/clone" checkout -q "$COMMIT" || exit 2
 "$GODOT" --headless --path "$WORK/clone" --import >/dev/null 2>&1
 printf '[display]\n\nwindow/size/borderless=true\n' > "$WORK/clone/override.cfg"
 for S in $SCENES; do wait_quiet || break; say "warming $S"; capture "$S" "$WORK/warm" 5; done

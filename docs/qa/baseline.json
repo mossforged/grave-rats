@@ -30,7 +30,8 @@
       "avg": 7.067,
       "p95": 10.329,
       "resolution": "1920x1080",
-      "screen_scale": 1.0
+      "screen_scale": 1.0,
+      "note": "Provisional: windows ran alongside the T016 code lane, borderless, at screen scale 1.0 under a remote desktop session. Replace on a quiet Mac."
     }
   },
   "bots": {
@@ -369,7 +370,8 @@
         "bots.t015_shift",
         "bots.t014",
         "bots.t015"
-      ]
+      ],
+      "note": "T014 numbers depend on process order; they hold only for health_check.sh's fixed split (4 processes of 3 seeds)."
     }
   ]
 }

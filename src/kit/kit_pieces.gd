@@ -352,11 +352,14 @@ static func door_seam(width: float, height: float) -> ArrayMesh:
 
 # --- box props (A006-07b) ---
 
-## The crate for `type` at exactly `size`. Empty string types with a slot in data "slots" get null.
+## The piece for `type` at `size`: the file its slot in data "slots" names, in the file's own frame
+## (width along X, front +Z; prop_yaw turns it), or the box if it has none or that file won't fit.
+## Otherwise the crate at exactly `size`.
 static func prop(type: String, size: Vector3) -> ArrayMesh:
 	if _cfg().slots.has(type):
-		return slot_box(size)
-	var key := "prop_%s_%.3f_%.3f_%.3f" % [type, size.x, size.y, size.z]
+		var mesh := _fitted_slot(type, size)
+		return mesh if mesh != null else slot_box(size)
+	var key :="prop_%s_%.3f_%.3f_%.3f" % [type, size.x, size.y, size.z]
 	return _cached(key, func() -> ArrayMesh:
 		var m := KitMesh.new()
 		m.uv_offset = _uv_offset(key.hash() % int(_cfg().uv_variants))
@@ -372,7 +375,105 @@ static func prop(type: String, size: Vector3) -> ArrayMesh:
 		return m.build())
 
 
-## The box a Meshy prop replaces when its file lands (bed, console, cabinet, lockers).
+## The file for slot `type` at `size`, "" for none. A slot with several files is keyed by width in
+## metres: the one matching the long side, else the widest that fits inside it.
+static func slot_file(type: String, size: Vector3) -> String:
+	var entry: Variant = _cfg().slots.get(type, "")
+	if entry is String:
+		return entry
+	var long := maxf(size.x, size.z)
+	var tol := float(_cfg().slot_fit.tolerance_m)
+	var file := ""
+	var widest := 0.0
+	for w: String in entry:
+		if float(w) <= long + tol and float(w) > widest:
+			widest = float(w)
+			file = String(entry[w])
+	return file
+
+
+## The kit's mesh of a slot file: every surface rebuilt through KitMesh, so it wears the kit material
+## its slot is named after, with kit UVs and grime. The file's own colours are never used. Null if the
+## file won't load.
+static func slot_mesh(path: String) -> ArrayMesh:
+	if _meshes.has(path):
+		return _meshes[path]
+	var scene: PackedScene = load(path) if ResourceLoader.exists(path) else null
+	if scene == null:
+		push_error("kit: slot file %s won't load" % path)
+		return null
+	var root := scene.instantiate()
+	var m := KitMesh.new()
+	var parts: Array = []
+	_gather_meshes(root, Transform3D.IDENTITY, parts)
+	var bounds := AABB()
+	for part: Dictionary in parts:
+		var box: AABB = part.xform * (part.mesh as Mesh).get_aabb()
+		bounds = box if bounds.size == Vector3.ZERO else bounds.merge(box)
+	for part: Dictionary in parts:
+		_add_file_mesh(m, part.mesh, part.xform, bounds.get_center())
+	root.free()
+	var mesh := m.build()
+	mesh.resource_name = path.get_file().get_basename()
+	_meshes[path] = mesh
+	return mesh
+
+
+static func _gather_meshes(node: Node, xform: Transform3D, out: Array) -> void:
+	var here: Transform3D = xform * (node as Node3D).transform if node is Node3D else xform
+	if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+		out.append({"mesh": (node as MeshInstance3D).mesh, "xform": here})
+	for child in node.get_children():
+		_gather_meshes(child, here, out)
+
+
+static func _add_file_mesh(m: KitMesh, mesh: Mesh, xform: Transform3D, tile_centre: Vector3) -> void:
+	for i in mesh.get_surface_count():
+		var mat: String = mesh.surface_get_material(i).resource_name
+		if not (_cfg().materials as Dictionary).has(mat):
+			push_error("kit: %s slot %s is no kit material; using %s" % [mesh.resource_name, mat, _cfg().slot_mat])
+			mat = String(_cfg().slot_mat)
+		var arrays := mesh.surface_get_arrays(i)
+		var verts: PackedVector3Array = xform * (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array)
+		var normals := PackedVector3Array()
+		for n: Vector3 in arrays[Mesh.ARRAY_NORMAL]:
+			normals.append(xform.basis * n)
+		m.add_triangles(mat, verts, normals, arrays[Mesh.ARRAY_INDEX], tile_centre)
+
+
+## The slot's mesh if it has a file and that file fits `size`, turned or not; else null. Nothing pokes
+## out of a footprint: collision comes from the deck, so a bigger mesh would show where you can't go.
+static func _fitted_slot(type: String, size: Vector3) -> ArrayMesh:
+	var file := slot_file(type, size)
+	if file == "":
+		return null
+	var mesh := slot_mesh(file)
+	if mesh == null:
+		return null
+	var tol := float(_cfg().slot_fit.tolerance_m)
+	var want := Vector3(maxf(size.x, size.z), size.y, minf(size.x, size.z))
+	var got := mesh.get_aabb().size
+	return mesh if got.x <= want.x + tol and got.y <= want.y + tol and got.z <= want.z + tol else null
+
+
+## The yaw for a deck prop's piece. A file's front turns to the room's centre, across the prop's short
+## side, unless that floor is blocked and the other side is open. Boxes and crates stay at 0.
+static func prop_yaw(layout: RefCounted, p: Dictionary) -> float:
+	var size: Vector3 = p.size
+	if _fitted_slot(String(p.type), size) == null:
+		return 0.0
+	var along_z := size.x < size.z
+	var axis := Vector2.RIGHT if along_z else Vector2.DOWN
+	var to_centre: Vector2 = layout.space_rect(String(p.space)).get_center() - (p.center as Vector2)
+	var front := axis if to_centre.dot(axis) >= 0.0 else -axis
+	var radius := float(_cfg().slot_fit.front_clear_m)
+	var reach := minf(size.x, size.z) * 0.5 + radius
+	if not layout.is_free(p.center + front * reach, radius) and layout.is_free(p.center - front * reach, radius):
+		front = -front
+	return atan2(front.x, front.y)
+
+
+## The box a Meshy prop replaces when its file lands (the bed, still).
 static func slot_box(size: Vector3) -> ArrayMesh:
 	var key := "slot_%.3f_%.3f_%.3f" % [size.x, size.y, size.z]
 	return _cached(key, func() -> ArrayMesh:

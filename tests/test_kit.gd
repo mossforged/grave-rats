@@ -112,16 +112,145 @@ func test_crates_match_a006() -> void:
 	for deck: Dictionary in [_main_deck(), _pirate_deck()]:
 		var layout := DeckLayout.new(deck, float(deck.room_scale))
 		for p: Dictionary in layout.props:
+			if KitPieces.slot_file(String(p.type), p.size) != "":
+				continue
 			var got: Vector3 = KitPieces.prop(String(p.type), p.size).get_aabb().size
 			check((got - (p.size as Vector3)).length() <= TOLERANCE, "%s from data is %s" % [p.type, got])
 
 
-func test_meshy_props_stay_clean_slots() -> void:
-	var slots: Dictionary = KitMaterials.cfg().slots
-	for type: String in ["bed", "console", "cabinet", "locker_bank"]:
-		check(slots.has(type), "%s has a slot" % type)
-		var size := Vector3(0.9, 0.75, 2.0)
-		check_eq(KitPieces.prop(type, size), KitPieces.slot_box(size), "%s is still the box" % type)
+func test_the_bed_stays_the_box() -> void:
+	check_eq(String(KitMaterials.cfg().slots.bed), "", "no bed file yet")
+	var size := Vector3(0.9, 0.75, 2.0)
+	check_eq(KitPieces.prop("bed", size), KitPieces.slot_box(size), "the bed is still the box")
+	for type: String in ["console", "cabinet", "locker_bank"]:
+		check_eq(KitPieces.prop(type, size), KitPieces.slot_box(size), "a %s whose file won't fit is the box" % type)
+
+
+# --- T013: scripted props in the slots ---
+
+func _slot_files() -> Array:
+	var files := []
+	for entry: Variant in KitMaterials.cfg().slots.values():
+		if entry is Dictionary:
+			files.append_array((entry as Dictionary).values())
+		elif String(entry) != "":
+			files.append(String(entry))
+	return files
+
+
+func _deck_slot_props() -> Array:
+	var out := []
+	for deck: Dictionary in [_main_deck(), _pirate_deck()]:
+		var layout := DeckLayout.new(deck, float(deck.room_scale))
+		for p: Dictionary in layout.props:
+			if p.type != "bed" and KitMaterials.cfg().slots.has(p.type):
+				out.append([layout, p])
+	return out
+
+
+func test_each_slot_loads_its_file() -> void:
+	check_eq(_slot_files().size(), 5, "three consoles, a cabinet, a locker bank")
+	for path: String in _slot_files():
+		check(path.begins_with("res://assets/game/props/"), "%s is a game copy" % path)
+		var mesh := KitPieces.slot_mesh(path)
+		check(mesh != null and mesh.get_surface_count() > 0, "%s loads" % path)
+	var cab := Vector3(0.6, 1.9, 0.5)
+	check_eq(KitPieces.prop("cabinet", cab), KitPieces.slot_mesh(String(KitMaterials.cfg().slots.cabinet)), "the cabinet slot")
+	var lockers := Vector3(0.6, 2.0, 2.4)
+	check_eq(KitPieces.prop("locker_bank", lockers), KitPieces.slot_mesh(String(KitMaterials.cfg().slots.locker_bank)), "the locker slot")
+
+
+func test_the_console_variant_matches_its_deck_width() -> void:
+	var seen := {}
+	for pair: Array in _deck_slot_props():
+		var p: Dictionary = pair[1]
+		if p.type != "console":
+			continue
+		var long := maxf(p.size.x, p.size.z)
+		var width := KitPieces.prop("console", p.size).get_aabb().size.x
+		# The pirate deck's 1.6 m console has no file of its own: the widest that fits, centred.
+		var want := minf(long, 1.4)
+		check(absf(width - want) <= TOLERANCE, "a %.1f m console gets %.2f m" % [long, width])
+		seen[roundi(long * 10.0)] = true
+	for tenths: int in [14, 12, 10, 16]:
+		check(seen.has(tenths), "the decks still have a %d dm console" % tenths)
+
+
+func test_every_material_slot_binds_to_a_kit_material() -> void:
+	for path: String in _slot_files():
+		var mesh := KitPieces.slot_mesh(path)
+		for i in mesh.get_surface_count():
+			var key := mesh.surface_get_name(i)
+			check((KitMaterials.cfg().materials as Dictionary).has(key), "%s slot %s is a kit key" % [path, key])
+			check_eq(mesh.surface_get_material(i), KitMaterials.material(key), "%s %s wears the kit's" % [path, key])
+
+
+func test_prop_textures_are_as_dense_as_the_walls_and_grimed() -> void:
+	for path: String in _slot_files():
+		var mesh := KitPieces.slot_mesh(path)
+		for i in mesh.get_surface_count():
+			var a := mesh.surface_get_arrays(i)
+			var v: PackedVector3Array = a[Mesh.ARRAY_VERTEX]
+			var uv: PackedVector2Array = a[Mesh.ARRAY_TEX_UV]
+			var idx: PackedInt32Array = a[Mesh.ARRAY_INDEX]
+			var n: PackedVector3Array = a[Mesh.ARRAY_NORMAL]
+			var m := KitMaterials.uv_metres(mesh.surface_get_name(i))
+			check_eq((a[Mesh.ARRAY_TANGENT] as PackedFloat32Array).size(), v.size() * 4, "%s has tangents" % path)
+			for t in range(0, idx.size(), 3):
+				# Triangles square to an axis keep their length: a metre is 1 / uv_m of the tile.
+				var e := v[idx[t + 1]] - v[idx[t]]
+				var along_axis: bool = maxf(absf(n[idx[t]].x), maxf(absf(n[idx[t]].y), absf(n[idx[t]].z))) > 0.999
+				if e.length() < 0.05 or not along_axis:
+					continue
+				var du := (uv[idx[t + 1]] - uv[idx[t]]).length()
+				check(absf(du * m - e.length()) < 0.001, "%s %s: %.3f m is %.3f tiles at uv_m %.2f" % [path, mesh.surface_get_name(i), e.length(), du, m])
+	var c: PackedColorArray = KitPieces.prop("cabinet", Vector3(0.6, 1.9, 0.5)).surface_get_arrays(0)[Mesh.ARRAY_COLOR]
+	check(c.size() > 0, "the cabinet carries vertex grime")
+	var mesh := KitPieces.prop("cabinet", Vector3(0.6, 1.9, 0.5))
+	var low := 1.0
+	var high := 0.0
+	for i in mesh.get_surface_count():
+		for col: Color in mesh.surface_get_arrays(i)[Mesh.ARRAY_COLOR]:
+			low = minf(low, col.r)
+			high = maxf(high, col.r)
+	check(low <= float(KitMaterials.cfg().grime.floor_shade) + 0.01, "darkest at the floor (%.2f)" % low)
+	check_eq(high, 1.0, "clean up high")
+
+
+func test_props_face_the_room_and_stay_inside_their_footprints() -> void:
+	var cfg: Dictionary = KitMaterials.cfg().slot_fit
+	for pair: Array in _deck_slot_props():
+		var layout: DeckLayout = pair[0]
+		var p: Dictionary = pair[1]
+		var yaw := KitPieces.prop_yaw(layout, p)
+		var front := Vector2(sin(yaw), cos(yaw))
+		var box := Transform3D(Basis(Vector3.UP, yaw), Vector3.ZERO) * KitPieces.prop(p.type, p.size).get_aabb()
+		var tol := float(cfg.tolerance_m)
+		check(absf(box.position.x) <= p.size.x * 0.5 + tol and absf(box.end.x) <= p.size.x * 0.5 + tol, "%s in x: %s" % [p.type, box])
+		check(absf(box.position.z) <= p.size.z * 0.5 + tol and absf(box.end.z) <= p.size.z * 0.5 + tol, "%s in z: %s" % [p.type, box])
+		check(box.end.y <= p.size.y + tol, "%s height" % p.type)
+		check(absf(front.dot(Vector2.RIGHT if p.size.x < p.size.z else Vector2.DOWN)) > 0.99, "%s fronts its long side" % p.type)
+		var reach: float = minf(p.size.x, p.size.z) * 0.5 + float(cfg.front_clear_m)
+		var r := float(cfg.front_clear_m)
+		var ahead: bool = layout.is_free(p.center + front * reach, r)
+		var behind: bool = layout.is_free(p.center - front * reach, r)
+		check(ahead or not behind, "%s at %s doesn't face blocked floor with open floor behind" % [p.type, p.center])
+		var to_centre: Vector2 = layout.space_rect(p.space).get_center() - p.center
+		if ahead and behind:
+			check(front.dot(to_centre) >= 0.0, "%s at %s faces the room's centre" % [p.type, p.center])
+
+
+func test_a_turned_prop_is_placed_turned_with_its_box_collision_as_before() -> void:
+	var deck := _main_deck()
+	var layout := DeckLayout.new(deck, float(deck.room_scale))
+	var root := DeckBuilder.build(layout)
+	var turned := 0
+	for mi: Node in root.get_node("Props").get_children():
+		if mi is MeshInstance3D and String(mi.get_meta("kit_piece")) == "locker_bank":
+			check(absf(absf(mi.rotation.y) - PI * 0.5) < 0.01, "the bank's 2.4 m runs along Z")
+			turned += 1
+	check_eq(turned, 1, "one locker bank")
+	root.free()
 
 
 func test_the_door_fits_the_people_and_the_walls() -> void:

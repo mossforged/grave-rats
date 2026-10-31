@@ -186,6 +186,7 @@ static func _add_prop(parent: Node3D, layout: DeckLayout, p: Dictionary) -> void
 	mi.mesh = KitPieces.prop(String(p.type), p.size)
 	mi.set_meta("kit_piece", String(p.type))
 	mi.position = Vector3(r.get_center().x, 0.0, r.get_center().y)
+	mi.rotation.y = KitPieces.prop_yaw(layout, p)
 	mi.layers = KitPieces.space_layer(layout, String(p.space))
 	parent.add_child(mi)
 	_add_collision(parent, r, 0.0, p.size.y)

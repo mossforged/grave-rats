@@ -75,9 +75,17 @@
     "ammo_strap_m": 0.09
   },
   "slots": {
-    "bed": "", "console": "", "cabinet": "", "locker_bank": ""
+    "bed": "",
+    "console": {
+      "1.0": "res://assets/game/props/console_1000.glb",
+      "1.2": "res://assets/game/props/console_1200.glb",
+      "1.4": "res://assets/game/props/console_1400.glb"
+    },
+    "cabinet": "res://assets/game/props/cabinet.glb",
+    "locker_bank": "res://assets/game/props/locker_bank.glb"
   },
   "slot_mat": "hull",
+  "slot_fit": {"tolerance_m": 0.01, "front_clear_m": 0.5},
   "floors": {
     "plate_m": 2.0,
     "seam_m": 0.018,

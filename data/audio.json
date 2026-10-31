@@ -87,13 +87,25 @@
   },
   "reload_stages": [
     {
+      "at": 0.2,
+      "cue": "rifle_mag_out",
+      "mark": "mag_out"
+    },
+    {
+      "at": 0.3,
+      "mark": "mag_drop",
+      "drop": true
+    },
+    {
       "at": 0.45,
-      "cue": "rifle_mag_in"
+      "cue": "rifle_mag_in",
+      "mark": "mag_in"
     },
     {
       "at": 0.8,
       "cue": "rifle_charge",
-      "only_empty": true
+      "only_empty": true,
+      "mark": "charge"
     }
   ],
   "stalker_idle": {

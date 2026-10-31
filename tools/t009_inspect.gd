@@ -2,8 +2,7 @@ extends SceneTree
 ## T009: prints what the hauler and its clips hold: bones, rest pose, clips, hip travel.
 ## usage: godot --headless --path . -s tools/t009_inspect.gd
 
-const FILES := ["hauler-rigged.glb", "hauler-rifle-idle.fbx", "hauler-crouch-idle.fbx", "hauler-crouch-aim.fbx",
-	"hauler-crouch-walk.fbx", "hauler-strafe-a.fbx", "hauler-strafe-b.fbx", "hauler-reload.fbx", "hauler-hit.fbx"]
+const FILES := ["hauler-rigged.glb", "clips/rifle_aim_idle_loop.fbx", "clips/rifle_crouch_idle_loop.fbx", "clips/rifle_reload.fbx"]
 
 
 func _init() -> void:

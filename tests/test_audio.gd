@@ -131,7 +131,8 @@ func test_every_cue_named_elsewhere_in_the_data_is_in_the_bank() -> void:
 	named.append_array(cfg.carry.drop.values())
 	named.append_array(cfg.paper_stamps.values())
 	for s: Dictionary in cfg.reload_stages:
-		named.append(s.cue)
+		if s.has("cue"):
+			named.append(s.cue)
 	for cue: Variant in named:
 		check(Audio.bank.has(String(cue)), "%s is in the bank" % cue)
 	for surface: String in cfg.footsteps.surfaces.values():
@@ -444,9 +445,11 @@ func test_shot_casing_dry_fire_and_reload_stages() -> void:
 	await _sim(scene, 0.05)
 	_clear()
 	check(op.request_reload(), "reload")
-	check(_heard.has("rifle_mag_out"), "mag out, at once")
+	check(not _heard.has("rifle_mag_out"), "the mag comes out when the hand gets there")
+	await _sim(scene, float(op.rifle.state.reload_total) * 0.3)
+	check(_heard.has("rifle_mag_out"), "and there it is")
 	check(not _heard.has("rifle_mag_in"), "mag in not yet")
-	await _sim(scene, float(op.rifle.state.reload_total) * 0.6)
+	await _sim(scene, float(op.rifle.state.reload_total) * 0.3)
 	check(_heard.has("rifle_mag_in"), "mag in in the middle")
 	check(not _heard.has("rifle_charge"), "no charge yet")
 	await _sim(scene, float(op.rifle.state.reload_total) * 0.45)

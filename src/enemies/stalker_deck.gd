@@ -309,7 +309,8 @@ func interact() -> void:
 	if bed and bed.try_tip(_eye()):
 		operator.hold_control(float(_cover_cfg.bed.tip_s))
 		return
-	doors.interact(_eye())
+	if doors.interact(_eye()) != "":
+		operator.play_action("interact")
 
 
 func _unhandled_input(event: InputEvent) -> void:

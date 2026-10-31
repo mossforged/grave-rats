@@ -94,6 +94,27 @@ func play_state(_state: String, _seconds := -1.0) -> bool:
 	return false
 
 
+## The hauler's moves. This body has no clips for them.
+func note_shot() -> void:
+	pass
+
+
+func note_hit(_from: Vector2, _yaw: float, _point_y: float, _height: float, _shouldered: bool) -> void:
+	pass
+
+
+func play_action(_state: String) -> void:
+	pass
+
+
+func set_carrying(_on: bool) -> void:
+	pass
+
+
+func set_cover(_share: float, _locked: bool) -> void:
+	pass
+
+
 func clear_states() -> void:
 	pass
 

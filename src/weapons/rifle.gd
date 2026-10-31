@@ -73,8 +73,6 @@ func request_reload(sprinting: bool) -> bool:
 	var ok := state.start_reload(sprinting)
 	if ok:
 		_empty_reload = was_empty
-		Audio.play("rifle_mag_out", global_position)
-		timeline.drop_magazine(_muzzle, _facing)
 		reload_started.emit()
 	return ok
 
@@ -84,10 +82,13 @@ func play_round(origin: Vector3, yaw: float, muzzle: Vector3) -> void:
 	_shoot(origin, yaw, muzzle)
 
 
-## The mag going in and, from empty, the charge, where data says they fall in the reload.
+## The mag out, the mag falling, the mag going in and, from empty, the charge, where data says they fall in the
+## reload. The hauler's reload clips are bent to the same moments (T022).
 func _reload_sounds(before: float, after: float) -> void:
 	for s: Dictionary in SoundRules.stages_crossed(Data.value("audio", "reload_stages"), before, after):
-		if _empty_reload or not bool(s.get("only_empty", false)):
+		if bool(s.get("drop", false)):
+			timeline.drop_magazine(_muzzle, _facing)
+		elif _empty_reload or not bool(s.get("only_empty", false)):
 			Audio.play(String(s.cue), global_position)
 
 

@@ -133,6 +133,18 @@ func play_hit(seconds: float) -> void:
 	anim.play_state("hit", seconds)
 
 
+## A blow from `from` (world x, z): a flinch by where it came from, and which way a killing blow drops the body.
+## `point_y` is how high it landed, if anyone knows.
+func note_hit_from(from: Vector2, point_y := -1.0) -> void:
+	var at := Vector2(global_position.x, global_position.z)
+	anim.note_hit(from - at, model.torso_yaw, point_y, _shape.height, model.firing())
+
+
+## A quick job for the hands: "pick_up", "interact". Moving cuts it short.
+func play_action(state: String) -> void:
+	anim.play_action(state)
+
+
 func control_held() -> bool:
 	return _hold_left > 0.0
 
@@ -144,6 +156,7 @@ func set_carry(p: Dictionary) -> void:
 	model.can_sprint = bool(p.can_sprint)
 	_can_fire = bool(p.can_fire)
 	_cone_next = float(p.cone_extra_deg)
+	anim.set_carrying(not _can_fire)
 
 
 func can_fire() -> bool:
@@ -246,6 +259,7 @@ func simulate(delta: float) -> void:
 	var origin := global_position + Vector3.UP * float(_cfg.aim_height_m)
 	if rifle.tick(delta, model.sprinting, origin, gun_yaw(), muzzle_position()):
 		model.note_shot()
+		anim.note_shot()
 	var upper := "aim"
 	if rifle.state.reloading():
 		upper = "reload"

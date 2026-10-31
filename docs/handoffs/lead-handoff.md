@@ -51,11 +51,12 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T017 | code | merged: placeholder sound (44 cues); John listens |
 | T018 | code | merged: co-op groundwork; solo must feel unchanged |
 | T019 | code | merged: corridor dressing; John judges depth and darkness |
-| T020 | code | queued: gun feel and environment effects (VFX library, shot timeline, sound layers; needs T017) |
-| T021 | code | queued: loose ends from T016-T018 (bed visibility, wall-top band, pirate audio, lock command); needs T020 |
+| T020 | code | merged: gun feel and effects; John fires a mag in the dark |
+| T021 | code | merged: bed stripe, wall-top z-fight fix, lock commands |
 | A013 | art | merged; waits for John's copy approval |
-| A014 | art | queued: second derelict concept (pitches, floor plan, mood paint-overs); John said yes to a second ship; code task after his approval |
-| Q003 | qa | written, NOT queued: queue once T021 merges and the code lane is idle |
+| A014 | art | merged; recommends B, biological survey vessel; waits for John's pick, then a code build task |
+| Q003 | qa | written, NOT queued: queue once T022 merges and the code lane is idle |
+| T022 | code | queued: John's 88 Mixamo clips on the hauler (8-way locomotion, fire, reloads, hits, deaths, actions, heavy carry) |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

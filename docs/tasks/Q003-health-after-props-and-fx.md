@@ -1,7 +1,7 @@
 # Q003 - Health check after props, sound, co-op and effects (QA)
 
 **Read:** `CLAUDE.md`, `docs/tasks/Q002-health-rerun.md`, `docs/handoffs/auto-Q002.md` (its findings and the provisional baseline), `docs/qa/baseline.json`, the handoffs of everything merged since Q002 (T016–T021).
-**Needs:** T021 merged, and the code lane idle (Q002 finding: the code lane's runs spoil frame windows).
+**Needs:** T022 merged, and the code lane idle (Q002 finding: the code lane's runs spoil frame windows).
 **Autonomy:** auto-ok.
 
 Five packets have landed since the last health check: the bed and medbay props, sound, co-op groundwork, corridor dressing, gun feel and effects, and polish. Each added frame cost or rewired input. Check nothing quietly regressed, and get the clean frame-time numbers Q002 couldn't.

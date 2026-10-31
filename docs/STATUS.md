@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T019 merged, waiting on John's gates (T017 sound: his ear). A013 room graphics merged, waiting on his copy approval. T020 (`auto/t020-mac`) and T021 (`auto/t021-mac`) await merge; T021 was built without T020, merge notes in `auto-T021`. **Next:** the lead merges T020, then T021. John plays a shift (black box past tier 2, AA pick, listen, solo feel, the dressed corridors). Art: A014 second derelict concept. QA: Q003 once T021 merges.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T021 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 room graphics and A014 second-derelict concept merged, waiting on his approval (A014 recommends the biological survey vessel). **Next:** John plays a shift; approves A013 copy and an A014 pitch. Code lane: T022 (his 88 Mixamo clips on the hauler). QA: Q003 after T022.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -71,4 +71,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (code, unattended): T021, 518/518, on `main` without T020 (trial merge with it: 566/566, resolve `pirate_squad.gd` to T020's side). Wall-top band was a kit z-fight since T010: fixed. Bed hazard stripe, pirate shots through `Audio`, lock through `LOCK` and `LOCK_CONTROLS`. Not played or heard.
+2026-10-31 (lead): merged T020 (559/559 with T019), T021 (566/566; T020 and T021 conflicts resolved as T021's handoff said: T020's layered shot for pirates), A014. Filed John's 88 Mixamo clips in `assets/source/mixamo-shooter/` with a manifest; queued T022.
+2026-10-31 (code, unattended): T020 `src/vfx` (16 recipes, pooled), shot timeline, 88 placeholder sound files, F1 → Effects gallery; mag dump +0.4 ms; a mag dump touches the limiter. T021: bed hazard stripe, wall-top z-fight fixed (in since T010), lock as commands.

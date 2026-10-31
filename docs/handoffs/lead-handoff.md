@@ -52,6 +52,10 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | T018 | code | merged: co-op groundwork; solo must feel unchanged |
 | T019 | code | queued: corridor wall dressing from the hallway prop set (visual only; needs T016 merged) |
 | T020 | code | queued: gun feel and environment effects (VFX library, shot timeline, sound layers; needs T017) |
+| T021 | code | queued: loose ends from T016-T018 (bed visibility, wall-top band, pirate audio, lock command); needs T020 |
+| A013 | art | queued: company graphics for engineering, bio lab, bridge, quarters, mess |
+| A014 | art | queued: second derelict concept (pitches, floor plan, mood paint-overs); John said yes to a second ship; code task after his approval |
+| Q003 | qa | written, NOT queued: queue once T021 merges and the code lane is idle |
 
 ## Lesson
 - Twice an addendum missed its task because the runner had already branched. Before adding an addendum, check `git branch -r` for the task's `auto/` branch; if it exists or might, write a new packet instead.

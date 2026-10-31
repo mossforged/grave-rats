@@ -45,6 +45,8 @@ func _ready() -> void:
 	flashlight.setup(sight.cfg)
 	flashlight.spot.light_volumetric_fog_energy = float(deck_lighting.cfg.fog.flashlight_energy)
 	flashlight.set_mask(mask.visible_texture(), sight.bounds)
+	operator.visuals.use_mask(mask.bind)
+	doors.use_mask(mask.bind)
 	sight_debug = SightDebug.new()
 	sight_debug.name = "SightDebug"
 	add_child(sight_debug)

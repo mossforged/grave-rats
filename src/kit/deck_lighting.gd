@@ -2,7 +2,8 @@ extends Node3D
 ## The deck's mood, from data/kit.json "lighting": the environment (dark ambient, glow, SSAO, fog in
 ## a box the size of the ship) and the practicals (strip fixtures with their lights, on the walls).
 ## The sight mask stays the authority: it sits on top of all of this and darkens what you don't know.
-## Env KIT_FOG, KIT_PRACTICALS, KIT_SSAO, KIT_GLOW = off switch one thing off to price it.
+## Env KIT_FOG, KIT_PRACTICALS, KIT_SSAO, KIT_GLOW = off switch one thing off to price it. KIT_SHEEN =
+## probe, ssr or off overrides how the floors get their wet sheen.
 
 const KitPieces := preload("res://src/kit/kit_pieces.gd")
 const KitMaterials := preload("res://src/kit/kit_materials.gd")
@@ -11,12 +12,14 @@ const DeckBuilder := preload("res://src/study/deck_builder.gd")
 var cfg: Dictionary
 var lights: Array[Light3D] = []
 var fog_volume: FogVolume
+var probes: Array[ReflectionProbe] = []
 
 ## Gives each fixture a home on the wall behind it, so it fades with the wall.
 func setup(layout: RefCounted, env: Environment, deck: Node3D) -> void:
 	cfg = KitMaterials.cfg().lighting
 	name = "DeckLighting"
 	_apply_environment(env, layout)
+	_apply_sheen(env, layout)
 	if _switched_on("KIT_PRACTICALS"):
 		_place_fixtures(layout, deck.get_node("Walls"))
 
@@ -78,6 +81,46 @@ func _apply_environment(env: Environment, layout: RefCounted) -> void:
 	fog_volume.size = Vector3(b.size.x, h, b.size.y)
 	fog_volume.position = Vector3(b.get_center().x, h * 0.5, b.get_center().y)
 	add_child(fog_volume)
+
+
+## One cheap probe per room, or screen-space reflections. The handoff has what each costs.
+func _apply_sheen(env: Environment, layout: RefCounted) -> void:
+	var sheen: Dictionary = cfg.sheen
+	var mode := OS.get_environment("KIT_SHEEN")
+	if mode == "":
+		mode = String(sheen.mode)
+	env.ssr_enabled = mode == "ssr"
+	if mode == "ssr":
+		var s: Dictionary = sheen.ssr
+		env.ssr_max_steps = int(s.max_steps)
+		env.ssr_fade_in = float(s.fade_in)
+		env.ssr_fade_out = float(s.fade_out)
+		env.ssr_depth_tolerance = float(s.depth_tolerance)
+	elif mode == "probe":
+		for space: String in layout.space_order:
+			_place_probe(layout, space, sheen.probe)
+
+
+## Sees only its room's static layer: not people, doors or the sight mask, which all sit on layer 1.
+func _place_probe(layout: RefCounted, space: String, p: Dictionary) -> void:
+	var r: Rect2 = layout.space_rect(space)
+	var layer: int = KitPieces.space_layer(layout, space)
+	var probe := ReflectionProbe.new()
+	probe.name = "Probe_%s" % space
+	probe.update_mode = ReflectionProbe.UPDATE_ONCE
+	probe.box_projection = true
+	probe.interior = true
+	probe.enable_shadows = false
+	probe.intensity = float(p.intensity)
+	probe.blend_distance = float(p.blend_m)
+	probe.ambient_mode = ReflectionProbe.AMBIENT_DISABLED
+	probe.cull_mask = layer
+	probe.reflection_mask = layer
+	probe.size = Vector3(r.size.x, float(p.height_m), r.size.y)
+	probe.max_distance = float(p.max_distance_m)
+	probe.position = Vector3(r.get_center().x, float(p.y_m), r.get_center().y)
+	add_child(probe)
+	probes.append(probe)
 
 
 func _place_fixtures(layout: RefCounted, walls: Node3D) -> void:

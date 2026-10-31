@@ -1,14 +1,18 @@
 extends MeshInstance3D
 ## Floor drawings that explain the gun: the aim-settle cone, the arc from the gun's current facing
 ## to the cursor while turning, and a ring under the aim point. Rebuilt each step in world space.
-## Numbers from data/player.json "aim_visuals".
+## In a scene with sight (`use_mask`) the cone and arc obey the mask; the ring never does, since you
+## have to be able to aim into the dark. Numbers from data/player.json "aim_visuals".
 
 const OperatorModel := preload("res://src/player/operator_model.gd")
+const AIM_FLOOR := preload("res://src/sight/aim_floor.gdshader")
 
 var arc_showing := false
 
 var _cfg: Dictionary
 var _mesh: ImmediateMesh
+var _plain: StandardMaterial3D
+var _under_sight: Material
 
 
 func _ready() -> void:
@@ -23,14 +27,28 @@ func _ready() -> void:
 	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	m.vertex_color_use_as_albedo = true
 	m.cull_mode = BaseMaterial3D.CULL_DISABLED
-	material_override = m
+	_plain = m
+	_under_sight = m
+
+
+## `bind` is SightMask.bind: from here on the cone and arc draw through the mask.
+func use_mask(bind: Callable) -> void:
+	var m := ShaderMaterial.new()
+	m.shader = AIM_FLOOR
+	m.set_shader_parameter("remembered_share", float(_cfg.remembered_share))
+	bind.call(m)
+	_under_sight = m
+
+
+func under_sight_material() -> Material:
+	return _under_sight
 
 
 ## `gun_yaw` includes recoil; `aim_yaw` is the cursor's yaw; `aim_point` the cursor in the world.
 ## `reach` (yaw -> metres) is how far a shot along that yaw flies, so the cone stops where shots do.
 func draw(from: Vector3, gun_yaw: float, spread_deg: float, aim_yaw: float, aim_point: Vector3, reach: Callable) -> void:
 	_mesh.clear_surfaces()
-	_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, _under_sight)
 	var y := float(_cfg.floor_y_m)
 	var c := Vector3(from.x, y, from.z)
 	_draw_cone(c, gun_yaw, deg_to_rad(spread_deg), reach)
@@ -38,6 +56,8 @@ func draw(from: Vector3, gun_yaw: float, spread_deg: float, aim_yaw: float, aim_
 	arc_showing = absf(err) > deg_to_rad(float(_cfg.arc_min_deg))
 	if arc_showing:
 		_draw_arc(c, gun_yaw, err)
+	_mesh.surface_end()
+	_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, _plain)
 	_draw_ring(Vector3(aim_point.x, y, aim_point.z))
 	_mesh.surface_end()
 

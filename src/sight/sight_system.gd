@@ -6,6 +6,7 @@ extends Node
 const Visibility := preload("res://src/sight/visibility.gd")
 const SightGrid := preload("res://src/sight/sight_grid.gd")
 const SightTarget := preload("res://src/sight/sight_target.gd")
+const FlashReveals := preload("res://src/sight/flash_reveals.gd")
 const OCCLUDER_GROUP := &"sight_occluder"
 
 signal sight_updated(polygon: PackedVector2Array, reveal: Array)
@@ -21,6 +22,8 @@ var reveal: Array = []
 var eye := Vector2.ZERO
 var aim_yaw := 0.0
 var light_on := true
+## Muzzle flashes and the like: lit for a moment, known to nobody afterward.
+var reveals := FlashReveals.new()
 
 var _props: Array = []
 var _movers: Array = []
@@ -50,6 +53,7 @@ func refresh_occluders() -> void:
 
 ## One update from where the eye is. `force_memory` writes the grid now, whatever the rate.
 func update_sight(from: Vector2, yaw: float, light: bool, delta: float, force_memory := false) -> void:
+	reveals.step(delta)
 	eye = from
 	aim_yaw = yaw
 	light_on = light
@@ -73,14 +77,27 @@ func _update_targets(from: Vector2, yaw: float, light: bool) -> void:
 	var r := float(cfg.target_radius_m)
 	for t: SightTarget in get_tree().get_nodes_in_group(SightTarget.GROUP):
 		var p := t.floor_position()
-		t.set_seen(visibility.can_see(from, yaw, light, p)
+		t.set_seen(reveals.covers(p) or visibility.can_see(from, yaw, light, p)
 				or visibility.can_see(from, yaw, light, p + Vector2(r, 0))
 				or visibility.can_see(from, yaw, light, p + Vector2(-r, 0))
 				or visibility.can_see(from, yaw, light, p + Vector2(0, r))
 				or visibility.can_see(from, yaw, light, p + Vector2(0, -r)))
 
 
+## Something at `at` lit itself up, `key` being who: a shape around it, stopped by the walls, shows it
+## for `hold_s` and fades over `fade_s`. `c` is {radius_m, hold_s, fade_s, rays}.
+func flash(key: Variant, at: Vector2, c: Dictionary) -> void:
+	var radius := float(c.radius_m)
+	var rays := int(c.rays)
+	var reach := visibility.fan(at, 0.0, TAU, rays + 1, radius)
+	var shape := PackedVector2Array([at])
+	for i in rays + 1:
+		shape.append(at + Visibility.yaw_dir2(TAU * i / rays) * reach[i])
+	reveals.add(key, at, radius, shape, float(c.hold_s), float(c.fade_s))
+
+
 func forget() -> void:
+	reveals.clear()
 	grid.clear()
 	_since_grid = INF
 	forgotten.emit()

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""T010: procedural textures and signage decals for the slice kit. Values: data/kit.json.
+"""T010, T011: procedural textures for the slice kit. Values: data/kit.json. Decals: tools/t011_decals.py.
 
 Every set grows from one height/mask stack, so albedo, normal and ORM agree. All tile except the
 door leaf. ORM: R AO, G roughness, B metalness. Normals: OpenGL. Grime stays out of the textures:
 the kit paints it low and in corners with vertex colours.
 
-Writes assets/game/kit/tex/<set>_{albedo,normal,orm}.png, assets/game/kit/decals/<name>.png and the
-matching .import settings (mipmaps, VRAM compression, normal maps). Reads the art lane's sheet, never
-writes to it. Then: godot --headless --path . --import
+Writes assets/game/kit/tex/<set>_{albedo,normal,orm}.png and the matching .import settings (mipmaps,
+VRAM compression, normal maps). Then: godot --headless --path . --import
 
 Run: python3 tools/t010_textures.py
 """
@@ -16,12 +15,11 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw
-from scipy.ndimage import binary_erosion, gaussian_filter, label
+from scipy.ndimage import gaussian_filter
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = json.loads((ROOT / "data/kit.json").read_text())
 TEX = ROOT / "assets/game/kit/tex"
-DEC = ROOT / "assets/game/kit/decals"
 
 
 def rgb(hexstr):
@@ -113,58 +111,77 @@ def write_import(path, normal_map, vram=True):
 
 
 def paint_set(name):
-    """Chipped paint over steel: hull, graphite trim, clinical enamel."""
+    """Chipped paint over steel: hull, graphite trim, clinical enamel. The tile is one whole panel
+    (kit_mesh's trim faces): chips crowd its rim and corners and leave the middle nearly clean."""
     c = CFG["textures"][name]
     n, seed = c["px"], c["seed"]
-    field = fbm(n, 2.7, 4, seed) * 0.8 + fbm(n, 1.9, 40, seed + 1) * 0.2
-    # `cover` of the surface keeps its paint; chips grow where the field is low.
-    t = threshold_for(field, c["cover"])
-    paint = smooth(t - 0.004, t + 0.004, field)
-    rim = np.clip(blur(1 - paint, 2.0) * paint * 2.2, 0, 1)
+    band = CFG["materials"][name]["edge_band_m"] / CFG["materials"][name]["uv_m"]
+    yy, xx = np.mgrid[0:n, 0:n] / (n - 1)
+    dx, dy = np.minimum(xx, 1 - xx), np.minimum(yy, 1 - yy)
+    edge = np.minimum(dx, dy) / band            # 0 at the rim, 1 at the band's inner edge
+    near = lambda d: np.clip(1 - d / band, 0, 1)
+    rim_wear = np.clip(1 - edge, 0, 1) ** c["edge_power"] + (near(dx) * near(dy)) * c["corner_boost"]
+    # Noise lumps set where it chips; the rim raises the bar, so chips grow in from the edge.
+    field = fbm(n, 2.5, 5, seed) * 0.62 + fbm(n, 1.8, 34, seed + 1) * 0.38
+    field = (field - field.min()) / (field.max() - field.min())
+    bite = threshold_for(field, c["cover"]) + rim_wear * c["edge_bite"]
+    paint = smooth(bite - 0.006, bite + 0.006, field)
+    lip = np.clip(gaussian_filter(1 - paint, 2.5, mode="nearest") * paint * 2.4, 0, 1)
+    # Rust bleeds down from each chip: the image's down is the wall's down on a trim face.
+    run = gaussian_filter(1 - paint, (c["streak_px"], 1.6), mode="nearest")
+    run = np.clip(np.roll(run, int(c["streak_px"]), axis=0) * c["streak"], 0, 1)
     tone = fbm(n, 2.6, 2, seed + 2)
-    hair = scratches(n, n // 6, seed + 3)
-    albedo = rgb(c["paint"])[None, None] * (0.88 + 0.12 * tone)[..., None]
+    hair = scratches(n, n // 7, seed + 3)
+    albedo = rgb(c["paint"])[None, None] * (0.8 + 0.2 * tone)[..., None]
     albedo = albedo * (1 - 0.3 * hair)[..., None]
-    steel = rgb(c["steel"])[None, None] * (0.75 + 0.5 * fbm(n, 1.6, 30, seed + 4))[..., None]
+    # Scuffed darker toward the rim, even where the paint held.
+    albedo = albedo * (1 - c["rim_grime"] * np.clip(1 - edge, 0, 1) ** 1.5)[..., None]
+    albedo = albedo * (1 - run * paint)[..., None] + rgb(c["rust"])[None, None] * (run * paint)[..., None]
+    steel = rgb(c["steel"])[None, None] * (0.7 + 0.6 * fbm(n, 1.6, 30, seed + 4))[..., None]
     albedo = albedo * paint[..., None] + steel * (1 - paint)[..., None]
-    albedo = albedo * (1 - rim * 0.65)[..., None] + rgb(c["rust"])[None, None] * (rim * 0.65)[..., None]
+    albedo = albedo * (1 - lip * 0.7)[..., None] + rgb(c["rust"])[None, None] * (lip * 0.7)[..., None]
     rp, rs = c["rough_paint"], c["rough_steel"]
     rough = (rp[0] + (rp[1] - rp[0]) * tone) * paint + (rs[0] + (rs[1] - rs[0]) * tone) * (1 - paint)
     metal = 1 - paint
-    height = blur(paint, 1.0) * 1.3 + fbm(n, 2.0, 12, seed + 5) * 0.7 - hair * 0.25
-    ao = 1 - 0.3 * blur(1 - paint, 2.5)
-    save(name, albedo, normal_from(height, 3.0), ao, rough, metal)
+    # Depth: paint thickness at each chip, a pressed panel line, fine orange-peel.
+    line = smooth(c["line_px"] * 1.6, c["line_px"] * 0.5, np.abs(np.minimum(dx, dy) - band) * n)
+    height = blur(paint, 1.0) * 1.6 + fbm(n, 2.0, 12, seed + 5) * 0.9 - hair * 0.3 - line * c["line_depth"]
+    ao = (1 - 0.35 * blur(1 - paint, 2.5)) * (1 - 0.35 * line)
+    save(name, albedo, normal_from(height, c["normal"]), ao, rough, metal)
 
 
 def deck():
+    """Bare deck plate. No damp or polish here: a tile can't know where feet go, so those come from the
+    per-deck wear map (src/kit/floor_wear.gd). Only the crinkled steel and fine pits stay."""
     c = CFG["textures"]["deck"]
     n, seed = c["px"], c["seed"]
-    # The hammered, crinkled steel of the paint-overs: ridged noise at two scales.
     a = fbm(n, 2.1, 10, seed)
     b = fbm(n, 2.0, 26, seed + 1)
     ridged = (1 - np.abs(a * 2 - 1)) * 0.65 + (1 - np.abs(b * 2 - 1)) * 0.35
     ridged = (ridged - ridged.min()) / (ridged.max() - ridged.min())
     tone = fbm(n, 2.6, 2, seed + 2)
-    stain = fbm(n, 2.6, 4, seed + 3)
-    t = threshold_for(stain, c["stain_cover"])
-    stains = smooth(t, t + 0.16, stain) * c["stain_strength"]
     specks = fbm(n, 1.3, 60, seed + 6)
     t = threshold_for(specks, 0.03)
     specks = smooth(t, t + 0.02, specks)
-    albedo = rgb(c["base"])[None, None] * (0.82 + 0.3 * tone)[..., None]
-    albedo = albedo * (0.86 + 0.2 * ridged)[..., None]
-    albedo = albedo * (1 - stains)[..., None] + rgb(c["dark"])[None, None] * stains[..., None]
-    albedo = albedo * (1 - specks * 0.6)[..., None]
-    polish = fbm(n, 2.8, 3, seed + 4)
-    t = threshold_for(polish, c["polish_cover"])
-    damp = blur(smooth(t, t + 0.2, polish), 6.0)
-    r0, r1 = c["rough"], c["polish_rough"]
-    rough = r0[0] + (r0[1] - r0[0]) * (ridged * 0.5 + stains * 0.5)
-    rough = rough * (1 - damp) + (r1[0] + (r1[1] - r1[0]) * tone) * damp
-    height = ridged * 1.0 + fbm(n, 1.7, 40, seed + 5) * 0.3
+    hair = scratches(n, n // 4, seed + 7, length=(0.02, 0.12))
+    albedo = rgb(c["base"])[None, None] * (0.8 + 0.34 * tone)[..., None]
+    albedo = albedo * (0.82 + 0.26 * ridged)[..., None]
+    albedo = albedo * (1 - specks * 0.6)[..., None] * (1 + 0.25 * hair)[..., None]
+    r0 = c["rough"]
+    rough = r0[0] + (r0[1] - r0[0]) * (ridged * 0.6 + tone * 0.4)
+    height = ridged * 1.0 + fbm(n, 1.7, 40, seed + 5) * 0.3 - hair * 0.2
     metal = np.full((n, n), c["metal"], np.float32)
-    ao = 1 - 0.15 * stains
-    save("deck", albedo, normal_from(height, 2.6), ao, rough, metal)
+    save("deck", albedo, normal_from(height, c["normal"]), 1 - 0.1 * specks, rough, metal)
+
+
+def breakup():
+    """World-space noise the floor shader breaks wear and damp up with: R broad, G fine. No normal or ORM."""
+    c = CFG["textures"]["breakup"]
+    n, seed = c["px"], c["seed"]
+    TEX.mkdir(parents=True, exist_ok=True)
+    img = np.dstack([fbm(n, 2.5, 3, seed), fbm(n, 1.9, 14, seed + 1), np.zeros((n, n), np.float32)])
+    Image.fromarray((img * 255 + 0.5).astype(np.uint8)).save(TEX / "breakup_albedo.png", optimize=True)
+    write_import(TEX / "breakup_albedo.png", normal_map=False)
 
 
 def grate():
@@ -184,7 +201,7 @@ def grate():
     rough = r[0] + (r[1] - r[0]) * tone
     height = (1 - blur(hole, 1.6)) * 4 + fbm(n, 1.8, 20, seed + 1) * 0.3
     metal = c["metal"] * (1 - hole)
-    save("grate", albedo, normal_from(height, 2.2), 1 - 0.85 * hole, rough, metal)
+    save("grate", albedo, normal_from(height, c["normal"]), 1 - 0.85 * hole, rough, metal)
 
 
 def hazard(name="hazard"):
@@ -229,7 +246,7 @@ def leaf():
     seed = c["seed"]
     hull = CFG["textures"]["hull"]
     field = fbm(0, 2.5, 3, seed, (h, w)) * 0.72 + fbm(0, 1.7, 24, seed + 1, (h, w)) * 0.28
-    t = threshold_for(field, hull["cover"])
+    t = threshold_for(field, c["cover"])
     paint = smooth(t - 0.004, t + 0.004, field)
     tone = fbm(0, 2.6, 2, seed + 2, (h, w))
     hair = scratches(w, w // 5, seed + 3, shape=(h, w))
@@ -257,39 +274,6 @@ def leaf():
     save("leaf", albedo, normal_from(height, 3.0), 1 - 0.4 * line, rough, 1 - paint)
 
 
-def decals():
-    """Cuts signage out of the art lane's sheet: the sheet's grey goes transparent, ink stays."""
-    d = CFG["decals"]
-    DEC.mkdir(parents=True, exist_ok=True)
-    src = np.asarray(Image.open(ROOT / d["source"]).convert("RGB"), np.float32) / 255.0
-    for i, (name, it) in enumerate(d["items"].items()):
-        x0, y0, x1, y1 = it["box"]
-        crop = src[y0:y1, x0:x1]
-        lo = crop.min(axis=2)
-        hi = crop.max(axis=2)
-        # The sheet's grey: light and colourless.
-        grey = (lo > 0.72) & (hi - lo < 0.045)
-        if it["mode"] == "outline":
-            # A framed sign keeps everything inside its frame: only grey touching the crop goes.
-            lab, _ = label(grey)
-            edge = set(lab[0, :]) | set(lab[-1, :]) | set(lab[:, 0]) | set(lab[:, -1])
-            edge.discard(0)
-            gone = np.isin(lab, list(edge))
-        else:
-            gone = grey
-        keep = binary_erosion(~gone, iterations=1)
-        alpha = keep.astype(np.float32)
-        # Painted-on wear, so stencils look stencilled.
-        worn = fbm(0, 2.0, 16, 400 + i, alpha.shape)
-        alpha = alpha * (worn > threshold_for(worn, 1.0 - d["wear"]))
-        if "ink" in it:
-            # Floor stencils: black ink vanishes on a dark deck, so it's repainted.
-            dark = (hi < 0.35)[..., None]
-            crop = crop * (~dark) + rgb(it["ink"])[None, None] * dark
-        Image.fromarray((np.dstack([crop, alpha]) * 255 + 0.5).astype(np.uint8), "RGBA").save(DEC / f"{name}.png", optimize=True)
-        write_import(DEC / f"{name}.png", normal_map=False)
-
-
 if __name__ == "__main__":
     for s in ("hull", "steel", "clinical"):
         paint_set(s)
@@ -299,6 +283,5 @@ if __name__ == "__main__":
     hazard("hazard_line")
     rubber()
     leaf()
-    decals()
+    breakup()
     print("textures:", sorted(p.name for p in TEX.glob("*_albedo.png")))
-    print("decals:", sorted(p.name for p in DEC.glob("*.png")))

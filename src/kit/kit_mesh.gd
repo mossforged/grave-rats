@@ -26,6 +26,9 @@ func _surface(mat: String) -> Dictionary:
 		_surfaces[mat] = {"v": PackedVector3Array(), "n": PackedVector3Array(), "t": PackedFloat32Array(),
 				"uv": PackedVector2Array(), "c": PackedColorArray(), "i": PackedInt32Array(),
 				"uv_m": KitMaterials.uv_metres(mat)}
+		var band: float = KitMaterials.edge_band(mat)
+		if band > 0.0:
+			_surfaces[mat].edge_band_m = band
 	return _surfaces[mat]
 
 
@@ -60,6 +63,70 @@ func _poly(s: Dictionary, pts: Array, n: Vector3, t: Vector3) -> void:
 		s.i.append(base + j2)
 
 
+## A flat rectangle cut into nine, so its outer band always lands on the texture's own edge band, where
+## the chips are, at any size. Materials with data "edge_band_m" come through here (T011). `a` is a
+## corner; `u` and `v` run along its sides. A face that fits the tile shows part of it, picked by `uv_offset`.
+func _trim_face(s: Dictionary, a: Vector3, u: Vector3, v: Vector3, n: Vector3, t: Vector3) -> void:
+	var size := Vector2(u.length(), v.length())
+	if size.x <= 0.0 or size.y <= 0.0:
+		return
+	var ud := u / size.x
+	var vd := v / size.y
+	var bx := minf(float(s.edge_band_m), size.x * 0.5)
+	var by := minf(float(s.edge_band_m), size.y * 0.5)
+	var xs := [0.0, bx, size.x - bx, size.x]
+	var ys := [0.0, by, size.y - by, size.y]
+	# Tile U runs along the tangent, tile V down the binormal, as in _poly, so OpenGL normals agree.
+	var b_axis := n.cross(t)
+	var u_along_t := absf(ud.dot(t)) > 0.5
+	var mirror_u := uv_offset.x >= 0.5
+	var mirror_v := uv_offset.y >= 0.5
+	var base: int = s.v.size()
+	for j in 4:
+		for i in 4:
+			var p: Vector3 = a + ud * float(xs[i]) + vd * float(ys[j])
+			var mu := _trim_coord(float(xs[i]), size.x, bx, float(s.uv_m), uv_offset.x)
+			var mv := _trim_coord(float(ys[j]), size.y, by, float(s.uv_m), uv_offset.y)
+			var along_t: float = mu if u_along_t else mv
+			var along_b: float = mv if u_along_t else mu
+			if (ud if u_along_t else vd).dot(t) < 0.0:
+				along_t = 1.0 - along_t
+			if (vd if u_along_t else ud).dot(b_axis) < 0.0:
+				along_b = 1.0 - along_b
+			var tu := 1.0 - along_t if mirror_u else along_t
+			var tv := along_b if mirror_v else 1.0 - along_b
+			s.v.append(p)
+			s.n.append(n)
+			# A mirrored tile flips the binormal's handedness.
+			s.t.append_array(PackedFloat32Array([t.x, t.y, t.z, -1.0 if mirror_u != mirror_v else 1.0]))
+			s.uv.append(Vector2(tu, tv))
+			s.c.append(_colour(p))
+	var flip: bool = u.cross(v).dot(n) * FRONT_FACING_SIGN < 0.0
+	for j in 3:
+		for i in 3:
+			var p0 := base + j * 4 + i
+			var p1 := p0 + 1
+			var p2 := p0 + 4
+			var p3 := p2 + 1
+			if flip:
+				s.i.append_array(PackedInt32Array([p0, p2, p1, p1, p2, p3]))
+			else:
+				s.i.append_array(PackedInt32Array([p0, p1, p2, p1, p3, p2]))
+
+
+## Where `d` metres along a face `length` long lands on the tile, 0..1: the outer bands stay at their
+## real size on the tile's rim. The middle slides by `w` if it's shorter than the tile's, and is squeezed
+## only if the face is longer than the whole tile.
+static func _trim_coord(d: float, length: float, band: float, tile: float, w: float) -> float:
+	if d <= band:
+		return d / tile
+	if d >= length - band:
+		return (tile - (length - d)) / tile
+	if length <= tile:
+		return (d + (tile - length) * w) / tile
+	return lerpf(band, tile - band, (d - band) / maxf(length - band * 2.0, 0.001)) / tile
+
+
 ## Axis-aligned box from `lo` to `hi`, its edges cut by `chamfer` metres. The outer bounds stay exact.
 func box(lo: Vector3, hi: Vector3, mat: String, chamfer := 0.0) -> void:
 	var s := _surface(mat)
@@ -86,8 +153,14 @@ func box(lo: Vector3, hi: Vector3, mat: String, chamfer := 0.0) -> void:
 				t = Vector3.BACK * -sa
 			elif a == 2:
 				t = Vector3.RIGHT * sa
-			_poly(s, [at.call(a, sa, b, -1.0, d, -1.0, a), at.call(a, sa, b, 1.0, d, -1.0, a),
-					at.call(a, sa, b, 1.0, d, 1.0, a), at.call(a, sa, b, -1.0, d, 1.0, a)], n, t)
+			var p00: Vector3 = at.call(a, sa, b, -1.0, d, -1.0, a)
+			var p10: Vector3 = at.call(a, sa, b, 1.0, d, -1.0, a)
+			var p11: Vector3 = at.call(a, sa, b, 1.0, d, 1.0, a)
+			var p01: Vector3 = at.call(a, sa, b, -1.0, d, 1.0, a)
+			if s.has("edge_band_m"):
+				_trim_face(s, p00, p10 - p00, p01 - p00, n, t)
+			else:
+				_poly(s, [p00, p10, p11, p01], n, t)
 	if c <= 0.0:
 		return
 	# The cut edges: a quad along each of the twelve, a triangle at each of the eight corners.

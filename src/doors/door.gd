@@ -6,6 +6,7 @@ extends Node3D
 const DoorState := preload("res://src/doors/door_state.gd")
 const KitPieces := preload("res://src/kit/kit_pieces.gd")
 const KitMaterials := preload("res://src/kit/kit_materials.gd")
+const BEACON := preload("res://src/sight/beacon.gdshader")
 const CUTAWAY_GROUP := &"camera_cutaway"  # the camera rig's contract
 const OCCLUDER_GROUP := &"sight_occluder"  # src/sight's contract
 
@@ -23,7 +24,8 @@ var _pivot: Node3D
 var _frame_rect: Rect2
 var _panel: MeshInstance3D
 var _body: StaticBody3D
-var _lamp_mat: StandardMaterial3D
+var _lamp_mat: ShaderMaterial
+var _state_hex := ""
 var _height := 0.0
 var _last_state := -1
 var _panel_mat: StandardMaterial3D
@@ -89,10 +91,12 @@ func _build() -> void:
 	cs.shape = box
 	_body.add_child(cs)
 	add_child(_body)
-	_lamp_mat = StandardMaterial3D.new()
-	_lamp_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_lamp_mat.emission_enabled = true
-	_lamp_mat.emission_energy_multiplier = float(cfg.lamp_energy)
+	# One light in three places. It draws after the sight mask, so a door you've seen stays readable
+	# outside the cone (T011, the study's fairness rule).
+	_lamp_mat = ShaderMaterial.new()
+	_lamp_mat.shader = BEACON
+	_lamp_mat.set_shader_parameter("energy", float(cfg.lamp_energy))
+	_lamp_mat.set_shader_parameter("unknown_share", float(_look.floor_strip.unknown_share))
 	# The lamp is on the frame post, so it follows the post when the cut-away drops it.
 	var lamp_mesh := BoxMesh.new()
 	var ls: Array = cfg.lamp_size_m
@@ -112,6 +116,8 @@ func _build() -> void:
 	add_child(post)
 	post.add_child(lamp)
 	post.add_child(_make_state_strip(off))
+	for side_sign: float in [-1.0, 1.0]:
+		add_child(_make_floor_strip(side_sign))
 
 
 ## The same state light on top of the header: from above, a side door's jambs hide the lamp's faces.
@@ -129,6 +135,36 @@ func _make_state_strip(post_offset: Vector2) -> MeshInstance3D:
 	strip.position = Vector3(-post_offset.x, _height + float(s[1]) * 0.5, -post_offset.y + across) if along_x \
 			else Vector3(-post_offset.x + across, _height + float(s[1]) * 0.5, -post_offset.y)
 	return strip
+
+
+## The state along the threshold, on the floor just outside the wall: nothing hides it from above,
+## however the door faces. `side_sign` picks which side of the wall.
+func _make_floor_strip(side_sign: float) -> MeshInstance3D:
+	var f: Dictionary = _look.floor_strip
+	var length := float(opening.size.x if along_x else opening.size.y) * float(f.length_frac)
+	var w := float(f.width_m)
+	var h := float(f.height_m)
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(length, h, w) if along_x else Vector3(w, h, length)
+	var strip := MeshInstance3D.new()
+	strip.name = "FloorStrip"
+	strip.mesh = mesh
+	strip.material_override = _lamp_mat
+	strip.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var out := float(opening.size.y if along_x else opening.size.x) * 0.5 + float(f.out_m)
+	strip.position = Vector3(0.0, h * 0.5, side_sign * out) if along_x else Vector3(side_sign * out, h * 0.5, 0.0)
+	return strip
+
+
+## `bind` is SightMask.bind.
+func use_mask(bind: Callable) -> void:
+	bind.call(_lamp_mat)
+	_lamp_mat.set_shader_parameter("masked", true)
+
+
+## The colour every state light on this door shows right now.
+func state_color() -> Color:
+	return Color(_state_hex)
 
 
 ## The warm seam (and the spill it casts) that A006-03c shows once a leaf is pushed out of true.
@@ -239,15 +275,16 @@ func _apply() -> void:
 	var local := Vector3(off.x, half_h, off.y)
 	_body.position = local
 	_show_panel(local, half_h)
+	var colors: Dictionary = cfg.colors
+	var hex: String = colors.lamp_broken if door_state.is_broken() else (colors.lamp_locked if door_state.is_locked() else (
+			colors.lamp_open if not door_state.blocks() else (colors.lamp_bashed if door_state.bash_progress > 0.0 else colors.lamp_closed)))
+	if hex != _state_hex:
+		_state_hex = hex
+		_lamp_mat.set_shader_parameter("beacon_color", Color(hex))
 	var s := int(door_state.state)
 	if s == _last_state:
 		return
 	_last_state = s
-	var colors: Dictionary = cfg.colors
-	var hex: String = colors.lamp_broken if door_state.is_broken() else (colors.lamp_locked if door_state.is_locked() else (
-			colors.lamp_closed if door_state.blocks() else colors.lamp_open))
-	_lamp_mat.albedo_color = Color(hex)
-	_lamp_mat.emission = Color(hex)
 	state_changed.emit(self)
 
 

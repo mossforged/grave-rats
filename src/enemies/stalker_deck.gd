@@ -405,6 +405,7 @@ func capture_shots() -> Array[Dictionary]:
 		{"name": "hud_tense", "do": "tense"},
 		{"name": "t011_cutaway_fade", "do": "kit_cutaway", "mode": "fade"},
 		{"name": "t011_cutaway_off", "do": "kit_cutaway", "mode": "off"},
+		{"name": "t011_faded_walls_under_mask", "do": "kit_cutaway", "mode": "fade", "view": "play"},
 		{"name": "t011_rooms_medbay", "do": "kit_room", "space": "medbay", "at": [0.5, 0.45]},
 		{"name": "t011_rooms_junction", "do": "kit_room", "space": "junction", "at": [0.5, 0.25]},
 		{"name": "t011_rooms_cargo", "do": "kit_room", "space": "cargo", "at": [0.55, 0.55]},
@@ -554,7 +555,7 @@ func apply_shot(shot: Dictionary) -> void:
 		"kit_cutaway":
 			ambush.fired = true
 			rig.set_cutaway_mode(String(shot.mode))
-			set_kit_view("off")
+			set_kit_view(String(shot.get("view", "off")))
 			var r2: Rect2 = layout.space_rect("cargo")
 			await _stand_at(Vector2(r2.get_center().x, r2.end.y - 1.2), r2.get_center())
 			rig.snap()

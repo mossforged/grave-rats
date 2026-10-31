@@ -26,7 +26,7 @@ static func build(layout: DeckLayout) -> Node3D:
 	var floor_mat := KitMaterials.floor_material(FloorWear.paint(layout, wear_cfg, kit.floors), FloorWear.rect_for(layout, wear_cfg))
 	for n: String in layout.space_order:
 		var spec: Dictionary = specs.get(n, specs.default)
-		var mi := _add_floor(floors, n, KitPieces.floor_space(layout.space_rect(n), spec, door_rects), KitPieces.space_layer(layout, n))
+		var mi := _add_floor(floors, n, KitPieces.floor_space(layout.space_rect(n), spec, door_rects), KitPieces.space_layer(layout, n) | KitPieces.floor_layer())
 		for i in mi.mesh.get_surface_count():
 			if mi.mesh.surface_get_name(i) == "deck":
 				mi.set_surface_override_material(i, floor_mat)
@@ -220,7 +220,7 @@ static func _add_signage(root: Node3D, walls: Node3D, layout: DeckLayout, s: Dic
 		var p: Vector2 = face.at + face.inward * (out + step * float(e.get("layer", 0)))
 		mi.position = Vector3(p.x - pivot.position.x, float(e.y_m), p.y - pivot.position.z)
 		mi.rotation = Vector3(0.0, atan2(face.inward.x, face.inward.y), deg_to_rad(float(e.get("tilt_deg", 0.0))))
-		pivot.add_child(mi)
+		pivot.add_child(mi, true)
 	var signs := Node3D.new()
 	signs.name = "FloorSigns"
 	root.add_child(signs)
@@ -233,7 +233,7 @@ static func _add_signage(root: Node3D, walls: Node3D, layout: DeckLayout, s: Dic
 		mi.position = Vector3(p.x, float(s.floor_y_m), p.y)
 		mi.rotation = Vector3(-PI * 0.5, deg_to_rad(float(e.turn_deg)), 0.0)
 		mi.rotation_order = EULER_ORDER_YXZ
-		signs.add_child(mi)
+		signs.add_child(mi, true)
 
 
 ## A point on the inside of a room's wall, at fraction `at` along it, and the way into the room.

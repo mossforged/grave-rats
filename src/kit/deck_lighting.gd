@@ -14,6 +14,11 @@ var lights: Array[Light3D] = []
 var fog_volume: FogVolume
 var probes: Array[ReflectionProbe] = []
 
+var _room_lights := {}   # space -> Array of its lights
+var _room_rects := {}    # space -> Rect2
+var _dark_rooms: Array = []
+var _cull_after := 0.0
+
 ## Gives each fixture a home on the wall behind it, so it fades with the wall.
 func setup(layout: RefCounted, env: Environment, deck: Node3D) -> void:
 	cfg = KitMaterials.cfg().lighting
@@ -22,6 +27,45 @@ func setup(layout: RefCounted, env: Environment, deck: Node3D) -> void:
 	_apply_sheen(env, layout)
 	if _switched_on("KIT_PRACTICALS"):
 		_place_fixtures(layout, deck.get_node("Walls"))
+	_cull_after = float(cfg.fixtures.cull_rooms_after_s)
+	_dark_rooms = _room_lights.keys()
+
+
+## A room nobody has looked into yet shows at the mask's near-black, so its lamps needn't run. Every frame,
+## from where sight reaches now: `reach` is a rect round it, so a lamp is on before any of its light shows.
+## The probes take their one picture in the first moments, so nothing's put out until `cull_rooms_after_s`.
+func cull_rooms(reach: Rect2, delta: float) -> void:
+	_cull_after -= delta
+	if _cull_after > 0.0:
+		return
+	for space: String in _dark_rooms.duplicate():
+		if reach.intersects(_room_rects[space]):
+			_set_room_lit(space, true)
+			_dark_rooms.erase(space)
+
+
+## Back to no room having been seen: a new run. `cull_rooms` lights them again as they come into reach.
+func forget_rooms() -> void:
+	_dark_rooms = _room_lights.keys()
+	if _cull_after <= 0.0:
+		for space: String in _dark_rooms:
+			_set_room_lit(space, false)
+
+
+## Everything on: captures of what the art looks like with the mask off.
+func light_all_rooms() -> void:
+	for space: String in _room_lights.keys():
+		_set_room_lit(space, true)
+	_dark_rooms.clear()
+
+
+func room_lit(space: String) -> bool:
+	return (_room_lights[space][0] as Light3D).visible
+
+
+func _set_room_lit(space: String, on: bool) -> void:
+	for light: Light3D in _room_lights[space]:
+		light.visible = on
 
 
 func _switched_on(env_name: String) -> bool:
@@ -41,15 +85,18 @@ func _apply_environment(env: Environment, layout: RefCounted) -> void:
 	env.glow_intensity = float(e.glow_intensity)
 	env.glow_bloom = float(e.glow_bloom)
 	env.glow_hdr_threshold = float(e.glow_hdr_threshold)
+	var levels: Array = e.glow_levels
+	for i in levels.size():
+		env.set_glow_level(i, float(levels[i]))
 	env.ssao_enabled = bool(e.ssao) and _switched_on("KIT_SSAO")
 	env.ssao_radius = float(e.ssao_radius)
 	env.ssao_intensity = float(e.ssao_intensity)
 	env.ssao_power = float(e.ssao_power)
 	env.ssao_light_affect = float(e.ssao_light_affect)
-	var ssao_q: int = RenderingServer.ENV_SSAO_QUALITY_LOW if String(e.ssao_quality) == "low" else RenderingServer.ENV_SSAO_QUALITY_MEDIUM
-	var ssao_half: bool = ProjectSettings.get_setting("rendering/environment/ssao/half_size")
+	var ssao_q: int = {"very_low": RenderingServer.ENV_SSAO_QUALITY_VERY_LOW, "low": RenderingServer.ENV_SSAO_QUALITY_LOW}.get(String(e.ssao_quality), RenderingServer.ENV_SSAO_QUALITY_MEDIUM)
+	var ssao_half: bool = e.get("ssao_half", ProjectSettings.get_setting("rendering/environment/ssao/half_size"))
 	var ssao_adapt: float = ProjectSettings.get_setting("rendering/environment/ssao/adaptive_target")
-	var ssao_blur: int = ProjectSettings.get_setting("rendering/environment/ssao/blur_passes")
+	var ssao_blur: int = int(e.get("ssao_blur", ProjectSettings.get_setting("rendering/environment/ssao/blur_passes")))
 	var ssao_fade0: float = ProjectSettings.get_setting("rendering/environment/ssao/fadeout_from")
 	var ssao_fade1: float = ProjectSettings.get_setting("rendering/environment/ssao/fadeout_to")
 	RenderingServer.environment_set_ssao_quality(ssao_q, ssao_half, ssao_adapt, ssao_blur, ssao_fade0, ssao_fade1)
@@ -115,7 +162,7 @@ func _place_probe(layout: RefCounted, space: String, p: Dictionary) -> void:
 	probe.blend_distance = float(p.blend_m)
 	probe.ambient_mode = ReflectionProbe.AMBIENT_DISABLED
 	probe.cull_mask = layer
-	probe.reflection_mask = layer
+	probe.reflection_mask = KitPieces.floor_layer()
 	probe.size = Vector3(r.size.x, float(p.height_m), r.size.y)
 	probe.max_distance = float(p.max_distance_m)
 	probe.position = Vector3(r.get_center().x, float(p.y_m), r.get_center().y)
@@ -177,8 +224,13 @@ func _place_fixture(layout: RefCounted, walls: Node3D, space: String, e: Diction
 	light.light_specular = float(look.specular)
 	light.light_volumetric_fog_energy = float(cfg.fog.practical_energy)
 	light.light_cull_mask = 1 | layer
+	if not _room_lights.has(space):
+		_room_lights[space] = []
+		_room_rects[space] = r
+	_room_lights[space].append(light)
 	light.shadow_enabled = bool(e.get("shadow", false))
 	light.shadow_blur = float(fx.shadow_blur)
+	light.omni_shadow_mode = OmniLight3D.SHADOW_DUAL_PARABOLOID if String(fx.shadow_mode) == "dual" else OmniLight3D.SHADOW_CUBE
 	var out := float(fx.light_out_m)
 	light.position = Vector3(face.x + inward.x * out, float(fx.light_y_m), face.y + inward.y * out)
 	add_child(light)

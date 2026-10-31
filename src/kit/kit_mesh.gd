@@ -13,12 +13,14 @@ var shade: Callable
 var _surfaces := {}
 var _grime_h := 1.0
 var _grime_floor := 1.0
+var _trim_min_m := 0.0
 
 
 func _init() -> void:
 	var g: Dictionary = KitMaterials.cfg().grime
 	_grime_h = float(g.height_m)
 	_grime_floor = float(g.floor_shade)
+	_trim_min_m = float(KitMaterials.cfg().dims.trim_face_min_m)
 
 
 func _surface(mat: String) -> Dictionary:
@@ -157,7 +159,8 @@ func box(lo: Vector3, hi: Vector3, mat: String, chamfer := 0.0) -> void:
 			var p10: Vector3 = at.call(a, sa, b, 1.0, d, -1.0, a)
 			var p11: Vector3 = at.call(a, sa, b, 1.0, d, 1.0, a)
 			var p01: Vector3 = at.call(a, sa, b, -1.0, d, 1.0, a)
-			if s.has("edge_band_m"):
+			# Small faces stay one quad on the plain tile: nine cuts a rail can't show cost real frame time.
+			if s.has("edge_band_m") and minf((p10 - p00).length(), (p01 - p00).length()) >= _trim_min_m:
 				_trim_face(s, p00, p10 - p00, p01 - p00, n, t)
 			else:
 				_poly(s, [p00, p10, p11, p01], n, t)

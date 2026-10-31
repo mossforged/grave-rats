@@ -597,11 +597,11 @@ func _braced_shot() -> void:
 	suit_hud._flash.visible = false
 
 
-## T011: a pirate behind you with their light off, firing for real. The frame is the first round to land:
+## T011: a pirate behind you, firing for real. The frame is the first round to land:
 ## the flash has lit them, and the suit OS points at them.
 func _hit_shot() -> void:
-	var at := layout.point_in("cargo", [0.4, 0.55])
-	var behind := at + Vector2(0.6, 4.2)
+	var at := layout.point_in("cargo", [0.6, 0.3])
+	var behind := at + Vector2(-1.5, 2.9)
 	await _stand_at(at, at + Vector2(0.0, -5.0))
 	var q: Node = squad.pirates[0]
 	for o: Node in squad.pirates:
@@ -609,7 +609,6 @@ func _hit_shot() -> void:
 			o.global_position = Vector3(16.5, 0, 9.0)
 			o.brain.take_hit(INF)
 	q.global_position = Vector3(behind.x, 0, behind.y)
-	q.light.set_on(false)
 	q.brain.model.face_now(q.brain.model.yaw_to(q.global_position, Vector3(at.x, 0, at.y)))
 	q.brain.order(squad.Tactics.Role.SUPPORT, {"hide": behind, "fire": behind, "kind": "low", "id": 11})
 	squad.alert(at)

@@ -21,7 +21,8 @@
     "hazard_kick_frac": 0.4,
     "hazard_cap_m": 0.42,
     "min_panel_m": 0.7,
-    "rail_m": 0.06
+    "rail_m": 0.06,
+    "trim_face_min_m": 0.3
   },
   "grime": {"height_m": 0.9, "floor_shade": 0.48, "floor_corner_shade": 0.55, "plate_tone": 0.16},
   "uv_variants": 4,
@@ -111,6 +112,7 @@
     }
   },
   "floor_wear": {
+    "layer_index": 15,
     "px_per_m": 4.0,
     "margin_m": 1.0,
     "path_width_m": 1.1,
@@ -243,7 +245,7 @@
       {"image": "rem_logo", "space": "cargo", "wall": "north", "at": 0.86, "y_m": 1.35, "width_m": 1.0},
       {"image": "rem_inventory", "space": "cargo", "wall": "east", "at": 0.48, "y_m": 1.3, "width_m": 0.75},
 
-      {"image": "plate_junction", "space": "junction", "wall": "north", "at": 0.5, "y_m": 2.02, "width_m": 1.7},
+      {"image": "plate_junction", "space": "junction", "wall": "north", "at": 0.17, "y_m": 1.95, "width_m": 1.45},
       {"image": "airlock_fee", "space": "junction", "wall": "north", "at": 0.5, "y_m": 1.3, "width_m": 1.9},
       {"image": "owner_logo", "space": "junction", "wall": "west", "at": 0.1, "y_m": 1.35, "width_m": 1.2},
       {"image": "rem_notice", "space": "junction", "wall": "west", "at": 0.1, "y_m": 1.2, "width_m": 0.72, "layer": 1, "tilt_deg": -3.0},
@@ -254,10 +256,10 @@
       {"image": "rem_terms", "space": "junction", "wall": "east", "at": 0.62, "y_m": 1.3, "width_m": 0.72},
       {"image": "arrow_right", "space": "junction", "wall": "east", "at": 0.62, "y_m": 1.95, "width_m": 0.42},
 
-      {"image": "plate_engineering", "space": "side_corridor", "wall": "north", "at": 0.3, "y_m": 2.02, "width_m": 1.6},
-      {"image": "arrow_right", "space": "side_corridor", "wall": "north", "at": 0.3, "y_m": 1.4, "width_m": 0.45},
+      {"image": "plate_engineering", "space": "side_corridor", "wall": "north", "at": 0.13, "y_m": 2.0, "width_m": 1.5},
+      {"image": "arrow_right", "space": "side_corridor", "wall": "north", "at": 0.13, "y_m": 1.4, "width_m": 0.45},
       {"image": "owner_safety", "space": "side_corridor", "wall": "north", "at": 0.55, "y_m": 1.35, "width_m": 1.1},
-      {"image": "rem_notice", "space": "side_corridor", "wall": "north", "at": 0.09, "y_m": 1.3, "width_m": 0.8}
+      {"image": "rem_notice", "space": "side_corridor", "wall": "north", "at": 0.33, "y_m": 1.3, "width_m": 0.8}
     ],
     "floors": [
       {"image": "floor_keep_clear", "space": "junction", "at": [0.2, 0.46], "width_m": 1.5, "turn_deg": 90.0},
@@ -284,12 +286,14 @@
       "glow_intensity": 0.55,
       "glow_bloom": 0.0,
       "glow_hdr_threshold": 1.4,
+      "glow_levels": [0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0],
       "ssao": true,
       "ssao_radius": 1.0,
       "ssao_intensity": 2.2,
       "ssao_power": 1.5,
       "ssao_light_affect": 0.25,
-      "ssao_quality": "low"
+      "ssao_quality": "very_low",
+      "ssao_blur": 1
     },
     "sheen": {
       "mode": "probe",
@@ -298,8 +302,8 @@
     },
     "fog": {
       "enabled": true,
-      "volume_size": 48,
-      "volume_depth": 32,
+      "volume_size": 32,
+      "volume_depth": 24,
       "length_m": 32.0,
       "detail_spread": 2.0,
       "temporal_reprojection": 0.9,
@@ -323,24 +327,26 @@
       "light_out_m": 0.65,
       "light_y_m": 2.75,
       "looks": {
-        "cool": {"mat": "emit_cool", "color": "e2ebf8", "energy": 5.0, "range_m": 8.0, "attenuation": 1.8, "specular": 0.9},
-        "amber": {"mat": "emit_amber", "color": "ff9a38", "energy": 4.2, "range_m": 8.0, "attenuation": 1.8, "specular": 0.9},
-        "cool_low": {"mat": "emit_cool", "color": "cdd8ea", "energy": 2.4, "range_m": 6.0, "attenuation": 1.8, "specular": 0.8},
-        "amber_low": {"mat": "emit_amber", "color": "f09038", "energy": 2.6, "range_m": 6.0, "attenuation": 1.8, "specular": 0.8}
+        "cool": {"mat": "emit_cool", "color": "e2ebf8", "energy": 5.0, "range_m": 6.0, "attenuation": 1.8, "specular": 0.9},
+        "amber": {"mat": "emit_amber", "color": "ff9a38", "energy": 4.2, "range_m": 6.0, "attenuation": 1.8, "specular": 0.9},
+        "cool_low": {"mat": "emit_cool", "color": "cdd8ea", "energy": 2.4, "range_m": 4.5, "attenuation": 1.8, "specular": 0.8},
+        "amber_low": {"mat": "emit_amber", "color": "f09038", "energy": 2.6, "range_m": 4.5, "attenuation": 1.8, "specular": 0.8}
       },
       "shadow_blur": 1.2,
+      "shadow_mode": "cube",
+      "cull_rooms_after_s": 1.0,
       "spaces": {
         "medbay": [
           {"look": "cool", "wall": "north", "at": 0.25},
           {"look": "cool", "wall": "north", "at": 0.68},
-          {"look": "cool", "wall": "west", "at": 0.5, "vertical": true, "shadow": true},
+          {"look": "cool", "wall": "west", "at": 0.5, "vertical": true},
           {"look": "cool_low", "wall": "east", "at": 0.25, "vertical": true}
         ],
         "cargo": [
           {"look": "amber", "wall": "north", "at": 0.25},
           {"look": "amber", "wall": "north", "at": 0.72},
           {"look": "amber", "wall": "east", "at": 0.25, "vertical": true},
-          {"look": "amber", "wall": "east", "at": 0.72, "vertical": true, "shadow": true}
+          {"look": "amber", "wall": "east", "at": 0.72, "vertical": true}
         ],
         "junction": [
           {"look": "cool_low", "wall": "north", "at": 0.5},

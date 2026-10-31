@@ -117,7 +117,7 @@ func _build() -> void:
 	post.add_child(lamp)
 	post.add_child(_make_state_strip(off))
 	for side_sign: float in [-1.0, 1.0]:
-		add_child(_make_floor_strip(side_sign))
+		add_child(_make_floor_strip(side_sign), true)
 
 
 ## The same state light on top of the header: from above, a side door's jambs hide the lamp's faces.

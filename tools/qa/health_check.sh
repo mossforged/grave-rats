@@ -7,14 +7,15 @@
 # Exit: 0 report written, nothing red; 1 report written, something red; 2 no report.
 # Env, for debugging the check itself: QA_WINDOWS (frame-time windows per scene, default 2),
 # QA_SECONDS (default 30), QA_RUNS (bot runs per case, default 12), QA_POLL_S (300), QA_WAIT_MAX_S (7200),
-# QA_SOURCE (what to clone, default origin), QA_KEEP_WORK=1 (keep the temp folder).
+# QA_SOURCE (what to clone, default origin), QA_KEEP_WORK=1 (keep the temp folder), QA_DATE (the report's name).
 set -u
 # launchd and non-login shells leave out some of these (lsof and sysctl live in /usr/sbin).
 export PATH="$HOME/.local/grave-rats-bin:$PATH:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 GODOT="${GODOT:-$(command -v godot || echo /Applications/Godot.app/Contents/MacOS/Godot)}"
 export GODOT
-DATE="$(date +%F)"
+# QA_DATE: a second run on one calendar day would overwrite that day's report, logs and stills (Q003 after Q002).
+DATE="${QA_DATE:-$(date +%F)}"
 WINDOWS="${QA_WINDOWS:-2}"
 SECONDS_WINDOW="${QA_SECONDS:-30}"
 RUNS="${QA_RUNS:-12}"

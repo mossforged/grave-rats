@@ -4,7 +4,7 @@ Branch `auto/q003-mac`, on main `a4a5f73`. Report: `docs/qa/health-2026-10-31-q0
 
 ## Unexplained regressions
 **Two, both small.**
-- **Cautious bot survival with the old door press:** T012 11 of 12, T015 shift 10 of 12, were 12 of 12; T014 cautious deaths 3, were 1. It came in somewhere in T016 to T022, not T023; I didn't find which. With the fixed bot cautious survives 12 of 12 on both, so the baseline's new numbers don't show it.
+- **Cautious bot survival with the old door press:** T012 11 of 12, T015 shift 10 of 12, were 12 of 12; T014 cautious deaths 3, were 1. It came in somewhere in T016 to T022, not T023; I didn't find which: a T012 run on T017, T018, T021 and T022 hit my 5-minute cap with no result. To trace it: `godot --headless --path . --fixed-fps 60 -s tools/t012_bots.gd -- 12 out.json` on each, given more time. With the fixed bot cautious survives 12 of 12 on both, so the baseline's new numbers don't show it.
 - **T006 `killed_it_s`** 1.64 to 1.65 (+0.6%, green): may be rounding.
 
 Every RED flag in the script otherwise traces to a merged packet (table in the report).

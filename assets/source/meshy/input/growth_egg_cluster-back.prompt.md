@@ -1,0 +1,5 @@
+# A018-06 / growth_egg_cluster / back
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/assets/source/meshy/input/growth_egg_cluster-34.png
+
+Use case: precise-object-edit. Asset A018-06. Edit target: the supplied three-quarter object image. Change ONLY camera to a straight BACK orthographic view. Keep the EXACT same object, world pose, orientation of all limbs, damaged parts and detached pieces, sheet folds, relative positions, proportions, materials, colour, wear, six-pod count if applicable, and lighting. Do not stand, roll, unfold, mirror or repair anything. Orbit camera around the vertical world axis only; static object remains frozen. Keep whole object centred with ample margin on uniform flat light grey background. No text, marks, scenery, wall, props or dimensions. One organic cluster of exactly six leathery translucent sickly green-yellow veined egg pods attached to a single fleshy root base, approx 0.8 metres across. Mother Culture aesthetic, three larger rear pods and three smaller front pods, irregular pear-shaped closed membranes, no hatching, no gore, no glow.

@@ -1,0 +1,5 @@
+# A018-10 / loader_wreck / 34
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/assets/source/meshy/input/loader-34.png
+
+Use case: stylized-concept. Asset type: Grave Rats Meshy image-to-3D input, one complete original object centred with ample margin. Worn industrial realistic PBR 3D studio render. Flat uniform light grey background, soft even light, minimal contact shadow, no scenery, no wall or floor plane edges, no text, logos, watermark, labels or dimensions. Front three-quarter camera, show whole object. One composite wreck of reference tracked loader: ivory box torso, teal side panels, two rubber tracks, industrial jointed claw arms. Torso slumped forward resting low, right claw arm torn off at shoulder lying touching right track, left arm bent down resting on floor. Two top lamps and circular front lens dark. Bent panels, simple dark broken shoulder machinery, no smoke or sparks. Input image is a design/style reference; use only the relevant object, change pose and state as specified.

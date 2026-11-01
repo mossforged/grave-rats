@@ -1,0 +1,5 @@
+# A018-05 / growth_wall_patch / 34
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/docs/screens/A015/sheet.png
+
+Use case: stylized-concept. Asset type: Grave Rats Meshy image-to-3D input, one complete original object centred with ample margin. Worn industrial realistic PBR 3D studio render. Flat uniform light grey background, soft even light, minimal contact shadow, no scenery, no wall or floor plane edges, no text, logos, watermark, labels or dimensions. Front three-quarter camera, show whole object. Single flat-backed organic wall growth with integrated thin rectangular worn metal wall panel, wider than tall. Spread approx 1.5 x 1.2 metres, thickness from a few cm at rim to 25 cm. Mother Culture aesthetic: translucent sickly green-yellow lobes, fine branching dark veins, gelatinous membranes and rope-like roots, distinct asymmetrical bulbs, no glow, no gore. No surrounding wall. Input image is a design/style reference; use only the relevant object, change pose and state as specified.

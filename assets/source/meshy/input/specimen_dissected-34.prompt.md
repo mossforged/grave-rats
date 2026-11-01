@@ -1,0 +1,5 @@
+# A018-08 / specimen_dissected / 34
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/docs/screens/A015/sheet.png
+
+Use case: stylized-concept. Asset type: Grave Rats Meshy image-to-3D input, one complete original object centred with ample margin. Worn industrial realistic PBR 3D studio render. Flat uniform light grey background, soft even light, minimal contact shadow, no scenery, no wall or floor plane edges, no text, logos, watermark, labels or dimensions. Front three-quarter camera, show whole object. One intact dead alien quadruped specimen lying on its right side, closed non-graphic body with a plain grey sheet partly covering middle torso, head and four tucked legs and curled tail visible. Pale sickly ivory-green leathery skin, blunt eyeless head, four jointed limbs, distinct nonhuman anatomy. No cuts, no exposed innards, no blood, no tools, no table. Input image is a design/style reference; use only the relevant object, change pose and state as specified.

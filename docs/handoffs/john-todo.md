@@ -3,6 +3,8 @@
 Shortest first. Gut reactions are enough; the lead turns them into tuning.
 
 ## Play tomorrow night (one session covers most of it)
+**First: restart the Mac.** On Oct 31 Godot hung at launch in macOS's audio service (not the game; a clean copy of main hung too). A restart should clear it. If it still hangs, add `--audio-driver Dummy` to the launch command (no sound, but it plays).
+
 Pull and run (paste in Terminal):
 `cd ~/Projects/grave-rats-playtesting && git pull && /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import && /Applications/Godot.app/Contents/MacOS/Godot --path .`
 - [ ] **One full shift:** grab the black box, push past the 60% and 30% oxygen tiers (CUSTODIAN wakes), and try to extract.
@@ -13,11 +15,12 @@ Pull and run (paste in Terminal):
 - [ ] **Solo feel:** do aim, fire and E feel exactly as before? (They now go through the co-op command layer.)
 - [ ] **Corridors:** too dark to see the new detail? Door jamb tops too heavy? Does the torn panel read?
 - [ ] **The overturned bed:** can you see it in its dark corner now that it has a hazard stripe?
-- [ ] **The second ship** (once T023 lands): launch with `--ship survey`, or pick it in F1 → Shift.
+- [ ] **The second ship (the survey vessel, merged):** add `--ship survey` to the launch command, or pick it in F1 → Shift. Does it feel different, and is the black-box run tense? Known: only 10 salvage spots (can't meet the quota without the black box), and the patrol drone flies through shut doors.
 - [ ] **Effects gallery:** F1 → Effects, if you're curious.
 
 ## Balance questions the play will answer
-- [ ] Greedy bots die in 34 of 36 shifts with CUSTODIAN awake. Is the black-box route too lethal? (First lever: move the cargo cutter.)
+- [ ] Greedy bots die in every shift on the current ship with CUSTODIAN awake (a bot bug had hidden how far they really get). Is the black-box route too lethal? (First lever: move the cargo cutter.)
+- [ ] Survey vessel: more salvage spots, or its own lower quota?
 - [ ] Are fees too small next to a good shift? Does dying cost less on the quota than leaving empty-handed? (It shouldn't.)
 - [ ] Do stalkers reach you too fast (about 2 s) at the higher tiers?
 

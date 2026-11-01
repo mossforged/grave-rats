@@ -1,0 +1,95 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _draw_oxygen (res://src/hud/suit_os_hud.gd:223)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:107)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _draw_carry (res://src/hud/suit_os_hud.gd:241)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:108)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _cell (res://src/hud/suit_os_hud.gd:388)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:361)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:110)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _cell (res://src/hud/suit_os_hud.gd:388)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:369)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:110)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _cell (res://src/hud/suit_os_hud.gd:388)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:372)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:110)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:137)
+       [1] _draw_help (res://src/hud/suit_os_hud.gd:512)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:121)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:137)
+       [1] _draw_help (res://src/hud/suit_os_hud.gd:512)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:121)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:137)
+       [1] _draw_shields (res://src/hud/suit_os_hud.gd:431)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:112)
+OUT greedy seed 1000: {"banked":0,"cause":"cutter","deposited":5334,"items":27,"lost":0,"outcome":"wiped","oxygen_left_s":185.933333333159,"prize":1,"seed":1000,"tier":1,"time_s":294.066666666685}
+OUT greedy seed 1001: {"banked":0,"cause":"cutter","deposited":3755,"items":25,"lost":2,"outcome":"wiped","oxygen_left_s":221.399999999824,"prize":1,"seed":1001,"tier":1,"time_s":258.59999999999}
+OUT greedy seed 1002: {"banked":0,"cause":"cutter","deposited":5643,"items":27,"lost":0,"outcome":"wiped","oxygen_left_s":183.899999999826,"prize":1,"seed":1002,"tier":1,"time_s":296.10000000002}
+OUT greedy seed 1003: {"banked":0,"cause":"cutter","deposited":4377,"items":25,"lost":2,"outcome":"wiped","oxygen_left_s":212.399999999824,"prize":1,"seed":1003,"tier":1,"time_s":267.599999999997}
+OUT greedy seed 1004: {"banked":0,"cause":"cutter","deposited":6307,"items":27,"lost":0,"outcome":"wiped","oxygen_left_s":189.233333333159,"prize":1,"seed":1004,"tier":1,"time_s":290.766666666682}
+OUT greedy seed 1005: {"banked":0,"cause":"lunge","deposited":3408,"items":24,"lost":0,"outcome":"wiped","oxygen_left_s":261.099999999826,"prize":0,"seed":1005,"tier":1,"time_s":218.89999999999}
+OUT greedy seed 1006: {"banked":0,"cause":"cutter","deposited":4191,"items":25,"lost":2,"outcome":"wiped","oxygen_left_s":208.633333333158,"prize":1,"seed":1006,"tier":1,"time_s":271.366666666667}
+OUT greedy seed 1007: {"banked":0,"cause":"spit","deposited":2798,"items":18,"lost":1,"outcome":"wiped","oxygen_left_s":280.199999999841,"prize":0,"seed":1007,"tier":1,"time_s":199.799999999991}
+OUT greedy seed 1008: {"banked":0,"cause":"cutter","deposited":4202,"items":25,"lost":2,"outcome":"wiped","oxygen_left_s":221.96666666649,"prize":1,"seed":1008,"tier":1,"time_s":258.033333333323}
+OUT greedy seed 1009: {"banked":0,"cause":"cutter","deposited":4132,"items":25,"lost":2,"outcome":"wiped","oxygen_left_s":219.96666666649,"prize":1,"seed":1009,"tier":1,"time_s":260.033333333325}
+OUT greedy seed 1010: {"banked":0,"cause":"cutter","deposited":3923,"items":25,"lost":2,"outcome":"wiped","oxygen_left_s":211.866666666491,"prize":1,"seed":1010,"tier":1,"time_s":268.133333333331}
+OUT greedy seed 1011: {"banked":0,"cause":"lunge","deposited":3375,"items":24,"lost":0,"outcome":"wiped","oxygen_left_s":266.59999999983,"prize":0,"seed":1011,"tier":1,"time_s":213.39999999999}
+OUT == greedy, 12 seeds
+OUT    survived 0 of 12 (0%)
+OUT    banked     mean      0.0  median      0.0  min      0.0  max      0.0
+OUT    deposited  mean   4287.1  median   4191.0  min   2798.0  max   6307.0
+OUT    items      mean     24.8  median     25.0  min     18.0  max     27.0
+OUT    tier       mean      1.0  median      1.0  min      1.0  max      1.0
+OUT    time_s     mean    258.1  median    267.6  min    199.8  max    296.1
+OUT    prize      mean      0.8  median      1.0  min      0.0  max      1.0
+OUT    deaths by {"cutter":9,"lunge":2,"spit":1}
+OUT cautious seed 1000: {"banked":2442,"cause":null,"deposited":2442,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":271.699999999834,"prize":0,"seed":1000,"tier":1,"time_s":208.299999999991}
+OUT cautious seed 1001: {"banked":2183,"cause":null,"deposited":2183,"items":21,"lost":0,"outcome":"extracted","oxygen_left_s":276.266666666505,"prize":0,"seed":1001,"tier":1,"time_s":203.733333333324}
+OUT cautious seed 1002: {"banked":2452,"cause":null,"deposited":2452,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":272.366666666501,"prize":0,"seed":1002,"tier":1,"time_s":207.633333333324}
+OUT cautious seed 1003: {"banked":2429,"cause":null,"deposited":2429,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":275.733333333171,"prize":0,"seed":1003,"tier":1,"time_s":204.266666666658}
+OUT cautious seed 1004: {"banked":2644,"cause":null,"deposited":2644,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":272.899999999835,"prize":0,"seed":1004,"tier":1,"time_s":207.099999999991}
+OUT cautious seed 1005: {"banked":2215,"cause":null,"deposited":2215,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":274.866666666503,"prize":0,"seed":1005,"tier":1,"time_s":205.133333333324}
+OUT cautious seed 1006: {"banked":2249,"cause":null,"deposited":2249,"items":23,"lost":0,"outcome":"extracted","oxygen_left_s":271.366666666501,"prize":0,"seed":1006,"tier":1,"time_s":208.633333333324}
+OUT cautious seed 1007: {"banked":2191,"cause":null,"deposited":2191,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":274.033333333169,"prize":0,"seed":1007,"tier":1,"time_s":205.966666666658}
+OUT cautious seed 1008: {"banked":2577,"cause":null,"deposited":2577,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":272.333333333168,"prize":0,"seed":1008,"tier":1,"time_s":207.666666666657}
+OUT cautious seed 1009: {"banked":2199,"cause":null,"deposited":2199,"items":22,"lost":0,"outcome":"extracted","oxygen_left_s":274.43333333317,"prize":0,"seed":1009,"tier":1,"time_s":205.566666666658}
+OUT cautious seed 1010: {"banked":2030,"cause":null,"deposited":2030,"items":21,"lost":0,"outcome":"extracted","oxygen_left_s":273.633333333169,"prize":0,"seed":1010,"tier":1,"time_s":206.366666666658}
+OUT cautious seed 1011: {"banked":2709,"cause":null,"deposited":2709,"items":24,"lost":0,"outcome":"extracted","oxygen_left_s":277.333333333172,"prize":0,"seed":1011,"tier":1,"time_s":202.666666666658}
+OUT == cautious, 12 seeds
+OUT    survived 12 of 12 (100%)
+OUT    banked     mean   2360.0  median   2429.0  min   2030.0  max   2709.0
+OUT    deposited  mean   2360.0  median   2429.0  min   2030.0  max   2709.0
+OUT    items      mean     23.2  median     24.0  min     21.0  max     24.0
+OUT    tier       mean      1.0  median      1.0  min      1.0  max      1.0
+OUT    time_s     mean    206.1  median    206.4  min    202.7  max    208.6
+OUT    prize      mean      0.0  median      0.0  min      0.0  max      0.0
+OUT    deaths by {}

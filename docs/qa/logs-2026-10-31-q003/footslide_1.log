@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+walk forward       body 3.40 m/s  planted foot slides 1.22 m/s (36% of the body speed), planted 32% of the time
+walk back          body 3.40 m/s  planted foot slides 1.19 m/s (35% of the body speed), planted 24% of the time
+strafe right       body 3.40 m/s  planted foot slides 1.30 m/s (38% of the body speed), planted 27% of the time
+strafe left        body 3.40 m/s  planted foot slides 1.33 m/s (39% of the body speed), planted 21% of the time
+crouch forward     body 1.50 m/s  planted foot slides 0.54 m/s (36% of the body speed), planted 40% of the time
+sprint forward     body 5.40 m/s  planted foot slides 2.22 m/s (41% of the body speed), planted 26% of the time
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,0 +1,7 @@
+ %CPU COMM
+ 53.8 XprotectService
+ 53.6 WindowServer
+ 45.4 Camera Hub
+ 22.7 (node)
+ 15.7 coreaudiod
+ 15.5 BambuStudio

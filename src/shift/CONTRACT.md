@@ -32,6 +32,8 @@ One shift, for a crew of one or more, end to end (T012, T018): oxygen, tiers, th
 - **What goes in the log for later briefings:** each hit's source and space, the first stalker actually seen (checked every `session.threat_check_s`), the alarm, tier vents, the failed section.
 - E order: salvage in reach, then a bed, then a door.
 
+- **Which ship (T023):** `ShipPick.pick(cfg, contract_no, rng)` from `ships` and `ship_pick` (`first`, the default; `rotate`; `random_seeded`), asked at each briefing by the running main scene only. A change sets `Data.use_ship` and reloads the scene; the session (quota, logs, paperwork, contract count) crosses in `_carried_session`. A pinned ship (`--ship`, F1) is left alone. F1 > Shift calls `pick_ship(deck_file)`: that ship, new session. A ship's rules differ only by data; a deck with `ambush.none` has no closet, panel or burst.
+
 ## Sounds (T017)
 Through `src/audio`, whose data holds the numbers: room tones and breathing while a shift runs (no breathing behind a form or once dead), the siren for as long as the alarm, the oxygen tone at each tier and repeating once the air's gone, the lights' clunk in the failing room, pick-up and drop by class, a stamp on `accept`, `confirm_decline` and `acknowledge`, a ledger tick per payslip row.
 
@@ -49,6 +51,6 @@ Through `src/audio`, whose data holds the numbers: room tones and breathing whil
 `shift_deck.tier_fired(index, spec)`.
 
 ## Data keys (`data/shift.json`)
-`quota` {`shifts_per_cycle`, `start_cr`, `growth`, `round_to`}, `session` {`death_hold_s`, `threat_check_s`}, `oxygen_s`; `out_of_air` {`suit_fraction_per_s`, `who`}; `tiers` [{`at_oxygen`, `stalkers`, `lights`, `wake`, `announce` (`%s` is the section)}]; `section_words`; `lights` {`flicker_s`, `gap_min_s`, `gap_max_s`, `flicker_energy`}; `airlock` {`space`, `from`, `to`, `strip_m`, `strip_height_m`, `color`, `energy`, `unknown_share`, `sign`, `sign_height_m`, `sign_pixel_size`, `sign_font_size`, `sign_color`}; `leave` {`hold_s`, `hold_after_s`}; `alarm` {`reveal_s`, `refresh_s`, `announce`, `marker` {...}}; `prompt`, `words`, `demo`, `help`.
+`ships`, `ship_pick`, `ship_section` (the F1 heading); `quota` {`shifts_per_cycle`, `start_cr`, `growth`, `round_to`}, `session` {`death_hold_s`, `threat_check_s`}, `oxygen_s`; `out_of_air` {`suit_fraction_per_s`, `who`}; `tiers` [{`at_oxygen`, `stalkers`, `lights`, `wake`, `announce` (`%s` is the section)}]; `section_words`; `lights` {`flicker_s`, `gap_min_s`, `gap_max_s`, `flicker_energy`}; `airlock` {`space`, `from`, `to`, `strip_m`, `strip_height_m`, `color`, `energy`, `unknown_share`, `sign`, `sign_height_m`, `sign_pixel_size`, `sign_font_size`, `sign_color`}; `leave` {`hold_s`, `hold_after_s`}; `alarm` {`reveal_s`, `refresh_s`, `announce`, `marker` {...}}; `prompt`, `words`, `demo`, `help`.
 
 Tests: `tests/test_shift.gd`, `tests/test_paperwork.gd`, `tests/test_custodian.gd`, `tests/test_session.gd`. Bots: `tools/t012_bots.gd`, `tools/t014_bots.gd`, `tools/t015_bots.gd`.

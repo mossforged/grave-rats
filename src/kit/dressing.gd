@@ -36,6 +36,10 @@ static func build(layout: RefCounted) -> Node3D:
 		mi.position = piece.position
 		mi.rotation.y = piece.yaw
 		mi.layers = KitPieces.space_layer(layout, String(piece.space))
+		for i in mi.mesh.get_surface_count():
+			var wear: Dictionary = piece.wear
+			if wear.has(mi.mesh.surface_get_name(i)):
+				mi.set_surface_override_material(i, KitMaterials.material(String(wear[mi.mesh.surface_get_name(i)])))
 		root.add_child(mi)
 	return root
 
@@ -79,4 +83,5 @@ static func wall_pose(r: Rect2, wall: String, along_m: float, mesh: ArrayMesh, t
 static func _piece(spec: Dictionary, wall: String, mesh: ArrayMesh, at: Vector3, yaw: float) -> Dictionary:
 	var box: AABB = Transform3D(Basis(Vector3.UP, yaw), at) * mesh.get_aabb()
 	return {"type": String(spec.type), "space": String(spec.space), "wall": wall, "mesh": mesh,
-			"position": at, "yaw": yaw, "rect": Rect2(box.position.x, box.position.z, box.size.x, box.size.z)}
+			"position": at, "yaw": yaw, "rect": Rect2(box.position.x, box.position.z, box.size.x, box.size.z),
+			"wear": spec.get("wear", {})}

@@ -104,9 +104,10 @@ func _ready() -> void:
 func _make_lighting() -> void:
 	super()
 	var a: Dictionary = Data.value("enemies", "ambush", {})
-	(deck_data.spaces as Array).append(a.closet)
-	deck_data.breaches = [a.breach]
-	deck_data.spawn = a.spawn
+	if not bool(a.get("none", false)):
+		(deck_data.spaces as Array).append(a.closet)
+		deck_data.breaches = [a.breach]
+		deck_data.spawn = a.spawn
 	_bed_specs = (deck_data.props as Array).filter(func(p: Dictionary) -> bool: return bool(p.get("tippable", false)))
 	deck_data.props = (deck_data.props as Array).filter(func(p: Dictionary) -> bool: return not bool(p.get("tippable", false)))
 
@@ -128,6 +129,8 @@ func _make_beds() -> void:
 func _make_bulkhead() -> void:
 	bulkhead = Bulkhead.new()
 	add_child(bulkhead)
+	if bool(_ambush_cfg.get("none", false)):
+		return
 	bulkhead.setup(layout.breaches[0], _ambush_cfg, float(deck_data.wall_height_m))
 	bulkhead.use_mask(mask.bind)
 
@@ -250,6 +253,8 @@ func _step_emerge(delta: float) -> void:
 
 ## The burst: bang, kick, debris, then it comes out. The player hears it first.
 func fire_ambush() -> void:
+	if bool(_ambush_cfg.get("none", false)):
+		return
 	bulkhead.blow()
 	var c := bulkhead.panel_center()
 	Audio.play("bulkhead_burst", Vector3(c.x, float(deck_data.wall_height_m) * 0.5, c.y))

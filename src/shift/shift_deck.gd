@@ -19,6 +19,10 @@ const PaperworkScreen := preload("res://src/paperwork/paperwork_screen.gd")
 const Custodian := preload("res://src/custodian/custodian.gd")
 const CustodianTrace := preload("res://src/custodian/custodian_trace.gd")
 const PlayerSight := preload("res://src/session/player_sight.gd")
+const ShipPick := preload("res://src/shift/ship_pick.gd")
+
+## A session crossing to another ship: the deck is rebuilt, and this is what it picks up again.
+static var _carried_session: Dictionary = {}
 
 ## Fired as each tier lands: (index from 1, its data). The ship's next threat hangs off this.
 signal tier_fired(index: int, spec: Dictionary)
@@ -113,7 +117,10 @@ func _ready() -> void:
 	_shift_ready = true
 	_start_shift()
 	if get_tree().current_scene == self and not _capture and _opens_on_session():
-		start_session()
+		if _carried_session.is_empty():
+			start_session()
+		else:
+			_resume_session()
 
 
 ## The main scene runs the quota and the forms around its shifts.
@@ -947,8 +954,49 @@ func start_session() -> void:
 	_brief()
 
 
+## The ship this contract runs on, if the session may choose. A change rebuilds the deck, and the session
+## picks up in the new scene (`_resume_session`). Only the running main scene can change ship.
+func _ship_changes() -> bool:
+	if Data.ship_pinned or get_tree().current_scene != self:
+		return false
+	var want := ShipPick.pick(_cfg, _contracts + 1, rng)
+	if want == Data.ship:
+		return false
+	_carried_session = {"quota": quota, "past_logs": past_logs, "contracts": _contracts, "paperwork": paperwork}
+	Data.use_ship(want)
+	get_tree().reload_current_scene()
+	return true
+
+
+func _resume_session() -> void:
+	var c := _carried_session
+	_carried_session = {}
+	session_live = true
+	quota = c.quota
+	session.quota = quota
+	past_logs = c.past_logs
+	_contracts = int(c.contracts)
+	paperwork = c.paperwork
+	_write_contract()
+
+
+## F1 > Shift, for testing: this ship from now on, in a new session.
+func pick_ship(deck_file: String) -> void:
+	if deck_file == Data.ship:
+		return
+	Data.pin_ship(deck_file)
+	_carried_session = {}
+	get_tree().reload_current_scene()
+
+
 ## A fresh ship, rolled now so the estimate is about this ship, frozen behind the form until it's signed.
 func _brief() -> void:
+	if _ship_changes():
+		return
+	_write_contract()
+
+
+func _write_contract() -> void:
 	respawn()
 	_contracts += 1
 	var total := 0

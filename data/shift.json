@@ -1,6 +1,9 @@
 {
   "quota": {"shifts_per_cycle": 3, "start_cr": 2400, "growth": 1.5, "round_to": 5},
   "session": {"death_hold_s": 2.5, "threat_check_s": 0.25},
+  "ships": ["deck", "deck_survey"],
+  "ship_pick": "first",
+  "ship_section": "Shift: ship (restarts the scene)",
   "oxygen_s": 480.0,
   "out_of_air": {"suit_fraction_per_s": 0.02, "who": "OUT OF AIR"},
   "tiers": [

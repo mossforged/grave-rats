@@ -1,0 +1,164 @@
+[
+ {
+  "round": 0,
+  "stand": "spawn",
+  "ship": "deck",
+  "avg_ms": 4.98492524916944,
+  "p95_ms": 5.796,
+  "p99_ms": 13.808,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 0,
+  "stand": "spawn",
+  "ship": "deck_survey",
+  "avg_ms": 5.49303002563165,
+  "p95_ms": 6.594,
+  "p99_ms": 12.503,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 0,
+  "stand": "big_room",
+  "ship": "deck",
+  "avg_ms": 5.62483127109111,
+  "p95_ms": 6.474,
+  "p99_ms": 11.443,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 0,
+  "stand": "big_room",
+  "ship": "deck_survey",
+  "avg_ms": 6.44022145922746,
+  "p95_ms": 7.271,
+  "p99_ms": 10.283,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 0,
+  "stand": "corridor",
+  "ship": "deck",
+  "avg_ms": 6.51543291359097,
+  "p95_ms": 7.382,
+  "p99_ms": 14.28,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 0,
+  "stand": "corridor",
+  "ship": "deck_survey",
+  "avg_ms": 6.92415689893863,
+  "p95_ms": 7.877,
+  "p99_ms": 13.084,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 1,
+  "stand": "spawn",
+  "ship": "deck",
+  "avg_ms": 5.02249179779044,
+  "p95_ms": 5.796,
+  "p99_ms": 14.851,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 1,
+  "stand": "spawn",
+  "ship": "deck_survey",
+  "avg_ms": 5.48415674095727,
+  "p95_ms": 6.405,
+  "p99_ms": 12.385,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 1,
+  "stand": "big_room",
+  "ship": "deck",
+  "avg_ms": 5.64593827625142,
+  "p95_ms": 6.497,
+  "p99_ms": 12.243,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 1,
+  "stand": "big_room",
+  "ship": "deck_survey",
+  "avg_ms": 6.44488445017183,
+  "p95_ms": 7.253,
+  "p99_ms": 9.412,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 1,
+  "stand": "corridor",
+  "ship": "deck",
+  "avg_ms": 6.54264980375055,
+  "p95_ms": 7.438,
+  "p99_ms": 14.512,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 1,
+  "stand": "corridor",
+  "ship": "deck_survey",
+  "avg_ms": 6.85598217550275,
+  "p95_ms": 7.719,
+  "p99_ms": 9.818,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 2,
+  "stand": "spawn",
+  "ship": "deck",
+  "avg_ms": 4.96148115079364,
+  "p95_ms": 5.71,
+  "p99_ms": 13.507,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 2,
+  "stand": "spawn",
+  "ship": "deck_survey",
+  "avg_ms": 5.47276942721635,
+  "p95_ms": 6.379,
+  "p99_ms": 12.276,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 2,
+  "stand": "big_room",
+  "ship": "deck",
+  "avg_ms": 5.66623980362538,
+  "p95_ms": 6.511,
+  "p99_ms": 12.611,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 2,
+  "stand": "big_room",
+  "ship": "deck_survey",
+  "avg_ms": 6.46176959517658,
+  "p95_ms": 7.327,
+  "p99_ms": 10.446,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 2,
+  "stand": "corridor",
+  "ship": "deck",
+  "avg_ms": 6.49847379818104,
+  "p95_ms": 7.303,
+  "p99_ms": 14.306,
+  "resolution": "1920x957"
+ },
+ {
+  "round": 2,
+  "stand": "corridor",
+  "ship": "deck_survey",
+  "avg_ms": 6.93191543438079,
+  "p95_ms": 7.897,
+  "p99_ms": 13.185,
+  "resolution": "1920x957"
+ }
+]

@@ -9,6 +9,7 @@ const CorridorDressing := preload("res://src/kit/corridor_dressing.gd")
 const KitMaterials := preload("res://src/kit/kit_materials.gd")
 const FloorWear := preload("res://src/kit/floor_wear.gd")
 const CUTAWAY_GROUP := &"camera_cutaway"  # the camera rig's contract (src/camera/CONTRACT.md)
+const STUCK_YAW := {"south": 0.0, "east": PI * 0.5, "north": PI, "west": -PI * 0.5}
 
 
 ## Returns a Node3D named "Deck" holding the whole deck for `layout`.
@@ -192,8 +193,19 @@ static func _add_prop(parent: Node3D, layout: DeckLayout, p: Dictionary) -> void
 	mi.position = Vector3(r.get_center().x, 0.0, r.get_center().y)
 	mi.rotation.y = KitPieces.prop_yaw(layout, p)
 	mi.layers = KitPieces.space_layer(layout, String(p.space))
+	_wear_surfaces(mi, p.get("wear", {}))
 	parent.add_child(mi)
 	_add_collision(parent, r, 0.0, p.size.y)
+
+
+## A prop's own surfaces in another kit material: {slot: material} (a tank's glass glows on the survey ship).
+static func _wear_surfaces(mi: MeshInstance3D, wear: Dictionary) -> void:
+	if wear.is_empty():
+		return
+	for i in mi.mesh.get_surface_count():
+		var slot: String = mi.mesh.surface_get_name(i)
+		if wear.has(slot):
+			mi.set_surface_override_material(i, KitMaterials.material(String(wear[slot])))
 
 
 static func _add_collision(parent: Node3D, r: Rect2, y0: float, height: float) -> void:
@@ -238,6 +250,27 @@ static func _add_signage(root: Node3D, walls: Node3D, layout: DeckLayout, s: Dic
 		mi.position = Vector3(p.x, float(s.floor_y_m), p.y)
 		mi.rotation = Vector3(-PI * 0.5, deg_to_rad(float(e.turn_deg)), 0.0)
 		mi.rotation_order = EULER_ORDER_YXZ
+		signs.add_child(mi, true)
+	_add_stuck_signs(signs, layout, s.get("stuck", []))
+
+
+## Stickers on props: `facing` "top" lies flat at `y_m`; a compass side stands at `at`, facing that way.
+## They don't fade: props don't.
+static func _add_stuck_signs(signs: Node3D, layout: DeckLayout, entries: Array) -> void:
+	for e: Dictionary in entries:
+		var space := String(e.space)
+		if not layout.spaces.has(space):
+			continue
+		var p := layout.point_in(space, e.at)
+		var mi := _sign_quad(String(e.image), float(e.width_m), KitPieces.space_layer(layout, space))
+		mi.position = Vector3(p.x, float(e.y_m), p.y)
+		var tilt := deg_to_rad(float(e.get("tilt_deg", 0.0)))
+		var facing := String(e.get("facing", "south"))
+		if facing == "top":
+			mi.rotation = Vector3(-PI * 0.5, tilt, 0.0)
+			mi.rotation_order = EULER_ORDER_YXZ
+		else:
+			mi.rotation = Vector3(0.0, float(STUCK_YAW[facing]), tilt)
 		signs.add_child(mi, true)
 
 

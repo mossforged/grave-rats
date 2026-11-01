@@ -3,7 +3,11 @@
 Branch `auto/q003-mac`, on main `a4a5f73`. Report: `docs/qa/health-2026-10-31-q003.md` (hand notes first). Baseline updated, with notes, in `docs/qa/baseline.json`. Nothing in the game changed.
 
 ## Unexplained regressions
-**None that matter.** T006's `killed_it_s` went 1.64 to 1.65 (+0.6%, green) and I didn't trace it; it may be rounding. The script says RED on three areas, and every flag traces to a merged packet (table in the report).
+**Two, both small.**
+- **Cautious bot survival with the old door press:** T012 11 of 12, T015 shift 10 of 12, were 12 of 12; T014 cautious deaths 3, were 1. It came in somewhere in T016 to T022, not T023; I didn't find which. With the fixed bot cautious survives 12 of 12 on both, so the baseline's new numbers don't show it.
+- **T006 `killed_it_s`** 1.64 to 1.65 (+0.6%, green): may be rounding.
+
+Every RED flag in the script otherwise traces to a merged packet (table in the report).
 
 ## Per-packet frame cost (fight windows, 30 s, 1920x1080, MSAA 2x; avg / p95 ms)
 | Packet | `pirate_deck` | `stalker_deck` | `shift_deck` |
@@ -21,7 +25,7 @@ Branch `auto/q003-mac`, on main `a4a5f73`. Report: `docs/qa/health-2026-10-31-q0
 ## Solo feel
 - **Input to motion: identical across T018,** step for step in all 11 cases, T017 to main. There was no earlier number, so I wrote `tools/qa/input_to_motion.gd` and ran it on the old commits. It catches a one-step delay on movement and crouch; fire, reload, E and aim weren't shown to fail. Events are synthetic, not a real keyboard.
 - **T006, T007:** unchanged, apart from the +0.6% above.
-- **T012: moved, from T023's bot fix.** BOTS_EVIDENCE
+- **T012: moved, from T023's bot fix.** With the door bug put back on main, cautious banks 1,162 (old baseline 1,319; fixed bot 2,360), so the big move is T023's fix. A small part isn't: see Unexplained regressions.
 - **Foot slide: moved, from T022, checked commit by commit.** T021 matches the old table to the digit. Most cases improved; **sprint forward is worse,** 0.65 to 1.29 m/s (T022 reported it).
 
 ## Needs the lead

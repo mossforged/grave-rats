@@ -406,7 +406,7 @@
         "frame_time": "Explained: T020 (effects, and pirates and the player firing through its timeline), measured against T018 in docs/qa/health-2026-10-31-q003.md. Clean windows at load 4 to 5, borderless, scale 1.0, remote desktop host running. pirate_deck now misses T011's target; the lead decides. Replaces the provisional shift_deck number.",
         "foot_slide": "Explained: T022's clips. T021 equals the old table to the digit; T022 equals main. Sprint forward got worse (0.65 to 1.29 m/s); T022 reported that.",
         "foot_slide_realtime": "Explained by T022 by the fixed-step result; the real-time runs weren't repeated on T021. Noisy.",
-        "t012, t015_shift, t014": "T023's bot door fix; see the report for what the door-bug rerun showed. Bot change, not a game change.",
+        "t012, t015_shift, t014": "Mostly T023's bot door fix, checked with the door bug put back on main. Small residue unexplained: with the old press cautious survives 11 of 12 (T012) and 10 of 12 (T015 shift), was 12 of 12; somewhere in T016 to T022. T014 still holds only for the fixed process split.",
         "flicker": "Explained: T020 raised still-camera twinkle from 0.0003% (effects move in frame); T021's wall-top z-fight fix lowered turning and pirate twinkle by about 35%. Checked commit by commit.",
         "t006, t007, t015": "Left alone: no number moved past rounding."
       }

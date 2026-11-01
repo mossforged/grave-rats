@@ -68,4 +68,110 @@ ERROR: Condition "p_size <= 0" is true. Returning: false
    GDScript backtrace (most recent call first):
        [0] _text_w (res://src/hud/suit_os_hud.gd:137)
        [1] _draw_quota (res://src/hud/suit_os_hud.gd:332)
-       [2] _dr
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:119)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:137)
+       [1] _draw_quota (res://src/hud/suit_os_hud.gd:332)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:119)
+OUT greedy seed 2600: cycles met 0, fired true, deaths 3, shifts 3
+OUT greedy seed 2700: cycles met 0, fired true, deaths 3, shifts 3
+OUT greedy seed 2800: cycles met 0, fired true, deaths 3, shifts 3
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+OUT cautious seed 2600: cycles met 1, fired true, deaths 0, shifts 6
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+OUT cautious seed 2700: cycles met 1, fired true, deaths 0, shifts 6
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+ERROR: Parameter "body->get_space()" is null.
+   at: body_test_motion (modules/godot_physics_3d/godot_physics_server_3d.cpp:943)
+   GDScript backtrace (most recent call first):
+       [0] simulate (res://src/player/operator.gd:274)
+       [1] _one_shift (res://tools/t014_bots.gd:93)
+OUT cautious seed 2800: cycles met 1, fired true, deaths 0, shifts 6
+WARNING: 49 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 11 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

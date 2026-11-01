@@ -1,0 +1,745 @@
+{
+  "cautious": [
+    {
+      "cycles": [
+        {
+          "met": false,
+          "quota": 2400,
+          "shortfall": 555,
+          "surplus": 0,
+          "was": 2400
+        }
+      ],
+      "cycles_met": 0,
+      "deaths": 1,
+      "fired": true,
+      "seed": 2000,
+      "shifts": [
+        {
+          "cause": "lunge",
+          "cycles": 3,
+          "death_bill": 2012,
+          "deductions": 0,
+          "gross": 0,
+          "items": 10,
+          "lines": [],
+          "lost": 3,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": false,
+          "rounds": 30,
+          "time_s": 198.966666666658
+        },
+        {
+          "cause": null,
+          "cycles": 4,
+          "death_bill": 0,
+          "deductions": 468,
+          "gross": 1129,
+          "items": 12,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 76,
+              "id": "ammunition",
+              "quantity": 19
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 60,
+              "id": "airlock_cycling",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 44,
+              "id": "corrosive_contact",
+              "quantity": 22
+            },
+            {
+              "amount_cr": 108,
+              "id": "floor_residue",
+              "quantity": 54
+            }
+          ],
+          "lost": 0,
+          "net": 661,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 19,
+          "time_s": 202.366666666658
+        },
+        {
+          "cause": null,
+          "cycles": 5,
+          "death_bill": 0,
+          "deductions": 397,
+          "gross": 1581,
+          "items": 18,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 84,
+              "id": "ammunition",
+              "quantity": 21
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 75,
+              "id": "airlock_cycling",
+              "quantity": 5
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 44,
+              "id": "corrosive_contact",
+              "quantity": 22
+            },
+            {
+              "amount_cr": 14,
+              "id": "floor_residue",
+              "quantity": 7
+            }
+          ],
+          "lost": 0,
+          "net": 1184,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 21,
+          "time_s": 199.933333333325
+        }
+      ]
+    },
+    {
+      "cycles": [
+        {
+          "met": false,
+          "quota": 2400,
+          "shortfall": 705,
+          "surplus": 0,
+          "was": 2400
+        }
+      ],
+      "cycles_met": 0,
+      "deaths": 1,
+      "fired": true,
+      "seed": 2100,
+      "shifts": [
+        {
+          "cause": "puddle",
+          "cycles": 3,
+          "death_bill": 1965,
+          "deductions": 0,
+          "gross": 0,
+          "items": 10,
+          "lines": [],
+          "lost": 2,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": false,
+          "rounds": 30,
+          "time_s": 193.933333333325
+        },
+        {
+          "cause": null,
+          "cycles": 4,
+          "death_bill": 0,
+          "deductions": 440,
+          "gross": 1142,
+          "items": 14,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 132,
+              "id": "ammunition",
+              "quantity": 33
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 60,
+              "id": "airlock_cycling",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 68,
+              "id": "impact_seal",
+              "quantity": 34
+            }
+          ],
+          "lost": 0,
+          "net": 702,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 33,
+          "time_s": 205.766666666658
+        },
+        {
+          "cause": null,
+          "cycles": 4,
+          "death_bill": 0,
+          "deductions": 316,
+          "gross": 1309,
+          "items": 14,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 76,
+              "id": "ammunition",
+              "quantity": 19
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 60,
+              "id": "airlock_cycling",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            }
+          ],
+          "lost": 0,
+          "net": 993,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 19,
+          "time_s": 207.033333333324
+        }
+      ]
+    },
+    {
+      "cycles": [
+        {
+          "met": true,
+          "quota": 2400,
+          "shortfall": 0,
+          "surplus": 243,
+          "was": 2400
+        },
+        {
+          "met": false,
+          "quota": 3600,
+          "shortfall": 1279,
+          "surplus": 0,
+          "was": 3600
+        }
+      ],
+      "cycles_met": 1,
+      "deaths": 0,
+      "fired": true,
+      "seed": 2200,
+      "shifts": [
+        {
+          "cause": null,
+          "cycles": 4,
+          "death_bill": 0,
+          "deductions": 472,
+          "gross": 1257,
+          "items": 12,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 80,
+              "id": "ammunition",
+              "quantity": 20
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 60,
+              "id": "airlock_cycling",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 44,
+              "id": "corrosive_contact",
+              "quantity": 22
+            },
+            {
+              "amount_cr": 108,
+              "id": "floor_residue",
+              "quantity": 54
+            }
+          ],
+          "lost": 0,
+          "net": 785,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 20,
+          "time_s": 202.499999999991
+        },
+        {
+          "cause": null,
+          "cycles": 3,
+          "death_bill": 0,
+          "deductions": 261,
+          "gross": 884,
+          "items": 8,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 36,
+              "id": "ammunition",
+              "quantity": 9
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 45,
+              "id": "airlock_cycling",
+              "quantity": 3
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            }
+          ],
+          "lost": 0,
+          "net": 623,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 9,
+          "time_s": 202.399999999991
+        },
+        {
+          "cause": null,
+          "cycles": 5,
+          "death_bill": 0,
+          "deductions": 389,
+          "gross": 1624,
+          "items": 18,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 76,
+              "id": "ammunition",
+              "quantity": 19
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 75,
+              "id": "airlock_cycling",
+              "quantity": 5
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 44,
+              "id": "corrosive_contact",
+              "quantity": 22
+            },
+            {
+              "amount_cr": 14,
+              "id": "floor_residue",
+              "quantity": 7
+            }
+          ],
+          "lost": 0,
+          "net": 1235,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 19,
+          "time_s": 199.966666666658
+        },
+        {
+          "cause": null,
+          "cycles": 3,
+          "death_bill": 0,
+          "deductions": 261,
+          "gross": 712,
+          "items": 8,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 36,
+              "id": "ammunition",
+              "quantity": 9
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 45,
+              "id": "airlock_cycling",
+              "quantity": 3
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            }
+          ],
+          "lost": 0,
+          "net": 451,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 9,
+          "time_s": 202.666666666658
+        },
+        {
+          "cause": null,
+          "cycles": 4,
+          "death_bill": 0,
+          "deductions": 336,
+          "gross": 1229,
+          "items": 14,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 96,
+              "id": "ammunition",
+              "quantity": 24
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 60,
+              "id": "airlock_cycling",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            }
+          ],
+          "lost": 0,
+          "net": 893,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 24,
+          "time_s": 199.833333333325
+        },
+        {
+          "cause": null,
+          "cycles": 4,
+          "death_bill": 0,
+          "deductions": 504,
+          "gross": 1238,
+          "items": 14,
+          "lines": [
+            {
+              "amount_cr": 80,
+              "id": "suit_rental",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 112,
+              "id": "ammunition",
+              "quantity": 28
+            },
+            {
+              "amount_cr": 80,
+              "id": "oxygen",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 60,
+              "id": "airlock_cycling",
+              "quantity": 4
+            },
+            {
+              "amount_cr": 20,
+              "id": "morale",
+              "quantity": 1
+            },
+            {
+              "amount_cr": 44,
+              "id": "corrosive_contact",
+              "quantity": 22
+            },
+            {
+              "amount_cr": 108,
+              "id": "floor_residue",
+              "quantity": 54
+            }
+          ],
+          "lost": 0,
+          "net": 734,
+          "outcome": "extracted",
+          "prize": false,
+          "rounds": 28,
+          "time_s": 204.333333333324
+        }
+      ]
+    }
+  ],
+  "greedy": [
+    {
+      "cycles": [
+        {
+          "met": false,
+          "quota": 2400,
+          "shortfall": 2400,
+          "surplus": 0,
+          "was": 2400
+        }
+      ],
+      "cycles_met": 0,
+      "deaths": 3,
+      "fired": true,
+      "seed": 2000,
+      "shifts": [
+        {
+          "cause": "cutter",
+          "cycles": 8,
+          "death_bill": 1840,
+          "deductions": 0,
+          "gross": 0,
+          "items": 22,
+          "lines": [],
+          "lost": 0,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 25,
+          "time_s": 283.166666666676
+        },
+        {
+          "cause": "cutter",
+          "cycles": 7,
+          "death_bill": 1840,
+          "deductions": 0,
+          "gross": 0,
+          "items": 19,
+          "lines": [],
+          "lost": 0,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 24,
+          "time_s": 302.400000000025
+        },
+        {
+          "cause": "cutter",
+          "cycles": 6,
+          "death_bill": 3651,
+          "deductions": 0,
+          "gross": 0,
+          "items": 16,
+          "lines": [],
+          "lost": 2,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 33,
+          "time_s": 273.600000000002
+        }
+      ]
+    },
+    {
+      "cycles": [
+        {
+          "met": false,
+          "quota": 2400,
+          "shortfall": 2400,
+          "surplus": 0,
+          "was": 2400
+        }
+      ],
+      "cycles_met": 0,
+      "deaths": 3,
+      "fired": true,
+      "seed": 2100,
+      "shifts": [
+        {
+          "cause": "cutter",
+          "cycles": 7,
+          "death_bill": 3669,
+          "deductions": 0,
+          "gross": 0,
+          "items": 20,
+          "lines": [],
+          "lost": 2,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 30,
+          "time_s": 258.666666666657
+        },
+        {
+          "cause": "cutter",
+          "cycles": 5,
+          "death_bill": 3520,
+          "deductions": 0,
+          "gross": 0,
+          "items": 13,
+          "lines": [],
+          "lost": 2,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 44,
+          "time_s": 310.366666666698
+        },
+        {
+          "cause": "puddle",
+          "cycles": 7,
+          "death_bill": 1840,
+          "deductions": 0,
+          "gross": 0,
+          "items": 20,
+          "lines": [],
+          "lost": 0,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": false,
+          "rounds": 21,
+          "time_s": 238.466666666656
+        }
+      ]
+    },
+    {
+      "cycles": [
+        {
+          "met": false,
+          "quota": 2400,
+          "shortfall": 2400,
+          "surplus": 0,
+          "was": 2400
+        }
+      ],
+      "cycles_met": 0,
+      "deaths": 3,
+      "fired": true,
+      "seed": 2200,
+      "shifts": [
+        {
+          "cause": "spit",
+          "cycles": 5,
+          "death_bill": 3210,
+          "deductions": 0,
+          "gross": 0,
+          "items": 13,
+          "lines": [],
+          "lost": 2,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 21,
+          "time_s": 301.633333333358
+        },
+        {
+          "cause": "cutter",
+          "cycles": 8,
+          "death_bill": 1840,
+          "deductions": 0,
+          "gross": 0,
+          "items": 22,
+          "lines": [],
+          "lost": 0,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": true,
+          "rounds": 24,
+          "time_s": 287.200000000013
+        },
+        {
+          "cause": "puddle",
+          "cycles": 7,
+          "death_bill": 1840,
+          "deductions": 0,
+          "gross": 0,
+          "items": 20,
+          "lines": [],
+          "lost": 0,
+          "net": 0,
+          "outcome": "wiped",
+          "prize": false,
+          "rounds": 26,
+          "time_s": 242.199999999989
+        }
+      ]
+    }
+  ]
+}

@@ -57,6 +57,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A014 | art | merged; John picked B, biological survey vessel; mining tug likely ship 3 |
 | A015 | art | merged: 18 threats + matrix; top five Loader, Suit Hitch, Pool Bell, PC Surveyor, Seam Spiders; waits for John's picks |
 | A016 | art | merged: 18 written designs + matrix, only 2 images (image tool refused 16 as violence); top six rifle, shotgun, flare gun, cutter, frag, decoy; offer: lead models weapons in Blender |
+| A017 | art | queued: weapon prop paint-overs of the lead's Blender models (object-only sheets, honest prompts, no retries on refusal) |
 | Q003 | qa | queued 2026-11-01 (code lane idle) |
 | T023 | code | merged: survey vessel (`--ship survey`); salvage too thin for the quota; drone clips doors |
 | T022 | code | merged: Mixamo set on the hauler; John judges if it moves like a soldier |

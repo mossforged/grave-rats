@@ -61,7 +61,12 @@ def main():
             for f in (ROOT / "tools/qa").glob("q003_fx_*"):
                 shutil.copy(f, c / "tools/qa")
             say("importing", commit)
-            subprocess.run([GODOT, "--headless", "--path", str(c), "--import"], capture_output=True, timeout=900)
+            # Q003: a first import can abort on a fresh clone and leave a half-loaded deck that "runs" very fast.
+            for attempt in range(1, 4):
+                rc = subprocess.run([GODOT, "--headless", "--path", str(c), "--import"], capture_output=True, timeout=900).returncode
+                say("  import attempt", attempt, "exit", rc)
+                if rc == 0:
+                    break
             # As the health check does on this display: a titled window falls short of 1080.
             (c / "override.cfg").write_text("[display]\n\nwindow/size/borderless=true\n")
             clones[commit] = c
@@ -115,6 +120,8 @@ def main():
                 # A stand that failed to parse still writes a frametime.json, of an empty scene.
                 if state == "clean" and job["mode"] and not (dest / "q003_fx.json").exists():
                     state = "stand-failed"
+                if state == "clean" and "Failed loading resource" in Path(str(dest) + ".log").read_text(errors="replace"):
+                    state = "load-errors"
                 if state == "clean" and d.get("resolution") != "1920x1080":
                     state = "wrong-size"
                 if state == "clean":

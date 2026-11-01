@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M2 Pro (Apple8)
+
+capture: /Users/johniadarola/Projects/grave-rats-qa/docs/qa/logs-2026-10-31-q003/packet_cost/main_pirate_deck_34/pirate_deck.png 1920x1080 OK
+capture: /Users/johniadarola/Projects/grave-rats-qa/docs/qa/logs-2026-10-31-q003/packet_cost/main_pirate_deck_34/pirate_deck_overlay.png 1920x1080 OK
+capture: frame 7.87 ms avg, 10.46 ms p95 at 1920x1080
+WARNING: 7 RIDs of type "Texture" were leaked.
+   at: finalize (servers/rendering/rendering_device.cpp:8900)

@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M2 Pro (Apple8)
+
+shift_deck: frame-time window with 3 stalkers and CUSTODIAN awake
+capture: /Users/johniadarola/Projects/grave-rats-qa/docs/qa/logs-2026-10-31-q003/fx_states/main_q003_fx_shift_effects_15/q003_fx_shift.png 1920x1080 OK
+capture: /Users/johniadarola/Projects/grave-rats-qa/docs/qa/logs-2026-10-31-q003/fx_states/main_q003_fx_shift_effects_15/q003_fx_shift_overlay.png 1920x1080 OK
+capture: frame 6.93 ms avg, 7.59 ms p95 at 1920x1080
+WARNING: 7 RIDs of type "Texture" were leaked.
+   at: finalize (servers/rendering/rendering_device.cpp:8900)

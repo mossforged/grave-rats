@@ -1,0 +1,15 @@
+{
+ "casings": 0,
+ "decals": 0,
+ "has_vfx": true,
+ "live_particles": 134,
+ "mode": "idle",
+ "rounds": 0,
+ "running": 5,
+ "scene": "res://tools/qa/q003_fx_pirate.tscn",
+ "stood_at": [
+  2.5,
+  2.59999990463257
+ ],
+ "surface": "metal"
+}

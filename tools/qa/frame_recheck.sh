@@ -5,6 +5,7 @@
 # Writes <out-dir>/windows.tsv (scene, window, clean or dirty, resolution, scale, frames, avg, p95, p99, load before,
 # load after) and <out-dir>/<scene>_<n>/frametime.json. Stops at two clean windows per scene, or at the deadline.
 # Env: QA_SECONDS (default 30), QA_LOAD_MAX (load average to start a window under, default 6).
+# The window is dirty if guard.sh said busy at any time during it.
 set -u
 export PATH="$HOME/.local/grave-rats-bin:$PATH:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -19,17 +20,8 @@ mkdir -p "$OUT"; OUT="$(cd "$OUT" && pwd)"; : > "$OUT/windows.tsv"
 say() { echo "[$(date +%H:%M:%S)] $*"; }
 load1() { sysctl -n vm.loadavg | tr -d '{}' | awk '{print $1}'; }
 loadavg() { sysctl -n vm.loadavg | tr -d '{}' | awk '{print $1, $2, $3}'; }
-code_lane_busy() {
-  local pid exe cwd cmd
-  for pid in $(pgrep -if godot); do
-    exe="$(ps -o comm= -p "$pid" 2>/dev/null)"
-    case "$(basename "$exe" | tr 'A-Z' 'a-z')" in godot*) ;; *) continue ;; esac
-    cwd="$(lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p')"
-    cmd="$(ps -o command= -p "$pid" 2>/dev/null)"
-    case "$cwd $cmd" in *grave-rats-code*) return 0 ;; esac
-  done
-  return 1
-}
+# Q003: any other Godot on this Mac, or an agent in the code lane's clone, not only a code-lane Godot. See guard.sh.
+code_lane_busy() { "$ROOT/tools/qa/guard.sh" "$WORK" >/dev/null; }
 # Holds until the Mac has gone quiet; non-zero at the deadline.
 wait_quiet() {
   while code_lane_busy || [ "$(echo "$(load1) >= $LOAD_MAX" | bc -l)" = 1 ]; do

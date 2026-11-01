@@ -29,6 +29,7 @@ Pull and run (paste in Terminal). If it stops during the import step, just paste
 - [ ] **Weapons:** judge the Blender models (`docs/screens/props/weapons_sheet.jpg`) and the two paint-overs (A017: plasma cutter, decoy beacon); say which to wire in first, and whether to try Meshy retexturing for the rest (10 credits each).
 - [ ] **Paperwork copy:** approve the new lines in `docs/handoffs/auto-T014.md` and `auto-T015.md` (end-of-shift forms, CUSTODIAN announcements).
 - [ ] **Meshy:** set a standing credit budget (for example "up to 150 credits a week on agreed models, report each"), or keep OK-ing each batch. Say what to make next.
+- [ ] **Meshy batch 2 (OK to spend 300 credits, about $6?):** 4 dead crew, 4 survey-vessel infestation pieces, the wrecked drone and a gutted security bot, from the A018 images (`docs/screens/A018/sheet.png`). The wrecked loader the lead makes in Blender for free. Plan: `assets/source/meshy/input/A018/meshy-plan.md`.
 - [ ] **Stalker legs:** OK a code task giving the new Meshy stalker procedural legs?
 - [ ] **Skill card:** save the meshy-3d-models update card in the chat (the lead will add one more fix: Meshy's API rig uses its own bone names).
 

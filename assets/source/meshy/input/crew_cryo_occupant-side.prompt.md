@@ -1,0 +1,5 @@
+# A018-04 / crew_cryo_occupant / side
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/assets/source/meshy/input/crew_cryo_occupant-34.png
+
+Use case: precise-object-edit. Asset A018-04. Edit target: the supplied three-quarter object image. Change ONLY camera to a exact LEFT SIDE orthographic profile. Keep the EXACT same object, world pose, orientation of all limbs, damaged parts and detached pieces, sheet folds, relative positions, proportions, materials, colour, wear, six-pod count if applicable, and lighting. Do not stand, roll, unfold, mirror or repair anything. Orbit camera around the vertical world axis only; static object remains frozen. Keep whole object centred with ample margin on uniform flat light grey background. No text, marks, scenery, wall, props or dimensions. One still empty non-graphic grey-blue hauler-style salvage pressure suit upright, feet together and forearms crossed across chest. Rounded helmet with opaque black visor hiding face, breathing hose, rectangular backpack, thick boots, pouches and shoulder plates. No pod, no stand, no blood, wounds, skin or face.

@@ -1,0 +1,5 @@
+# A018-01 / crew_dead_sitting / 34
+
+Built-in imagegen. Reference: assets/source/meshy/input/hauler-apose-34.png
+
+Use case: stylized-concept. Asset type: Grave Rats Meshy image-to-3D input, one complete original object centred with ample margin. Worn industrial realistic PBR 3D studio render. Flat uniform light grey background, soft even light, minimal contact shadow, no scenery, no wall or floor plane edges, no text, logos, watermark, labels or dimensions. Front three-quarter camera, show whole object. A non-graphic dead crew suit, reads as an empty still suit. Bulky hauler-style salvage pressure suit with rounded helmet, opaque black visor hiding all face, corrugated breathing hose, rectangular life support pack, thick boots, pouches and shoulder plates. All painted panels and fabric faded crew grey-blue, worn dark hardware. Slumped sitting as if against an invisible wall, both legs straight out, head bowed, both arms limp beside hips with gloves on floor. No blood, wounds, face or exposed skin. Input image is style reference only; recolour and repose as specified.

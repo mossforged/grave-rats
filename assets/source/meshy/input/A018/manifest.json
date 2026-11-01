@@ -1,0 +1,172 @@
+{
+  "packet": "A018",
+  "axis_order": "width,height,depth",
+  "root": "assets/source/meshy/input",
+  "objects": [
+    {
+      "id": "A018-01",
+      "name": "crew_dead_sitting",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        0.95,
+        1.15,
+        1.65
+      ]
+    },
+    {
+      "id": "A018-02b",
+      "name": "crew_dead_prone",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        0.85,
+        0.55,
+        2.25
+      ]
+    },
+    {
+      "id": "A018-03",
+      "name": "crew_dead_bunk",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        1,
+        1.25,
+        2.15
+      ]
+    },
+    {
+      "id": "A018-04",
+      "name": "crew_cryo_occupant",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        0.8,
+        1.9,
+        0.65
+      ]
+    },
+    {
+      "id": "A018-05",
+      "name": "growth_wall_patch",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        1.5,
+        1.2,
+        0.25
+      ]
+    },
+    {
+      "id": "A018-06",
+      "name": "growth_egg_cluster",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        0.8,
+        0.65,
+        0.75
+      ]
+    },
+    {
+      "id": "A018-07",
+      "name": "specimen_floating",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        0.35,
+        0.55,
+        0.3
+      ]
+    },
+    {
+      "id": "A018-08",
+      "name": "specimen_dissected",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        0.65,
+        0.45,
+        1.25
+      ]
+    },
+    {
+      "id": "A018-09",
+      "name": "drone_wreck",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        1.25,
+        1,
+        1.5
+      ]
+    },
+    {
+      "id": "A018-10",
+      "name": "loader_wreck",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        2.2,
+        1.6,
+        2.1
+      ]
+    },
+    {
+      "id": "A018-11",
+      "name": "security_bot_gutted",
+      "views": [
+        "front",
+        "side",
+        "34",
+        "back"
+      ],
+      "target_metres": [
+        1.15,
+        1.15,
+        1.7
+      ]
+    }
+  ]
+}

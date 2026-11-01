@@ -1,0 +1,5 @@
+# A018-02 / crew_dead_prone / front
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/assets/source/meshy/input/crew_dead_prone-34.png
+
+Use case: precise-object-edit. Asset A018-02. Edit target: the supplied three-quarter object image. Change ONLY camera to a straight FRONT orthographic view. Keep the EXACT same object, world pose, orientation of all limbs, damaged parts and detached pieces, sheet folds, relative positions, proportions, materials, colour, wear, six-pod count if applicable, and lighting. Do not stand, roll, unfold, mirror or repair anything. Orbit camera around the vertical world axis only; static object remains frozen. Keep whole object centred with ample margin on uniform flat light grey background. No text, marks, scenery, wall, props or dimensions. Non-graphic still empty grey-blue hauler-style salvage pressure suit, black opaque visor, no face, blood, wounds or skin. Rounded helmet, hose, rectangular life support backpack, bulky boots, pouches, shoulder plates. Face down lying flat on belly, legs extended, left arm reaching forward on ground, right arm resting beside torso.

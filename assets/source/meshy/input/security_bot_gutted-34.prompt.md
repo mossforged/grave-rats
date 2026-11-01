@@ -1,0 +1,5 @@
+# A018-11 / security_bot_gutted / 34
+
+Built-in imagegen. Reference: /Users/johniadarola/Projects/grave-rats-art/docs/screens/A015/sheet.png
+
+Use case: stylized-concept. Asset type: Grave Rats Meshy image-to-3D input, one complete original object centred with ample margin. Worn industrial realistic PBR 3D studio render. Flat uniform light grey background, soft even light, minimal contact shadow, no scenery, no wall or floor plane edges, no text, logos, watermark, labels or dimensions. Front three-quarter camera, show whole object. One old broken humanoid industrial security robot in A015-06 Term Enforcer style, broad square dark gunmetal chest, short head with dark horizontal amber lens, chunky jointed legs, heavy feet and plain mechanical hands. Sitting slumped as if against invisible wall with legs out and arms limp. Chest panel hinged open at one side revealing simple dark mechanical blocks and wiring. Lamps dark. No weapon, actual wall, sparks, smoke, gore or text. Input image is a design/style reference; use only the relevant object, change pose and state as specified.

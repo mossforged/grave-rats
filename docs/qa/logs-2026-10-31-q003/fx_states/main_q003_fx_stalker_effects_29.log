@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M2 Pro (Apple8)
+
+capture: /Users/johniadarola/Projects/grave-rats-qa/docs/qa/logs-2026-10-31-q003/fx_states/main_q003_fx_stalker_effects_29/q003_fx_stalker.png 1920x1080 OK
+capture: /Users/johniadarola/Projects/grave-rats-qa/docs/qa/logs-2026-10-31-q003/fx_states/main_q003_fx_stalker_effects_29/q003_fx_stalker_overlay.png 1920x1080 OK
+capture: frame 6.49 ms avg, 7.19 ms p95 at 1920x1080
+WARNING: 7 RIDs of type "Texture" were leaked.
+   at: finalize (servers/rendering/rendering_device.cpp:8900)
+/var/folders/xc/yg268pss2ws86xrvvxmrzxmh0000gn/T/grave-rats-cost.y9td5dh3/a4a5f73/tools/capture.sh: line 27: 91117 Terminated: 15          ( sleep "$LIMIT"; kill "$PID" 2> /dev/null ) < /dev/null > /dev/null 2>&1

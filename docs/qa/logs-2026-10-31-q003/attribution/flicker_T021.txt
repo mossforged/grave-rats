@@ -1,0 +1,6 @@
+q003-flick-T021/pirate_still: moved 0.126% (max 0.419%), twinkle 0.0189% (max 0.0352%) of the screen
+q003-flick-T021/pirate_turn: moved 0.015% (max 0.050%), twinkle 0.0022% (max 0.0169%) of the screen
+q003-flick-T021/still_beam_off: moved 0.018% (max 0.097%), twinkle 0.0009% (max 0.0124%) of the screen
+q003-flick-T021/still_beam_on: moved 0.021% (max 0.086%), twinkle 0.0009% (max 0.0146%) of the screen
+q003-flick-T021/turn_beam_off: moved 1.135% (max 2.081%), twinkle 0.0865% (max 0.1824%) of the screen
+q003-flick-T021/turn_beam_on: moved 1.087% (max 2.112%), twinkle 0.0820% (max 0.1795%) of the screen

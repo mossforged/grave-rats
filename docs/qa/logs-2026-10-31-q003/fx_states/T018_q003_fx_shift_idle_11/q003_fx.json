@@ -1,0 +1,10 @@
+{
+ "has_vfx": false,
+ "mode": "idle",
+ "rounds": 0,
+ "scene": "res://tools/qa/q003_fx_shift.tscn",
+ "stood_at": [
+  2.5,
+  2.59999990463257
+ ]
+}

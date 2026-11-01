@@ -1,0 +1,2803 @@
+{
+  "date": "2026-10-31-q003",
+  "overall": "red",
+  "meta": {
+    "date": "2026-10-31-q003",
+    "started": "2026-10-31 17:29:31",
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "chip": "Apple M2 Pro",
+    "macos": "15.6",
+    "thermal_start": "Note: No thermal warning level has been recorded Note: No performance warning level has been recorded Note: No CPU power status has been recorded",
+    "remote_desktop": "running",
+    "clone_source": "https://github.com/mossforged/grave-rats",
+    "commit": "a4a5f73 John's list: restart-first warning, survey vessel items",
+    "seconds_clone": "141",
+    "import_rc": "0",
+    "import_files": "400",
+    "imported_count": "800",
+    "seconds_import": "8",
+    "borderless": "yes",
+    "thermal_end": "Note: No thermal warning level has been recorded Note: No performance warning level has been recorded Note: No CPU power status has been recorded",
+    "seconds_frame": "284",
+    "tests_1_rc": "0",
+    "tests_2_rc": "0",
+    "tests_3_rc": "0",
+    "seconds_tests": "959",
+    "t006_rc": "0",
+    "t007_rc": "0",
+    "footslide_fixed_rc": "0",
+    "footslide_1_rc": "0",
+    "footslide_2_rc": "0",
+    "footslide_3_rc": "0",
+    "seconds_bots": "277",
+    "t012_rc": "0",
+    "t015_shift_rc": "0",
+    "t015_rc": "0",
+    "t014_0_rc": "0",
+    "t014_3_rc": "0",
+    "t014_9_rc": "0",
+    "t014_6_rc": "0",
+    "seconds_session_bots": "862",
+    "flicker_rc": "0",
+    "flicker_diff_rc": "0",
+    "seconds_flicker": "100",
+    "waited_s": "0",
+    "under_load": "",
+    "seconds_total": "2632"
+  },
+  "areas": {
+    "fresh_clone": {
+      "level": "green",
+      "notes": []
+    },
+    "frame_time": {
+      "level": "red",
+      "notes": [
+        "pirate_deck average +1.14 ms",
+        "pirate_deck p95 +2.38 ms",
+        "shift_deck average +0.87 ms"
+      ]
+    },
+    "bots": {
+      "level": "red",
+      "notes": [
+        "foot_slide: 11 of 18 metrics moved",
+        "foot_slide_realtime: 12 of 18 metrics moved",
+        "t012: 7 of 16 metrics moved",
+        "t015_shift: 9 of 16 metrics moved",
+        "t014: 14 of 26 metrics moved"
+      ]
+    },
+    "flicker": {
+      "level": "red",
+      "notes": [
+        "6 of 6 twinkle numbers moved"
+      ]
+    }
+  },
+  "baseline": {
+    "present": true,
+    "commit": "050b0b0 Queue Q001; STATUS after T011, A011, A012",
+    "date": "2026-10-30",
+    "thresholds": {
+      "frame_avg_ms": 0.5,
+      "frame_p95_ms": 1.0,
+      "bot_metric_pct": 25.0,
+      "flicker_pct": 25.0,
+      "red_multiplier": 2.0,
+      "_note": "Over a threshold is amber; over threshold x red_multiplier is red. Any flaky test is amber. Any import error, always-failing test, load error, or missing number is red."
+    }
+  },
+  "tests": {
+    "runs": [
+      {
+        "run": 1,
+        "rc": "0",
+        "finished": true,
+        "passed": 620,
+        "failed": 0,
+        "load_errors": 0,
+        "load_error_files": [],
+        "failed_tests": []
+      },
+      {
+        "run": 2,
+        "rc": "0",
+        "finished": true,
+        "passed": 620,
+        "failed": 0,
+        "load_errors": 0,
+        "load_error_files": [],
+        "failed_tests": []
+      },
+      {
+        "run": 3,
+        "rc": "0",
+        "finished": true,
+        "passed": 620,
+        "failed": 0,
+        "load_errors": 0,
+        "load_error_files": [],
+        "failed_tests": []
+      }
+    ],
+    "flaky": {},
+    "always_failing": []
+  },
+  "import_errors": {},
+  "frame_time": {
+    "windows": [
+      {
+        "scene": "pirate_deck",
+        "window": 1,
+        "rc": 0,
+        "load_before": "7.77 6.86 6.02",
+        "load_after": "7.10 6.79 6.03",
+        "frame_ms_avg": 8.03682453790516,
+        "frame_ms_p95": 10.726,
+        "frame_ms_p99": 14.953,
+        "frame_ms_max": 36.116,
+        "frames": 3733,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0,
+        "msaa_3d": "2x",
+        "adapter": "Apple M2 Pro (Apple8)",
+        "rendering_driver": "metal"
+      },
+      {
+        "scene": "stalker_deck",
+        "window": 1,
+        "rc": 0,
+        "load_before": "7.10 6.79 6.03",
+        "load_after": "6.24 6.60 5.99",
+        "frame_ms_avg": 6.67085638061361,
+        "frame_ms_p95": 8.918,
+        "frame_ms_p99": 12.369,
+        "frame_ms_max": 26.143,
+        "frames": 4498,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0,
+        "msaa_3d": "2x",
+        "adapter": "Apple M2 Pro (Apple8)",
+        "rendering_driver": "metal"
+      },
+      {
+        "scene": "shift_deck",
+        "window": 1,
+        "rc": 0,
+        "load_before": "6.24 6.60 5.99",
+        "load_after": "6.25 6.58 6.01",
+        "frame_ms_avg": 8.12653737811486,
+        "frame_ms_p95": 11.568,
+        "frame_ms_p99": 12.944,
+        "frame_ms_max": 24.471,
+        "frames": 3692,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0,
+        "msaa_3d": "2x",
+        "adapter": "Apple M2 Pro (Apple8)",
+        "rendering_driver": "metal"
+      },
+      {
+        "scene": "pirate_deck",
+        "window": 2,
+        "rc": 0,
+        "load_before": "6.25 6.58 6.01",
+        "load_after": "10.39 7.51 6.37",
+        "frame_ms_avg": 8.49078013582342,
+        "frame_ms_p95": 12.721,
+        "frame_ms_p99": 17.87,
+        "frame_ms_max": 51.233,
+        "frames": 3534,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0,
+        "msaa_3d": "2x",
+        "adapter": "Apple M2 Pro (Apple8)",
+        "rendering_driver": "metal"
+      },
+      {
+        "scene": "stalker_deck",
+        "window": 2,
+        "rc": 0,
+        "load_before": "10.39 7.51 6.37",
+        "load_after": "8.17 7.30 6.34",
+        "frame_ms_avg": 6.74093754212537,
+        "frame_ms_p95": 9.268,
+        "frame_ms_p99": 11.531,
+        "frame_ms_max": 24.976,
+        "frames": 4451,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0,
+        "msaa_3d": "2x",
+        "adapter": "Apple M2 Pro (Apple8)",
+        "rendering_driver": "metal"
+      },
+      {
+        "scene": "shift_deck",
+        "window": 2,
+        "rc": 0,
+        "load_before": "8.17 7.30 6.34",
+        "load_after": "6.74 7.03 6.28",
+        "frame_ms_avg": 7.75198113695091,
+        "frame_ms_p95": 10.99,
+        "frame_ms_p99": 13.001,
+        "frame_ms_max": 45.476,
+        "frames": 3870,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0,
+        "msaa_3d": "2x",
+        "adapter": "Apple M2 Pro (Apple8)",
+        "rendering_driver": "metal"
+      }
+    ],
+    "summary": {
+      "pirate_deck": {
+        "avg": 8.264,
+        "p95": 11.724,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0
+      },
+      "stalker_deck": {
+        "avg": 6.706,
+        "p95": 9.093,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0
+      },
+      "shift_deck": {
+        "avg": 7.939,
+        "p95": 11.279,
+        "resolution": "1920x1080",
+        "screen_scale": 1.0
+      }
+    },
+    "compare": [
+      {
+        "scene": "pirate_deck",
+        "base_avg": 7.119,
+        "avg": 8.264,
+        "d_avg": 1.14,
+        "level_avg": "red",
+        "base_p95": 9.339,
+        "p95": 11.724,
+        "d_p95": 2.38,
+        "level_p95": "red"
+      },
+      {
+        "scene": "stalker_deck",
+        "base_avg": 6.604,
+        "avg": 6.706,
+        "d_avg": 0.1,
+        "level_avg": "green",
+        "base_p95": 9.466,
+        "p95": 9.093,
+        "d_p95": -0.37,
+        "level_p95": "green"
+      },
+      {
+        "scene": "shift_deck",
+        "base_avg": 7.067,
+        "avg": 7.939,
+        "d_avg": 0.87,
+        "level_avg": "amber",
+        "base_p95": 10.329,
+        "p95": 11.279,
+        "d_p95": 0.95,
+        "level_p95": "green"
+      }
+    ],
+    "targets": {
+      "pirate_deck": {
+        "avg": 7.5,
+        "p95": 9.5
+      }
+    }
+  },
+  "bots": {
+    "t006": {
+      "standing still, after the burst | died_s": {
+        "mean": 5.17,
+        "runs": 12,
+        "of": 12
+      },
+      "standing still, after the burst | first_hit_s": {
+        "mean": 1.38,
+        "runs": 12,
+        "of": 12
+      },
+      "crouched behind the overturned bed, stalker 6 m off through the door | died_s": {
+        "mean": 8.57,
+        "runs": 12,
+        "of": 12
+      },
+      "crouched behind the overturned bed, stalker 6 m off through the door | first_hit_s": {
+        "mean": 3.3,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: walks on, reacts to the bang after 0.45 s | first_hit_s": {
+        "mean": 1.4,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: walks on, reacts to the bang after 0.45 s | first_shot_s": {
+        "mean": 1.1,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: walks on, reacts to the bang after 0.45 s | shot_before_hit": {
+        "mean": 1.0,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: walks on, reacts to the bang after 0.45 s | suit_after_8s": {
+        "mean": 66.0,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: walks on, reacts to the bang after 0.45 s | died_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "ambush: turns at once on the bang | first_hit_s": {
+        "mean": 1.15,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: turns at once on the bang | first_shot_s": {
+        "mean": 0.55,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: turns at once on the bang | shot_before_hit": {
+        "mean": 1.0,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: turns at once on the bang | suit_after_8s": {
+        "mean": 66.0,
+        "runs": 12,
+        "of": 12
+      },
+      "ambush: turns at once on the bang | died_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "standing, tracks the stalker perfectly and fires | killed_it_s": {
+        "mean": 1.65,
+        "runs": 12,
+        "of": 12
+      },
+      "standing, tracks the stalker perfectly and fires | died_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "standing, tracks the stalker perfectly and fires | hit_percent": {
+        "mean": 61.94,
+        "runs": 12,
+        "of": 12
+      },
+      "standing, tracks the stalker perfectly and fires | suit_left": {
+        "mean": 91.5,
+        "runs": 12,
+        "of": 12
+      },
+      "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | killed_it_s": {
+        "mean": 2.15,
+        "runs": 12,
+        "of": 12
+      },
+      "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | died_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | hit_percent": {
+        "mean": 45.72,
+        "runs": 12,
+        "of": 12
+      },
+      "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | suit_left": {
+        "mean": 77.33,
+        "runs": 12,
+        "of": 12
+      }
+    },
+    "t007": {
+      "stands in the open, never fires | died_s": {
+        "mean": 3.39,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, never fires | first_hit_s": {
+        "mean": 1.02,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, never fires | cleared_squad_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "stands in the open, never fires | survived_60s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "stands in the open, never fires | pirates_killed": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, never fires | rounds_blocked_for_you": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, never fires | your_rounds_blocked": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, never fires | hits_taken": {
+        "mean": 13.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, never fires | your_hit_percent": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | died_s": {
+        "mean": 8.2,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | first_hit_s": {
+        "mean": 4.42,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | cleared_squad_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | survived_60s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | pirates_killed": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | rounds_blocked_for_you": {
+        "mean": 21.83,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | your_rounds_blocked": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | hits_taken": {
+        "mean": 13.0,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, never fires | your_hit_percent": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | died_s": {
+        "mean": 7.7,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | first_hit_s": {
+        "mean": 4.43,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | cleared_squad_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "locked to the same cover, never fires | survived_60s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "locked to the same cover, never fires | pirates_killed": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | rounds_blocked_for_you": {
+        "mean": 20.92,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | your_rounds_blocked": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | hits_taken": {
+        "mean": 13.0,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, never fires | your_hit_percent": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | died_s": {
+        "mean": 3.34,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | first_hit_s": {
+        "mean": 1.02,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | cleared_squad_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "stands in the open, fights like a person | survived_60s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "stands in the open, fights like a person | pirates_killed": {
+        "mean": 0.08,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | rounds_blocked_for_you": {
+        "mean": 0.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | your_rounds_blocked": {
+        "mean": 1.33,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | hits_taken": {
+        "mean": 13.0,
+        "runs": 12,
+        "of": 12
+      },
+      "stands in the open, fights like a person | your_hit_percent": {
+        "mean": 20.95,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | died_s": {
+        "mean": 5.57,
+        "runs": 10,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | first_hit_s": {
+        "mean": 1.74,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | cleared_squad_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | survived_60s": {
+        "mean": 1.0,
+        "runs": 2,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | pirates_killed": {
+        "mean": 1.17,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | rounds_blocked_for_you": {
+        "mean": 1.92,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | your_rounds_blocked": {
+        "mean": 3.67,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | hits_taken": {
+        "mean": 12.42,
+        "runs": 12,
+        "of": 12
+      },
+      "crouches behind low cover, fights like a person (rises as it shoots) | your_hit_percent": {
+        "mean": 67.73,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | died_s": {
+        "mean": 5.65,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | first_hit_s": {
+        "mean": 1.75,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | cleared_squad_s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | survived_60s": {
+        "mean": null,
+        "runs": 0,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | pirates_killed": {
+        "mean": 0.33,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | rounds_blocked_for_you": {
+        "mean": 7.25,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | your_rounds_blocked": {
+        "mean": 2.92,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | hits_taken": {
+        "mean": 13.0,
+        "runs": 12,
+        "of": 12
+      },
+      "locked to the same cover, fights like a person (up to fire, down between bursts) | your_hit_percent": {
+        "mean": 52.06,
+        "runs": 12,
+        "of": 12
+      }
+    },
+    "foot_slide": {
+      "walk forward | body_m_s": 3.4,
+      "walk forward | slide_m_s": 0.47,
+      "walk forward | planted_pct": 33.0,
+      "walk back | body_m_s": 3.4,
+      "walk back | slide_m_s": 0.38,
+      "walk back | planted_pct": 26.0,
+      "strafe right | body_m_s": 3.4,
+      "strafe right | slide_m_s": 0.63,
+      "strafe right | planted_pct": 28.0,
+      "strafe left | body_m_s": 3.4,
+      "strafe left | slide_m_s": 0.5,
+      "strafe left | planted_pct": 23.0,
+      "crouch forward | body_m_s": 1.5,
+      "crouch forward | slide_m_s": 0.16,
+      "crouch forward | planted_pct": 40.0,
+      "sprint forward | body_m_s": 5.4,
+      "sprint forward | slide_m_s": 1.29,
+      "sprint forward | planted_pct": 24.0
+    },
+    "foot_slide_realtime": {
+      "walk forward | body_m_s": 3.4,
+      "walk forward | slide_m_s": 1.207,
+      "walk forward | planted_pct": 32.0,
+      "walk back | body_m_s": 3.4,
+      "walk back | slide_m_s": 1.24,
+      "walk back | planted_pct": 24.33,
+      "strafe right | body_m_s": 3.4,
+      "strafe right | slide_m_s": 1.297,
+      "strafe right | planted_pct": 27.67,
+      "strafe left | body_m_s": 3.4,
+      "strafe left | slide_m_s": 1.28,
+      "strafe left | planted_pct": 21.67,
+      "crouch forward | body_m_s": 1.5,
+      "crouch forward | slide_m_s": 0.523,
+      "crouch forward | planted_pct": 40.0,
+      "sprint forward | body_m_s": 5.4,
+      "sprint forward | slide_m_s": 2.1,
+      "sprint forward | planted_pct": 26.0
+    },
+    "t012": {
+      "cautious | survived": 12,
+      "cautious | banked (mean)": 2360.0,
+      "cautious | deposited (mean)": 2360.0,
+      "cautious | items (mean)": 23.25,
+      "cautious | lost (mean)": 0.0,
+      "cautious | tier (mean)": 1.0,
+      "cautious | time_s (mean)": 206.09,
+      "cautious | prize (mean)": 0.0,
+      "greedy | survived": 0,
+      "greedy | banked (mean)": 0.0,
+      "greedy | deposited (mean)": 4287.08,
+      "greedy | items (mean)": 24.75,
+      "greedy | lost (mean)": 1.08,
+      "greedy | tier (mean)": 1.0,
+      "greedy | time_s (mean)": 258.07,
+      "greedy | prize (mean)": 0.75
+    },
+    "t015_shift": {
+      "cautious | survived": 12,
+      "cautious | banked (mean)": 2320.25,
+      "cautious | deposited (mean)": 2320.25,
+      "cautious | items (mean)": 23.17,
+      "cautious | lost (mean)": 0.0,
+      "cautious | tier (mean)": 1.0,
+      "cautious | time_s (mean)": 207.49,
+      "cautious | prize (mean)": 0.0,
+      "greedy | survived": 0,
+      "greedy | banked (mean)": 0.0,
+      "greedy | deposited (mean)": 4044.25,
+      "greedy | items (mean)": 24.92,
+      "greedy | lost (mean)": 1.83,
+      "greedy | tier (mean)": 1.0,
+      "greedy | time_s (mean)": 262.68,
+      "greedy | prize (mean)": 0.92
+    },
+    "t014": {
+      "cautious | sessions": 12,
+      "cautious | fired": 3,
+      "cautious | quota_1_met": 12,
+      "cautious | quotas_met": 45,
+      "cautious | quotas_due": 48,
+      "cautious | quotas_met_per_session (mean)": 3.75,
+      "cautious | shifts": 144,
+      "cautious | deaths": 12,
+      "cautious | death_pct": 8.3,
+      "cautious | net_per_shift_deaths_at_0 (mean)": 1726.91,
+      "cautious | survivors_gross (mean)": 2373.4,
+      "cautious | survivors_deductions (mean)": 489.5,
+      "cautious | negative_payslips": 0,
+      "greedy | sessions": 12,
+      "greedy | fired": 12,
+      "greedy | quota_1_met": 0,
+      "greedy | quotas_met": 0,
+      "greedy | quotas_due": 12,
+      "greedy | quotas_met_per_session (mean)": 0.0,
+      "greedy | shifts": 36,
+      "greedy | deaths": 36,
+      "greedy | death_pct": 100.0,
+      "greedy | net_per_shift_deaths_at_0 (mean)": 0.0,
+      "greedy | survivors_gross (mean)": null,
+      "greedy | survivors_deductions (mean)": null,
+      "greedy | negative_payslips": 0
+    },
+    "t015": {
+      "cutter_cover | aims (mean)": 24.83,
+      "cutter_cover | burns (mean)": 1.67,
+      "cutter_cover | cancelled (mean)": 22.83,
+      "cutter_cover | damage (mean)": 50.0,
+      "cutter_cover | hits (mean)": 1.67,
+      "cutter_ignore | aims (mean)": 15.08,
+      "cutter_ignore | burns (mean)": 12.17,
+      "cutter_ignore | cancelled (mean)": 2.75,
+      "cutter_ignore | damage (mean)": 365.0,
+      "cutter_ignore | hits (mean)": 12.17,
+      "drone_break | broken (mean)": 7.25,
+      "drone_break | calls_started (mean)": 7.83,
+      "drone_break | completed (mean)": 0.5,
+      "drone_ignore | broken (mean)": 2.67,
+      "drone_ignore | calls_started (mean)": 5.75,
+      "drone_ignore | completed (mean)": 3.0
+    },
+    "causes": {
+      "t012": {
+        "cautious": {},
+        "greedy": {
+          "cutter": 9,
+          "lunge": 2,
+          "spit": 1
+        }
+      },
+      "t015_shift": {
+        "cautious": {},
+        "greedy": {
+          "cutter": 11,
+          "lunge": 1
+        }
+      },
+      "t014": {
+        "cautious": {
+          "lunge": 6,
+          "puddle": 3,
+          "spit": 3
+        },
+        "greedy": {
+          "cutter": 34,
+          "lunge": 1,
+          "puddle": 1
+        }
+      }
+    },
+    "compare": {
+      "t006": [
+        {
+          "id": "ambush: turns at once on the bang | died_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | died_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | first_hit_s (mean)",
+          "base": 1.15,
+          "now": 1.15,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | first_shot_s (mean)",
+          "base": 0.55,
+          "now": 0.55,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | first_shot_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | shot_before_hit (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | shot_before_hit (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | suit_after_8s (mean)",
+          "base": 66.0,
+          "now": 66.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: turns at once on the bang | suit_after_8s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | died_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | died_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | first_hit_s (mean)",
+          "base": 1.4,
+          "now": 1.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | first_shot_s (mean)",
+          "base": 1.1,
+          "now": 1.1,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | first_shot_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | shot_before_hit (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | shot_before_hit (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | suit_after_8s (mean)",
+          "base": 66.0,
+          "now": 66.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "ambush: walks on, reacts to the bang after 0.45 s | suit_after_8s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouched behind the overturned bed, stalker 6 m off through the door | died_s (mean)",
+          "base": 8.57,
+          "now": 8.57,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouched behind the overturned bed, stalker 6 m off through the door | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouched behind the overturned bed, stalker 6 m off through the door | first_hit_s (mean)",
+          "base": 3.3,
+          "now": 3.3,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouched behind the overturned bed, stalker 6 m off through the door | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing still, after the burst | died_s (mean)",
+          "base": 5.17,
+          "now": 5.17,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing still, after the burst | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing still, after the burst | first_hit_s (mean)",
+          "base": 1.38,
+          "now": 1.38,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing still, after the burst | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | died_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | died_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | hit_percent (mean)",
+          "base": 61.94,
+          "now": 61.94,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | killed_it_s (mean)",
+          "base": 1.64,
+          "now": 1.65,
+          "pct": 0.6,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | killed_it_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | suit_left (mean)",
+          "base": 91.5,
+          "now": 91.5,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks the stalker perfectly and fires | suit_left (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | died_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | died_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | hit_percent (mean)",
+          "base": 45.72,
+          "now": 45.72,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | killed_it_s (mean)",
+          "base": 2.15,
+          "now": 2.15,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | killed_it_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | suit_left (mean)",
+          "base": 77.33,
+          "now": 77.33,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "standing, tracks where it was 0.20 s ago (a person's eye and hand) and fires | suit_left (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        }
+      ],
+      "t007": [
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | cleared_squad_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | cleared_squad_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | died_s (mean)",
+          "base": 5.57,
+          "now": 5.57,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | died_s (runs seen)",
+          "base": 10,
+          "now": 10,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | first_hit_s (mean)",
+          "base": 1.74,
+          "now": 1.74,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | hits_taken (mean)",
+          "base": 12.42,
+          "now": 12.42,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | hits_taken (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | pirates_killed (mean)",
+          "base": 1.17,
+          "now": 1.17,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | pirates_killed (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | rounds_blocked_for_you (mean)",
+          "base": 1.92,
+          "now": 1.92,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | rounds_blocked_for_you (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | survived_60s (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | survived_60s (runs seen)",
+          "base": 2,
+          "now": 2,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | your_hit_percent (mean)",
+          "base": 67.73,
+          "now": 67.73,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | your_hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | your_rounds_blocked (mean)",
+          "base": 3.67,
+          "now": 3.67,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, fights like a person (rises as it shoots) | your_rounds_blocked (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | cleared_squad_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | cleared_squad_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | died_s (mean)",
+          "base": 8.2,
+          "now": 8.2,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | first_hit_s (mean)",
+          "base": 4.42,
+          "now": 4.42,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | hits_taken (mean)",
+          "base": 13.0,
+          "now": 13.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | hits_taken (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | pirates_killed (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | pirates_killed (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | rounds_blocked_for_you (mean)",
+          "base": 21.83,
+          "now": 21.83,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | rounds_blocked_for_you (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | survived_60s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | survived_60s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | your_hit_percent (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | your_hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | your_rounds_blocked (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "crouches behind low cover, never fires | your_rounds_blocked (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | cleared_squad_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | cleared_squad_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | died_s (mean)",
+          "base": 5.65,
+          "now": 5.65,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | first_hit_s (mean)",
+          "base": 1.75,
+          "now": 1.75,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | hits_taken (mean)",
+          "base": 13.0,
+          "now": 13.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | hits_taken (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | pirates_killed (mean)",
+          "base": 0.33,
+          "now": 0.33,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | pirates_killed (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | rounds_blocked_for_you (mean)",
+          "base": 7.25,
+          "now": 7.25,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | rounds_blocked_for_you (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | survived_60s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | survived_60s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | your_hit_percent (mean)",
+          "base": 52.06,
+          "now": 52.06,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | your_hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | your_rounds_blocked (mean)",
+          "base": 2.92,
+          "now": 2.92,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, fights like a person (up to fire, down between bursts) | your_rounds_blocked (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | cleared_squad_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | cleared_squad_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | died_s (mean)",
+          "base": 7.7,
+          "now": 7.7,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | first_hit_s (mean)",
+          "base": 4.43,
+          "now": 4.43,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | hits_taken (mean)",
+          "base": 13.0,
+          "now": 13.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | hits_taken (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | pirates_killed (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | pirates_killed (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | rounds_blocked_for_you (mean)",
+          "base": 20.92,
+          "now": 20.92,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | rounds_blocked_for_you (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | survived_60s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | survived_60s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | your_hit_percent (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | your_hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | your_rounds_blocked (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "locked to the same cover, never fires | your_rounds_blocked (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | cleared_squad_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | cleared_squad_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | died_s (mean)",
+          "base": 3.34,
+          "now": 3.34,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | first_hit_s (mean)",
+          "base": 1.02,
+          "now": 1.02,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | hits_taken (mean)",
+          "base": 13.0,
+          "now": 13.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | hits_taken (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | pirates_killed (mean)",
+          "base": 0.08,
+          "now": 0.08,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | pirates_killed (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | rounds_blocked_for_you (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | rounds_blocked_for_you (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | survived_60s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | survived_60s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | your_hit_percent (mean)",
+          "base": 20.95,
+          "now": 20.95,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | your_hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | your_rounds_blocked (mean)",
+          "base": 1.33,
+          "now": 1.33,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, fights like a person | your_rounds_blocked (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | cleared_squad_s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | cleared_squad_s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | died_s (mean)",
+          "base": 3.39,
+          "now": 3.39,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | died_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | first_hit_s (mean)",
+          "base": 1.02,
+          "now": 1.02,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | first_hit_s (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | hits_taken (mean)",
+          "base": 13.0,
+          "now": 13.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | hits_taken (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | pirates_killed (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | pirates_killed (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | rounds_blocked_for_you (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | rounds_blocked_for_you (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | survived_60s (mean)",
+          "base": null,
+          "now": null,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | survived_60s (runs seen)",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | your_hit_percent (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | your_hit_percent (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | your_rounds_blocked (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "stands in the open, never fires | your_rounds_blocked (runs seen)",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        }
+      ],
+      "foot_slide": [
+        {
+          "id": "crouch forward | body_m_s",
+          "base": 1.5,
+          "now": 1.5,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouch forward | planted_pct",
+          "base": 26.0,
+          "now": 40.0,
+          "pct": 53.8,
+          "level": "red"
+        },
+        {
+          "id": "crouch forward | slide_m_s",
+          "base": 1.08,
+          "now": 0.16,
+          "pct": -85.2,
+          "level": "red"
+        },
+        {
+          "id": "sprint forward | body_m_s",
+          "base": 5.4,
+          "now": 5.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "sprint forward | planted_pct",
+          "base": 18.0,
+          "now": 24.0,
+          "pct": 33.3,
+          "level": "amber"
+        },
+        {
+          "id": "sprint forward | slide_m_s",
+          "base": 0.65,
+          "now": 1.29,
+          "pct": 98.5,
+          "level": "red"
+        },
+        {
+          "id": "strafe left | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "strafe left | planted_pct",
+          "base": 68.0,
+          "now": 23.0,
+          "pct": -66.2,
+          "level": "red"
+        },
+        {
+          "id": "strafe left | slide_m_s",
+          "base": 2.27,
+          "now": 0.5,
+          "pct": -78.0,
+          "level": "red"
+        },
+        {
+          "id": "strafe right | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "strafe right | planted_pct",
+          "base": 48.0,
+          "now": 28.0,
+          "pct": -41.7,
+          "level": "amber"
+        },
+        {
+          "id": "strafe right | slide_m_s",
+          "base": 1.47,
+          "now": 0.63,
+          "pct": -57.1,
+          "level": "red"
+        },
+        {
+          "id": "walk back | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "walk back | planted_pct",
+          "base": 55.0,
+          "now": 26.0,
+          "pct": -52.7,
+          "level": "red"
+        },
+        {
+          "id": "walk back | slide_m_s",
+          "base": 0.84,
+          "now": 0.38,
+          "pct": -54.8,
+          "level": "red"
+        },
+        {
+          "id": "walk forward | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "walk forward | planted_pct",
+          "base": 18.0,
+          "now": 33.0,
+          "pct": 83.3,
+          "level": "red"
+        },
+        {
+          "id": "walk forward | slide_m_s",
+          "base": 0.38,
+          "now": 0.47,
+          "pct": 23.7,
+          "level": "green"
+        }
+      ],
+      "foot_slide_realtime": [
+        {
+          "id": "crouch forward | body_m_s",
+          "base": 1.5,
+          "now": 1.5,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "crouch forward | planted_pct",
+          "base": 24.33,
+          "now": 40.0,
+          "pct": 64.4,
+          "level": "red"
+        },
+        {
+          "id": "crouch forward | slide_m_s",
+          "base": 1.493,
+          "now": 0.523,
+          "pct": -65.0,
+          "level": "red"
+        },
+        {
+          "id": "sprint forward | body_m_s",
+          "base": 5.4,
+          "now": 5.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "sprint forward | planted_pct",
+          "base": 17.67,
+          "now": 26.0,
+          "pct": 47.1,
+          "level": "amber"
+        },
+        {
+          "id": "sprint forward | slide_m_s",
+          "base": 3.183,
+          "now": 2.1,
+          "pct": -34.0,
+          "level": "amber"
+        },
+        {
+          "id": "strafe left | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "strafe left | planted_pct",
+          "base": 66.67,
+          "now": 21.67,
+          "pct": -67.5,
+          "level": "red"
+        },
+        {
+          "id": "strafe left | slide_m_s",
+          "base": 3.367,
+          "now": 1.28,
+          "pct": -62.0,
+          "level": "red"
+        },
+        {
+          "id": "strafe right | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "strafe right | planted_pct",
+          "base": 47.0,
+          "now": 27.67,
+          "pct": -41.1,
+          "level": "amber"
+        },
+        {
+          "id": "strafe right | slide_m_s",
+          "base": 3.02,
+          "now": 1.297,
+          "pct": -57.1,
+          "level": "red"
+        },
+        {
+          "id": "walk back | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "walk back | planted_pct",
+          "base": 54.67,
+          "now": 24.33,
+          "pct": -55.5,
+          "level": "red"
+        },
+        {
+          "id": "walk back | slide_m_s",
+          "base": 2.7,
+          "now": 1.24,
+          "pct": -54.1,
+          "level": "red"
+        },
+        {
+          "id": "walk forward | body_m_s",
+          "base": 3.4,
+          "now": 3.4,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "walk forward | planted_pct",
+          "base": 17.0,
+          "now": 32.0,
+          "pct": 88.2,
+          "level": "red"
+        },
+        {
+          "id": "walk forward | slide_m_s",
+          "base": 1.94,
+          "now": 1.207,
+          "pct": -37.8,
+          "level": "amber"
+        }
+      ],
+      "t012": [
+        {
+          "id": "cautious | banked (mean)",
+          "base": 1318.67,
+          "now": 2360.0,
+          "pct": 79.0,
+          "level": "red"
+        },
+        {
+          "id": "cautious | deposited (mean)",
+          "base": 1318.67,
+          "now": 2360.0,
+          "pct": 79.0,
+          "level": "red"
+        },
+        {
+          "id": "cautious | items (mean)",
+          "base": 14.42,
+          "now": 23.25,
+          "pct": 61.2,
+          "level": "red"
+        },
+        {
+          "id": "cautious | lost (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "cautious | prize (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "cautious | survived",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cautious | tier (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cautious | time_s (mean)",
+          "base": 202.69,
+          "now": 206.09,
+          "pct": 1.7,
+          "level": "green"
+        },
+        {
+          "id": "greedy | banked (mean)",
+          "base": 159.67,
+          "now": 0.0,
+          "pct": -100.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | deposited (mean)",
+          "base": 3168.75,
+          "now": 4287.08,
+          "pct": 35.3,
+          "level": "amber"
+        },
+        {
+          "id": "greedy | items (mean)",
+          "base": 16.92,
+          "now": 24.75,
+          "pct": 46.3,
+          "level": "amber"
+        },
+        {
+          "id": "greedy | lost (mean)",
+          "base": 1.17,
+          "now": 1.08,
+          "pct": -7.7,
+          "level": "green"
+        },
+        {
+          "id": "greedy | prize (mean)",
+          "base": 0.67,
+          "now": 0.75,
+          "pct": 11.9,
+          "level": "green"
+        },
+        {
+          "id": "greedy | survived",
+          "base": 1,
+          "now": 0,
+          "pct": -100.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | tier (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "greedy | time_s (mean)",
+          "base": 267.6,
+          "now": 258.07,
+          "pct": -3.6,
+          "level": "green"
+        }
+      ],
+      "t015_shift": [
+        {
+          "id": "cautious | banked (mean)",
+          "base": 1204.08,
+          "now": 2320.25,
+          "pct": 92.7,
+          "level": "red"
+        },
+        {
+          "id": "cautious | deposited (mean)",
+          "base": 1204.08,
+          "now": 2320.25,
+          "pct": 92.7,
+          "level": "red"
+        },
+        {
+          "id": "cautious | items (mean)",
+          "base": 13.17,
+          "now": 23.17,
+          "pct": 75.9,
+          "level": "red"
+        },
+        {
+          "id": "cautious | lost (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "cautious | prize (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "cautious | survived",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cautious | tier (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cautious | time_s (mean)",
+          "base": 202.67,
+          "now": 207.49,
+          "pct": 2.4,
+          "level": "green"
+        },
+        {
+          "id": "greedy | banked (mean)",
+          "base": 100.83,
+          "now": 0.0,
+          "pct": -100.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | deposited (mean)",
+          "base": 2823.25,
+          "now": 4044.25,
+          "pct": 43.2,
+          "level": "amber"
+        },
+        {
+          "id": "greedy | items (mean)",
+          "base": 15.5,
+          "now": 24.92,
+          "pct": 60.8,
+          "level": "red"
+        },
+        {
+          "id": "greedy | lost (mean)",
+          "base": 1.0,
+          "now": 1.83,
+          "pct": 83.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | prize (mean)",
+          "base": 0.5,
+          "now": 0.92,
+          "pct": 84.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | survived",
+          "base": 1,
+          "now": 0,
+          "pct": -100.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | tier (mean)",
+          "base": 1.0,
+          "now": 1.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "greedy | time_s (mean)",
+          "base": 257.34,
+          "now": 262.68,
+          "pct": 2.1,
+          "level": "green"
+        }
+      ],
+      "t014": [
+        {
+          "id": "cautious | death_pct",
+          "base": 1.6,
+          "now": 8.3,
+          "pct": 418.8,
+          "level": "red"
+        },
+        {
+          "id": "cautious | deaths",
+          "base": 1,
+          "now": 12,
+          "pct": 1100.0,
+          "level": "red"
+        },
+        {
+          "id": "cautious | fired",
+          "base": 12,
+          "now": 3,
+          "pct": -75.0,
+          "level": "red"
+        },
+        {
+          "id": "cautious | negative_payslips",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "cautious | net_per_shift_deaths_at_0 (mean)",
+          "base": 893.54,
+          "now": 1726.91,
+          "pct": 93.3,
+          "level": "red"
+        },
+        {
+          "id": "cautious | quota_1_met",
+          "base": 7,
+          "now": 12,
+          "pct": 71.4,
+          "level": "red"
+        },
+        {
+          "id": "cautious | quotas_due",
+          "base": 21,
+          "now": 48,
+          "pct": 128.6,
+          "level": "red"
+        },
+        {
+          "id": "cautious | quotas_met",
+          "base": 9,
+          "now": 45,
+          "pct": 400.0,
+          "level": "red"
+        },
+        {
+          "id": "cautious | quotas_met_per_session (mean)",
+          "base": 0.75,
+          "now": 3.75,
+          "pct": 400.0,
+          "level": "red"
+        },
+        {
+          "id": "cautious | sessions",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cautious | shifts",
+          "base": 63,
+          "now": 144,
+          "pct": 128.6,
+          "level": "red"
+        },
+        {
+          "id": "cautious | survivors_deductions (mean)",
+          "base": 373.81,
+          "now": 489.5,
+          "pct": 30.9,
+          "level": "amber"
+        },
+        {
+          "id": "cautious | survivors_gross (mean)",
+          "base": 1281.76,
+          "now": 2373.4,
+          "pct": 85.2,
+          "level": "red"
+        },
+        {
+          "id": "greedy | death_pct",
+          "base": 94.4,
+          "now": 100.0,
+          "pct": 5.9,
+          "level": "green"
+        },
+        {
+          "id": "greedy | deaths",
+          "base": 34,
+          "now": 36,
+          "pct": 5.9,
+          "level": "green"
+        },
+        {
+          "id": "greedy | fired",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "greedy | negative_payslips",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "greedy | net_per_shift_deaths_at_0 (mean)",
+          "base": 97.81,
+          "now": 0.0,
+          "pct": -100.0,
+          "level": "red"
+        },
+        {
+          "id": "greedy | quota_1_met",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "greedy | quotas_due",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "greedy | quotas_met",
+          "base": 0,
+          "now": 0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "greedy | quotas_met_per_session (mean)",
+          "base": 0.0,
+          "now": 0.0,
+          "pct": null,
+          "level": "green"
+        },
+        {
+          "id": "greedy | sessions",
+          "base": 12,
+          "now": 12,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "greedy | shifts",
+          "base": 36,
+          "now": 36,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "greedy | survivors_deductions (mean)",
+          "base": 340.5,
+          "now": null,
+          "pct": null,
+          "level": "amber"
+        },
+        {
+          "id": "greedy | survivors_gross (mean)",
+          "base": 2101.0,
+          "now": null,
+          "pct": null,
+          "level": "amber"
+        }
+      ],
+      "t015": [
+        {
+          "id": "cutter_cover | aims (mean)",
+          "base": 24.83,
+          "now": 24.83,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_cover | burns (mean)",
+          "base": 1.67,
+          "now": 1.67,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_cover | cancelled (mean)",
+          "base": 22.83,
+          "now": 22.83,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_cover | damage (mean)",
+          "base": 50.0,
+          "now": 50.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_cover | hits (mean)",
+          "base": 1.67,
+          "now": 1.67,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_ignore | aims (mean)",
+          "base": 15.08,
+          "now": 15.08,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_ignore | burns (mean)",
+          "base": 12.17,
+          "now": 12.17,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_ignore | cancelled (mean)",
+          "base": 2.75,
+          "now": 2.75,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_ignore | damage (mean)",
+          "base": 365.0,
+          "now": 365.0,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "cutter_ignore | hits (mean)",
+          "base": 12.17,
+          "now": 12.17,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "drone_break | broken (mean)",
+          "base": 7.25,
+          "now": 7.25,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "drone_break | calls_started (mean)",
+          "base": 7.83,
+          "now": 7.83,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "drone_break | completed (mean)",
+          "base": 0.5,
+          "now": 0.5,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "drone_ignore | broken (mean)",
+          "base": 2.67,
+          "now": 2.67,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "drone_ignore | calls_started (mean)",
+          "base": 5.75,
+          "now": 5.75,
+          "pct": 0.0,
+          "level": "green"
+        },
+        {
+          "id": "drone_ignore | completed (mean)",
+          "base": 3.0,
+          "now": 3.0,
+          "pct": 0.0,
+          "level": "green"
+        }
+      ]
+    }
+  },
+  "engine_errors": {
+    "tests_1": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 1251,
+      "Data: data file missing: res://tests/fixtures/data/does_not_exist.json": 1,
+      "Data: bad JSON in res://tests/fixtures/data/bad.json line 3: Expected value, got 'EOF'": 1,
+      "Data: key 'nope' missing in data/good.json": 1,
+      "String formatting error: not all arguments converted during string formatting.": 1,
+      "The vectors must not be zero.": 1,
+      "5 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "t006": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 8,
+      "24 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "t007": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 8,
+      "20 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "footslide_1": {
+      "1 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "t012": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 8
+    },
+    "t015_shift": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 8,
+      "10 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "t014_0": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 12,
+      "Parameter \"body->get_space()\" is null.": 30,
+      "12 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "t015": {
+      "Condition \"p_size <= 0\" is true. Returning: false": 7,
+      "10 resources still in use at exit (run with --verbose for details).": 1
+    },
+    "flicker": {
+      "Parameter \"body->get_space()\" is null.": 324
+    }
+  },
+  "flicker": {
+    "now": {
+      "pirate_still": {
+        "moved_pct": 0.123,
+        "twinkle_pct": 0.0189,
+        "twinkle_max_pct": 0.0352
+      },
+      "pirate_turn": {
+        "moved_pct": 0.015,
+        "twinkle_pct": 0.0022,
+        "twinkle_max_pct": 0.0169
+      },
+      "still_beam_off": {
+        "moved_pct": 0.019,
+        "twinkle_pct": 0.0009,
+        "twinkle_max_pct": 0.0147
+      },
+      "still_beam_on": {
+        "moved_pct": 0.022,
+        "twinkle_pct": 0.0011,
+        "twinkle_max_pct": 0.0223
+      },
+      "turn_beam_off": {
+        "moved_pct": 1.136,
+        "twinkle_pct": 0.0877,
+        "twinkle_max_pct": 0.1847
+      },
+      "turn_beam_on": {
+        "moved_pct": 1.088,
+        "twinkle_pct": 0.0822,
+        "twinkle_max_pct": 0.1887
+      }
+    },
+    "compare": [
+      {
+        "id": "pirate_still",
+        "base": 0.0307,
+        "now": 0.0189,
+        "pct": -38.4,
+        "level": "amber"
+      },
+      {
+        "id": "pirate_turn",
+        "base": 0.0039,
+        "now": 0.0022,
+        "pct": -43.6,
+        "level": "amber"
+      },
+      {
+        "id": "still_beam_off",
+        "base": 0.0003,
+        "now": 0.0009,
+        "pct": 200.0,
+        "level": "red"
+      },
+      {
+        "id": "still_beam_on",
+        "base": 0.0003,
+        "now": 0.0011,
+        "pct": 266.7,
+        "level": "red"
+      },
+      {
+        "id": "turn_beam_off",
+        "base": 0.1239,
+        "now": 0.0877,
+        "pct": -29.2,
+        "level": "amber"
+      },
+      {
+        "id": "turn_beam_on",
+        "base": 0.1193,
+        "now": 0.0822,
+        "pct": -31.1,
+        "level": "amber"
+      }
+    ]
+  }
+}

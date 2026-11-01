@@ -1,0 +1,22 @@
+{
+  "adapter": "Apple M2 Pro (Apple8)",
+  "date": "2026-10-31T20:08:16",
+  "fps_avg": 154.015919266728,
+  "frame_ms_avg": 6.49283531703095,
+  "frame_ms_max": 20.591,
+  "frame_ms_p95": 8.754,
+  "frame_ms_p99": 9.379,
+  "frames": 4621,
+  "godot": "4.7.2-stable (official)",
+  "msaa_3d": "2x",
+  "renderer": "forward_plus",
+  "rendering_driver": "metal",
+  "resolution": "1920x1080",
+  "scene": "stalker_deck",
+  "screen_scale": 1.0,
+  "screen_space_aa": "off",
+  "seconds": 30.0,
+  "vsync": "disabled",
+  "warmup_seconds": 2.0,
+  "window_size": "1920x1080"
+}

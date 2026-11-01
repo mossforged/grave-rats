@@ -17,21 +17,25 @@
   },
   "frame_time": {
     "pirate_deck": {
-      "avg": 7.119,
-      "p95": 9.339,
-      "resolution": "1920x1080"
-    },
-    "stalker_deck": {
-      "avg": 6.604,
-      "p95": 9.466,
-      "resolution": "1920x1080"
-    },
-    "shift_deck": {
-      "avg": 7.067,
-      "p95": 10.329,
+      "avg": 7.841,
+      "p95": 10.326,
       "resolution": "1920x1080",
       "screen_scale": 1.0,
-      "note": "Provisional: windows ran alongside the T016 code lane, borderless, at screen scale 1.0 under a remote desktop session. Replace on a quiet Mac."
+      "windows": 2
+    },
+    "stalker_deck": {
+      "avg": 6.511,
+      "p95": 8.886,
+      "resolution": "1920x1080",
+      "screen_scale": 1.0,
+      "windows": 2
+    },
+    "shift_deck": {
+      "avg": 7.607,
+      "p95": 11.061,
+      "resolution": "1920x1080",
+      "screen_scale": 1.0,
+      "windows": 2
     }
   },
   "bots": {
@@ -193,93 +197,93 @@
     },
     "foot_slide": {
       "walk forward | body_m_s": 3.4,
-      "walk forward | slide_m_s": 0.38,
-      "walk forward | planted_pct": 18.0,
+      "walk forward | slide_m_s": 0.47,
+      "walk forward | planted_pct": 33.0,
       "walk back | body_m_s": 3.4,
-      "walk back | slide_m_s": 0.84,
-      "walk back | planted_pct": 55.0,
+      "walk back | slide_m_s": 0.38,
+      "walk back | planted_pct": 26.0,
       "strafe right | body_m_s": 3.4,
-      "strafe right | slide_m_s": 1.47,
-      "strafe right | planted_pct": 48.0,
+      "strafe right | slide_m_s": 0.63,
+      "strafe right | planted_pct": 28.0,
       "strafe left | body_m_s": 3.4,
-      "strafe left | slide_m_s": 2.27,
-      "strafe left | planted_pct": 68.0,
+      "strafe left | slide_m_s": 0.5,
+      "strafe left | planted_pct": 23.0,
       "crouch forward | body_m_s": 1.5,
-      "crouch forward | slide_m_s": 1.08,
-      "crouch forward | planted_pct": 26.0,
+      "crouch forward | slide_m_s": 0.16,
+      "crouch forward | planted_pct": 40.0,
       "sprint forward | body_m_s": 5.4,
-      "sprint forward | slide_m_s": 0.65,
-      "sprint forward | planted_pct": 18.0
+      "sprint forward | slide_m_s": 1.29,
+      "sprint forward | planted_pct": 24.0
     },
     "foot_slide_realtime": {
       "walk forward | body_m_s": 3.4,
-      "walk forward | slide_m_s": 1.94,
-      "walk forward | planted_pct": 17.0,
+      "walk forward | slide_m_s": 1.207,
+      "walk forward | planted_pct": 32.0,
       "walk back | body_m_s": 3.4,
-      "walk back | slide_m_s": 2.7,
-      "walk back | planted_pct": 54.67,
+      "walk back | slide_m_s": 1.24,
+      "walk back | planted_pct": 24.33,
       "strafe right | body_m_s": 3.4,
-      "strafe right | slide_m_s": 3.02,
-      "strafe right | planted_pct": 47.0,
+      "strafe right | slide_m_s": 1.297,
+      "strafe right | planted_pct": 27.67,
       "strafe left | body_m_s": 3.4,
-      "strafe left | slide_m_s": 3.367,
-      "strafe left | planted_pct": 66.67,
+      "strafe left | slide_m_s": 1.28,
+      "strafe left | planted_pct": 21.67,
       "crouch forward | body_m_s": 1.5,
-      "crouch forward | slide_m_s": 1.493,
-      "crouch forward | planted_pct": 24.33,
+      "crouch forward | slide_m_s": 0.523,
+      "crouch forward | planted_pct": 40.0,
       "sprint forward | body_m_s": 5.4,
-      "sprint forward | slide_m_s": 3.183,
-      "sprint forward | planted_pct": 17.67
+      "sprint forward | slide_m_s": 2.1,
+      "sprint forward | planted_pct": 26.0
     },
     "t012": {
       "cautious | survived": 12,
-      "cautious | banked (mean)": 1318.67,
-      "cautious | deposited (mean)": 1318.67,
-      "cautious | items (mean)": 14.42,
+      "cautious | banked (mean)": 2360.0,
+      "cautious | deposited (mean)": 2360.0,
+      "cautious | items (mean)": 23.25,
       "cautious | lost (mean)": 0.0,
       "cautious | tier (mean)": 1.0,
-      "cautious | time_s (mean)": 202.69,
+      "cautious | time_s (mean)": 206.09,
       "cautious | prize (mean)": 0.0,
-      "greedy | survived": 1,
-      "greedy | banked (mean)": 159.67,
-      "greedy | deposited (mean)": 3168.75,
-      "greedy | items (mean)": 16.92,
-      "greedy | lost (mean)": 1.17,
+      "greedy | survived": 0,
+      "greedy | banked (mean)": 0.0,
+      "greedy | deposited (mean)": 4287.08,
+      "greedy | items (mean)": 24.75,
+      "greedy | lost (mean)": 1.08,
       "greedy | tier (mean)": 1.0,
-      "greedy | time_s (mean)": 267.6,
-      "greedy | prize (mean)": 0.67
+      "greedy | time_s (mean)": 258.07,
+      "greedy | prize (mean)": 0.75
     },
     "t015_shift": {
       "cautious | survived": 12,
-      "cautious | banked (mean)": 1204.08,
-      "cautious | deposited (mean)": 1204.08,
-      "cautious | items (mean)": 13.17,
+      "cautious | banked (mean)": 2320.25,
+      "cautious | deposited (mean)": 2320.25,
+      "cautious | items (mean)": 23.17,
       "cautious | lost (mean)": 0.0,
       "cautious | tier (mean)": 1.0,
-      "cautious | time_s (mean)": 202.67,
+      "cautious | time_s (mean)": 207.49,
       "cautious | prize (mean)": 0.0,
-      "greedy | survived": 1,
-      "greedy | banked (mean)": 100.83,
-      "greedy | deposited (mean)": 2823.25,
-      "greedy | items (mean)": 15.5,
-      "greedy | lost (mean)": 1.0,
+      "greedy | survived": 0,
+      "greedy | banked (mean)": 0.0,
+      "greedy | deposited (mean)": 4044.25,
+      "greedy | items (mean)": 24.92,
+      "greedy | lost (mean)": 1.83,
       "greedy | tier (mean)": 1.0,
-      "greedy | time_s (mean)": 257.34,
-      "greedy | prize (mean)": 0.5
+      "greedy | time_s (mean)": 262.68,
+      "greedy | prize (mean)": 0.92
     },
     "t014": {
       "cautious | sessions": 12,
-      "cautious | fired": 12,
-      "cautious | quota_1_met": 7,
-      "cautious | quotas_met": 9,
-      "cautious | quotas_due": 21,
-      "cautious | quotas_met_per_session (mean)": 0.75,
-      "cautious | shifts": 63,
-      "cautious | deaths": 1,
-      "cautious | death_pct": 1.6,
-      "cautious | net_per_shift_deaths_at_0 (mean)": 893.54,
-      "cautious | survivors_gross (mean)": 1281.76,
-      "cautious | survivors_deductions (mean)": 373.81,
+      "cautious | fired": 3,
+      "cautious | quota_1_met": 12,
+      "cautious | quotas_met": 45,
+      "cautious | quotas_due": 48,
+      "cautious | quotas_met_per_session (mean)": 3.75,
+      "cautious | shifts": 144,
+      "cautious | deaths": 12,
+      "cautious | death_pct": 8.3,
+      "cautious | net_per_shift_deaths_at_0 (mean)": 1726.91,
+      "cautious | survivors_gross (mean)": 2373.4,
+      "cautious | survivors_deductions (mean)": 489.5,
       "cautious | negative_payslips": 0,
       "greedy | sessions": 12,
       "greedy | fired": 12,
@@ -288,9 +292,9 @@
       "greedy | quotas_due": 12,
       "greedy | quotas_met_per_session (mean)": 0.0,
       "greedy | shifts": 36,
-      "greedy | deaths": 34,
-      "greedy | death_pct": 94.4,
-      "greedy | net_per_shift_deaths_at_0 (mean)": 97.81,
+      "greedy | deaths": 36,
+      "greedy | death_pct": 100.0,
+      "greedy | net_per_shift_deaths_at_0 (mean)": 0.0,
       "greedy | survivors_gross (mean)": 2101.0,
       "greedy | survivors_deductions (mean)": 340.5,
       "greedy | negative_payslips": 0
@@ -315,12 +319,12 @@
     }
   },
   "flicker": {
-    "pirate_still": 0.0307,
-    "pirate_turn": 0.0039,
-    "still_beam_off": 0.0003,
-    "still_beam_on": 0.0003,
-    "turn_beam_off": 0.1239,
-    "turn_beam_on": 0.1193
+    "pirate_still": 0.0189,
+    "pirate_turn": 0.0022,
+    "still_beam_off": 0.0009,
+    "still_beam_on": 0.0011,
+    "turn_beam_off": 0.0877,
+    "turn_beam_on": 0.0822
   },
   "load": [
     {
@@ -372,6 +376,40 @@
         "bots.t015"
       ],
       "note": "T014 numbers depend on process order; they hold only for health_check.sh's fixed split (4 processes of 3 seeds)."
+    }
+  ],
+  "updates": [
+    {
+      "date": "2026-10-31",
+      "packet": "Q003",
+      "commit": "a4a5f73 John's list: restart-first warning, survey vessel items",
+      "previous_frame_time": {
+        "pirate_deck": {
+          "avg": 7.119,
+          "p95": 9.339,
+          "resolution": "1920x1080"
+        },
+        "stalker_deck": {
+          "avg": 6.604,
+          "p95": 9.466,
+          "resolution": "1920x1080"
+        },
+        "shift_deck": {
+          "avg": 7.067,
+          "p95": 10.329,
+          "resolution": "1920x1080",
+          "screen_scale": 1.0,
+          "note": "Provisional: windows ran alongside the T016 code lane, borderless, at screen scale 1.0 under a remote desktop session. Replace on a quiet Mac."
+        }
+      },
+      "notes": {
+        "frame_time": "Explained: T020 (effects, and pirates and the player firing through its timeline), measured against T018 in docs/qa/health-2026-10-31-q003.md. Clean windows at load 4 to 5, borderless, scale 1.0, remote desktop host running. pirate_deck now misses T011's target; the lead decides. Replaces the provisional shift_deck number.",
+        "foot_slide": "Explained: T022's clips. T021 equals the old table to the digit; T022 equals main. Sprint forward got worse (0.65 to 1.29 m/s); T022 reported that.",
+        "foot_slide_realtime": "Explained by T022 by the fixed-step result; the real-time runs weren't repeated on T021. Noisy.",
+        "t012, t015_shift, t014": "Mostly T023's bot door fix, checked with the door bug put back on main. Small residue unexplained: with the old press cautious survives 11 of 12 (T012) and 10 of 12 (T015 shift), was 12 of 12; somewhere in T016 to T022. T014 still holds only for the fixed process split.",
+        "flicker": "Explained: T020 raised still-camera twinkle from 0.0003% (effects move in frame); T021's wall-top z-fight fix lowered turning and pirate twinkle by about 35%. Checked commit by commit.",
+        "t006, t007, t015": "Left alone: no number moved past rounding."
+      }
     }
   ]
 }

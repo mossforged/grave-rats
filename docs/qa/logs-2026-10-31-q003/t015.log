@@ -1,0 +1,55 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _draw_oxygen (res://src/hud/suit_os_hud.gd:223)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:107)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _draw_carry (res://src/hud/suit_os_hud.gd:241)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:108)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _cell (res://src/hud/suit_os_hud.gd:388)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:361)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:110)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _cell (res://src/hud/suit_os_hud.gd:388)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:369)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:110)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text (res://src/hud/suit_os_hud.gd:133)
+       [1] _cell (res://src/hud/suit_os_hud.gd:388)
+       [2] _draw_right_dock (res://src/hud/suit_os_hud.gd:372)
+       [3] _draw_hud (res://src/hud/suit_os_hud.gd:110)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:137)
+       [1] _draw_help (res://src/hud/suit_os_hud.gd:512)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:121)
+ERROR: Condition "p_size <= 0" is true. Returning: false
+   at: _shaped_text_add_string (modules/text_server_adv/text_server_adv.cpp:5302)
+   GDScript backtrace (most recent call first):
+       [0] _text_w (res://src/hud/suit_os_hud.gd:137)
+       [1] _draw_help (res://src/hud/suit_os_hud.gd:512)
+       [2] _draw_hud (res://src/hud/suit_os_hud.gd:121)
+OUT cutter_ignore   damage 365.0  hits 12.2  aims 15.1  burns 12.2  cancelled 2.8
+OUT cutter_cover    damage 50.0  hits 1.7  aims 24.8  burns 1.7  cancelled 22.8
+OUT drone_ignore    calls_started 5.8  completed 3.0  broken 2.7
+OUT drone_break     calls_started 7.8  completed 0.5  broken 7.2
+WARNING: 28 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 10 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,6 +1,6 @@
 # Grave Rats — status
 
-**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T022 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. A015 bestiary and A016 arsenal merged, waiting on his picks (A016 has 2 images of 18: the art tool refused weapons). Meshy API live: stalker, drone, loader, Prior Claim leader (rigged; Meshy bone names, not Mixamo) in `assets/source/meshy/`, 125 credits. **Next:** John plays a shift (expected tomorrow night). Code lane: T023 (build the survey vessel). QA: Q003 after T023 (code lane must be idle). QA: Q003 after T022.
+**Stage:** 3 and 4 in progress. Stage 2 passed (tag `stage-2`). T011 to T023 merged, waiting on John's gates (T017/T020 sound and gun feel: his ear and hands). A013 approved; A014 pitch B (biological survey vessel) approved. A015 bestiary and A016 arsenal merged, waiting on his picks (A016 has 2 images of 18: the art tool refused weapons). Meshy API live: stalker, drone, loader, Prior Claim leader (rigged; Meshy bone names, not Mixamo) in `assets/source/meshy/`, 125 credits. **Next:** John plays a shift (expected tomorrow night). Code lane: idle (queue empty). QA: Q003 queued. The survey vessel is in (`--ship survey`); default ship unchanged. Godot hung at launch on the Mac in CoreAudio during T023 (not the game): restart, or `--audio-driver Dummy`. QA: Q003 after T022.
 
 ## Stage plan (each stage ends in a gate John answers by playing)
 0. **Skeleton.** Godot project, headless tests, capture tool, runners. Gate: none (lead checks). **Done 2026-10-30.**
@@ -71,5 +71,5 @@ Later (parked): Open Tender (competitive mode, decided 2026-10-31; see decisions
 - Hauler: left-hand IK onto the foregrip; separate left and right strafe clip speeds; the Meshy clips' feet aren't auto-grounded.
 
 ## Last session
-2026-10-31 (lead): merged T022 (587/587 reproduced), A015, A016. Meshy API: stalker, drone, loader, Prior Claim leader (rigged, Meshy bone names), 125 credits.
-2026-10-31 (code, unattended): T022 Mixamo set on the hauler: 54 clips, 8-way walk/run, sprint, crouch, fire, reloads, hits, deaths, pick up, press, cover, heavy carry; foot slide much better except forward run/sprint slightly worse; no measurable frame cost.
+2026-11-01 (lead): merged T023 onto main with T022 (620/620 combined). Queued Q003. Note T023's bot fix: every bot number since T012 understated reach; greedy on the current ship now dies 12/12 (cutter).
+2026-11-01 (code, unattended): T023 survey vessel (`data/deck_survey.json`, ship picker, A013 decals, effects); only 10 salvage spots, so it can't meet the quota without the black box; drone flies through shut doors; T012 bot door-press bug fixed.

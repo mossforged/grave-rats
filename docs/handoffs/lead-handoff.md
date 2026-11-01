@@ -58,7 +58,7 @@ Queue a packet by committing its ID to the lane's queue file on main and pushing
 | A015 | art | merged: 18 threats + matrix; top five Loader, Suit Hitch, Pool Bell, PC Surveyor, Seam Spiders; waits for John's picks |
 | A016 | art | merged: 18 written designs + matrix, only 2 images (image tool refused 16 as violence); top six rifle, shotgun, flare gun, cutter, frag, decoy; offer: lead models weapons in Blender |
 | A017 | art | merged: 2 of 7 paint-overs (cutter, beacon); gun-shaped items refused even object-only. No retries. Option: Meshy retexture of the blockouts |
-| Q003 | qa | queued 2026-11-01 (code lane idle) |
+| Q003 | qa | merged: no big regressions; pirate_deck over T011 target since T020; import sometimes crashes on fresh clone (retry); small untraced cautious-bot dip |
 | T023 | code | merged: survey vessel (`--ship survey`); salvage too thin for the quota; drone clips doors |
 | T022 | code | merged: Mixamo set on the hauler; John judges if it moves like a soldier |
 

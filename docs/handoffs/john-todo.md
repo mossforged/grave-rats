@@ -5,7 +5,7 @@ Shortest first. Gut reactions are enough; the lead turns them into tuning.
 ## Play tomorrow night (one session covers most of it)
 **First: restart the Mac.** On Oct 31 Godot hung at launch in macOS's audio service (not the game; a clean copy of main hung too). A restart should clear it. If it still hangs, add `--audio-driver Dummy` to the launch command (no sound, but it plays).
 
-Pull and run (paste in Terminal):
+Pull and run (paste in Terminal). If it stops during the import step, just paste it again: the import sometimes crashes on the first try and passes on the second.
 `cd ~/Projects/grave-rats-playtesting && git pull && /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import && /Applications/Godot.app/Contents/MacOS/Godot --path .`
 - [ ] **One full shift:** grab the black box, push past the 60% and 30% oxygen tiers (CUSTODIAN wakes), and try to extract.
 - [ ] **Anti-aliasing:** F1 → Display. Flip the four modes while turning; pick by eye (it saves).

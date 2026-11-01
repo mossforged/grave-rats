@@ -1,4 +1,4 @@
-# John's list (kept by the lead; updated 2026-10-31)
+# John's list (kept by the lead; updated 2026-11-01)
 
 Shortest first. Gut reactions are enough; the lead turns them into tuning.
 
@@ -26,7 +26,7 @@ Pull and run (paste in Terminal):
 
 ## Picks and approvals (no game needed)
 - [ ] **Threats:** pick from the A015 bestiary (top five in gold: Loader, Suit Hitch, Pool Bell, Prior Claim Surveyor, Seam Spiders).
-- [ ] **Weapons:** judge the lead's Blender-modelled guns (sheet coming); say which to wire in first.
+- [ ] **Weapons:** judge the Blender models (`docs/screens/props/weapons_sheet.jpg`) and the two paint-overs (A017: plasma cutter, decoy beacon); say which to wire in first, and whether to try Meshy retexturing for the rest (10 credits each).
 - [ ] **Paperwork copy:** approve the new lines in `docs/handoffs/auto-T014.md` and `auto-T015.md` (end-of-shift forms, CUSTODIAN announcements).
 - [ ] **Meshy:** set a standing credit budget (for example "up to 150 credits a week on agreed models, report each"), or keep OK-ing each batch. Say what to make next.
 - [ ] **Stalker legs:** OK a code task giving the new Meshy stalker procedural legs?
